@@ -1,0 +1,26 @@
+# bağımlılıklar
+node_modules/
+**/node_modules/
+
+# build çıktıları
+web/dist/
+api/dist/
+
+# ortam / sırlar
+.env
+*.local
+
+# db üretilmiş şema opsiyonel — commit'lemek isterseniz .gitignore'dan çıkarın
+# db/schema.sql
+
+# çeşitli
+.DS_Store
+*.log
+npm-debug.log*
+storage/
+
+# V-4: Datenbank-Sicherungen enthalten Kundendaten — niemals ins Repository
+backups/
+
+# Ablage zum Löschen (von Claude verschoben)
+_to_delete/

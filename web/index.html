@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      /* Pre-Paint: Dunkelmodus vor dem ersten Rendern setzen (kein Aufblitzen).
+         Gleicher Schlüssel/gleiche Logik wie src/lib/themeMode.ts. */
+      (function(){try{var m=localStorage.getItem("cws.theme.mode.v1")||"light";
+      var d=m==="dark"||(m==="system"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+      if(d){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark";}}catch(e){}})();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="author" content="Dr. Sait Yalazay" />
+    <title>UniqSuite Compliance &amp; Implementation Platform</title>
+    <meta name="description" content="UniqSuite: Complete NIS2 compliance platform with 17-step pipeline — from company profile to continuous improvement. EU Directive 2022/2555 .">
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://uniq.cyberwerk.online/" />
+    <meta property="og:site_name" content="UniqSuite" />
+    
+    
+    <meta property="og:image" content="https://uniq.cyberwerk.online/favicon.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    
+    <meta name="twitter:image" content="https://uniq.cyberwerk.online/favicon.svg">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "UniqSuite",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Complete NIS2 compliance and implementation platform with 17-step PDCA pipeline covering assessment, gap analysis, risk management, SoA, policies, and audit.",
+      "url": "https://uniq.cyberwerk.online",
+      "offers": [
+        { "@type": "Offer", "price": "0", "priceCurrency": "EUR", "name": "Free" },
+        { "@type": "Offer", "price": "1900", "priceCurrency": "EUR", "name": "Core" },
+        { "@type": "Offer", "price": "7900", "priceCurrency": "EUR", "name": "Enterprise" }
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Dr. Sait Yalazay",
+        "jobTitle": "NIS2 & Cybersecurity Expert",
+        "url": "https://uniq.cyberwerk.online/impressum",
+        "sameAs": ["https://uniq.cyberwerk.online/impressum"]
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Cyberwerk",
+        "url": "https://uniq.cyberwerk.online",
+        "founder": { "@type": "Person", "name": "Dr. Sait Yalazay" }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Dr. Sait Yalazay",
+      "jobTitle": "NIS2 & Cybersecurity Expert",
+      "description": "Architect of UniqSuite. 20+ years in cybersecurity (NATO, UN, G20). Author of NIS2 implementation guides.",
+      "url": "https://uniq.cyberwerk.online/impressum",
+      "worksFor": { "@type": "Organization", "name": "Cyberwerk", "url": "https://uniq.cyberwerk.online" },
+      "knowsAbout": ["NIS2", "Cybersecurity", "ISO 27001", "BSIG", "GDPR", "Risk Management"]
+    }
+    </script>
+    <meta property="og:title" content="UniqSuite Compliance &amp; Implementation Platform">
+  <meta name="twitter:title" content="UniqSuite Compliance &amp; Implementation Platform">
+  <meta property="og:description" content="UniqSuite: Complete NIS2 compliance platform with 17-step pipeline — from company profile to continuous improvement. EU Directive 2022/2555 .">
+  <meta name="twitter:description" content="UniqSuite: Complete NIS2 compliance platform with 17-step pipeline — from company profile to continuous improvement. EU Directive 2022/2555 .">
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

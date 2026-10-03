@@ -1,0 +1,46 @@
+name: Nachweis Mandantentrennung
+
+# Beweist, ob Kunde A die Daten von Kunde B sehen oder aendern kann.
+#
+# Warum als Workflow und nicht per SSH vom Arbeitsrechner: der private
+# SSH-Schluessel liegt ausschliesslich in den GitHub-Secrets, nicht lokal.
+# GitHub kommt also auf den Server, der Laptop nicht. Statt einen zweiten
+# Schluessel zu verteilen (mehr Schluessel = mehr Angriffsflaeche), laeuft der
+# Nachweis dort, wo der Zugang ohnehin schon besteht.
+#
+# Starten: GitHub -> Actions -> "Nachweis Mandantentrennung" -> Run workflow
+# Das Ergebnis steht danach im Log des Schrittes "Nachweis ausfuehren".
+#
+# Das Skript selbst laeuft in EINER Transaktion und endet mit ROLLBACK —
+# es liest echte Daten, veraendert aber dauerhaft nichts.
+
+on:
+  workflow_dispatch:
+
+# V-4: nur Lesezugriff auf das Repository.
+permissions:
+  contents: read
+
+jobs:
+  nachweis:
+    runs-on: ubuntu-latest
+    steps:
+      # V-4: Actions auf den Commit festgenagelt (siehe deploy.yml).
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      # V-4: SSH ohne Fremd-Actions (siehe .github/scripts/ssh-vorbereiten.sh).
+      - name: SSH vorbereiten
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: sh .github/scripts/ssh-vorbereiten.sh
+
+      - name: Skript auf den Server kopieren
+        run: tar -czf - db/mandantentrennung_beweis.sql | ssh -F ~/.ssh/cy_config cy 'tar -xzf - --no-same-owner -C /root/UniqSuite'
+
+      - name: Nachweis ausfuehren
+        timeout-minutes: 10
+        run: ssh -F ~/.ssh/cy_config cy 'cd /root/UniqSuite && docker compose exec -T db psql -U postgres -d cy < db/mandantentrennung_beweis.sql' < /dev/null

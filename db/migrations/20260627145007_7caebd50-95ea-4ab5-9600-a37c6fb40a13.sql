@@ -1,0 +1,1 @@
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.class_assessment_answers TO authenticated; GRANT ALL ON public.class_assessment_answers TO service_role;

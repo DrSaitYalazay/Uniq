@@ -1,0 +1,3 @@
+ALTER TABLE public.assets
+  ADD COLUMN IF NOT EXISTS graph_position_x DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS graph_position_y DOUBLE PRECISION;

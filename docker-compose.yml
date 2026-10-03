@@ -1,0 +1,148 @@
+# UniqSuite — eigenständige Installation auf demselben Server wie ClaudeCWS.
+# Eigener Projektname => eigene Container, eigene Volumes (eigene Datenbank,
+# eigene Dateiablage, eigene Sicherungen). Mit CWS teilt UniqSuite nur den
+# Caddy (TLS + Weiterleitung), siehe Netz uniqsuite_edge unten.
+name: uniqsuite
+
+# V-4: Container-Logs rotieren. Der Standardtreiber json-file wächst sonst ohne
+# Grenze und kann die Platte füllen. Gilt für jeden Dienst (logging: *logging).
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+# V-4: fertige Images ebenfalls vom AWS-Spiegel (wie in den Dockerfiles). Von
+# Docker Hub bekam der Server keine Aktualisierung mehr (TLS-Timeout, 10.09.2026);
+# Postgres und Caddy liefen damit dauerhaft auf dem Stand der Erstinstallation.
+services:
+  db:
+    image: public.ecr.aws/docker/library/postgres:16-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cy}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?gerekli}
+      AUTHENTICATOR_PASSWORD: ${AUTHENTICATOR_PASSWORD:?gerekli}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Şema ilk boot'ta yüklenir (build-schema.sh ile üretilmiş schema.sql)
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/00_schema.sql:ro
+      - ./db/docker/01_set_authenticator_pw.sh:/docker-entrypoint-initdb.d/01_set_authenticator_pw.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-cy}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Einmaliger Migrations-/Ensure-Lauf bei JEDEM `up`: wendet idempotente
+  # Laufzeit-Fixes (db/runtime-ensure.sql) als postgres-Superuser an. Nötig, weil
+  # schema.sql nur beim ERSTEN Boot läuft und neue Fixes eine bereits
+  # initialisierte Live-DB sonst nicht erreichen (CHG-04/F-05). Läuft entkoppelt
+  # von der App: schlägt er fehl, startet die App trotzdem (Wipe bleibt dann alt).
+  migrate:
+    image: public.ecr.aws/docker/library/postgres:16-alpine
+    restart: "no"
+    logging: *logging
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:?gerekli}
+    entrypoint: ["sh", "-c", "psql -h db -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-cy} -v ON_ERROR_STOP=1 -f /runtime-ensure.sql"]
+    volumes:
+      - ./db/runtime-ensure.sql:/runtime-ensure.sql:ro
+
+  # V-4: tägliche Sicherung (DB-Dump + Rollen + hochgeladene Dateien) nach
+  # ./backups auf dem Host, 14 Tage Aufbewahrung. Derselbe Dienst sichert vor
+  # jedem Deploy ("once predeploy") und liefert die Wiederherstellungsprobe
+  # ("nachweis"). Einzelheiten: db/backup/backup.sh.
+  # ACHTUNG: die Sicherungen liegen auf DEMSELBEN Server. Gegen Serververlust
+  # braucht es zusätzlich eine verschlüsselte Kopie ausserhalb.
+  backup:
+    image: public.ecr.aws/docker/library/postgres:16-alpine
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-postgres}
+      PGDATABASE: ${POSTGRES_DB:-cy}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?gerekli}
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+    entrypoint: ["sh", "/backup/backup.sh"]
+    command: ["loop"]
+    volumes:
+      - ./backups:/backups
+      - ./db/backup:/backup:ro
+      - storage_data:/data/storage:ro
+
+  api:
+    build: ./api
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://authenticator:${AUTHENTICATOR_PASSWORD}@db:5432/${POSTGRES_DB:-cy}
+      JWT_SECRET: ${JWT_SECRET:?gerekli}
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL:-http://localhost}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      AUTH_AUTOCONFIRM: ${AUTH_AUTOCONFIRM:-true}
+      STORAGE_DIR: /data/storage
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-no-reply@localhost}
+      # Name im Authenticator-App-Eintrag (Standard im Code: "cy")
+      MFA_ISSUER: ${MFA_ISSUER:-UniqSuite}
+    volumes:
+      - storage_data:/data/storage
+
+  worker:
+    build: ./api
+    restart: unless-stopped
+    logging: *logging
+    command: ["node", "src/worker/email-worker.js"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://authenticator:${AUTHENTICATOR_PASSWORD}@db:5432/${POSTGRES_DB:-cy}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-no-reply@localhost}
+
+  web:
+    build: ./web
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      - api
+    # UniqSuite hat KEINEN eigenen Caddy: Port 80/443 belegt auf demselben
+    # Server bereits der Caddy von ClaudeCWS. Der erreicht diesen Container
+    # über das externe Netz uniqsuite_edge unter dem Namen "uniqsuite-web"
+    # (Site-Block uniq.cyberwerk.online in der Caddyfile von ClaudeCWS).
+    # Dieses Netz enthält NUR web und den Caddy — db und api bleiben im
+    # eigenen Standardnetz von UniqSuite und sind von CWS aus nicht erreichbar.
+    networks:
+      default:
+      uniqsuite_edge:
+        aliases:
+          - uniqsuite-web
+
+volumes:
+  pgdata:
+  storage_data:
+
+networks:
+  uniqsuite_edge:
+    external: true
+    name: uniqsuite_edge

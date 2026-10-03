@@ -1,0 +1,160 @@
+/**
+ * Policy Clauses — OT/ICS Security (p51)
+ * Operational Technology & Industrial Control Systems policy aligned to
+ * IEC 62443, NIS2 Art.21, NIST SP 800-82r3, BSI ICS-Security Kompendium.
+ * Sector relevance: energy, water, healthcare (medical OT), manufacturing,
+ * transport, district heating.
+ */
+import type { PolicyClause } from "../policyClauseTemplates";
+
+// ═══════════════════════════════════════════════════════════════
+// P51 — OT/ICS Security Policy
+// Complements IT-focused policies; explicit OT/ICS boundary controls
+// ═══════════════════════════════════════════════════════════════
+const p51: PolicyClause[] = [
+  { id: "p51-c00", title: "Zweck und Geltungsbereich der OT/ICS-Sicherheitsrichtlinie", titleEn: "Purpose & Scope of OT/ICS Security Policy",
+    description: "Diese Richtlinie definiert die Sicherheitsanforderungen für operative Technologie (OT), industrielle Steuerungssysteme (ICS), SCADA, DCS, SPS/PLC, RTUs, HMIs und sicherheitsgerichtete Systeme (SIS). Sie gilt für alle Produktions-, Versorgungs- und Steuerungsumgebungen der Organisation. Allgemeine IT-Sicherheitsanforderungen werden weiterhin durch p01–p50 abgedeckt; diese Richtlinie regelt die OT-spezifischen Ergänzungen und Abweichungen, die sich aus Verfügbarkeitspriorisierung, langen Lebenszyklen und physischen Folgewirkungen ergeben.",
+    descriptionEn: "This policy defines security requirements for operational technology (OT), industrial control systems (ICS), SCADA, DCS, PLCs, RTUs, HMIs, and safety-instrumented systems (SIS). It applies to all production, utility, and control environments of the organisation. General IT security requirements remain governed by p01–p50; this policy regulates the OT-specific additions and deviations resulting from availability prioritisation, long lifecycles, and physical consequences.",
+    reason: "OT/ICS-Systeme haben fundamental andere Risikoprofile als klassische IT — Verfügbarkeit und Safety stehen über Vertraulichkeit, Patch-Zyklen sind lang, und Kompromittierungen können physische Schäden verursachen. Ohne dedizierte Richtlinie werden IT-Kontrollen unpassend auf OT angewandt und gefährden den Betrieb.",
+    reasonEn: "OT/ICS systems have fundamentally different risk profiles than classic IT — availability and safety outrank confidentiality, patch cycles are long, and compromises can cause physical damage. Without a dedicated policy, IT controls are inappropriately applied to OT and endanger operations.",
+    whenRequired: "Erforderlich für Organisationen mit OT/ICS-Systemen (Energie, Wasser, Produktion, Transport, Gesundheit, Fernwärme).",
+    whenRequiredEn: "Required for organisations with OT/ICS systems (energy, water, manufacturing, transport, healthcare, district heating).",
+    sources: ["IEC 62443-2-1", "NIS2 Art.21(2)(a,e)", "NIST SP 800-82r3", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c01", title: "IT/OT-Verantwortungsabgrenzung und Governance", titleEn: "IT/OT Responsibility Demarcation & Governance",
+    description: "Die Verantwortlichkeiten zwischen IT-, OT- und Safety-Teams müssen formell abgegrenzt sein. Eine RACI-Matrix muss für jeden OT-Sicherheitsbereich (Patching, Monitoring, Incident-Response, Change, Backup, Zugriff) den zuständigen Eigentümer, den Mitwirkenden und den Genehmiger festlegen. Ein OT-Sicherheitsverantwortlicher muss benannt sein. Konflikte zwischen IT- und OT-Anforderungen müssen über eine definierte Eskalationsinstanz geklärt werden.",
+    descriptionEn: "Responsibilities between IT, OT, and safety teams must be formally delineated. A RACI matrix must define the responsible owner, contributor, and approver for each OT security area (patching, monitoring, incident response, change, backup, access). An OT security officer must be designated. Conflicts between IT and OT requirements must be resolved via a defined escalation body.",
+    reason: "Unklare Verantwortlichkeiten führen dazu, dass OT-Sicherheit zwischen Stühlen fällt — IT betrachtet OT als nicht zuständig, OT besitzt keine Security-Kompetenz.",
+    reasonEn: "Unclear responsibilities cause OT security to fall between the cracks — IT considers OT out of scope, OT lacks security expertise.",
+    whenRequired: "Immer erforderlich für Organisationen mit OT.",
+    whenRequiredEn: "Always required for organisations with OT.",
+    sources: ["IEC 62443-2-1", "BSI ICS-Security Kompendium", "NIST SP 800-82r3"] },
+
+  { id: "p51-c02", title: "OT-Asset-Inventar und Discovery", titleEn: "OT Asset Inventory & Discovery",
+    description: "Alle OT-Assets (PLCs, RTUs, HMIs, Engineering-Workstations, Historian-Server, Safety-Controller, Field-Devices, OT-Netzwerkgeräte) müssen inventarisiert werden — mit Hersteller, Modell, Firmware-Version, Standort, Anlagenzuordnung, Protokoll und Sicherheitsklassifizierung. Discovery muss passiv erfolgen (Span-Port-Mirror, Netzwerk-Traffic-Analyse) — aktives Scannen ist auf abgesprochene Wartungsfenster zu beschränken, da es Steuerungssysteme stören oder zum Absturz bringen kann. Das Inventar muss in die zentrale CMDB (siehe p08) eingebunden, aber als OT-Asset markiert sein.",
+    descriptionEn: "All OT assets (PLCs, RTUs, HMIs, engineering workstations, historian servers, safety controllers, field devices, OT network equipment) must be inventoried — with vendor, model, firmware version, location, plant assignment, protocol, and security classification. Discovery must be passive (SPAN port mirror, network traffic analysis) — active scanning must be restricted to agreed maintenance windows, as it can disturb or crash control systems. The inventory must be integrated with the central CMDB (see p08) but flagged as OT asset.",
+    reason: "Klassische IT-Discovery-Tools (Nmap-Scans, Agent-Push) können in OT-Netzen zu Steuerungsausfällen führen. Passive Methoden sind die einzige sichere Variante im Produktivbetrieb.",
+    reasonEn: "Classical IT discovery tools (nmap scans, agent push) can cause control failures in OT networks. Passive methods are the only safe variant during production.",
+    whenRequired: "Immer erforderlich für OT-Umgebungen.",
+    whenRequiredEn: "Always required for OT environments.",
+    sources: ["IEC 62443-2-1", "NIST SP 800-82r3 §6.2", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c03", title: "Netzwerksegmentierung nach Purdue-Modell", titleEn: "Network Segmentation per Purdue Model",
+    description: "OT-Netzwerke müssen nach dem Purdue Enterprise Reference Architecture (PERA) Modell segmentiert sein — mindestens Ebene 0 (Sensoren/Aktoren), Ebene 1 (Steuerung/PLC), Ebene 2 (Überwachung/SCADA/HMI), Ebene 3 (Operations/MES), Ebene 3.5 (industrielle DMZ/iDMZ) und Ebene 4/5 (Enterprise-IT). Übergänge zwischen Ebenen müssen ausschließlich über die iDMZ erfolgen. Direkte Verbindungen von Enterprise-IT zu Steuerungsebenen sind verboten. Jede Zone muss als IEC-62443-Zone mit definierten Sicherheitsanforderungen dokumentiert sein.",
+    descriptionEn: "OT networks must be segmented per the Purdue Enterprise Reference Architecture (PERA) — at minimum level 0 (sensors/actuators), level 1 (control/PLC), level 2 (supervision/SCADA/HMI), level 3 (operations/MES), level 3.5 (industrial DMZ/iDMZ), and levels 4/5 (enterprise IT). Transitions between levels must occur exclusively via the iDMZ. Direct connections from enterprise IT to control levels are prohibited. Each zone must be documented as an IEC 62443 zone with defined security requirements.",
+    reason: "Flache Netzwerke zwischen IT und OT ermöglichen laterale Bewegung von IT-Kompromittierungen direkt in die Produktionssteuerung — ein Hauptangriffsweg moderner Ransomware gegen Industrieziele.",
+    reasonEn: "Flat networks between IT and OT enable lateral movement from IT compromises directly into production control — a primary attack path of modern ransomware against industrial targets.",
+    whenRequired: "Immer erforderlich für OT-Umgebungen.",
+    whenRequiredEn: "Always required for OT environments.",
+    sources: ["IEC 62443-3-2", "NIST SP 800-82r3 §5", "BSI ICS-Security Kompendium", "NIS2 Art.21(2)(e)"] },
+
+  { id: "p51-c04", title: "Industrielle DMZ (iDMZ) und Datenübergabe", titleEn: "Industrial DMZ (iDMZ) & Data Handover",
+    description: "Eine industrielle DMZ muss zwischen Enterprise-IT (Ebene 4/5) und OT (Ebene 3 und tiefer) eingerichtet sein. Der gesamte Datenaustausch zwischen IT und OT muss über genehmigte iDMZ-Dienste laufen — historische Daten via Historian-Replication, Patches via dedizierte Patch-Server, Remote-Zugriff via Jump Server mit Session-Recording. Initiierte Verbindungen müssen ausschließlich von der höheren zur niedrigeren Ebene gerichtet sein (Pull statt Push). Protokolle wie Modbus, S7 oder DNP3 dürfen die iDMZ nicht durchqueren.",
+    descriptionEn: "An industrial DMZ must be established between enterprise IT (level 4/5) and OT (level 3 and below). All data exchange between IT and OT must run through approved iDMZ services — historical data via historian replication, patches via dedicated patch servers, remote access via jump server with session recording. Initiated connections must be directed exclusively from higher to lower level (pull instead of push). Industrial protocols such as Modbus, S7, or DNP3 must not traverse the iDMZ.",
+    reason: "Ohne iDMZ entsteht eine direkte Verbindung zwischen Office-IT und Produktionssteuerung. Ein einzelner Office-Phishing-Erfolg kann dann direkt Steuerungssysteme erreichen.",
+    reasonEn: "Without an iDMZ, a direct connection exists between office IT and production control. A single office phishing success can then directly reach control systems.",
+    whenRequired: "Immer erforderlich für OT mit IT-Anbindung.",
+    whenRequiredEn: "Always required for OT with IT connectivity.",
+    sources: ["IEC 62443-3-2", "NIST SP 800-82r3 §5.5", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c05", title: "Sicherer Fernzugriff auf OT-Systeme", titleEn: "Secure Remote Access to OT Systems",
+    description: "Fernzugriffe auf OT-Systeme (durch Mitarbeiter, Hersteller, Wartungstechniker, Integratoren) müssen über einen kontrollierten Jump-Server in der iDMZ erfolgen, der MFA, Session-Recording, Just-in-Time-Aktivierung und Vier-Augen-Freigabe erzwingt. Permanente Hersteller-VPNs sind nicht zulässig — Fernzugriff darf nur für definierte Wartungsfenster aktiviert und danach automatisch deaktiviert werden. Alle OT-Fernsitzungen müssen vollständig aufgezeichnet, mindestens 12 Monate aufbewahrt und auf Anomalien überwacht werden.",
+    descriptionEn: "Remote access to OT systems (by employees, vendors, maintenance technicians, integrators) must occur via a controlled jump server in the iDMZ enforcing MFA, session recording, just-in-time activation, and four-eyes approval. Permanent vendor VPNs are not permitted — remote access must only be activated for defined maintenance windows and automatically deactivated thereafter. All OT remote sessions must be fully recorded, retained for at least 12 months, and monitored for anomalies.",
+    reason: "Hersteller-Fernzugänge sind ein Top-Angriffsvektor — Lieferketten-Kompromittierungen wie SolarWinds zeigen, dass dauerhafte Wartungstunnel ausgenutzt werden.",
+    reasonEn: "Vendor remote access is a top attack vector — supply chain compromises like SolarWinds demonstrate that persistent maintenance tunnels are exploited.",
+    whenRequired: "Erforderlich bei jedem OT-Fernzugriff.",
+    whenRequiredEn: "Required for any OT remote access.",
+    sources: ["IEC 62443-3-3 SR 1.13", "NIST SP 800-82r3 §6.4", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c06", title: "OT-spezifisches Patch- und Schwachstellenmanagement", titleEn: "OT-Specific Patch & Vulnerability Management",
+    description: "Patches für OT-Systeme dürfen nur nach Freigabe des Herstellers oder Integrators und nach Test in einer repräsentativen Staging-Umgebung eingespielt werden. Wo Patches nicht zeitnah möglich sind (zertifizierte Anlagen, eingebettete Steuerungen, lange Wartungsfenster), müssen kompensierende Kontrollen dokumentiert sein — Netzwerksegmentierung, Protokollfilterung, virtuelles Patching durch IPS, verschärfte Überwachung. Schwachstellenbewertung muss Safety- und Verfügbarkeitsfolgen einbeziehen — eine niedrige CVSS-Bewertung im IT-Kontext kann in OT kritisch sein und umgekehrt.",
+    descriptionEn: "Patches for OT systems may only be applied after vendor or integrator approval and after testing in a representative staging environment. Where patches are not promptly possible (certified plants, embedded controllers, long maintenance windows), compensating controls must be documented — network segmentation, protocol filtering, virtual patching by IPS, intensified monitoring. Vulnerability assessment must incorporate safety and availability impacts — a low CVSS rating in IT context can be critical in OT and vice versa.",
+    reason: "Sofortiges Patchen wie in IT würde Anlagen-Zertifizierungen, Garantien und Verfügbarkeit gefährden. Gleichzeitig dürfen Schwachstellen nicht einfach ignoriert werden.",
+    reasonEn: "Immediate patching as in IT would endanger plant certifications, warranties, and availability. At the same time, vulnerabilities must not simply be ignored.",
+    whenRequired: "Immer erforderlich für OT-Umgebungen.",
+    whenRequiredEn: "Always required for OT environments.",
+    sources: ["IEC 62443-2-3", "NIST SP 800-82r3 §6.5", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c07", title: "Härtung und sichere Konfiguration von OT-Komponenten", titleEn: "Hardening & Secure Configuration of OT Components",
+    description: "OT-Komponenten müssen gemäß Hersteller-Hardening-Guides und einschlägigen Standards (IEC 62443-4-2, BSI ICS-Härtungsleitfäden) konfiguriert werden. Unbenutzte Dienste und Ports müssen deaktiviert, Standardpasswörter geändert, Web-Konfigurationsschnittstellen abgesichert und kryptografische Standardschlüssel ersetzt werden. Engineering-Workstations müssen wie Servern behandelt werden — gehärtet, mit Anti-Malware, ohne Internet-Zugriff und mit Application-Whitelisting.",
+    descriptionEn: "OT components must be configured per vendor hardening guides and relevant standards (IEC 62443-4-2, BSI ICS hardening guides). Unused services and ports must be disabled, default passwords changed, web configuration interfaces secured, and cryptographic default keys replaced. Engineering workstations must be treated like servers — hardened, with anti-malware, no internet access, and application whitelisting.",
+    reason: "OT-Komponenten werden häufig mit unsicheren Werkseinstellungen ausgeliefert. Engineering-Workstations sind durch ihre Funktion ein Hochwertziel für Angreifer.",
+    reasonEn: "OT components are frequently shipped with insecure factory defaults. Engineering workstations are high-value targets due to their function.",
+    whenRequired: "Bei Inbetriebnahme und nach jedem wesentlichen Update.",
+    whenRequiredEn: "At commissioning and after every significant update.",
+    sources: ["IEC 62443-4-2", "BSI ICS-Security Kompendium", "NIST SP 800-82r3"] },
+
+  { id: "p51-c08", title: "Passive Überwachung industrieller Protokolle", titleEn: "Passive Monitoring of Industrial Protocols",
+    description: "Industrielle Protokolle (Modbus, DNP3, IEC 60870-5-104, IEC 61850, S7, EtherNet/IP, OPC UA, PROFINET, BACnet) müssen passiv überwacht werden. Eine OT-spezifische Network-Detection-Lösung (oder ein OT-IDS) muss eingesetzt werden, die Baselines erlaubter Kommandos, Datenflüsse und Geräteinteraktionen erstellt und Abweichungen alarmiert — z.B. unerwartete Schreibbefehle, Firmware-Uploads, Konfigurationsänderungen oder neue Teilnehmer. Alarme müssen in das zentrale SIEM (p28) integriert werden, mit OT-spezifischen Use-Cases und Eskalationspfaden.",
+    descriptionEn: "Industrial protocols (Modbus, DNP3, IEC 60870-5-104, IEC 61850, S7, EtherNet/IP, OPC UA, PROFINET, BACnet) must be passively monitored. An OT-specific network detection solution (or OT IDS) must be deployed that creates baselines of permitted commands, data flows, and device interactions and alerts on deviations — e.g., unexpected write commands, firmware uploads, configuration changes, or new participants. Alerts must be integrated into the central SIEM (p28) with OT-specific use cases and escalation paths.",
+    reason: "Klassische IT-Security-Tools verstehen industrielle Protokolle nicht und können Angriffe wie Stuxnet oder TRITON nicht erkennen. Dedizierte OT-Sichtbarkeit ist unverzichtbar.",
+    reasonEn: "Classical IT security tools do not understand industrial protocols and cannot detect attacks like Stuxnet or TRITON. Dedicated OT visibility is indispensable.",
+    whenRequired: "Erforderlich für alle produktiven OT-Netze.",
+    whenRequiredEn: "Required for all productive OT networks.",
+    sources: ["IEC 62443-3-3 SR 6.2", "NIST SP 800-82r3 §6.6", "BSI ICS-Security Kompendium", "NIS2 Art.21(2)(b)"] },
+
+  { id: "p51-c09", title: "Zugriffskontrolle und Konten für OT-Systeme", titleEn: "Access Control & Accounts for OT Systems",
+    description: "OT-Konten müssen persönlich und nachvollziehbar sein — Schichtkonten oder gemeinsame Anmeldungen sind nur in dokumentierten Ausnahmefällen mit kompensierenden Kontrollen (Kamera, Schichtprotokoll, Schlüsselmanagement) zulässig. Administrative OT-Konten müssen MFA verwenden (wo technisch möglich) und über PAM (p12) verwaltet werden. Engineering-Funktionen (Programmänderung, Rezeptänderung, Firmware-Upload) müssen rollengetrennt und protokolliert sein. Notfall-Zugänge (Break-Glass) müssen für sicherheitskritische Situationen vorgesehen sein, aber jede Nutzung muss innerhalb von 24 Stunden überprüft werden.",
+    descriptionEn: "OT accounts must be personal and traceable — shift accounts or shared logins are only permissible in documented exceptional cases with compensating controls (camera, shift log, key management). Administrative OT accounts must use MFA (where technically possible) and be managed via PAM (p12). Engineering functions (program change, recipe change, firmware upload) must be role-segregated and logged. Emergency (break-glass) access must be provided for safety-critical situations, but every use must be reviewed within 24 hours.",
+    reason: "Geteilte Konten verhindern Verantwortungszuordnung; ungetrennte Engineering-Funktionen ermöglichen Sabotage durch einen einzelnen Innentäter.",
+    reasonEn: "Shared accounts prevent accountability; non-segregated engineering functions enable sabotage by a single insider.",
+    whenRequired: "Immer erforderlich für OT-Umgebungen.",
+    whenRequiredEn: "Always required for OT environments.",
+    sources: ["IEC 62443-3-3 SR 1.x", "NIST SP 800-82r3", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c10", title: "Wechseldatenträger und mobile Geräte in OT", titleEn: "Removable Media & Mobile Devices in OT",
+    description: "USB-Sticks, Wechselfestplatten, mobile Geräte und Engineering-Laptops dürfen in OT-Zonen nur nach formaler Freigabe genutzt werden. Eine USB-Sluice (Quarantäne-Scan-Station) muss vor jedem Einsatz in OT alle Medien auf Schadcode prüfen. Engineering-Laptops müssen dediziert für OT-Einsätze sein, dürfen nicht in Office-Netze gebracht werden und müssen vor jedem OT-Einsatz auf einen sicheren Stand zurückgesetzt werden. Private Geräte sind in OT-Zonen verboten.",
+    descriptionEn: "USB sticks, removable drives, mobile devices, and engineering laptops may only be used in OT zones after formal approval. A USB sluice (quarantine scan station) must screen all media for malicious code before each OT use. Engineering laptops must be dedicated to OT use, must not be taken into office networks, and must be reset to a secure state before each OT use. Private devices are prohibited in OT zones.",
+    reason: "USB-Medien sind ein dokumentierter Angriffsvektor in OT (Stuxnet, BadUSB). Engineering-Laptops, die zwischen Office- und OT-Netzen wechseln, sind ein klassischer Brückenkopf.",
+    reasonEn: "USB media are a documented attack vector in OT (Stuxnet, BadUSB). Engineering laptops moving between office and OT networks are a classic bridgehead.",
+    whenRequired: "Immer erforderlich für OT-Umgebungen.",
+    whenRequiredEn: "Always required for OT environments.",
+    sources: ["IEC 62443-3-3 SR 2.3", "IEC 62443-3-3 SR 3.2", "NIST SP 800-82r3", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c11", title: "Backup, Recovery und Konfigurations-Snapshots", titleEn: "Backup, Recovery & Configuration Snapshots",
+    description: "Versionsverwaltete Offline-Backups der PLC-Programme, HMI-Projekte, Rezepte, Engineering-Konfigurationen und Historian-Daten müssen geführt werden. Backups müssen in einem von der OT- und IT-Umgebung getrennten Speicher gehalten (Air-Gap oder Immutable Storage) und jährlich in einer geplanten Wartungspause vollständig restauriert werden. Für jede Anlage muss ein dokumentierter Wiederanlauf-Plan mit RTO/RPO vorhanden sein, der auch Hardware-Ersatz, Lizenz-Reaktivierung und Hersteller-Eskalationen abdeckt.",
+    descriptionEn: "Version-controlled offline backups of PLC programs, HMI projects, recipes, engineering configurations, and historian data must be maintained. Backups must be kept in storage segregated from the OT and IT environment (air-gap or immutable storage) and fully restored at least annually during a planned maintenance window. For each plant, a documented restart plan with RTO/RPO must exist that also covers hardware replacement, licence reactivation, and vendor escalations.",
+    reason: "Ransomware gegen OT zielt zunehmend auch auf Backups. Ohne getestete Wiederherstellung verlängert sich ein Vorfall von Stunden auf Wochen.",
+    reasonEn: "Ransomware against OT increasingly also targets backups. Without tested recovery, an incident extends from hours to weeks.",
+    whenRequired: "Immer erforderlich für OT-Anlagen.",
+    whenRequiredEn: "Always required for OT plants.",
+    sources: ["IEC 62443-2-1", "NIST SP 800-82r3 §6.7", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c12", title: "Schutz sicherheitsgerichteter Systeme (SIS)", titleEn: "Protection of Safety-Instrumented Systems (SIS)",
+    description: "Sicherheitsgerichtete Systeme (SIS, Safety-PLCs, Emergency Shutdown Systems) müssen physisch und logisch vom Basis-Prozess-Steuerungssystem (BPCS) getrennt sein. SIS-Engineering-Schnittstellen müssen mit physischen Schlüsselschaltern, Schreibschutz oder dedizierten Engineering-Geräten geschützt werden. Änderungen an SIS-Logik unterliegen einer formalen Functional-Safety-Freigabe gemäß IEC 61511 / IEC 61508 zusätzlich zu Standard-Change-Management. Bypass-Zustände müssen alarmiert, protokolliert und nur mit Mehrfachgenehmigung erlaubt sein.",
+    descriptionEn: "Safety-instrumented systems (SIS, safety PLCs, emergency shutdown systems) must be physically and logically separated from the basic process control system (BPCS). SIS engineering interfaces must be protected with physical key switches, write protection, or dedicated engineering devices. Changes to SIS logic are subject to a formal functional-safety approval per IEC 61511 / IEC 61508 in addition to standard change management. Bypass states must be alarmed, logged, and only permitted with multi-party authorisation.",
+    reason: "Der TRITON/TRISIS-Angriff zeigte, dass SIS gezielt manipuliert werden, um Safety-Funktionen zu deaktivieren. Eine Kompromittierung kann Menschenleben gefährden.",
+    reasonEn: "The TRITON/TRISIS attack demonstrated that SIS are deliberately targeted to disable safety functions. A compromise can endanger human lives.",
+    whenRequired: "Erforderlich für alle Anlagen mit SIS.",
+    whenRequiredEn: "Required for all plants with SIS.",
+    sources: ["IEC 61511", "IEC 62443-3-3", "NIST SP 800-82r3"] },
+
+  { id: "p51-c13", title: "OT-Incident-Response mit Safety- und Verfügbarkeitspriorität", titleEn: "OT Incident Response with Safety & Availability Priority",
+    description: "Der allgemeine Incident-Response-Prozess (p30) gilt auch für OT, mit OT-spezifischen Ergänzungen: Vor jeder Eindämmungsmaßnahme muss eine Safety- und Verfügbarkeitsbewertung erfolgen — das Trennen eines Steuerungssegments kann eine Anlage in einen unsicheren Zustand bringen. Eindämmungsentscheidungen erfordern OT-Operations-Freigabe. Ein OT-Playbook muss Szenarien wie Ransomware in der iDMZ, PLC-Manipulation, Hersteller-Fernzugriff-Missbrauch, USB-Schadcode und SIS-Bypass abdecken. Forensik in OT muss spezialisierte Methoden nutzen (Memory-Capture von PLCs, Engineering-Tool-Logs), da klassische Forensik-Tools versagen.",
+    descriptionEn: "The general incident response process (p30) also applies to OT, with OT-specific additions: before any containment action, a safety and availability assessment must occur — disconnecting a control segment can put a plant into an unsafe state. Containment decisions require OT operations approval. An OT playbook must cover scenarios such as ransomware in the iDMZ, PLC manipulation, vendor remote-access abuse, USB-borne malware, and SIS bypass. Forensics in OT must use specialised methods (PLC memory capture, engineering tool logs), as classical forensics tools fail.",
+    reason: "Klassische IT-Eindämmung (alles trennen und neu aufsetzen) kann in OT Personenschäden, Umweltschäden oder Anlagenzerstörung verursachen.",
+    reasonEn: "Classical IT containment (disconnect everything and rebuild) can cause personal injury, environmental damage, or plant destruction in OT.",
+    whenRequired: "Erforderlich für alle OT-Umgebungen.",
+    whenRequiredEn: "Required for all OT environments.",
+    sources: ["IEC 62443-2-1", "NIST SP 800-82r3 §6.8", "BSI ICS-Security Kompendium", "NIS2 Art.21(2)(b)"] },
+
+  { id: "p51-c14", title: "OT-Lieferkette, Hersteller- und Integrator-Anforderungen", titleEn: "OT Supply Chain, Vendor & Integrator Requirements",
+    description: "Beschaffung von OT-Komponenten und Engineering-Dienstleistungen muss IEC-62443-4-1 (Security-Development-Lifecycle) und IEC-62443-4-2 (Komponenten-Anforderungen) als Mindestanforderung enthalten. Hersteller müssen Security-Advisories veröffentlichen, dokumentierte Patch-Pfade bieten und SBOM für gelieferte Komponenten bereitstellen. Integrator-Verträge müssen Anforderungen an Engineering-Workstation-Hygiene, Personal-Zuverlässigkeit und Fernzugriff regeln. Kritische OT-Lieferanten müssen in das Third-Party-Risk-Management (p43) mit OT-spezifischen Bewertungskriterien einbezogen werden.",
+    descriptionEn: "Procurement of OT components and engineering services must include IEC 62443-4-1 (Security Development Lifecycle) and IEC 62443-4-2 (component requirements) as minimum requirements. Vendors must publish security advisories, offer documented patch paths, and provide SBOMs for delivered components. Integrator contracts must govern requirements for engineering workstation hygiene, personnel reliability, and remote access. Critical OT suppliers must be included in third-party risk management (p43) with OT-specific assessment criteria.",
+    reason: "OT-Lieferketten-Angriffe (z.B. manipulierte Firmware oder kompromittierter Integrator-Laptop) sind eine wachsende Bedrohung und werden häufig von Standard-Lieferantenfragebögen nicht erfasst.",
+    reasonEn: "OT supply chain attacks (e.g., manipulated firmware or compromised integrator laptops) are a growing threat and are frequently missed by standard supplier questionnaires.",
+    whenRequired: "Erforderlich bei jeder OT-Beschaffung und für aktive OT-Lieferanten.",
+    whenRequiredEn: "Required for every OT procurement and for active OT suppliers.",
+    sources: ["IEC 62443-4-1", "IEC 62443-4-2", "NIS2 Art.21(2)(d)", "BSI ICS-Security Kompendium"] },
+
+  { id: "p51-c15", title: "Überprüfung der OT/ICS-Sicherheitsrichtlinie", titleEn: "Review of OT/ICS Security Policy",
+    description: "Diese Richtlinie muss mindestens jährlich und nach jedem signifikanten OT-Sicherheitsvorfall, jeder Anlagenerweiterung oder regulatorischen Änderung überprüft werden. Erkenntnisse aus OT-spezifischen Audits, Red-Team-Übungen auf der iDMZ, Hersteller-Advisories und Branchen-CERTs (z.B. CERT-VDE, CISA ICS-CERT) müssen einfließen. Eine Reifegradbewertung gemäß IEC 62443-2-1 sollte alle zwei Jahre durchgeführt werden.",
+    descriptionEn: "This policy must be reviewed at least annually and after every significant OT security incident, plant expansion, or regulatory change. Insights from OT-specific audits, red-team exercises on the iDMZ, vendor advisories, and sector CERTs (e.g., CERT-VDE, CISA ICS-CERT) must feed in. A maturity assessment per IEC 62443-2-1 should be conducted every two years.",
+    reason: "Die OT-Bedrohungslage entwickelt sich schnell — ohne regelmäßige Überprüfung wird die Richtlinie veraltet und schützt nicht vor aktuellen Angriffsmethoden.",
+    reasonEn: "The OT threat landscape evolves rapidly — without regular review, the policy becomes outdated and does not protect against current attack methods.",
+    whenRequired: "Mindestens jährlich.",
+    whenRequiredEn: "At least annually.",
+    sources: ["IEC 62443-2-1", "ISO 27001:2022 A.5.1", "BSI ICS-Security Kompendium"] },
+];
+
+export const otIcsSecurityClauses: Record<string, PolicyClause[]> = { p51 };

@@ -1,0 +1,55 @@
+name: Nachweis Betrieb
+
+# Belegt den Betriebszustand des Servers (V-4) mit Messwerten statt Annahmen:
+#
+#   "Serverzustand"            NUR LESEND: SSH-Einstellungen, Firewall,
+#                              Sicherheitsupdates, Docker-Protokollierung,
+#                              Alter der Images, Plattenplatz, Sicherungen.
+#   "Wiederherstellungsprobe"  frische Sicherung -> Rückspielen in einen
+#                              Wegwerf-Postgres ohne Netz -> Zeilenzahl jeder
+#                              Tabelle muss zeichengleich sein. Die Live-DB wird
+#                              nur gelesen; Probe-Container und -Dateien werden
+#                              danach gelöscht.
+#
+# Warum als Workflow: der SSH-Schlüssel liegt nur in den GitHub-Secrets (siehe
+# mandantentrennung.yml). Voraussetzung: der Deploy mit dem Dienst "backup"
+# (docker-compose.yml) ist gelaufen.
+# Der Abschnitt "SSH-Host-Schlüssel" liefert den Wert für das Secret
+# SSH_KNOWN_HOSTS — danach prüfen alle Workflows den Server-Schlüssel.
+#
+# Starten: GitHub -> Actions -> "Nachweis Betrieb" -> Run workflow
+# Ergebnis: Log der Schritte "Serverzustand" und "Wiederherstellungsprobe".
+# Ins Log kommen nur Summen und Einstellungen, keine Inhalte und keine Geheimnisse.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nachweis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      # V-4: SSH ohne Fremd-Actions (siehe .github/scripts/ssh-vorbereiten.sh).
+      - name: SSH vorbereiten
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: sh .github/scripts/ssh-vorbereiten.sh
+
+      - name: Skripte auf den Server kopieren
+        run: tar -czf - db/backup | ssh -F ~/.ssh/cy_config cy 'tar -xzf - --no-same-owner -C /root/UniqSuite'
+
+      - name: Serverzustand
+        timeout-minutes: 10
+        run: ssh -F ~/.ssh/cy_config cy 'sh /root/UniqSuite/db/backup/serverzustand.sh' < /dev/null
+
+      - name: Wiederherstellungsprobe
+        timeout-minutes: 30
+        run: ssh -F ~/.ssh/cy_config cy 'sh /root/UniqSuite/db/backup/restore_test.sh' < /dev/null

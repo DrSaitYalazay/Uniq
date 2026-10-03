@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Cyber Governance Charter</title><style>
+:root{
+  --navy:#1C1442; --gold:#E04B95; --gold2:#EE7FB6; --card:#F5F7FB; --cardb:#E4E9F2;
+  --body:#33414F; --mute:#5B6B82; --cream:#FBEAF2; --line:#E2E8F0; --white:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{font-family:Calibri,'Segoe UI',Arial,sans-serif;color:var(--body);margin:0;background:#fff;font-size:13px;line-height:1.5}
+.page{max-width:820px;margin:0 auto;padding:34px 40px}
+.brandbar{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold)}
+.kicker{font-size:11px;color:var(--mute);border-bottom:3px solid var(--gold);padding-bottom:6px;margin:4px 0 18px}
+h1.title{font-size:30px;color:var(--navy);margin:0 0 4px;font-weight:800}
+.subtitle{font-size:15px;color:var(--body);margin:0 0 18px}
+/* NAVY BAND — text only white or gold */
+.band{background:var(--navy);padding:10px 16px;border-radius:4px;margin:22px 0 12px}
+.band h2{color:var(--white);font-size:16px;margin:0;font-weight:700}
+.band .bsub{color:var(--gold2);font-size:12px;margin:2px 0 0}      /* gold on navy, never grey/blue */
+h3{color:var(--navy);font-size:15px;font-weight:700;border-bottom:2px solid var(--gold);padding-bottom:3px;margin:18px 0 8px}
+h4{color:var(--gold);font-size:13px;font-weight:700;margin:14px 0 4px}
+p{margin:0 0 10px;text-align:justify}
+ul,ol{margin:0 0 10px 4px;padding-left:18px}
+li{margin:0 0 4px}
+li::marker{color:var(--gold)}
+table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:12px}
+th{background:var(--navy);color:var(--white);text-align:left;padding:7px 10px;font-weight:700;border:1px solid var(--navy)}
+td{padding:7px 10px;border:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:var(--card)}
+.meta td{border:1px solid var(--line)}
+.meta td.k{background:var(--card);font-weight:700;width:34%}
+.callout{background:var(--cream);border-left:6px solid var(--gold);padding:12px 16px;border-radius:0 4px 4px 0;margin:12px 0;font-size:12.5px}
+.merge{background:#FDE7F1;color:var(--navy);font-weight:700;padding:0 3px;border-radius:3px}      /* auto-filled from company data */
+.fill{color:var(--mute);font-style:italic;border-bottom:1px dashed var(--mute);padding:0 4px}      /* user completes */
+.sig{display:flex;gap:40px;margin-top:26px;flex-wrap:wrap}
+.sigbox{flex:1;min-width:220px;border-top:1.5px solid var(--body);padding-top:4px}
+.sigbox .nm{font-weight:700;color:var(--navy)}
+.sigbox .rl{color:var(--mute);font-size:11px}
+.foot{border-top:1px solid var(--line);margin-top:26px;padding-top:8px;color:var(--mute);font-size:10.5px;display:flex;justify-content:space-between}
+.legend{font-size:11px;color:var(--mute);margin-top:6px}
+.legend .merge,.legend .fill{font-size:11px}
+.draft{display:inline-block;background:var(--gold);color:var(--navy);font-weight:800;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:3px;margin-bottom:8px}
+</style></head>
+<body><div class="page"><div class="brandbar">UNIQSUITE</div><div class="kicker">NIS2 GOVERNANCE · DOCUMENT TEMPLATE</div><span class="draft">DRAFT TEMPLATE — complete the highlighted fields</span><h1 class="title">Cyber Governance Charter</h1><p class="subtitle">{{entityName}} — how the management body governs cybersecurity under NIS2.</p><div class="band"><h2>Cyber Governance Charter</h2><div class="bsub">NIS2 Articles 20 & 21 · § 38 BSIG</div></div><table class="meta"><tr><td class="k">Document</td><td>Cyber Governance Charter</td></tr><tr><td class="k">Entity</td><td><span class="merge">{{entityName}}</span> — <span class="merge">{{sector}}</span>, <span class="merge">{{classification}}</span></td></tr><tr><td class="k">Programme owner</td><td><span class="merge">{{cisoName}}</span> — CISO / Information Security Officer (ISB)</td></tr><tr><td class="k">Version / status</td><td><span class="fill">[ 1.0 / draft ]</span></td></tr><tr><td class="k">Adopted on</td><td><span class="fill">[ date ]</span> (resolution <span class="fill">[ ref. ]</span>)</td></tr><tr><td class="k">Review cycle</td><td>Annually, or on material change</td></tr><tr><td class="k">Legal basis</td><td>NIS2 Articles 20 & 21; § 38 BSIG (management-body duties)</td></tr></table><h3>1. Purpose</h3><p>This charter sets out how the management body of <span class="merge">{{entityName}}</span> governs cybersecurity under the NIS2 Directive. Cyber risk is owned, directed and evidenced at board level — not delegated away — so that a supervisory authority can see from the records that the board approves, oversees and is trained on the risk-management measures.</p><h3>2. Scope</h3><p>This charter covers all information and operational technology supporting the regulated services of <span class="merge">{{entityName}}</span> across its sites (<span class="merge">{{sites}}</span>), and all suppliers that process its data or operate its systems.</p><h3>3. The management body and its duties (Article 20)</h3><p>The management body is collectively accountable for the cybersecurity risk-management measures. Each member carries this duty personally and non-delegably. The members are:</p><table><tr><th>Member</th><th>Role</th><th>NIS2 governance responsibility</th></tr><tr><td colspan="3"><span class="fill">[ one row per management-body member — auto-filled from your roles data: </span><span class="merge">{{managementBodyTable}}</span><span class="fill"> ]</span></td></tr></table><p>Under Article 20 the management body must (a) approve the risk-management measures, (b) oversee their implementation, and (c) undertake training to acquire sufficient knowledge and skills.</p><h3>4. Roles outside the board</h3><table><tr><th>Role</th><th>Holder</th><th>Mandate</th></tr><tr><td>CISO / ISB (programme owner)</td><td><span class="merge">{{cisoName}}</span></td><td>Runs the ISMS; reports to the board quarterly; registered NIS2 contact</td></tr><tr><td>Deputy / Legal</td><td><span class="merge">{{deputyName}}</span></td><td>Deputy NIS2 contact; legal interface</td></tr><tr><td>Data Protection Officer</td><td><span class="merge">{{dpoName}}</span></td><td>GDPR interface; personal-data breaches</td></tr></table><h3>5. Reporting and approval</h3><ul><li>A standing cybersecurity item is on the management-body agenda at least quarterly.</li><li>The CISO reports top risks, programme status, incidents and open gaps; the board records its questions and decisions in the minutes.</li><li>The board formally approves the Article 21(2) measures, and any material change, by resolution.</li><li>Where the board tolerates a residual risk, the decision is recorded in the risk-acceptance log, by name and date.</li></ul><h3>6. Escalation</h3><p>A tested escalation path connects security operations to the management body fast enough to meet the 24-hour early-warning obligation under Article 23. It is exercised at least annually, including out-of-hours.</p><h3>7. Training</h3><p>Every member of the management body completes individual cybersecurity training to the sufficient-knowledge-and-skills standard of Article 20(2), with a per-person record and a refresh at least every three years.</p><h3>8. Adoption</h3><p>Adopted by the management body of <span class="merge">{{entityName}}</span> on <span class="fill">[ date ]</span>, minuted under resolution <span class="fill">[ ref. ]</span>.</p><div class="sig"><div class="sigbox"><div class="nm"><span class="merge">{{ceoName}}</span></div><div class="rl">CEO / Chair of the management body</div></div><div class="sigbox"><div class="nm"><span class="merge">{{cfoName}}</span></div><div class="rl">CFO</div></div><div class="sigbox"><div class="nm"><span class="merge">{{cisoName}}</span></div><div class="rl">CISO / ISB (programme owner)</div></div></div><div class="legend">Legend: <span class="merge">{{auto-filled}}</span> = filled automatically from your company data · <span class="fill">[ user completes ]</span> = you fill in.</div><div class="foot"><span>UniqSuite · Document template</span><span>NIS2 · Art 20/21 · § 38 BSIG</span></div></div></body></html>

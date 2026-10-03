@@ -1,0 +1,102 @@
+# Project Memory
+
+## Core
+- Strict DE/EN bilingual. NO Turkish allowed in code, comments, or UI. Non-English chars limited to DE umlauts.
+- Data strictly isolated per user via Supabase RLS. 'useToolData' is SSOT with 3s debounced auto-save.
+- UniqSuite-aligned palette: shield navy, anthracite, copper. Inter font. Glassmorphism. Popover InfoTips (ⓘ), default-collapsed accordions.
+- "Explainable Compliance": All scores/metrics must include detailed 'Why' explanations or InfoTips.
+- 18-step sequential NIS2 pipeline (Context to Continuous Improvement).
+- Strict tenant isolation: AuthContext.tenantId auto-pivots to impersonated student; static test forbids `.eq("user_id", user.id)` on tenant tables.
+
+- Professional PDF/Word exports use Arial/Helvetica, strict text wrapping, and avoid risk scoring in external audits.
+
+## Memories
+- [Identity](mem://brand/identity) — UniqSuite branding, CYBERWERKSUITE overlay, PDCA focus
+- [Visuals](mem://style/visuals) — UniqSuite-aligned navy/copper palette, Inter font
+- [Pricing](mem://brand/pricing) — Free vs 2900 CORE vs 6900 ENTERPRISE tier
+- [Trainer](mem://brand/trainer) — Dr. Sait Yalazay profile & credentials
+- [Ecosystem](mem://brand/ecosystem) — Product suite (NIS2, ISMS, GDPR, AI)
+- [Minimalist Instructions](mem://style/minimalist-instruction-styling) — Neutral text for UI logic instructions
+- [Pipeline Structure](mem://architecture/nis2-pipeline-structure) — The 18-step sequential ISMS workflow
+- [Data Auto-save](mem://tech/data-persistence/auto-save-isolation) — useToolData 3s debounce and immediate save
+- [Auth Flow](mem://tech/auth/login-flow) — Supabase Auth, disabled email confirmation
+- [Multitenancy](mem://constraints/multitenancy-isolation) — RLS isolation constraint per user
+- [Language Constraint](mem://constraints/language-and-localization) — DE/EN only, strictly no Turkish
+- [Media & AI](mem://tech/media-and-ai-state) — Bunny Stream HLS, AI keys present but no UI AI
+- [Security Hardening](mem://tech/security/hardening) — HIBP, RLS limits, search_path security
+- [Service Accordion](mem://ui/layout/service-accordion-pattern) — Assets grouped by collapsed business services
+- [Navigation](mem://ui/layout/navigation-and-dashboard-layout) — PipelineNav, default collapsed charts
+- [Landing Pipeline](mem://ui/landing-page/pipeline) — 18-step cards with specific phase colors
+- [Landing Visuals](mem://ui/tool/landing-visuals) — 25% opacity SOC/seminar backgrounds
+- [Branding Nav](mem://ui/layout/branding-and-navigation) — Header icons and CYBERWERKSUITE logo
+- [InfoTip Pattern](mem://ui/patterns/infotip) — Popover-based ⓘ instead of standard tooltips
+- [Language Toggle](mem://ui/components/language-toggle) — Muted background with primary border for active language
+- [Features Section](mem://ui/landing-page/features) — Alternating eu-gradient and gold-gradient icon boxes
+- [Explainability Logic](mem://logic/explainability-principle) — Core architectural mandate for transparent scoring
+- [Context Profile (Step 1)](mem://features/context-layer/profile-entry) — Company name/country syncs with Step 2
+- [Regulatory Logic (Step 2)](mem://features/impact-assessment/regulatory-logic) — DE 'AND' vs EU 'OR' thresholds
+- [Service Criticality (Step 3)](mem://features/service-criticality/hybrid-scoring) — 0-4 scoring, manual override
+- [Criticality Config](mem://features/service-criticality/configurability) — Admin weights and versioning
+- [Criticality Inheritance](mem://logic/data-flow/criticality-inheritance) — Flows to assets and risk engine
+- [Asset Management (Step 4)](mem://features/asset-inventory/management-engine) — Accordions, critical service validation
+- [Dependency Isolation (Step 5)](mem://constraints/dependency-mapping-isolation) — Completeness only, no audit statuses
+- [Dependency Status (Step 5)](mem://logic/dependency-mapping/auto-status-grouping) — SPOF = 3+ inbound connections
+- [Assessment Distinction (Step 6/7)](mem://features/compliance-check/assessment-vs-gap-distinction) — Current state vs Gap separation
+- [Assessment Workflow (Step 6)](mem://features/assessment/workflow-tracking) — statuses, assignments, comments
+- [Asset Structure (Step 6)](mem://logic/control-engine/asset-driven-structure) — 12 asset classes, 18 families
+- [Dual Layer Logic (Step 6)](mem://logic/assessment/dual-layer-architecture) — Asset vs Org level separation
+- [Cross-Layer Refs (Step 6)](mem://logic/assessment/cross-layer-referencing) — Read-only org refs in asset controls
+- [Workflow Priority (Step 6)](mem://features/assessment/workflow-priority) — Org tab default
+- [Gap Interpretation (Step 7)](mem://features/gap-analysis/interpretation-engine) — Consolidated vs Findings register
+- [Severity Scoring (Step 7)](mem://logic/gap-analysis/severity-scoring) — SPOF dependency amplification
+- [Compliance Metrics (Step 7)](mem://logic/gap-analysis/compliance-metrics) — Radar 80%, Bar proportional
+- [Capability Mapping (Step 7)](mem://logic/capability-mapping) — Grouping controls (e.g., IAM -> Access Control)
+- [Gap Reporting](mem://features/gap-analysis/reporting) — 6-section PDF/Word reports
+- [Risk Generation (Step 7/8)](mem://logic/gap-analysis/risk-mitigation-generation) — Auto-gen DE/EN measures
+- [Risk Auto-Engine (Step 8)](mem://logic/risk-management/automated-engine) — Zero manual entry
+- [Risk Config (Step 8)](mem://features/risk-matrix/configuration-logic) — Mult/Add/Max formulas
+- [Risk Reset (Step 8)](mem://features/risk-analysis/config-reset-scope) — UI-only non-destructive reset
+- [Risk Matrix Style (Step 8)](mem://ui/visuals/risk-matrix-styling-logic) — RGBA alpha 0.45 interpolation
+- [Risk Decision Engine (Step 9)](mem://features/risk-treatment/decision-engine) — Strategies, custom controls
+- [Overdue Tracking (Step 9)](mem://features/risk-treatment/overdue-tracking-logic) — Automated overdue logic
+- [Duplicate Prevention (Step 9)](mem://logic/risk-treatment/duplicate-control-prevention) — Fuzzy search
+- [SoA Hierarchy (Step 10)](mem://ui/layout/soa-visual-hierarchy) — Stats prioritized over Gap data
+- [SoA Projection (Step 10)](mem://logic/soa/projection-and-sync-logic) — Merges data sources
+- [SoA Hydration (Step 10)](mem://logic/soa/assessment-hydration-logic) — Worst-status-wins precedence
+- [SoA Justifications (Step 10)](mem://features/soa/justification-mapping) — Inherited from Step 9
+- [Maturity Dual View (Step 11/12)](mem://features/maturity-and-execution/dual-view-architecture) — Domain vs NIS2 views
+- [Action Logic (Step 12)](mem://features/execution/action-management-logic) — Offen/Laufend/Fertig/Blockiert tracking
+- [Execution Source Ref (Step 12)](mem://logic/execution/source-attribution) — Entbehrlich vs Ausschlüsse
+- [Status Definitions (Step 12)](mem://logic/execution/status-definitions) — Blockiert definition
+- [Execution Insights (Step 13)](mem://features/capabilities/reporting-and-guidance) — Help dialogs, root causes
+- [Adjusted Projections (Step 13)](mem://logic/capabilities/adjusted-projections) — Health rules and maturity mapping
+- [Policy Separation (Step 14)](mem://logic/policies/content-separation-strategy) — Detailed delegation boundaries
+- [Policy Standards (Step 14)](mem://features/policies/content-and-terminology-standards) — c00 IDs, specific clause counts
+- [Policy Modules (Step 14)](mem://tech/policies/modular-data-structure-and-integration) — Topic-based files in src/data/clauses/
+- [Policy Training Tab (Step 14)](mem://features/policies/training-tab-integration) — Embedded training verification
+- [Policy Exports (Step 14)](mem://features/policies/export-customization) — Toggleable sections
+- [Roadmap (Step 15)](mem://features/roadmap-engine/sequencing-and-visualization) — Now/Next/Later sequencing
+- [Bundle Engine](mem://features/bundle-engine/cross-step-grouping) — 59 ISO bundles shared across Step 6/8/9/15, bundle-owner via useBundleOwners
+- [KPI Metrics (Step 16)](mem://features/kpi-engine/metrics) — 18 metrics, execution data precedence
+- [KPI Trends (Step 16)](mem://features/kpi-engine/trend-tracking) — Daily snapshot persistence
+- [KPI Data Attribution (Step 16)](mem://logic/kpi-engine/data-attribution-logic) — Step 12 precedence over 9
+- [KPI Sync (Step 16)](mem://logic/kpi/maturity-synchronization) — Syncs with Step 11 baseline
+- [Audit Architecture (Step 17/18)](mem://features/audit-and-kvp/architecture) — Check vs Act separation
+- [Audit Roles (Step 17)](mem://logic/audit/role-and-status-definitions) — Auditor vs Corrected by
+- [Audit Exports (Step 17)](mem://features/audit/reporting-and-export) — Realistic generated plans
+- [Audit Aggregation (Step 17)](mem://logic/audit/aggregation) — Deduplicates by control-id
+- [Audit Finding Logic (Step 17)](mem://features/audit/finding-entry-logic) — 3-stage picker and tracking
+- [Audit Stats (Step 17)](mem://logic/audit/stat-calculation-rules) — Open/Resolution rate formulas
+- [KVP Act Phase (Step 18)](mem://features/kvp/act-phase) — Imports signals from 8, 16, 17
+- [KVP Reports (Step 18)](mem://features/kvp/reporting-logic) — 5-section Act phase reports
+- [Reporting Standards](mem://features/reporting/standards) — Global typography and pagination logic
+- [Legal Data Standards](mem://legal/compliance/german-legal-standards) — Impressum, GDPR
+- [Privacy Policy](mem://legal/compliance/privacy-policy) — Accordion structure, TOMs
+- [Blog Logic](mem://features/blog/content-management) — 300-word preview, length sorted
+- [Blog Visuals](mem://features/blog/visual-design) — Photo-rich, wave dividers
+- [Bootcamp Layout](mem://ui/bootcamp/layout-and-design-patterns) — Interactive accordions, no call booking
+- [Bootcamp Banner](mem://ui/landing-page/bootcamp-banner) — Gold flash banner
+- [Bootcamp Offering](mem://features/bootcamp/training-offer) — 2-day workshop details
+- [Bootcamp Conversion](mem://features/bootcamp/conversion-strategy) — Form applications, edge function
+- [Marketing Consent](mem://features/auth/marketing-consent) — Default unchecked opt-ins
+- [Contact System](mem://features/communication/contact-system) — Form persistence to contact_messages

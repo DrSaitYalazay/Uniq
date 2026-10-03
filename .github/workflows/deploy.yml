@@ -1,0 +1,77 @@
+name: Deploy UniqSuite to IONOS
+
+# GitHub'a her push'ta sunucuya kodu kopyalar ve yeniden derleyip başlatır.
+# Gerekli repo secrets: SSH_HOST, SSH_USER, SSH_KEY  (Settings → Secrets → Actions)
+# V-4, optional: SSH_KNOWN_HOSTS (Host-Schlüssel des Servers, siehe
+# .github/scripts/ssh-vorbereiten.sh). Der Ablauf auf dem Server steht in
+# deploy_remote.sh.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# V-4: der Job braucht nur Lesezugriff auf das Repository.
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        # V-4: nur noch GitHub-eigene Actions, auf den Commit festgenagelt statt auf
+        # ein Tag — ein Tag kann nachträglich auf fremden Code umgebogen werden
+        # (tj-actions, März 2025). Den SSH-Schlüssel sieht nur noch OpenSSH.
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      # Statik Vorprüfung: fehlende Imports (z. B. `useCallback` ohne React-Import).
+      # esbuild/vite bündeln das klaglos — die Seite stürzt erst zur LAUFZEIT ab
+      # (11.09.2026: /roadmap „ReferenceError: useCallback is not defined").
+      # Schlägt der Check an, wird NICHT deployt.
+      - name: Fehlende Imports prüfen (Laufzeit-Crash verhindern)
+        run: node web/scripts/check-undefined-imports.mjs web/src
+
+      # Statik Vorprüfung: Beschriftungen in Ring-/Tortendiagrammen.
+      # Ein `label=` ohne insideSliceLabel() schreibt AUSSERHALB des Rings und
+      # überlappt mit Nachbarbeschriftungen bzw. der Legende (13.09.2026:
+      # Roadmap „Laufend: 84" lag quer auf „Laufend  Offen").
+      # Regel + Begründung: web/src/lib/chartLabels.tsx
+      - name: Diagramm-Beschriftungen prüfen (Überlappung verhindern)
+        run: node web/scripts/check-chart-labels.mjs
+
+      # V-4: Bauprobe VOR jedem Zugriff auf den Server. Passen package.json und
+      # package-lock.json nicht zusammen oder bricht der Build, endet der Job hier —
+      # vorher liefen in diesem Fall die Migrationen bereits auf der Live-DB, und
+      # danach lief trotzdem der alte Code weiter.
+      - name: Node 24 bereitstellen
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - name: Abhängigkeiten und Build prüfen (vor dem Server)
+        run: |
+          npm ci --prefix api --omit=dev --no-audit --no-fund
+          npm ci --prefix web --no-audit --no-fund
+          npm run --prefix web build
+
+      # V-4: SSH ohne Fremd-Actions (Begründung in der Datei).
+      - name: SSH vorbereiten
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: sh .github/scripts/ssh-vorbereiten.sh
+
+      # Gleiche Dateien wie bisher (+ deploy_remote.sh). Vorhandenes auf dem
+      # Server (.env, backups/) bleibt unberührt; node_modules und dist aus der
+      # Bauprobe gehen nicht mit.
+      - name: Kodu sunucuya kopyala
+        run: |
+          tar --exclude=node_modules --exclude=web/dist -czf - \
+            api web db docker-compose.yml ersteinrichtung.sh deploy_remote.sh README.md \
+            | ssh -F ~/.ssh/cy_config cy 'mkdir -p /root/UniqSuite && tar -xzf - --no-same-owner -C /root/UniqSuite'
+
+      - name: Yeniden derle ve başlat (ssh)
+        timeout-minutes: 25
+        run: ssh -F ~/.ssh/cy_config cy 'bash /root/UniqSuite/deploy_remote.sh' < /dev/null

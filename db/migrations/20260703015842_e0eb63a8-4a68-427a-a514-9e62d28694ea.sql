@@ -1,0 +1,1 @@
+alter table public.answers add column if not exists reifegrad smallint check (reifegrad between 0 and 5);

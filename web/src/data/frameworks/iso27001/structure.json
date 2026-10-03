@@ -1,0 +1,254 @@
+{
+  "domains": [
+    {
+      "id": "isms-clauses",
+      "title": "ISMS Clauses (4-10)",
+      "titleDe": "ISMS-Klauseln (4-10)",
+      "description": "Core ISMS requirements covering context, leadership, planning, support, operation, performance and improvement",
+      "descriptionDe": "Kern-ISMS-Anforderungen zu Kontext, Führung, Planung, Unterstützung, Betrieb, Leistungsbewertung und Verbesserung",
+      "icon": "book-open",
+      "categoryIds": [
+        "clause-4",
+        "clause-5",
+        "clause-6",
+        "clause-7",
+        "clause-8",
+        "clause-9",
+        "clause-10"
+      ]
+    },
+    {
+      "id": "organisational",
+      "title": "A.5 Organisational Controls",
+      "titleDe": "A.5 Organisatorische Kontrollen",
+      "description": "Policies, risk, asset management, access control, suppliers, incidents, continuity and compliance",
+      "descriptionDe": "Richtlinien, Risiko, Asset-Management, Zugriffskontrolle, Lieferanten, Vorfälle, Kontinuität und Compliance",
+      "icon": "shield-check",
+      "categoryIds": [
+        "a5-policies",
+        "a5-contacts",
+        "a5-threat-project",
+        "a5-asset",
+        "a5-access",
+        "a5-supplier",
+        "a5-incident",
+        "a5-continuity",
+        "a5-compliance"
+      ]
+    },
+    {
+      "id": "people",
+      "title": "A.6 People Controls",
+      "titleDe": "A.6 Personelle Kontrollen",
+      "description": "Personnel screening, employment terms, awareness, remote working and event reporting",
+      "descriptionDe": "Personalüberprüfung, Beschäftigungsbedingungen, Sensibilisierung, Fernarbeit und Ereignismeldung",
+      "icon": "users",
+      "categoryIds": [
+        "a6-people"
+      ]
+    },
+    {
+      "id": "physical",
+      "title": "A.7 Physical Controls",
+      "titleDe": "A.7 Physische Kontrollen",
+      "description": "Physical security perimeters, entry controls, monitoring, equipment and disposal",
+      "descriptionDe": "Physische Sicherheitsperimeter, Zugangskontrollen, Überwachung, Ausrüstung und Entsorgung",
+      "icon": "building",
+      "categoryIds": [
+        "a7-physical"
+      ]
+    },
+    {
+      "id": "technological",
+      "title": "A.8 Technological Controls",
+      "titleDe": "A.8 Technologische Kontrollen",
+      "description": "Endpoints, operations, network, cryptography and secure development",
+      "descriptionDe": "Endpunkte, Betrieb, Netzwerk, Kryptographie und sichere Entwicklung",
+      "icon": "cpu",
+      "categoryIds": [
+        "a8-endpoint",
+        "a8-operations",
+        "a8-network",
+        "a8-crypto-dev"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "clause-4",
+      "clause": "4",
+      "title": "Context of the Organization",
+      "titleDe": "Kontext der Organisation",
+      "description": "Understanding the organization, interested parties and ISMS scope",
+      "icon": "building"
+    },
+    {
+      "id": "clause-5",
+      "clause": "5",
+      "title": "Leadership",
+      "titleDe": "Führung",
+      "description": "Leadership commitment, policy and organizational roles",
+      "icon": "crown"
+    },
+    {
+      "id": "clause-6",
+      "clause": "6",
+      "title": "Planning",
+      "titleDe": "Planung",
+      "description": "Risk assessment, risk treatment and security objectives",
+      "icon": "target"
+    },
+    {
+      "id": "clause-7",
+      "clause": "7",
+      "title": "Support",
+      "titleDe": "Unterstützung",
+      "description": "Resources, competence, awareness, communication and documented information",
+      "icon": "life-buoy"
+    },
+    {
+      "id": "clause-8",
+      "clause": "8",
+      "title": "Operation",
+      "titleDe": "Betrieb",
+      "description": "Operational planning, risk assessment and risk treatment",
+      "icon": "settings"
+    },
+    {
+      "id": "clause-9",
+      "clause": "9",
+      "title": "Performance Evaluation",
+      "titleDe": "Leistungsbewertung",
+      "description": "Monitoring, measurement, internal audit and management review",
+      "icon": "bar-chart-3"
+    },
+    {
+      "id": "clause-10",
+      "clause": "10",
+      "title": "Improvement",
+      "titleDe": "Verbesserung",
+      "description": "Continual improvement, nonconformity and corrective action",
+      "icon": "trending-up"
+    },
+    {
+      "id": "a5-policies",
+      "clause": "A.5.1–5.4",
+      "title": "Security Policies & Management Responsibilities",
+      "titleDe": "Sicherheitsrichtlinien & Managementverantwortung",
+      "description": "Information security policies, roles, segregation and management enforcement",
+      "icon": "shield-check"
+    },
+    {
+      "id": "a5-contacts",
+      "clause": "A.5.5–5.6",
+      "title": "Authority & Special Interest Group Contacts",
+      "titleDe": "Behörden- & Fachgruppenkontakte",
+      "description": "Contacts with authorities and special interest groups",
+      "icon": "link"
+    },
+    {
+      "id": "a5-threat-project",
+      "clause": "A.5.7–5.8",
+      "title": "Threat Intelligence & Project Security",
+      "titleDe": "Bedrohungsanalyse & Projektsicherheit",
+      "description": "Threat intelligence collection and project management security",
+      "icon": "shield"
+    },
+    {
+      "id": "a5-asset",
+      "clause": "A.5.9–5.14",
+      "title": "Asset Management & Information Transfer",
+      "titleDe": "Asset-Management & Informationsübertragung",
+      "description": "Asset inventory, classification, labelling and information transfer",
+      "icon": "database"
+    },
+    {
+      "id": "a5-access",
+      "clause": "A.5.15–5.18",
+      "title": "Access Control & Identity Management",
+      "titleDe": "Zugriffskontrolle & Identitätsmanagement",
+      "description": "Access control, identity lifecycle and authentication",
+      "icon": "lock"
+    },
+    {
+      "id": "a5-supplier",
+      "clause": "A.5.19–5.23",
+      "title": "Supplier & Cloud Security",
+      "titleDe": "Lieferanten- & Cloud-Sicherheit",
+      "description": "Supplier relationships, agreements, ICT supply chain and cloud services",
+      "icon": "link"
+    },
+    {
+      "id": "a5-incident",
+      "clause": "A.5.24–5.28",
+      "title": "Incident Management",
+      "titleDe": "Vorfallmanagement",
+      "description": "Incident planning, assessment, response, learning and evidence collection",
+      "icon": "alert-triangle"
+    },
+    {
+      "id": "a5-continuity",
+      "clause": "A.5.29–5.30",
+      "title": "Business Continuity",
+      "titleDe": "Geschäftskontinuität",
+      "description": "Information security during disruption and ICT readiness",
+      "icon": "shield"
+    },
+    {
+      "id": "a5-compliance",
+      "clause": "A.5.31–5.37",
+      "title": "Legal Compliance & Operating Procedures",
+      "titleDe": "Rechtliche Compliance & Betriebsverfahren",
+      "description": "Legal requirements, IP rights, records protection, privacy, independent review and compliance",
+      "icon": "scale"
+    },
+    {
+      "id": "a6-people",
+      "clause": "A.6.1–6.8",
+      "title": "People Controls",
+      "titleDe": "Personelle Kontrollen",
+      "description": "Screening, employment terms, awareness, disciplinary process, remote working and event reporting",
+      "icon": "users"
+    },
+    {
+      "id": "a7-physical",
+      "clause": "A.7.1–7.14",
+      "title": "Physical Controls",
+      "titleDe": "Physische Kontrollen",
+      "description": "Physical security perimeters, entry controls, monitoring, equipment and disposal",
+      "icon": "building"
+    },
+    {
+      "id": "a8-endpoint",
+      "clause": "A.8.1–8.5",
+      "title": "Endpoint & Access Security",
+      "titleDe": "Endpunkt- & Zugriffssicherheit",
+      "description": "User endpoint devices, privileged access, information access, source code and authentication",
+      "icon": "monitor"
+    },
+    {
+      "id": "a8-operations",
+      "clause": "A.8.6–8.14",
+      "title": "Operations & Data Protection",
+      "titleDe": "Betrieb & Datensicherheit",
+      "description": "Capacity, malware, vulnerabilities, configuration, data deletion, masking, DLP, backup and redundancy",
+      "icon": "hard-drive"
+    },
+    {
+      "id": "a8-network",
+      "clause": "A.8.15–8.23",
+      "title": "Network & Monitoring",
+      "titleDe": "Netzwerk & Überwachung",
+      "description": "Logging, monitoring, clock sync, privileged utilities, software installation, network security and web filtering",
+      "icon": "network"
+    },
+    {
+      "id": "a8-crypto-dev",
+      "clause": "A.8.24–8.34",
+      "title": "Cryptography & Secure Development",
+      "titleDe": "Kryptographie & sichere Entwicklung",
+      "description": "Cryptography, SDLC, secure coding, testing, outsourced development and change management",
+      "icon": "key"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+# UniqSuite
+
+> Complete NIS2 compliance and implementation platform with an 17-step PDCA pipeline covering assessment, gap analysis, risk management, SoA, policies and audit. EU Directive 2022/2555 .
+
+## Pages
+
+- [Home](/): UniqSuite overview, pipeline, features and pricing.
+- [Blog](/blog): Expert articles on NIS2, cybersecurity and compliance by Dr. Sait Yalazay.
+- [NIS2 Implementation Bootcamp](/nis2-implementation-bootcamp): 2-day live training to implement NIS2 with the platform.
+- [Security](/security): Hosting, encryption, ISO 27001 / SOC 2 / GDPR posture.
+- [Contact](/contact): Contact form for sales, support and Enterprise inquiries.
+- [Sign in / Register](/auth): Authentication for the UniqSuite tool.
+
+## Optional
+
+- [Privacy Policy](/datenschutz): GDPR / DSGVO privacy policy.
+- [Impressum](/impressum): Legal notice (German law).
+- [Cookie settings](/cookie-einstellungen): Manage cookie preferences.

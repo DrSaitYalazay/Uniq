@@ -1,0 +1,447 @@
+/* V-4 / DSGVO: Inter kommt lokal über @fontsource/inter (siehe main.tsx),
+   nicht mehr von fonts.googleapis.com. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Accent hue/saturation — overridden at runtime by AccentColorPicker.
+       Every rule in this file that used to hard-code the turquoise (174 72%)
+       or its greener companion (152 62%) now reads these vars, so changing
+       the accent updates gradients, shadows, upload-zones, hover glows,
+       card frames, etc. Lightness stays per-rule for tonal variety. */
+    /* UniqSuite-Marke: Grundton Indigo (252), Akzent = Magenta-Rosé (330).
+       Ursprünglich CWS-Marke: Akzent = GOLD/Orange,
+       CyberWerk = Navy (--primary). Zweiter Stopp trägt den Verlauf
+       Gold -> sattes Orange (Buttons, Gradients, Glows). */
+    /* NIS2Suite-Palette (Dr. Sait, 2026-09-10): Akzent = Bakır/Gold
+       hsl(25 80% 50%) #DB2477; accent-2 = heller Gold-Startstopp des
+       Verlaufs hsl(40 90% 55%). Verlauf läuft Gold → Bakır (wie NIS2Suite). */
+    --accent-h: 330;
+    --accent-s: 72%;
+    --accent-2-h: 345;
+    --accent-2-s: 80%;
+
+    /* Palette: green, white, gray, navy, turquoise, red */
+    /* Weiche, kühle „Canvas"-Fläche (nicht reinweiß), damit die weißen Karten
+       sichtbar abheben statt in einem sterilen weißen Feld zu verschwinden. */
+    --background: 252 18% 97%;
+    --foreground: 252 30% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 252 30% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 252 30% 12%;
+
+    /* Navy */
+    --primary: 252 65% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Gray */
+    --secondary: 252 15% 30%;
+    --secondary-foreground: 0 0% 100%;
+    /* Readable variant used inline on light backgrounds — green */
+    --secondary-readable: 152 60% 30%;
+    /* Kupfer als TEXT auf hellem Grund. --accent (50 %) trägt auf Weiß nur
+       3,17:1 und reißt damit AA für normalen Text; als Fläche mit weißer
+       Schrift ist derselbe Ton dagegen in Ordnung. Darum ein eigener,
+       dunklerer Ton für Fließtext, Links und Pillen: 4,72:1. Farbton und
+       Sättigung folgen weiterhin dem eingestellten Akzent. */
+    --accent-readable: var(--accent-h) var(--accent-s) 40%;
+
+    --muted: 252 16% 93%;
+    --muted-foreground: 252 12% 50%;
+
+    /* Akzent = Markenfarbe (Gold), Wert kommt aus --accent-h/--accent-s */
+    --accent: var(--accent-h) var(--accent-s) 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Red */
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Green */
+    /* Semantisch FIX (nicht vom Marken-Akzent ableiten): Erfolg bleibt grün,
+       sonst würde „erfüllt" mit Gold-Akzent orange und die Ampel unlesbar. */
+    --success: 142 72% 29%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Turquoise partial */
+    --partial: 200 80% 44%;
+    --partial-foreground: 0 0% 100%;
+
+    --not-applicable: 252 10% 68%;
+    --not-applicable-foreground: 0 0% 100%;
+
+    --border: 252 20% 86%;
+    --input: 252 20% 86%;
+    --ring: 252 65% 20%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar (Hell): festes Navy. Im Dunkelmodus = Seitenfläche, siehe .dark. Bewusst dunkler als
+       --primary (20 %): eine große Fläche wirkt heller als ein kleiner Button
+       gleicher Farbe — 15 % sieht optisch wie die Tabs/Primär-Buttons aus. */
+    --sidebar-background: 252 65% 18%;
+    --sidebar-foreground: 252 20% 94%;
+    --sidebar-primary: var(--accent-h) var(--accent-s) 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 252 55% 26%;
+    --sidebar-accent-foreground: 252 20% 94%;
+    --sidebar-border: 252 45% 28%;
+    --sidebar-ring: var(--accent-h) var(--accent-s) 50%;
+
+    /* Legacy brand aliases — rebound to the new palette so existing
+       components keep working without token renames. */
+    --shield-navy: 252 65% 20%;
+    --shield-navy-light: 252 55% 34%;
+    --neutral-grey: 252 12% 55%;
+    --neutral-grey-light: 252 12% 72%;
+    --copper: var(--accent-h) var(--accent-s) 50%;         /* folgt dem Akzent (Default: Marken-Copper) */
+    --copper-light: 330 65% 60%;    /* Açık Bakır */
+
+    --font-heading: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+
+    /* Navy → neutral grey shell gradient (no anthracite) */
+    --eu-gradient: linear-gradient(135deg, hsl(252 65% 14%), hsl(252 15% 18%));
+    /* Turquoise → green accent gradient (replaces gold) */
+    /* Verlauf ÖFFNET nach hinten (Gold -> helleres Gold), er darf NICHT ins
+       dunkle Kupfer kippen: zweiter Stopp ist heller als der erste. */
+    /* NIS2Suite-Verlauf: helles Gold (accent-2, 55 %) → Bakır (accent, 50 %). */
+    --gold-gradient: linear-gradient(135deg, hsl(var(--accent-2-h) var(--accent-2-s) 55%), hsl(var(--accent-h) var(--accent-s) 50%));
+    --hero-shadow: 0 20px 60px -15px hsl(252 65% 20% / 0.28);
+    --card-shadow: 0 4px 24px -4px hsl(252 65% 20% / 0.10);
+    --card-shadow-hover: 0 12px 40px -8px hsl(252 65% 20% / 0.20);
+  }
+
+  .dark {
+    /* Dunkelmodus NAVY-basiert (nicht schwarz): Fläche = tiefes Marken-Navy,
+       Karten eine Stufe heller, Sidebar = Fläche. Wunsch Dr. Sait 2026-09-10. */
+    /* Wunsch Dr. Sait: Karten, Sidebar und Header = tiefes Navy (17 %); nur die
+       FLÄCHE dazwischen ist etwas heller und matt → Kartenkanten lesbar. */
+    --background: 252 30% 21%;
+    --foreground: 252 20% 92%;
+    --card: 252 45% 17%;
+    --card-foreground: 252 20% 92%;
+    --popover: 252 45% 17%;
+    --popover-foreground: 252 20% 92%;
+    /* Primär im Dunkeln = Bakır/Gold (Navy-Buttons wären auf Navy unsichtbar) */
+    --primary: var(--accent-h) var(--accent-s) 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 252 30% 26%;
+    --secondary-foreground: 252 20% 92%;
+    --secondary-readable: 330 70% 70%;
+    /* Im Dunkelmodus läuft es andersherum: auf Navy muss der Kupferton
+       HELLER werden, nicht dunkler. 62 % trägt auf --card (252 45% 17%)
+       6,9:1. Der 40-%-Wert aus :root wäre dort unlesbar. */
+    --accent-readable: var(--accent-h) 70% 62%;
+    --muted: 252 32% 26%;
+    --muted-foreground: 252 15% 72%;
+    --accent: var(--accent-h) var(--accent-s) 52%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 68% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 252 30% 30%;
+    --input: 252 30% 30%;
+    --ring: var(--accent-h) var(--accent-s) 55%;
+
+    /* Status-Farben (semantisch) eine Stufe heller für Navy-Fläche */
+    --success: 142 60% 42%;
+    --warning: 38 92% 56%;
+    --partial: 200 75% 55%;
+    --not-applicable: 252 10% 55%;
+    --not-applicable-foreground: 252 40% 10%;
+
+    /* Sidebar = Seitenfläche (kein hellerer Streifen) */
+    /* Sidebar + Header = KARTENFARBE (17 %); nur die Fläche dazwischen
+       (--background) ist heller/matt. Wunsch Dr. Sait 2026-09-10. */
+    --sidebar-background: 252 45% 17%;
+    --sidebar-accent: 252 40% 24%;
+    --sidebar-border: 252 30% 28%;
+
+    --shield-navy-light: 252 40% 70%;
+    --neutral-grey: 252 12% 65%;
+    --neutral-grey-light: 252 12% 40%;
+
+    --eu-gradient: linear-gradient(135deg, hsl(252 60% 22%), hsl(252 20% 30%));
+    --hero-shadow: 0 20px 60px -15px hsl(252 80% 4% / 0.7);
+    --card-shadow: 0 4px 24px -4px hsl(252 80% 4% / 0.5);
+    --card-shadow-hover: 0 12px 40px -8px hsl(252 80% 4% / 0.65);
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-foreground antialiased;
+    font-family: var(--font-body);
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(1200px 600px at 0% -10%, hsl(var(--accent-h) var(--accent-s) 45% / 0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, hsl(252 65% 22% / 0.10), transparent 55%),
+      radial-gradient(700px 500px at 100% 100%, hsl(var(--accent-2-h) var(--accent-2-s) 40% / 0.08), transparent 60%);
+    background-attachment: fixed;
+  }
+  .dark body {
+    background-image:
+      /* matt: Glows im Dunkeln stark gedämpft, damit die Fläche ruhig bleibt */
+      radial-gradient(1200px 600px at 0% -10%, hsl(var(--accent-h) var(--accent-s) 45% / 0.04), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, hsl(252 65% 40% / 0.05), transparent 55%),
+      radial-gradient(700px 500px at 100% 100%, hsl(var(--accent-2-h) var(--accent-2-s) 40% / 0.03), transparent 60%);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+
+  /* Premium card surface — pure white/neutral fill, no colored tint, no
+     accent top-line. Personality comes exclusively from the outer shadow
+     stack (subtle accent-tinted drop shadow). Keeps the UI serious. */
+  .bg-card {
+    position: relative;
+    background-image: none;
+    background-color: hsl(var(--card));
+    border-color: hsl(252 30% 90%);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 2px 6px -2px hsl(252 40% 20% / 0.05),
+      0 10px 30px -12px hsl(252 55% 22% / 0.15),
+      0 20px 50px -20px hsl(var(--accent-h) var(--accent-s) 40% / 0.18);
+    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  }
+  .bg-card:hover {
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.35);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 4px 10px -2px hsl(252 40% 20% / 0.06),
+      0 16px 40px -12px hsl(252 55% 22% / 0.22),
+      0 28px 70px -20px hsl(var(--accent-h) var(--accent-s) 40% / 0.32);
+    transform: translateY(-2px);
+  }
+  .dark .bg-card {
+    background-image: none;
+    background-color: hsl(var(--card));
+    border-color: hsl(252 30% 30%);
+    /* Lichtkante oben + weicher Schatten nach unten → Karte hebt sich von
+       der matten Fläche ab. */
+    box-shadow:
+      0 1px 0 hsl(252 35% 34% / 0.5) inset,
+      0 10px 30px -12px hsl(252 80% 3% / 0.75),
+      0 20px 60px -20px hsl(var(--accent-h) var(--accent-s) 45% / 0.12);
+  }
+  .dark .bg-card:hover {
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.5);
+  }
+
+}
+
+
+@layer utilities {
+  /* ====================================================================
+     STATUSFARBEN — eine Quelle für Bildschirm UND Bericht.
+     --------------------------------------------------------------------
+     Dr. Sait 2026-09-12: „thema seçilince tüm grafikler uymalı".
+     Vorher standen Statusfarben als feste Tailwind-Klassen im JSX
+     (bg-amber-500, text-emerald-600 …). Die blieben beim Themenwechsel
+     stehen — der Donut folgte der Themenfarbe, Balken und Kacheln nicht.
+     Diese Klassen lesen dieselben Variablen wie die Diagramme
+     (--ch-ja / --ch-teilweise / --ch-nein / --ch-na / --ch-kritisch),
+     die `applyChartVars()` setzt. Modus „ampel" → rot/gelb/grün,
+     Modus „mono" → Themenfarbe. Berichte holen die gleichen Werte als
+     HEX über `resolveChartHex()`.
+     ==================================================================== */
+  .st-ja-bg          { background-color: hsl(var(--ch-ja)); }
+  .st-ja-tint        { background-color: hsl(var(--ch-ja) / 0.10); }
+  .st-ja-text        { color: hsl(var(--ch-ja)); }
+  .st-ja-border      { border-color: hsl(var(--ch-ja) / 0.45); }
+
+  .st-teilweise-bg     { background-color: hsl(var(--ch-teilweise)); }
+  .st-teilweise-tint   { background-color: hsl(var(--ch-teilweise) / 0.10); }
+  .st-teilweise-text   { color: hsl(var(--ch-teilweise)); }
+  .st-teilweise-border { border-color: hsl(var(--ch-teilweise) / 0.45); }
+
+  .st-nein-bg        { background-color: hsl(var(--ch-nein)); }
+  .st-nein-tint      { background-color: hsl(var(--ch-nein) / 0.10); }
+  .st-nein-text      { color: hsl(var(--ch-nein)); }
+  .st-nein-border    { border-color: hsl(var(--ch-nein) / 0.45); }
+
+  .st-na-bg          { background-color: hsl(var(--ch-na)); }
+  .st-na-tint        { background-color: hsl(var(--ch-na) / 0.10); }
+  .st-na-text        { color: hsl(var(--ch-na)); }
+  .st-na-border      { border-color: hsl(var(--ch-na) / 0.45); }
+
+  .st-kritisch-bg    { background-color: hsl(var(--ch-kritisch)); }
+  .st-kritisch-tint  { background-color: hsl(var(--ch-kritisch) / 0.10); }
+  .st-kritisch-text  { color: hsl(var(--ch-kritisch)); }
+  .st-kritisch-border{ border-color: hsl(var(--ch-kritisch) / 0.45); }
+
+  /* Auf farbiger Statusfläche steht Text immer weiß — bei jeder Themenfarbe. */
+  .st-ja-bg, .st-teilweise-bg, .st-nein-bg, .st-na-bg, .st-kritisch-bg { color: #fff; }
+
+  /* Hover-Akzent (global): umrandete Karten/Zeilen nehmen beim Überfahren die
+     ausgewählte Themenfarbe (Akzent) an — konsistent auf allen Screens. */
+  .rounded-xl.border,
+  .rounded-lg.border,
+  .rounded-md.border {
+    transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+  }
+  .rounded-xl.border:hover,
+  .rounded-lg.border:hover,
+  .rounded-md.border:hover {
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.55);
+  }
+
+  .eu-gradient {
+    background: var(--eu-gradient);
+  }
+  .gold-gradient {
+    background: var(--gold-gradient);
+  }
+  /* Flächen, die WEISSE Schrift tragen (Buttons, Tab-Schieber).
+     --gold-gradient darf hier NICHT verwendet werden: sein heller Startstopp
+     hsl(40 90% 55%) trägt Weiß nur mit 1,92:1 — gemessen, nicht geschätzt.
+     Auf Navy, wo derselbe Verlauf als Text-Clip läuft („UniqSuite"),
+     ist er dagegen richtig; deshalb ein eigener Verlauf statt einer Änderung
+     dort.
+     Bis 2026-09-15 stand an diesen Stellen accent -> success, also Kupfer ins
+     Grün. Lesbar war das nur wegen des Grün-Endes (5,07:1) — zur Marke gehört
+     die Farbe nicht, und Grün ist hier die Statusfarbe für „umgesetzt".
+     Beide Stopps unten erfüllen AA für normalen Text:
+       hsl(25 80% 40%) #B01E63  4,72:1
+       hsl(300 55% 32%) #983416  7,41:1 */
+  .copper-button {
+    background: linear-gradient(135deg, hsl(var(--accent-h) var(--accent-s) 40%), hsl(300 55% 32%));
+  }
+  /* Gradient-bordered pill: turquoise→green frame with transparent fill */
+  .gradient-frame {
+    background:
+      linear-gradient(hsl(var(--primary)), hsl(var(--primary))) padding-box,
+      var(--gold-gradient) border-box;
+    border: 1.5px solid transparent;
+  }
+  .gradient-frame-on-sidebar {
+    background:
+      linear-gradient(hsl(var(--sidebar-background)), hsl(var(--sidebar-background))) padding-box,
+      var(--gold-gradient) border-box;
+    border: 1.5px solid transparent;
+  }
+  .gradient-frame-on-accent {
+    background:
+      linear-gradient(hsl(var(--accent-foreground) / 0.08), hsl(var(--accent-foreground) / 0.08)) padding-box,
+      var(--gold-gradient) border-box;
+    border: 1.5px solid transparent;
+  }
+  .gold-gradient-text {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  /* Brand override: any solid accent surface becomes gold gradient */
+  .bg-accent {
+    background-image: var(--gold-gradient) !important;
+  }
+  .hover\:bg-accent:hover {
+    background-image: var(--gold-gradient) !important;
+  }
+  /* Gold gradient SVG icon (uses CSS mask via stroke trick won't work; use bg + mask).
+     Easier: apply as a wrapper that paints the icon via SVG fill="url(#...)".
+     For lucide icons we use a simple gradient fill on the stroke via filter. */
+  .icon-gold {
+    color: hsl(var(--accent-h) var(--accent-s) 40%);
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .icon-gold svg {
+    stroke: url(#gold-gradient-stroke);
+  }
+  .card-elevated {
+    position: relative;
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 4px 24px -8px hsl(252 55% 22% / 0.14),
+      0 12px 40px -16px hsl(var(--accent-h) var(--accent-s) 40% / 0.18);
+    transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  }
+  .card-elevated:hover {
+    box-shadow:
+      0 1px 0 hsl(0 0% 100%) inset,
+      0 12px 40px -8px hsl(252 55% 22% / 0.22),
+      0 20px 60px -18px hsl(var(--accent-h) var(--accent-s) 40% / 0.35);
+    transform: translateY(-2px);
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.35);
+  }
+  .hero-shadow {
+    box-shadow:
+      0 30px 80px -20px hsl(252 65% 22% / 0.35),
+      0 0 60px -20px hsl(var(--accent-h) var(--accent-s) 45% / 0.25);
+  }
+  .copper-glow {
+    box-shadow: 0 0 30px -5px hsl(var(--accent-h) var(--accent-s) 45% / 0.25);
+  }
+  .copper-glow:hover {
+    box-shadow: 0 0 45px -5px hsl(var(--accent-h) var(--accent-s) 45% / 0.4);
+  }
+  .dark .card-elevated {
+    box-shadow:
+      0 1px 0 hsl(var(--accent-h) var(--accent-s) 45% / 0.1) inset,
+      0 4px 24px -8px hsl(0 0% 0% / 0.5),
+      0 12px 40px -16px hsl(var(--accent-h) var(--accent-s) 40% / 0.2);
+  }
+  .dark .card-elevated:hover {
+    box-shadow:
+      0 1px 0 hsl(var(--accent-h) var(--accent-s) 45% / 0.15) inset,
+      0 12px 40px -8px hsl(0 0% 0% / 0.6),
+      0 20px 60px -18px hsl(var(--accent-h) var(--accent-s) 40% / 0.35);
+  }
+  .dark .hero-shadow {
+    box-shadow:
+      0 30px 80px -20px hsl(0 0% 0% / 0.7),
+      0 0 60px -20px hsl(var(--accent-h) var(--accent-s) 45% / 0.3);
+  }
+  .dark .gradient-frame {
+    background:
+      linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+      var(--gold-gradient) border-box;
+  }
+
+  /* Premium file-upload dropzone — dashed turquoise ring, gradient wash,
+     glowing hover state. Use on <label> or <div> wrappers around a hidden
+     <input type="file">. Add .upload-zone--active while dragging. */
+  .upload-zone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    background: transparent;
+    border: 1.5px dashed hsl(var(--accent-h) var(--accent-s) 45% / 0.45);
+    transition: all 0.3s ease;
+  }
+  .upload-zone:hover,
+  .upload-zone--active {
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.9);
+    background: hsl(var(--accent-h) var(--accent-s) 45% / 0.04);
+  }
+  .dark .upload-zone {
+    background: transparent;
+    border-color: hsl(var(--accent-h) var(--accent-s) 45% / 0.4);
+  }
+
+}
+
