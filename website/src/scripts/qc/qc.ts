@@ -54,6 +54,7 @@ export function init() {
   let cur: { fw: Fw; i: number; answers: (Answer | null)[] } | null = null;
   let view: 'pick' | 'question' | 'result' = 'pick';
   let lastFw: Fw | null = null;
+  let autoFirst = !!card.dataset.autostart;
 
   const scores = () => Object.fromEntries([...results].map(([id, a]) => [id, scoreOf(byId.get(id)!, a)]));
   const overall = () => { const v = Object.values(scores()); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
@@ -103,6 +104,8 @@ export function init() {
     cur = { fw, i: 0, answers: fw.questions.map(() => null) };
     lastFw = fw;
     renderQuestion();
+    // eigene Quick-Check-Seite: beim automatischen Start nicht wegscrollen (Titel bleibt sichtbar)
+    if (autoFirst) { autoFirst = false; return; }
     const r = card.getBoundingClientRect();
     if (r.top < 60 || r.top > innerHeight * 0.45) state.scrollToEl(card, false, -96);
   }

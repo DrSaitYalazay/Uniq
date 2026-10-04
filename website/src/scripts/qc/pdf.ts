@@ -2,7 +2,7 @@
  * PDF-Bericht des Quick-Checks – vollständig im Browser erzeugt (pdf-lib), A4 hoch,
  * im Stil des White Papers: helle Seiten, Navy/Grün, selektierbarer Text, Vektor-Diagramm.
  */
-import { PDFDocument, rgb, type PDFFont, type PDFPage, type RGB } from 'pdf-lib';
+import { PDFDocument, rgb, LineCapStyle, type PDFFont, type PDFPage, type RGB } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import qrcode from 'qrcode-generator';
 import { scoreOf, bandOf } from './qc';
@@ -35,7 +35,7 @@ function wrap(text: string, font: PDFFont, size: number, max: number) {
 }
 
 export async function makePdf(opts: { D: any; results: Map<string, any[]>; company: string; snapshot: string | null }) {
-  const { D, results, company, snapshot } = opts;
+  const { D, results, company } = opts;
   const lang: 'de' | 'en' = D.lang;
   const T = D.pdf;
   const Q = D.qc;
@@ -50,7 +50,6 @@ export async function makePdf(opts: { D: any; results: Map<string, any[]>; compa
   const B = await doc.embedFont(fB, { subset: true });
   const X = await doc.embedFont(fX, { subset: true });
   const coverImg = await doc.embedJpg(cover);
-  const snapImg = snapshot ? await doc.embedJpg(snapshot).catch(() => null) : null;
 
   const date = new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: '2-digit', month: lang === 'de' ? '2-digit' : 'long', year: 'numeric' });
   doc.setTitle(`UniqSuite – ${T.title}`);
@@ -129,18 +128,58 @@ export async function makePdf(opts: { D: any; results: Map<string, any[]>; compa
     p.drawText(`${t}`, { x: M + 117 + t * 3, y: y - 2, size: 6.5, font: R, color: C.muted });
   });
 
-  // Schnappschuss der 3D-Szene
-  if (snapImg) {
-    y -= 26;
-    const maxW = A4.w - 2 * M;
-    const ratio = snapImg.height / snapImg.width;
-    let w = maxW, hgt = w * ratio;
-    const avail = y - 70;
-    if (hgt > avail) { hgt = avail; w = hgt / ratio; }
-    p.drawRectangle({ x: M, y: y - hgt, width: maxW, height: hgt, color: C.navy });
-    p.drawImage(snapImg, { x: M + (maxW - w) / 2, y: y - hgt, width: w, height: hgt });
-  }
-  footer(p, 1);
+  // Diagramm aus Ihren echten Antworten: Ring mit Ihrem Ergebnis je Regelwerk,
+  // daneben eine Säule je Frage (Ja = voll, Teilweise = halb, Nein = leer).
+  const ANS: Record<string, { v: number; c: RGB }> = { yes: { v: 1, c: hex('#2BB673') }, partly: { v: 0.5, c: hex('#F5A524') }, no: { v: 0, c: hex('#E5484D') } };
+  const ringPath = (r: number, frac: number) => {
+    // SVG-Koordinaten (y nach unten), Start oben, im Uhrzeigersinn
+    if (frac >= 0.999) return `M 0 ${-r} A ${r} ${r} 0 1 1 0 ${r} A ${r} ${r} 0 1 1 0 ${-r}`;
+    const th = frac * Math.PI * 2;
+    const ex = r * Math.sin(th), ey = -r * Math.cos(th);
+    return `M 0 ${-r} A ${r} ${r} 0 ${frac > 0.5 ? 1 : 0} 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`;
+  };
+  y -= 34;
+  p.drawText(T.chartTitle, { x: M, y, size: 12, font: B, color: C.navy });
+  // Legende
+  let lx = A4.w - M;
+  (['no', 'partly', 'yes'] as const).forEach((k) => {
+    const t = Q.answers[k];
+    const w = R.widthOfTextAtSize(t, 8);
+    lx -= w;
+    p.drawText(t, { x: lx, y: y + 1, size: 8, font: R, color: C.muted });
+    lx -= 12;
+    p.drawRectangle({ x: lx, y: y + 1, width: 8, height: 8, color: ANS[k].c });
+    lx -= 14;
+  });
+  y -= 18;
+  const rowH = 96;
+  fws.forEach((f) => {
+    if (y - rowH < 64) { footer(p, pages.length); p = newPage(); y = A4.h - M; }
+    const v = scores[f.id];
+    const cx = M + 44, cy = y - 46, r = 32;
+    p.drawSvgPath(ringPath(r, 1), { x: cx, y: cy, borderColor: C.line, borderWidth: 9 });
+    if (v > 0) p.drawSvgPath(ringPath(r, v / 100), { x: cx, y: cy, borderColor: BANDC[bandOf(v)], borderWidth: 9, borderLineCap: LineCapStyle.Round });
+    const vt = `${v}%`;
+    p.drawText(vt, { x: cx - X.widthOfTextAtSize(vt, 15) / 2, y: cy - 5.5, size: 15, font: X, color: C.text });
+    // Säulen je Frage
+    const answers = (results.get(f.id) || []) as (string | null)[];
+    const x0 = M + 104, chartW = A4.w - M - x0, chartH = 54, top = y - 16;
+    p.drawText(f.name[lang], { x: x0, y: top + 2, size: 10, font: B, color: C.text });
+    const n = answers.length || 1;
+    const gap = 3, bw = Math.min(26, (chartW - gap * (n - 1)) / n);
+    const base = top - 12 - chartH;
+    p.drawLine({ start: { x: x0, y: base }, end: { x: x0 + n * (bw + gap) - gap, y: base }, thickness: 0.5, color: C.line });
+    answers.forEach((a, i) => {
+      const x = x0 + i * (bw + gap);
+      p.drawRectangle({ x, y: base, width: bw, height: chartH, color: C.pale });
+      const d = a ? ANS[a] : null;
+      if (d) p.drawRectangle({ x, y: base, width: bw, height: Math.max(3, chartH * d.v), color: d.c });
+      const num = String(i + 1);
+      p.drawText(num, { x: x + bw / 2 - R.widthOfTextAtSize(num, 6.5) / 2, y: base - 9, size: 6.5, font: R, color: C.muted });
+    });
+    y -= rowH;
+  });
+  footer(p, pages.length);
 
   // ── Folgeseiten: Fragen, Antworten, Empfehlungen ────────────────────────
   p = newPage();
