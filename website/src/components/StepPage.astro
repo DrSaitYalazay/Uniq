@@ -5,6 +5,8 @@
  */
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
+import Viz from './Viz.astro';
+import { photos, photoSrc } from '../data/photos';
 import { demoHref, type Lang } from '../config';
 import { steps, stepHref } from '../data/steps';
 import de from '../i18n/de';
@@ -21,6 +23,7 @@ const altPath = stepHref(other, index);
 const L = lang === 'de'
   ? { of: 'Schritt {i} von 6', why: 'Worum es geht', how: 'So gehen Sie vor', tool: 'Was UniqSuite Ihnen abnimmt', result: 'Am Ende haben Sie', refs: 'Bezug zu den Regelwerken', prev: 'Vorheriger Schritt', next: 'Nächster Schritt', all: 'Alle sechs Schritte', ring: 'Die sechs Schritte', note: 'Bildschirmfoto aus einem Demo-Mandanten mit erfundenen Daten.', ctaH: 'Wie weit sind Sie bei diesem Schritt?', ctaT: 'Der Quick-Check zeigt es in zwei Minuten. Oder Sie lassen sich UniqSuite mit Ihren eigenen Fragen zeigen.', refsNote: 'Die Bezüge zeigen, wo die Anforderungen herkommen. Sie ersetzen keine rechtliche Prüfung.' }
   : { of: 'Step {i} of 6', why: 'What it is about', how: 'How you go about it', tool: 'What UniqSuite does for you', result: 'What you end up with', refs: 'Where the requirements come from', prev: 'Previous step', next: 'Next step', all: 'All six steps', ring: 'The six steps', note: 'Screenshot from a demo tenant with made-up data.', ctaH: 'How far along are you with this step?', ctaT: 'The quick check shows you in two minutes. Or let us show you UniqSuite with your own questions.', refsNote: 'The references show where the requirements come from. They do not replace a legal assessment.' };
+const ph = photos[(['briefing', 'it', 'collab', 'strategy', 'break', 'audit'] as const)[index]];
 const shot = (n: string) => `/img/shots/${lang}-${n}`;
 const prev = index > 0 ? index - 1 : null;
 const next = index < list.length - 1 ? index + 1 : null;
@@ -69,41 +72,57 @@ const jsonld = [{
       </div>
     </header>
 
-    <div class="wrap sp-grid">
-      <figure class="sp-shot">
+    <!-- 1 · Worum es geht, daneben die Grafik zum Schritt -->
+    <section class="wrap sp-block sp-intro" data-rv>
+      <div class="sp-body">
+        <h2>{L.why}</h2>
+        <p>{s.why}</p>
+      </div>
+      <Viz kind={s.img} lang={lang} kicker={`${L.of.replace('{i}', String(index + 1))}`} title={s.title} />
+    </section>
+
+    <!-- 2 · Vorgehen als Abfolge -->
+    <section class="wrap sp-block" data-rv>
+      <h2 class="sp-h">{L.how}</h2>
+      <ol class="sp-flow">{s.how.map((x) => <li><p>{x}</p></li>)}</ol>
+    </section>
+
+    <!-- Szenenbild: bewegt sich beim Scrollen leicht -->
+    <figure class="wrap sp-block photo-band" data-rv>
+      <img src={photoSrc(ph).src} srcset={photoSrc(ph).srcset} sizes="(max-width: 1360px) 100vw, 1360px" width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={ph.alt[lang]} />
+    </figure>
+
+    <!-- 3 · Bildschirmfoto mit Bewegung beim Scrollen, daneben was die Software übernimmt -->
+    <section class="wrap sp-block sp-tool-grid" data-rv>
+      <figure class="sp-shot-wide">
         <div class="frame">
           <picture>
-            <source srcset={`${shot(s.img)}-800.avif 800w, ${shot(s.img)}-1600.avif 1600w`} sizes="(max-width: 980px) 92vw, 52vw" type="image/avif" />
-            <img src={`${shot(s.img)}-1600.webp`} srcset={`${shot(s.img)}-800.webp 800w, ${shot(s.img)}-1600.webp 1600w`} sizes="(max-width: 980px) 92vw, 52vw" width="1600" height="1000" decoding="async" alt={`${s.title} – ${lang === 'de' ? 'Bildschirmansicht in UniqSuite' : 'screen in UniqSuite'}`} />
+            <source srcset={`${shot(s.img)}-800.avif 800w, ${shot(s.img)}-1600.avif 1600w`} sizes="(max-width: 980px) 92vw, 60vw" type="image/avif" />
+            <img src={`${shot(s.img)}-1600.webp`} srcset={`${shot(s.img)}-800.webp 800w, ${shot(s.img)}-1600.webp 1600w`} sizes="(max-width: 980px) 92vw, 60vw" width="1600" height="1000" loading="lazy" decoding="async" alt={`${s.title} – ${lang === 'de' ? 'Bildschirmansicht in UniqSuite' : 'screen in UniqSuite'}`} />
           </picture>
         </div>
         <figcaption>{L.note}</figcaption>
       </figure>
-
       <div class="sp-body">
-        <section>
-          <h2>{L.why}</h2>
-          <p>{s.why}</p>
-        </section>
-        <section>
-          <h2>{L.how}</h2>
-          <ol class="sp-how">{s.how.map((x) => <li>{x}</li>)}</ol>
-        </section>
-        <section>
-          <h2>{L.tool}</h2>
-          <ul class="sp-tool">{s.tool.map((x) => <li>{x}</li>)}</ul>
-        </section>
-        <div class="sp-result">
-          <p class="kicker">{L.result}</p>
-          <p>{s.result.charAt(0).toUpperCase() + s.result.slice(1)}</p>
-        </div>
-        <section>
-          <h2>{L.refs}</h2>
-          <ul class="sp-refs">{s.refs.map((x) => <li>{x}</li>)}</ul>
-          <p class="fine">{L.refsNote}</p>
-        </section>
+        <h2>{L.tool}</h2>
+        <ul class="sp-tool">{s.tool.map((x) => <li>{x}</li>)}</ul>
       </div>
-    </div>
+    </section>
+
+    <!-- 4 · Ergebnis als großes Statement -->
+    <section class="wrap sp-block" data-rv>
+      <div class="sp-result-band">
+        <p class="kicker">{L.result}</p>
+        <p class="sp-big">{s.result.charAt(0).toUpperCase() + s.result.slice(1)}</p>
+      </div>
+    </section>
+
+    <!-- 5 · Bezüge als Karten -->
+    <section class="wrap sp-block" data-rv>
+      <h2 class="sp-h">{L.refs}</h2>
+      <ul class="sp-refs-grid">{s.refs.map((x) => <li>{x}</li>)}</ul>
+      <p class="fine">{L.refsNote}</p>
+    </section>
 
     <nav class="wrap sp-pager" aria-label={L.all}>
       {prev !== null
