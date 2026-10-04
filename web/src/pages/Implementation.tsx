@@ -366,7 +366,7 @@ function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocu
       <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
         <AlertOctagon size={15} className="text-primary" />{de ? "Korrekturmaßnahmen aus dem Audit" : "Corrective actions from the audit"}
         <Badge variant="outline" className="text-[10px]">{open} {de ? "offen" : "open"}</Badge>
-        <span className="text-[10px] font-normal text-muted-foreground">{de ? "Abhaken schließt den Audit-Befund (Phase 07)." : "Ticking closes the audit finding (phase 07)."}</span>
+        <span className="text-[10px] font-normal text-muted-foreground">{de ? "Abhaken schließt den Audit-Befund (Phase 06)." : "Ticking closes the audit finding (phase 06)."}</span>
       </CardTitle></CardHeader>
       <CardContent className="space-y-1.5">
         {actions.map(a => {
@@ -382,7 +382,10 @@ function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocu
                   {a.done && a.doneAt && <span className="text-[9px] text-muted-foreground">{de ? "erledigt am" : "done on"} {new Date(a.doneAt).toLocaleDateString(de ? "de-DE" : "en-GB")}</span>}
                 </div>
                 <div className={`${a.done ? "line-through text-muted-foreground" : ""}`}>{a.measure}</div>
-                <div className="text-[10px] text-muted-foreground truncate">{a.controlReq}</div>
+                {/* UniqSuite: Anforderungstext nur zeigen, wenn die Maßnahme ihn nicht schon wörtlich enthält. */}
+                {!(a.measure ?? "").startsWith((a.controlReq ?? "").slice(0, 40)) && (
+                  <div className="text-[10px] text-muted-foreground truncate">{a.controlReq}</div>
+                )}
               </div>
               <label className="flex flex-col gap-0.5 shrink-0">
                 <span className="text-[9px] uppercase tracking-wide text-muted-foreground">{de ? "Zuständig" : "Owner"}</span>
@@ -401,7 +404,9 @@ function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocu
   );
 }
 
-export default function Implementation() {
+/** embedded: als Abschnitt „Maßnahmen & Umsetzung" in Phase 05 (Plan & Umsetzung) —
+ *  ohne eigene Seitenüberschrift und Ansichtsumschalter (die liefert die Phase). */
+export default function Implementation({ embedded = false }: { embedded?: boolean } = {}) {
   const { active } = useFramework();
   const { lang } = useLanguage();
   const de = lang === "de";
@@ -1118,21 +1123,28 @@ export default function Implementation() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className={embedded ? "space-y-6" : "p-6 max-w-7xl mx-auto space-y-6"}>
       <header className="space-y-1">
         <div className="flex items-start justify-between gap-3 flex-wrap">
+          {embedded ? (
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Wrench className="text-primary" size={18} />
+              {de ? "Maßnahmen — Status, Zuständige, Fristen" : "Measures — status, owners, due dates"}
+            </h2>
+          ) : (
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Wrench className="text-primary" size={22} />
             {de ? "Umsetzung — Live-Status" : "Implementation — Live Status"}
           </h1>
+          )}
           <div className="flex items-center gap-2">
             <ExportMenu
-              label={de ? "Bericht" : "Report"}
+              label={embedded ? (de ? "Umsetzungsbericht" : "Implementation report") : (de ? "Bericht" : "Report")}
               onPdf={() => generateExecutionPDF(execReportData, de ? "de" : "en", getReportBrandName(de))}
               onWord={() => generateExecutionWord(execReportData, de ? "de" : "en", getReportBrandName(de))}
               onExcel={() => generateExecutionExcel(execReportData, de ? "de" : "en")}
             />
-            <ModeToggle de={de} />
+            {!embedded && <ModeToggle de={de} />}
           </div>
         </div>
         <p className="text-sm text-muted-foreground max-w-3xl">
@@ -1178,11 +1190,7 @@ export default function Implementation() {
           <div className={`text-xl font-bold tabular-nums ${noEvidenceKeys.size > 0 ? "st-teilweise-text" : ""}`}>{noEvidenceKeys.size}</div>
           <div className="text-[10px] text-muted-foreground">{de ? "im Audit nicht belastbar" : "not defensible in audit"}</div>
         </CardContent></Card>
-        <Card><CardContent className="p-3">
-          <div className="text-xs text-muted-foreground">{de ? "Umsetzungsgrad" : "Implementation degree"}</div>
-          <div className="text-xl font-bold tabular-nums text-primary">{livePct}%</div>
-          <div className="text-[10px] text-muted-foreground">{de ? "= wie im Management-Dashboard" : "= same as management dashboard"}</div>
-        </CardContent></Card>
+        {/* UniqSuite: „Umsetzungsgrad" steht als Mitte des Umsetzungs-Rings direkt darunter — keine zweite Kachel. */}
         <Card><CardContent className="p-3">
           <div className="text-xs text-muted-foreground">{de ? "Laufend" : "Running"}</div>
           <div className="text-xl font-bold tabular-nums st-teilweise-text">{effSummary.laufend}</div>
