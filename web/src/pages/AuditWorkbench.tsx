@@ -647,7 +647,7 @@ export default function AuditWorkbench() {
     const safeTitle = (active?.titel || "").replace(/[^\w\-äöüÄÖÜß ]+/g, "").trim().replace(/\s+/g, "_");
     rkExport(modeOut, {
       title: de ? "Audit-Bericht" : "Audit report",
-      sub: `${de ? "Phase 07 · Audit & KVP" : "Phase 07 · Audit & CIP"}${active ? ` · ${active.titel} (${typLabel(active.typ)})` : ""}${audit.datum ? ` · ${fmtDate(audit.datum)}` : ""}`,
+      sub: `${de ? "Phase 06 · Audit & KVP" : "Phase 06 · Audit & CIP"}${active ? ` · ${active.titel} (${typLabel(active.typ)})` : ""}${audit.datum ? ` · ${fmtDate(audit.datum)}` : ""}`,
       body, file: `Audit-Bericht_${safeTitle ? safeTitle + "_" : ""}${audit.datum || new Date().toISOString().slice(0, 10)}`, lang: de ? "de" : "en",
       charts: modeOut === "pdf",
     });
@@ -802,7 +802,8 @@ export default function AuditWorkbench() {
             }));
             return (
               <div className="space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center gap-8">
+                {/* UniqSuite: Schwere-Ring + Balken wiederholten die Kennzahl-Kacheln (Major/Minor/OFI/Erledigt) darüber. */}
+                {SHOW_SEVERITY_BLOCK && <div className="flex flex-col md:flex-row md:items-center gap-8">
                   <div className="w-full md:w-80 shrink-0" style={{ height: 260 }}>
                     <ResponsiveContainer>
                       <PieChart>
@@ -829,10 +830,11 @@ export default function AuditWorkbench() {
                       {legend.map((s, i) => <span key={i} className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: s.c }} />{s.l}: <b className="text-foreground">{s.v}</b></span>)}
                     </div>
                   </div>
-                </div>
+                </div>}
                 <FrameworkMiniGrid items={fwItems} title={de ? "Befunde je Framework" : "Findings by framework"} subtitle={de ? "— offene Befunde nach Schwere, % erledigt" : "— open findings by severity, % resolved"} />
                 <AuditTrendChart de={de} audits={audits} activeId={activeId} />
-                {audit.urteil && (
+                {/* UniqSuite: Gesamturteil steht bereits im Feld „Gesamturteil" des Audit-Kopfs. */}
+                {SHOW_SEVERITY_BLOCK && audit.urteil && (
                   <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
                     <div className="text-[11px] text-muted-foreground">{de ? "Gesamturteil" : "Overall verdict"}</div>
                     <div className="text-sm font-semibold text-foreground">{audit.urteil}</div>
@@ -1046,3 +1048,5 @@ function FindingCard({ f, de, item, riskById, searchableRisks, fwLabel, onPatch,
     </div>
   );
 }
+
+const SHOW_SEVERITY_BLOCK = false;
