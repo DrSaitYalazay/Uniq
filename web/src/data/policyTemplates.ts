@@ -112,8 +112,8 @@ const POLICY_TEMPLATES: PolicyTemplate[] = [
   "nameEn": "Personnel Security Policy (Screening & Employment)",
   "category": "Personal & Bewusstsein",
   "categoryEn": "People & Awareness",
-  "description": "Richtlinie · ISO27001, BSI, NIS2, DORA, GDPR, ISO27701, KRITIS, ISO42001, AIACT, TISAX, MaRisk, SOC2, NIST_CSF, KRITIS_DACHG",
-  "descriptionEn": "Policy · ISO27001, BSI, NIS2, DORA, GDPR, ISO27701, KRITIS, ISO42001, AIACT, TISAX, MaRisk, SOC2, NIST_CSF, KRITIS_DACHG",
+  "description": "Richtlinie · ISO27001, NIS2, ISO42001, AIACT",
+  "descriptionEn": "Policy · ISO27001, NIS2, ISO42001, AIACT",
   "purpose": "Personalsicherheits-Richtlinie (Screening & Beschäftigung)",
   "purposeEn": "Personnel Security Policy (Screening & Employment)",
   "defaultRules": [
@@ -133,8 +133,8 @@ const POLICY_TEMPLATES: PolicyTemplate[] = [
   "nameEn": "Documented Operating Procedures (SOPs)",
   "category": "Governance & Risiko",
   "categoryEn": "Governance & Risk",
-  "description": "Richtlinie · ISO27001, BSI, NIS2, DORA, KRITIS, ISO22301, BSI200_4, TISAX, MaRisk, SOC2, NIST_CSF",
-  "descriptionEn": "Policy · ISO27001, BSI, NIS2, DORA, KRITIS, ISO22301, BSI200_4, TISAX, MaRisk, SOC2, NIST_CSF",
+  "description": "Richtlinie · ISO27001, NIS2",
+  "descriptionEn": "Policy · ISO27001, NIS2",
   "purpose": "Dokumentierte Betriebsverfahren (SOPs)",
   "purposeEn": "Documented Operating Procedures (SOPs)",
   "defaultRules": [
