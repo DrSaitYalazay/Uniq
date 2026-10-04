@@ -53,7 +53,7 @@ export interface XlsxDocSpec {
 /** "#RRGGBB" → "FFRRGGBB" (ExcelJS erwartet ARGB). */
 function argb(hex: string): string {
   const h = String(hex || "").replace("#", "").trim();
-  return "FF" + (h.length === 6 ? h.toUpperCase() : "241A4D");
+  return "FF" + (h.length === 6 ? h.toUpperCase() : "1A2E41");
 }
 
 const FONT = "Arial";
