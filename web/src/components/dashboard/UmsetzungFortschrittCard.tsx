@@ -311,7 +311,8 @@ export default function UmsetzungFortschrittCard({ de, liveTotal, liveDone, scop
                     ? ` · ${de ? `Reifegrad-Näherung aus Umsetzung (100 % ≈ 5,0) · aktuell ${(Math.round((pctNow / 20) * 10) / 10).toString().replace(".", ",")}/5` : `maturity proxy from implementation (100% ≈ 5.0) · now ${Math.round((pctNow / 20) * 10) / 10}/5`}`
                     : ""}
             </p>
-            {scopedDeadlines.filter(d => d.due_at).length > 0 && (
+            {/* UniqSuite: Fristen stehen auf dem Dashboard in der Fristen-Karte — hier keine zweite Liste. */}
+            {SHOW_DEADLINE_CHIPS && scopedDeadlines.filter(d => d.due_at).length > 0 && (
               <div className="flex flex-wrap items-center gap-1.5 mt-2">
                 <Flag className="size-3.5 text-muted-foreground shrink-0" />
                 <span className="text-[10px] text-muted-foreground mr-1">{de ? "Fristen:" : "Deadlines:"}</span>
@@ -332,3 +333,5 @@ export default function UmsetzungFortschrittCard({ de, liveTotal, liveDone, scop
     </Card>
   );
 }
+
+const SHOW_DEADLINE_CHIPS = false;
