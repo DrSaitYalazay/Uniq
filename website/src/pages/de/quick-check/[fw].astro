@@ -1,0 +1,9 @@
+---
+import QcPage from '../../../components/QcPage.astro';
+import qcData from '../../../data/quickcheck.json';
+export function getStaticPaths() {
+  return qcData.frameworks.map((f) => ({ params: { fw: f.id } }));
+}
+const { fw } = Astro.params;
+---
+<QcPage lang="de" fw={fw!} />
