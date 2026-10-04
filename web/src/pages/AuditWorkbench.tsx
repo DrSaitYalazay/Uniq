@@ -576,7 +576,7 @@ export default function AuditWorkbench() {
         : `<p style="color:#718096">${de ? "Keine früheren Audits im Programm." : "No previous audits in the programme."}</p>`);
 
     const kpis = rkKpiRow([
-      { label: de ? "Befunde gesamt" : "Findings total", value: stats.real, color: "#241A4D" },
+      { label: de ? "Befunde gesamt" : "Findings total", value: stats.real, color: "#1A2E41" },
       { label: "Major", value: stats.major, color: "#b91c1c" },
       { label: "Minor", value: stats.minor, color: "#b45309" },
       { label: de ? "Beobachtung (OFI)" : "Observation (OFI)", value: stats.ofi, color: "#475569" },
@@ -629,8 +629,8 @@ export default function AuditWorkbench() {
 
     const unterschrift = rkSection(de ? "Freigabe" : "Sign-off") +
       `<table style="width:100%;margin-top:18px;border-collapse:collapse"><tr>
-        <td style="width:50%;padding:0 18px 0 0;vertical-align:bottom"><div style="border-top:1px solid #241A4D;padding-top:6px;font-size:11px;color:#4A5568">${de ? "Auditor" : "Auditor"}: ${esc(audit.auditor) || "________________"}<br>${de ? "Datum, Unterschrift" : "Date, signature"}</div></td>
-        <td style="width:50%;padding:0 0 0 18px;vertical-align:bottom"><div style="border-top:1px solid #241A4D;padding-top:6px;font-size:11px;color:#4A5568">${de ? "Leitung / Auftraggeber" : "Management / sponsor"}<br>${de ? "Datum, Unterschrift" : "Date, signature"}</div></td>
+        <td style="width:50%;padding:0 18px 0 0;vertical-align:bottom"><div style="border-top:1px solid #1A2E41;padding-top:6px;font-size:11px;color:#4A5568">${de ? "Auditor" : "Auditor"}: ${esc(audit.auditor) || "________________"}<br>${de ? "Datum, Unterschrift" : "Date, signature"}</div></td>
+        <td style="width:50%;padding:0 0 0 18px;vertical-align:bottom"><div style="border-top:1px solid #1A2E41;padding-top:6px;font-size:11px;color:#4A5568">${de ? "Leitung / Auftraggeber" : "Management / sponsor"}<br>${de ? "Datum, Unterschrift" : "Date, signature"}</div></td>
       </tr></table>`;
 
     const body =
