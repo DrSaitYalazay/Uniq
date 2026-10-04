@@ -25,6 +25,7 @@ import {
   upcomingDeadlines,
   overdue,
   deadlineAmpel,
+  deadlineLabel,
   type ComplianceDeadline,
   type FristAmpel,
 } from "@/lib/deadlineEngine";
@@ -104,7 +105,7 @@ function FristenCard({ de, frameworkFilter = null }: { de: boolean; frameworkFil
         <div className="min-w-0 flex items-center gap-2">
           <span className={`shrink-0 size-2.5 rounded-full ${AMPEL_DOT[isLate ? "rot" : a.ampel]}`} />
           <div className="min-w-0">
-            <div className="text-sm font-medium truncate">{d.label}</div>
+            <div className="text-sm font-medium truncate">{deadlineLabel(d, de)}</div>
             <div className="text-[10.5px] text-muted-foreground">
               {d.framework ? `${d.framework} · ` : ""}{fmtDue(d.due_at)}
             </div>

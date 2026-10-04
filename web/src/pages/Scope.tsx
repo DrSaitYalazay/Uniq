@@ -12,8 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ModeToggle } from "@/components/ModeToggle";
-import { useAssessmentMode } from "@/hooks/useAssessmentMode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { emitFrameworksUpdated } from "@/lib/frameworkBus";
@@ -170,7 +168,9 @@ const FRAMEWORK_DESC: Record<string, { de: string; en: string }> = {
 
 const Scope = () => {
   const { lang } = useLanguage();
-  const { mode } = useAssessmentMode();
+  // UniqSuite: Scope & Kontext hat keinen Überblick/Detail-Umschalter — die Seite ist ein
+  // Formular, beide Ansichten zeigten dasselbe. Immer die bearbeitbare Ansicht.
+  const mode = "expert" as string;
   const { user, getTenantId } = useAuth();
   const de = lang === "de";
 
@@ -530,7 +530,6 @@ const Scope = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <ModeToggle de={de} />
           <ExportMenu
             onPdf={() => runScopeExport("pdf")}
             onWord={() => runScopeExport("docx")}

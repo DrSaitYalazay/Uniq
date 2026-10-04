@@ -12,7 +12,7 @@ import { Gauge, AlertTriangle, CalendarClock, ArrowRight, CheckCircle2, Clipboar
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { listOpenDeadlines, overdue, type ComplianceDeadline } from "@/lib/deadlineEngine";
+import { deadlineLabel, listOpenDeadlines, overdue, type ComplianceDeadline } from "@/lib/deadlineEngine";
 import { getReportBrandName } from "@/lib/reportBrand";
 import { RK } from "@/lib/reportKit";
 import { Sparkline } from "@/components/dashboard/Sparkline";
@@ -156,7 +156,7 @@ export default function ManagementSummaryCard({ overview, loading, de, freshness
         icon: CalendarClock,
         text: de
           ? `Überfällig${days == null ? "" : days === 0 ? " seit heute" : ` seit ${days} Tag${days === 1 ? "" : "en"}`}: ${d.label}${fw}`
-          : `Overdue${days == null ? "" : days === 0 ? " since today" : ` by ${days} day${days === 1 ? "" : "s"}`}: ${d.label}${fw}`,
+          : `Overdue${days == null ? "" : days === 0 ? " since today" : ` by ${days} day${days === 1 ? "" : "s"}`}: ${deadlineLabel(d, false)}${fw}`,
         to: "/incidents",
         tone: "st-nein-text",
       });

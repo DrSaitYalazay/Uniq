@@ -53,6 +53,9 @@ import { LegalBadges } from "@/components/LegalBadges";
 
 import { CHART_EMPTY, CHART_IMPL, CHART_STATUS } from "@/lib/chartPalette";
 import { insideSliceLabel } from "@/lib/chartLabels";
+import { isoRefOf, isoRefOfMany, isoThemeOf, isoThemeOfMany, type IsoTheme } from "@/data/isoThemes";
+import { annexBucketLabel, annexFamilyLabel } from "@/data/isoAnnexMap";
+import { IsoThemeGroups, type ThemeTopic } from "@/components/assessment/IsoThemeGroups";
 const STATUS_META: Record<ImplStatus, { de: string; en: string; color: string; Icon: any }> = {
   offen:      { de: "Offen",     en: "Open",       color: "text-muted-foreground", Icon: Circle },
   laufend:    { de: "Laufend",   en: "In progress", color: "st-teilweise-text",        Icon: Loader2 },
@@ -349,8 +352,11 @@ interface AuditActionLite { id: string; framework: string; controlId: string; co
 /** Aus dem Audit (Phase 07) übergebene Korrekturmaßnahmen. Rendert nur, wenn vorhanden.
  *  KVP-Schleife: Abhaken hier schließt den Audit-Befund (Sync in AuditWorkbench);
  *  Owner + Frist werden je Maßnahme gepflegt; „Zur Aufgabe" springt auf die Aufgabenzeile. */
-function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocus }: {
-  de: boolean; actions: AuditActionLite[];
+// UniqSuite-Überblick „Maßnahmen": allgemein halten — Details stehen im Detail-Modus.
+const SHOW_EVIDENCE_BAR = false;
+
+function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocus, compact = false, onShowAll }: {
+  de: boolean; actions: AuditActionLite[]; compact?: boolean; onShowAll?: () => void;
   setActions: (fn: (d: { actions: AuditActionLite[] }) => { actions: AuditActionLite[] }) => void;
   people: Person[]; onAddPerson: (p: Person) => void; onFocus: (controlId: string) => void;
 }) {
@@ -361,6 +367,40 @@ function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocu
   const open = actions.filter(a => !a.done).length;
   const today = new Date().toISOString().slice(0, 10);
   const sevCls = (sv: string) => sv === "major" ? "bg-destructive/15 text-destructive" : sv === "beobachtung" ? "bg-slate-500/15 text-slate-600" : "st-teilweise-tint st-teilweise-text";
+  // UniqSuite-Überblick: nur die offenen Korrekturmaßnahmen, höchstens drei, ohne Bearbeitung.
+  if (compact) {
+    const offen = actions.filter(a => !a.done);
+    const ueberfaellig = offen.filter(a => !!a.due && a.due < today).length;
+    if (offen.length === 0) return null;
+    return (
+      <Card>
+        <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2 flex-wrap">
+          <AlertOctagon size={15} className="text-primary" />{de ? "Korrekturmaßnahmen aus dem Audit" : "Corrective actions from the audit"}
+          <Badge variant="outline" className="text-[10px]">{offen.length} {de ? "offen" : "open"}</Badge>
+          {ueberfaellig > 0 && <Badge variant="outline" className="text-[10px] border-destructive/40 text-destructive">{ueberfaellig} {de ? "überfällig" : "overdue"}</Badge>}
+        </CardTitle></CardHeader>
+        <CardContent className="space-y-1.5">
+          {offen.slice(0, 3).map(a => {
+            const overdue = !!a.due && a.due < today;
+            return (
+              <div key={a.id} className="flex items-center gap-2 text-sm border-b border-border/50 last:border-0 pb-1.5">
+                <span className={`text-[9px] px-1.5 py-0.5 rounded-full shrink-0 ${sevCls(a.severity)}`}>{a.severity}</span>
+                <span className="flex-1 min-w-0 truncate" title={a.measure}>{a.measure}</span>
+                {a.due && <span className={`text-[11px] tabular-nums shrink-0 ${overdue ? "text-destructive font-semibold" : "text-muted-foreground"}`}>{new Date(a.due).toLocaleDateString(de ? "de-DE" : "en-GB")}</span>}
+              </div>
+            );
+          })}
+          {onShowAll && (
+            <button type="button" onClick={onShowAll} className="text-xs font-semibold text-accent-readable hover:underline pt-1">
+              {offen.length > 3
+                ? (de ? `Alle ${offen.length} bearbeiten im Detail →` : `Edit all ${offen.length} in Detail →`)
+                : (de ? "Bearbeiten im Detail →" : "Edit in Detail →")}
+            </button>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
   return (
     <Card>
       <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
@@ -1027,6 +1067,35 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
     return [...m.entries()].sort((a, b) => a[0].localeCompare(b[0], de ? "de" : "en"));
   }, [view, activeKeys, ctrlIndex, de, deltaGruppe]);
 
+  /** Überblick: Aufgaben je ISO-27001-Bereich (Kap. 4–10, A.5–A.8) und darin je Thema. */
+  const themenIso = useMemo(() => {
+    const m = new Map<IsoTheme, Map<string, { done: number; total: number }>>();
+    const dazu = (th: IsoTheme, label: string, fertig: boolean) => {
+      const inner = m.get(th) ?? m.set(th, new Map()).get(th)!;
+      const e = inner.get(label) ?? inner.set(label, { done: 0, total: 0 }).get(label)!;
+      e.total++; if (fertig) e.done++;
+    };
+    // Thema im Bereich = die ISO-Referenz der Aufgabe (Anhang-A-Kontrolle bzw. Kapitel 4–10);
+    // nur Aufgaben ohne ISO-Bezug behalten ihr bisheriges Thema.
+    const lang = de ? "de" : "en";
+    const ohneIso = (fw: string | undefined) =>
+      `${(fw && fwDef(fw)?.short) || fw || ""} · ${de ? "ohne direkte ISO-Entsprechung" : "no direct ISO counterpart"}`;
+    const thema = (ref: string | undefined, fw: string | undefined) =>
+      !ref ? ohneIso(fw) : ref.startsWith("A.") ? annexBucketLabel(ref, lang) : annexFamilyLabel(ref.split(".")[0], lang);
+    for (const t of view.shared) {
+      const ids = t.memberControlIds ?? [];
+      const th = isoThemeOfMany(ids);
+      dazu(th, thema(isoRefOfMany(ids, th), t.frameworks?.[0]), effStatus(t.bundle_key, ids) === "fertig");
+    }
+    for (const fw of activeKeys) for (const t of (view.deltaByFramework[fw] ?? [])) {
+      const th = isoThemeOf(t.control_id);
+      dazu(th, thema(isoRefOf(t.control_id), t.framework), effStatus(t.bundle_key, (t as any).memberControlIds ?? []) === "fertig");
+    }
+    const out = new Map<IsoTheme, ThemeTopic[]>();
+    for (const [th, inner] of m) out.set(th, [...inner.entries()].map(([label, e]) => ({ label, num: e.done, den: e.total, ratio: `${e.done}/${e.total}` })));
+    return out;
+  }, [view, activeKeys, de, effStatus]);
+
   const summary = useMemo(() => {
     const counts = { offen: 0, laufend: 0, fertig: 0, blockiert: 0 };
     const track = (k: string) => counts[getStatus(k)]++;
@@ -1155,7 +1224,8 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
       </header>
 
       <AuditActionsCard de={de} actions={auditActions} setActions={setAuditActionsData as any} people={people} onAddPerson={addPerson}
-        onFocus={(cid) => { setSearchParams({ focus: cid }); }} />
+        onFocus={(cid) => { setSearchParams({ focus: cid }); }}
+        compact={mode !== "expert"} onShowAll={() => setMode("expert")} />
 
       {/* KPI bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
@@ -1163,13 +1233,13 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           <div className="text-xs text-muted-foreground">{de ? "Aufgaben (netto)" : "Tasks (net)"}</div>
           <div className="text-xl font-bold tabular-nums">{totalTasks}</div>
         </CardContent></Card>
-        <Card><CardContent className="p-3">
+        {mode === "expert" && <Card><CardContent className="p-3">
           <div className="text-xs text-muted-foreground">{de ? "Restaufwand (PT)" : "Remaining effort (PD)"}</div>
           <div className="text-xl font-bold tabular-nums text-primary">{Math.round(ptRest.rest)}</div>
           <div className="text-[10px] text-muted-foreground">
             {de ? `von ${Math.round(ptSums.netto)} PT netto · laufend ½` : `of ${Math.round(ptSums.netto)} PD net · running ½`}
           </div>
-        </CardContent></Card>
+        </CardContent></Card>}
         {mode === "expert" && (
           <Card><CardContent className="p-3">
             <div className="text-xs text-muted-foreground">{de ? "PT brutto / netto" : "PD gross / net"}</div>
@@ -1185,11 +1255,11 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           <div className={`text-xl font-bold tabular-nums ${overdueKeys.size > 0 ? "text-destructive" : ""}`}>{overdueKeys.size}</div>
           <div className="text-[10px] text-muted-foreground">{de ? "Frist < heute, nicht fertig" : "due < today, not done"}</div>
         </CardContent></Card>
-        <Card className={noEvidenceKeys.size > 0 ? "st-teilweise-border" : ""}><CardContent className="p-3">
+        {mode === "expert" && <Card className={noEvidenceKeys.size > 0 ? "st-teilweise-border" : ""}><CardContent className="p-3">
           <div className="text-xs text-muted-foreground flex items-center gap-1"><Paperclip size={11} />{de ? "Fertig ohne Nachweis" : "Done w/o evidence"}</div>
           <div className={`text-xl font-bold tabular-nums ${noEvidenceKeys.size > 0 ? "st-teilweise-text" : ""}`}>{noEvidenceKeys.size}</div>
           <div className="text-[10px] text-muted-foreground">{de ? "im Audit nicht belastbar" : "not defensible in audit"}</div>
-        </CardContent></Card>
+        </CardContent></Card>}
         {/* UniqSuite: „Umsetzungsgrad" steht als Mitte des Umsetzungs-Rings direkt darunter — keine zweite Kachel. */}
         <Card><CardContent className="p-3">
           <div className="text-xs text-muted-foreground">{de ? "Laufend" : "Running"}</div>
@@ -1205,7 +1275,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           Hauptabschnitte, die Kapitel darin, die Frameworks und deren Gruppen.
           Wunsch Dr. Sait 17.09.2026: „Üstte Alle öffnen / Alle schließen olsun;
           tüm seviyeleri yönetsin." */}
-      <div className="flex items-center gap-2">
+      {mode === "expert" && <div className="flex items-center gap-2">
         <button type="button" onClick={alleAufklappen}
                 className="h-8 px-2.5 rounded border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent/5">
           {de ? "Alle öffnen" : "Expand all"}
@@ -1214,7 +1284,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                 className="h-8 px-2.5 rounded border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent/5">
           {de ? "Alle schließen" : "Collapse all"}
         </button>
-      </div>
+      </div>}
 
       {/* KENNZAHLEN — in beiden Modi vorhanden, aber NICHT in derselben Form.
           Zwei Wünsche, die sich zunächst widersprachen:
@@ -1328,7 +1398,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     <ResponsiveContainer>
                       <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
                         <Pie data={pieData} dataKey="n" nameKey="label" cx="50%" cy="50%"
-                             innerRadius={58} outerRadius={100} paddingAngle={2}
+                             innerRadius={58} outerRadius={100} paddingAngle={2} isAnimationActive={false}
                              labelLine={false}
                              label={insideSliceLabel("percent", 0.06)}>
                           {pieData.map((s, i) => <Cell key={i} fill={s.color} stroke="hsl(var(--card))" strokeWidth={2} />)}
@@ -1361,7 +1431,8 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     zaehlt Kontrollen, ein Nachweis haengt aber an der Aufgabe.
                     Beide Basen in EINEN Balken zu mischen waere die bequemere,
                     aber falsche Darstellung. */}
-                <div className="space-y-2">
+                {/* UniqSuite-Überblick: „Erledigt und belastbar" steht im Detail (Kennzahlen-Streifen). */}
+                {SHOW_EVIDENCE_BAR && <div className="space-y-2">
                   <div className="text-sm font-semibold text-foreground">
                     {de ? "Erledigt und im Audit belastbar" : "Done and defensible in audit"}
                     <span className="ml-2 text-xs font-normal text-muted-foreground">
@@ -1393,7 +1464,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                       </>
                     );
                   })()}
-                </div>
+                </div>}
                 {gapOverview.length > 0 && (
                   <div className="space-y-2">
                     <div className="text-sm font-semibold text-foreground">
@@ -1454,52 +1525,9 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     </div>
                   </div>
                 )}
-                {gruppenFortschritt.length > 0 && (
-                  <div className="space-y-2">
-                    <div className="text-sm font-semibold text-foreground">
-                      {de ? "Fortschritt je Thema" : "Progress by topic"}
-                      <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {de
-                          ? "— gemeinsame und framework-eigene Aufgaben zusammen, jede genau einmal gezaehlt"
-                          : "— shared and framework-specific tasks together, each counted exactly once"}
-                      </span>
-                    </div>
-                    {gruppenFortschritt.map(([gLabel, items]) => {
-                      const done = items.filter(i => effStatus(i.bundle_key, (i as any).memberControlIds ?? []) === "fertig").length;
-                      const pct = items.length ? Math.round((done / items.length) * 100) : 0;
-                      // Schwellenfarbe aus der Palette, nicht als feste Klasse:
-                      // im Themen-Modus („mono") folgen Balken und Kachel damit
-                      // der gewählten Farbe, im Ampel-/Hybrid-Modus bleiben sie
-                      // grün/gelb/rot. Vorher waren sie fest verdrahtet und
-                      // blieben beim Themenwechsel amber.
-                      const barColor = pct >= 75 ? CHART_STATUS.ja
-                        : pct >= 40 ? CHART_STATUS.teilweise
-                        : pct > 0 ? CHART_STATUS.nein
-                        : CHART_STATUS.na;
-                      const neutral = pct === 0;
-                      return (
-                        <div key={gLabel} className="flex items-center gap-4 rounded-xl border border-border bg-card px-3 py-2.5 hover:border-accent hover:shadow-sm transition-all">
-                          <span className="text-sm md:text-base text-foreground flex-1 min-w-0 truncate font-semibold" title={gLabel}>
-                            {gLabel}
-                          </span>
-                          <div className="w-28 sm:w-44 h-2.5 rounded-full bg-muted overflow-hidden shrink-0">
-                            <div className="h-full rounded-full transition-all duration-500"
-                                 style={{ width: `${Math.max(pct, 2)}%`, background: barColor }} />
-                          </div>
-                          <div className="shrink-0 rounded-lg border px-2.5 py-1 text-right leading-tight"
-                               style={neutral ? undefined : {
-                                 borderColor: `color-mix(in srgb, ${barColor} 45%, transparent)`,
-                                 background: `color-mix(in srgb, ${barColor} 8%, transparent)`,
-                                 color: barColor,
-                               }}>
-                            <span className="text-base font-bold tabular-nums">{pct}%</span>
-                            <span className="block text-[10px] text-muted-foreground tabular-nums">{done}/{items.length}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                {/* UniqSuite-Überblick: Fortschritt in der Gliederung von ISO/IEC 27001 —
+                    5 Bereiche zugeklappt, Themen beim Aufklappen. Gilt für alle Frameworks. */}
+                {themenIso.size > 0 && <IsoThemeGroups de={de} topics={themenIso} />}
                 {mode !== "expert" && (
                   <div className="text-[11px] text-muted-foreground border-t border-border pt-2">
                     {de ? "Zum Setzen von Status, Verantwortlichen und Terminen auf " : "To set status, owners and dates, switch to "}

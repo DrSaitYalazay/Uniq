@@ -53,6 +53,34 @@ export interface ComplianceDeadline {
   created_at?: string;          // ISO
 }
 
+/** Meldestufen der Vorfall-Fristen (meta.stufe) — englische Anzeige. Die Zeile speichert
+ *  das deutsche Label; für EN wird es aus der Stufe abgeleitet statt aus dem Freitext. */
+const INCIDENT_STAGE_EN: Record<string, string> = {
+  fruehwarnung: "Early warning",
+  meldung: "Incident notification",
+  erstmeldung: "Initial notification",
+  stoerungsmeldung: "Initial notification",
+  zwischenbericht: "Intermediate report",
+  zwischenmeldung: "Intermediate report",
+  folgemeldung: "Follow-up notification",
+  abschluss: "Final report",
+  abschlussbericht: "Final report",
+  abschlussmeldung: "Final report",
+  nachbericht: "Investigation / final report",
+  meldung_behoerde: "Notification to the supervisory authority",
+  benachrichtigung_betroffene: "Notification of affected persons",
+  registereintrag: "Internal register entry",
+};
+
+/** Anzeige-Label einer Frist in der gewählten Sprache. */
+export function deadlineLabel(d: Pick<ComplianceDeadline, "kind" | "framework" | "label" | "meta">, de: boolean): string {
+  if (de || d.kind !== "incident_report") return d.label;
+  const stufe = typeof d.meta?.stufe === "string" ? d.meta.stufe : "";
+  const en = INCIDENT_STAGE_EN[stufe];
+  if (!en) return d.label;
+  return d.framework ? `${d.framework} · ${en}` : en;
+}
+
 /** Eingabe zum Anlegen — id/status/created_at werden serverseitig gesetzt. */
 export interface NewDeadline {
   tenant_id: string;
