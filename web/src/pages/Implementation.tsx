@@ -349,8 +349,12 @@ interface AuditActionLite { id: string; framework: string; controlId: string; co
 /** Aus dem Audit (Phase 07) übergebene Korrekturmaßnahmen. Rendert nur, wenn vorhanden.
  *  KVP-Schleife: Abhaken hier schließt den Audit-Befund (Sync in AuditWorkbench);
  *  Owner + Frist werden je Maßnahme gepflegt; „Zur Aufgabe" springt auf die Aufgabenzeile. */
-function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocus }: {
-  de: boolean; actions: AuditActionLite[];
+// UniqSuite-Überblick „Maßnahmen": allgemein halten — Details stehen im Detail-Modus.
+const TOP_THEMEN = 5;
+const SHOW_EVIDENCE_BAR = false;
+
+function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocus, compact = false, onShowAll }: {
+  de: boolean; actions: AuditActionLite[]; compact?: boolean; onShowAll?: () => void;
   setActions: (fn: (d: { actions: AuditActionLite[] }) => { actions: AuditActionLite[] }) => void;
   people: Person[]; onAddPerson: (p: Person) => void; onFocus: (controlId: string) => void;
 }) {
@@ -361,6 +365,40 @@ function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocu
   const open = actions.filter(a => !a.done).length;
   const today = new Date().toISOString().slice(0, 10);
   const sevCls = (sv: string) => sv === "major" ? "bg-destructive/15 text-destructive" : sv === "beobachtung" ? "bg-slate-500/15 text-slate-600" : "st-teilweise-tint st-teilweise-text";
+  // UniqSuite-Überblick: nur die offenen Korrekturmaßnahmen, höchstens drei, ohne Bearbeitung.
+  if (compact) {
+    const offen = actions.filter(a => !a.done);
+    const ueberfaellig = offen.filter(a => !!a.due && a.due < today).length;
+    if (offen.length === 0) return null;
+    return (
+      <Card>
+        <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2 flex-wrap">
+          <AlertOctagon size={15} className="text-primary" />{de ? "Korrekturmaßnahmen aus dem Audit" : "Corrective actions from the audit"}
+          <Badge variant="outline" className="text-[10px]">{offen.length} {de ? "offen" : "open"}</Badge>
+          {ueberfaellig > 0 && <Badge variant="outline" className="text-[10px] border-destructive/40 text-destructive">{ueberfaellig} {de ? "überfällig" : "overdue"}</Badge>}
+        </CardTitle></CardHeader>
+        <CardContent className="space-y-1.5">
+          {offen.slice(0, 3).map(a => {
+            const overdue = !!a.due && a.due < today;
+            return (
+              <div key={a.id} className="flex items-center gap-2 text-sm border-b border-border/50 last:border-0 pb-1.5">
+                <span className={`text-[9px] px-1.5 py-0.5 rounded-full shrink-0 ${sevCls(a.severity)}`}>{a.severity}</span>
+                <span className="flex-1 min-w-0 truncate" title={a.measure}>{a.measure}</span>
+                {a.due && <span className={`text-[11px] tabular-nums shrink-0 ${overdue ? "text-destructive font-semibold" : "text-muted-foreground"}`}>{new Date(a.due).toLocaleDateString(de ? "de-DE" : "en-GB")}</span>}
+              </div>
+            );
+          })}
+          {onShowAll && (
+            <button type="button" onClick={onShowAll} className="text-xs font-semibold text-accent-readable hover:underline pt-1">
+              {offen.length > 3
+                ? (de ? `Alle ${offen.length} bearbeiten im Detail →` : `Edit all ${offen.length} in Detail →`)
+                : (de ? "Bearbeiten im Detail →" : "Edit in Detail →")}
+            </button>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
   return (
     <Card>
       <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
@@ -1155,7 +1193,8 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
       </header>
 
       <AuditActionsCard de={de} actions={auditActions} setActions={setAuditActionsData as any} people={people} onAddPerson={addPerson}
-        onFocus={(cid) => { setSearchParams({ focus: cid }); }} />
+        onFocus={(cid) => { setSearchParams({ focus: cid }); }}
+        compact={mode !== "expert"} onShowAll={() => setMode("expert")} />
 
       {/* KPI bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
@@ -1163,13 +1202,13 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           <div className="text-xs text-muted-foreground">{de ? "Aufgaben (netto)" : "Tasks (net)"}</div>
           <div className="text-xl font-bold tabular-nums">{totalTasks}</div>
         </CardContent></Card>
-        <Card><CardContent className="p-3">
+        {mode === "expert" && <Card><CardContent className="p-3">
           <div className="text-xs text-muted-foreground">{de ? "Restaufwand (PT)" : "Remaining effort (PD)"}</div>
           <div className="text-xl font-bold tabular-nums text-primary">{Math.round(ptRest.rest)}</div>
           <div className="text-[10px] text-muted-foreground">
             {de ? `von ${Math.round(ptSums.netto)} PT netto · laufend ½` : `of ${Math.round(ptSums.netto)} PD net · running ½`}
           </div>
-        </CardContent></Card>
+        </CardContent></Card>}
         {mode === "expert" && (
           <Card><CardContent className="p-3">
             <div className="text-xs text-muted-foreground">{de ? "PT brutto / netto" : "PD gross / net"}</div>
@@ -1185,11 +1224,11 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           <div className={`text-xl font-bold tabular-nums ${overdueKeys.size > 0 ? "text-destructive" : ""}`}>{overdueKeys.size}</div>
           <div className="text-[10px] text-muted-foreground">{de ? "Frist < heute, nicht fertig" : "due < today, not done"}</div>
         </CardContent></Card>
-        <Card className={noEvidenceKeys.size > 0 ? "st-teilweise-border" : ""}><CardContent className="p-3">
+        {mode === "expert" && <Card className={noEvidenceKeys.size > 0 ? "st-teilweise-border" : ""}><CardContent className="p-3">
           <div className="text-xs text-muted-foreground flex items-center gap-1"><Paperclip size={11} />{de ? "Fertig ohne Nachweis" : "Done w/o evidence"}</div>
           <div className={`text-xl font-bold tabular-nums ${noEvidenceKeys.size > 0 ? "st-teilweise-text" : ""}`}>{noEvidenceKeys.size}</div>
           <div className="text-[10px] text-muted-foreground">{de ? "im Audit nicht belastbar" : "not defensible in audit"}</div>
-        </CardContent></Card>
+        </CardContent></Card>}
         {/* UniqSuite: „Umsetzungsgrad" steht als Mitte des Umsetzungs-Rings direkt darunter — keine zweite Kachel. */}
         <Card><CardContent className="p-3">
           <div className="text-xs text-muted-foreground">{de ? "Laufend" : "Running"}</div>
@@ -1205,7 +1244,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
           Hauptabschnitte, die Kapitel darin, die Frameworks und deren Gruppen.
           Wunsch Dr. Sait 17.09.2026: „Üstte Alle öffnen / Alle schließen olsun;
           tüm seviyeleri yönetsin." */}
-      <div className="flex items-center gap-2">
+      {mode === "expert" && <div className="flex items-center gap-2">
         <button type="button" onClick={alleAufklappen}
                 className="h-8 px-2.5 rounded border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent/5">
           {de ? "Alle öffnen" : "Expand all"}
@@ -1214,7 +1253,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                 className="h-8 px-2.5 rounded border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent/5">
           {de ? "Alle schließen" : "Collapse all"}
         </button>
-      </div>
+      </div>}
 
       {/* KENNZAHLEN — in beiden Modi vorhanden, aber NICHT in derselben Form.
           Zwei Wünsche, die sich zunächst widersprachen:
@@ -1268,6 +1307,13 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
             ];
             const tot = Math.max(1, ctrlApp);
             const pieData = seg.filter(s => s.n > 0);
+            // Überblick: Themen nach Fortschritt aufsteigend — nur die schwächsten werden gezeigt.
+            const themen = gruppenFortschritt
+              .map(([gLabel, items]) => {
+                const done = items.filter(i => effStatus(i.bundle_key, (i as any).memberControlIds ?? []) === "fertig").length;
+                return { gLabel, items, done, pct: items.length ? Math.round((done / items.length) * 100) : 0 };
+              })
+              .sort((a, b) => a.pct - b.pct);
 
             // ── DETAIL: ein Streifen, keine Auswertung ──────────────────────
             // Dieselben Zahlen wie im Überblick, aber eine Zeile statt fünf
@@ -1361,7 +1407,8 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     zaehlt Kontrollen, ein Nachweis haengt aber an der Aufgabe.
                     Beide Basen in EINEN Balken zu mischen waere die bequemere,
                     aber falsche Darstellung. */}
-                <div className="space-y-2">
+                {/* UniqSuite-Überblick: „Erledigt und belastbar" steht im Detail (Kennzahlen-Streifen). */}
+                {SHOW_EVIDENCE_BAR && <div className="space-y-2">
                   <div className="text-sm font-semibold text-foreground">
                     {de ? "Erledigt und im Audit belastbar" : "Done and defensible in audit"}
                     <span className="ml-2 text-xs font-normal text-muted-foreground">
@@ -1393,7 +1440,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                       </>
                     );
                   })()}
-                </div>
+                </div>}
                 {gapOverview.length > 0 && (
                   <div className="space-y-2">
                     <div className="text-sm font-semibold text-foreground">
@@ -1457,16 +1504,12 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                 {gruppenFortschritt.length > 0 && (
                   <div className="space-y-2">
                     <div className="text-sm font-semibold text-foreground">
-                      {de ? "Fortschritt je Thema" : "Progress by topic"}
+                      {de ? "Themen mit dem größten Rückstand" : "Topics furthest behind"}
                       <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {de
-                          ? "— gemeinsame und framework-eigene Aufgaben zusammen, jede genau einmal gezaehlt"
-                          : "— shared and framework-specific tasks together, each counted exactly once"}
+                        {de ? "— Anteil erledigter Aufgaben" : "— share of tasks done"}
                       </span>
                     </div>
-                    {gruppenFortschritt.map(([gLabel, items]) => {
-                      const done = items.filter(i => effStatus(i.bundle_key, (i as any).memberControlIds ?? []) === "fertig").length;
-                      const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+                    {themen.slice(0, TOP_THEMEN).map(({ gLabel, items, done, pct }) => {
                       // Schwellenfarbe aus der Palette, nicht als feste Klasse:
                       // im Themen-Modus („mono") folgen Balken und Kachel damit
                       // der gewählten Farbe, im Ampel-/Hybrid-Modus bleiben sie
@@ -1498,6 +1541,19 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                         </div>
                       );
                     })}
+                    {themen.length > TOP_THEMEN && (
+                      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-sm">
+                        <span className="text-muted-foreground">
+                          {de ? `${themen.length} Themen: ` : `${themen.length} topics: `}
+                          <b className="st-ja-text">{themen.filter(t => t.pct >= 75).length} {de ? "gut" : "good"}</b>{" · "}
+                          <b className="st-teilweise-text">{themen.filter(t => t.pct >= 40 && t.pct < 75).length} {de ? "in Arbeit" : "in progress"}</b>{" · "}
+                          <b className="st-nein-text">{themen.filter(t => t.pct < 40).length} {de ? "kritisch" : "critical"}</b>
+                        </span>
+                        <button type="button" onClick={() => setMode("expert")} className="text-xs font-semibold text-accent-readable hover:underline">
+                          {de ? "Alle Themen im Detail →" : "All topics in Detail →"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
                 {mode !== "expert" && (
