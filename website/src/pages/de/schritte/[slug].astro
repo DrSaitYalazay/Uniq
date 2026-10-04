@@ -1,0 +1,9 @@
+---
+import StepPage from '../../../components/StepPage.astro';
+import { steps } from '../../../data/steps';
+export function getStaticPaths() {
+  return steps.de.map((s, i) => ({ params: { slug: s.slug }, props: { index: i } }));
+}
+const { index } = Astro.props;
+---
+<StepPage lang="de" index={index} />
