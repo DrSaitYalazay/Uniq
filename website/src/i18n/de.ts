@@ -293,7 +293,7 @@ export default {
     kicker: 'Zum Nachlesen',
     h2a: 'White Paper und Broschüre',
     h2b: 'zum Herunterladen.',
-    intro: 'Beide als PDF, auf Deutsch und Englisch. Ohne Anmeldung, ohne Formular.',
+    intro: 'Beide als PDF, ohne Anmeldung und ohne Formular.',
     title: 'NIS2 und ISO 27001 pragmatisch umsetzen',
     text: 'Vom „Sind wir überhaupt betroffen?“ bis zum Nachweis, den ein Prüfer akzeptiert. Mit den zehn Maßnahmen, den Meldefristen, den Pflichten der Geschäftsleitung und einem Plan für die ersten 30 Tage.',
     meta: 'White Paper · 14 Seiten · PDF',

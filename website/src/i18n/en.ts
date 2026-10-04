@@ -294,7 +294,7 @@ const en: typeof de = {
     kicker: 'For further reading',
     h2a: 'White paper and brochure',
     h2b: 'to download.',
-    intro: 'Both as PDF, in German and English. No sign-up, no form.',
+    intro: 'Both as PDF, no sign-up and no form.',
     title: 'Implementing NIS2 and ISO 27001 pragmatically',
     text: 'From “are we affected at all?” to evidence an auditor accepts. With the ten measures, the reporting deadlines, management duties and a plan for the first 30 days.',
     meta: 'White paper · 14 pages · PDF',
