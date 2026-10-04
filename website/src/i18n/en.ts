@@ -194,7 +194,7 @@ const en: typeof de = {
     intro: 'Eleven to thirteen short questions per framework. Answer Yes, Partly or No, as honestly as you can. At the end you see your biggest gaps and can save the result as a PDF.',
     privacy: 'Your answers never leave your browser. No transfer, no storage, no tracking.',
     pick: 'Choose a framework',
-    pickHint: 'Choose a framework. The quick check opens in a new tab, and this page stays open.',
+    pickHint: 'Choose a framework. “Back” brings you right back here.',
     reqLabel: 'requirements in the catalogue',
     open: 'Open the quick check',
     pageTitle: 'Quick check',

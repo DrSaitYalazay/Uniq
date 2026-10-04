@@ -218,6 +218,8 @@ export async function init(canvas: HTMLCanvasElement) {
     pointerX = e.clientX; pointerY = e.clientY; overUi = isUi(e.target); pointerDirty = true;
     ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
   }, { passive: true });
+  // Beim Scrollen ohne Mausbewegung liegt unter dem Zeiger etwas anderes: neu prüfen (kein Tooltip durch Karten hindurch)
+  addEventListener('scroll', () => { if (pointerX >= 0) { overUi = isUi(document.elementFromPoint(pointerX, pointerY)); pointerDirty = true; } }, { passive: true });
   addEventListener('pointerleave', () => { pointerX = -1; mouse.set(9, 9); });
   const ray = new THREE.Raycaster();
   let hoverTower = -1;

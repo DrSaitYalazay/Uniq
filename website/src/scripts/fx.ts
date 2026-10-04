@@ -123,6 +123,7 @@ export function initCarousel() {
   }
   document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupRing);
   document.querySelectorAll<HTMLElement>('[data-belt]').forEach(setupBelt);
+  document.querySelectorAll<HTMLElement>('[data-orbit]').forEach(setupOrbit);
 }
 
 function whenVisible(el: HTMLElement, cb: (v: boolean) => void) {
@@ -134,6 +135,8 @@ function setupRing(car: HTMLElement) {
   if (!ring) return;
   const items = Array.from(ring.querySelectorAll<HTMLElement>('.ring-item'));
   const step = 360 / items.length;
+  // Lage der Karten für beliebig viele Elemente
+  items.forEach((it, k) => { it.style.transform = `rotateY(${(k * step).toFixed(3)}deg) translateZ(var(--r))`; });
   const speed = 9; // Grad pro Sekunde, eine Runde in 40 s
   let angle = 0, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0;
   ring.classList.add('js');
@@ -156,9 +159,11 @@ function setupRing(car: HTMLElement) {
   items.forEach((it, k) => {
     it.addEventListener('pointerenter', () => { paused = true; });
     it.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 600; });
-    it.addEventListener('focusin', () => { paused = true; turnTo(-k * step); });
+    // nur bei Tastatur anhalten; nach Rückkehr auf die Seite (Fokus liegt noch auf der Karte) weiterdrehen
+    it.addEventListener('focusin', (e) => { if ((e.target as Element).matches(':focus-visible')) { paused = true; turnTo(-k * step); } });
     it.addEventListener('focusout', () => { paused = false; });
   });
+  addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
   car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {
     turnTo(Math.round((target ?? angle) / step) * step - Number(b.dataset.car) * step);
   }));
@@ -208,4 +213,85 @@ function setupBelt(belt: HTMLElement) {
     const base = target ?? x;
     target = Math.round(base / w) * w - Number(b.dataset.beltGo) * w;
   }));
+}
+
+/**
+ * Regelwerke als Planeten auf einer geneigten Umlaufbahn (gleiches Tempo wie der
+ * Quick-Check-Ring). Der vorderste Planet bestimmt die Karte daneben. Zeiger auf
+ * einem Planeten hält an, Klick dreht ihn nach vorn.
+ */
+function setupOrbit(box: HTMLElement) {
+  const stage = box.querySelector<HTMLElement>('.orbit-stage');
+  const planets = Array.from(box.querySelectorAll<HTMLElement>('[data-planet]'));
+  const cards = Array.from(box.querySelectorAll<HTMLElement>('.orbit-cards .rw'));
+  const n = planets.length;
+  if (!stage || n < 2) return;
+  box.classList.add('js');
+  const step = (Math.PI * 2) / n;
+  const speed = (9 * Math.PI) / 180; // wie der Quick-Check-Ring: 9° pro Sekunde
+  let angle = Math.PI / 2, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0, front = -1;
+  let rx = 200, ry = 60;
+  const measure = () => { const w = stage.clientWidth, h = stage.clientHeight; rx = w * 0.4; ry = h * 0.34; }; // passt zu .orbit-ring (80 % × 68 %)
+  measure();
+  addEventListener('resize', measure);
+  const setFront = (k: number) => {
+    if (k === front) return;
+    front = k;
+    cards.forEach((c, i) => { const on = i === k; c.classList.toggle('on', on); c.setAttribute('aria-hidden', on ? 'false' : 'true'); c.querySelector('a')?.setAttribute('tabindex', on ? '0' : '-1'); });
+    planets.forEach((p, i) => p.classList.toggle('front', i === k));
+  };
+  const frame = (now: number) => {
+    const dt = Math.min(0.1, (now - last) / 1000 || 0);
+    last = now;
+    if (target !== null) {
+      angle += (target - angle) * Math.min(1, dt * 5);
+      if (Math.abs(target - angle) < 0.002) { angle = target; target = null; hold = now + 2500; }
+    } else if (!paused && now > hold) angle += speed * dt;
+    let best = -2, bk = 0;
+    planets.forEach((p, k) => {
+      const th = angle + k * step;
+      const depth = Math.sin(th); // 1 = vorn (unten), -1 = hinten
+      const s = 0.62 + 0.38 * (depth + 1) / 2;
+      p.style.transform = `translate(-50%, -50%) translate(${(Math.cos(th) * rx).toFixed(1)}px, ${(depth * ry).toFixed(1)}px) scale(${s.toFixed(3)})`;
+      p.style.zIndex = String(Math.round((depth + 1) * 50));
+      p.style.opacity = (0.55 + 0.45 * (depth + 1) / 2).toFixed(2);
+      if (depth > best) { best = depth; bk = k; }
+    });
+    setFront(bk);
+    raf = visible ? requestAnimationFrame(frame) : 0;
+  };
+  new IntersectionObserver((e) => { visible = e[0].isIntersecting; if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }, { rootMargin: '100px 0px' }).observe(box);
+  const bringFront = (k: number) => {
+    let t = Math.PI / 2 - k * step;
+    const base = target ?? angle;
+    while (t - base > Math.PI) t -= Math.PI * 2;
+    while (t - base < -Math.PI) t += Math.PI * 2;
+    target = t;
+  };
+  planets.forEach((p, k) => {
+    p.addEventListener('pointerenter', () => { paused = true; });
+    p.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 800; });
+    p.addEventListener('click', () => bringFront(k));
+  });
+  // Rückkehr auf die Seite (Zurück-Taste, Cache): sofort weiterdrehen
+  addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
+  box.querySelectorAll<HTMLButtonElement>('[data-orbit-go]').forEach((b) => b.addEventListener('click', () => {
+    const k = (front - Number(b.dataset.orbitGo) + n) % n; // „weiter“ = der Planet, der als Nächstes nach vorn käme
+    bringFront(k);
+  }));
+}
+
+/** Bilder: beim ersten Erscheinen leichter Zoom heraus (von 1.16 auf 1), danach bleiben sie ruhig. */
+export function initImgIn() {
+  if (!('IntersectionObserver' in window)) return;
+  const sel = '.photo-band .pb-img, .photo-frame img, .sp-shot-wide .frame img, .sp-shot .frame img, .shot img, .rw-conv-bg, .final-bg, .team-scene';
+  const imgs = Array.from(document.querySelectorAll<HTMLElement>(sel));
+  if (!imgs.length) return;
+  // bereits sichtbare Bilder (z. B. nach Neuladen mitten auf der Seite) nicht ausblenden
+  const vis = (el: HTMLElement) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+  const io = new IntersectionObserver((es) => {
+    for (const e of es) if (e.isIntersecting) { e.target.classList.add('zo-in'); io.unobserve(e.target); }
+  }, { threshold: 0.12 });
+  for (const el of imgs) { if (vis(el)) continue; el.classList.add('zo'); io.observe(el); }
+  document.documentElement.classList.add('img-zo');
 }

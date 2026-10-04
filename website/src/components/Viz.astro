@@ -72,20 +72,20 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
 
     {kind === 'inventory' && (
       <div class="vz-inv">
-        <svg viewBox="0 0 360 190" role="img" aria-label={L('Abhängigkeiten eines Dienstes', 'Dependencies of a service')}>
+        <svg viewBox="0 0 360 200" role="img" aria-label={L('Abhängigkeiten eines Dienstes', 'Dependencies of a service')}>
           <g class="links">
-            <path class="ln" d="M180 40 L 70 110" /><path class="ln" d="M180 40 L 180 110" /><path class="ln" d="M180 40 L 290 110" />
-            <path class="ln" d="M70 110 L 70 165" /><path class="ln" d="M180 110 L 130 165" /><path class="ln" d="M180 110 L 230 165" /><path class="ln" d="M290 110 L 290 165" />
+            <path class="ln" d="M180 48 V 67 H 60 V 86" /><path class="ln" d="M180 48 V 86" /><path class="ln" d="M180 48 V 67 H 300 V 86" />
+            <path class="ln" d="M60 118 V 139 H 46 V 160" /><path class="ln" d="M180 118 V 139 H 135 V 160" /><path class="ln" d="M180 118 V 139 H 225 V 160" /><path class="ln" d="M300 118 V 139 H 315 V 160" />
           </g>
           <g class="nodes">
-            <g class="n svc"><rect x="120" y="22" width="120" height="36" rx="18" /><text x="180" y="45">{L('Kundenportal', 'Customer portal')}</text></g>
-            <g class="n sys"><rect x="22" y="94" width="96" height="32" rx="10" /><text x="70" y="115">{L('Webserver', 'Web server')}</text></g>
-            <g class="n sys"><rect x="132" y="94" width="96" height="32" rx="10" /><text x="180" y="115">{L('Datenbank', 'Database')}</text></g>
-            <g class="n sup"><rect x="242" y="94" width="96" height="32" rx="10" /><text x="290" y="115">{L('Cloud-Hoster', 'Cloud host')}</text></g>
-            <g class="n dat"><rect x="30" y="150" width="80" height="28" rx="14" /><text x="70" y="169">{L('Logdaten', 'Logs')}</text></g>
-            <g class="n dat"><rect x="90" y="150" width="80" height="28" rx="14" /><text x="130" y="169">{L('Kunden', 'Customers')}</text></g>
-            <g class="n dat"><rect x="190" y="150" width="80" height="28" rx="14" /><text x="230" y="169">{L('Verträge', 'Contracts')}</text></g>
-            <g class="n sup"><rect x="250" y="150" width="80" height="28" rx="14" /><text x="290" y="169">{L('Backup', 'Backup')}</text></g>
+            <g class="n svc"><rect x="110" y="14" width="140" height="34" rx="17" /><text x="180" y="35">{L('Kundenportal', 'Customer portal')}</text></g>
+            <g class="n sys"><rect x="10" y="86" width="100" height="32" rx="10" /><text x="60" y="106">{L('Webserver', 'Web server')}</text></g>
+            <g class="n sys"><rect x="130" y="86" width="100" height="32" rx="10" /><text x="180" y="106">{L('Datenbank', 'Database')}</text></g>
+            <g class="n sup"><rect x="250" y="86" width="100" height="32" rx="10" /><text x="300" y="106">{L('Cloud-Hoster', 'Cloud host')}</text></g>
+            <g class="n dat"><rect x="8" y="160" width="76" height="28" rx="14" /><text x="46" y="178">{L('Logdaten', 'Logs')}</text></g>
+            <g class="n dat"><rect x="96" y="160" width="78" height="28" rx="14" /><text x="135" y="178">{L('Kunden', 'Customers')}</text></g>
+            <g class="n dat"><rect x="186" y="160" width="78" height="28" rx="14" /><text x="225" y="178">{L('Verträge', 'Contracts')}</text></g>
+            <g class="n sup"><rect x="276" y="160" width="76" height="28" rx="14" /><text x="314" y="178">{L('Backup', 'Backup')}</text></g>
           </g>
         </svg>
         <ul class="vz-legend"><li class="svc">{L('Dienst', 'Service')}</li><li class="sys">{L('System', 'System')}</li><li class="dat">{L('Daten', 'Data')}</li><li class="sup">{L('Dienstleister', 'Supplier')}</li></ul>
@@ -194,7 +194,7 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
     {kind === 'policies' && (
       <div class="vz-pol">
         <ul class="vz-rows">
-          <li><b>{L('Informationssicherheitsleitlinie', 'Information security policy')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
+          <li><b>{L('Informations\u00ADsicherheits\u00ADleitlinie', 'Information security policy')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
           <li><b>{L('Zugriffskontrolle', 'Access control')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
           <li><b>{L('Umgang mit Vorfällen', 'Incident handling')}</b><span class="pill run">{L('in Prüfung', 'in review')}</span></li>
           <li><b>{L('Einsatz von KI', 'Use of AI')}</b><span class="pill draft">{L('Entwurf', 'draft')}</span></li>

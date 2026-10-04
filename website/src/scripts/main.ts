@@ -5,7 +5,7 @@
  */
 import Lenis from 'lenis';
 import { bus, state } from './state';
-import { initFx, initCarousel, initViz } from './fx';
+import { initFx, initCarousel, initViz, initImgIn } from './fx';
 import { initAnfrage } from './anfrage';
 
 const root = document.documentElement;
@@ -95,7 +95,22 @@ function setActive(id: string) {
   bus.emit('station', id);
 }
 
+// Letzter Klick (in % des Fensters): Ziel des Zooms, wenn ein Klick einen Sprung auslöst
+let lastClick = { x: 50, y: 50, t: 0 };
+document.addEventListener('click', (e) => { lastClick = { x: Math.round(e.clientX / innerWidth * 100), y: Math.round(e.clientY / innerHeight * 100), t: performance.now() }; }, true);
+
+/** Sprung zu einem Element: weit weg → Zoom (wie ein Seitenwechsel), nah → weiches Scrollen. */
 function scrollToEl(el: HTMLElement, push = true, offset = 0) {
+  const dist = Math.abs(el.getBoundingClientRect().top + offset);
+  if (!reduced && (document as any).startViewTransition && dist > innerHeight * 1.1) {
+    const c = performance.now() - lastClick.t < 1500 ? lastClick : { x: 50, y: 50 };
+    zoomJump(el, c.x, c.y, push, false, offset);
+    return;
+  }
+  smoothTo(el, push, offset);
+}
+
+function smoothTo(el: HTMLElement, push = true, offset = 0) {
   programmatic = true;
   clearTimeout(programmaticTimer);
   const done = () => {
@@ -114,20 +129,54 @@ function scrollToEl(el: HTMLElement, push = true, offset = 0) {
 }
 state.scrollToEl = scrollToEl;
 
+/**
+ * Sprung innerhalb der Seite als Kamerafahrt: statt schnell vorbeizuscrollen
+ * zoomt das Bild in Richtung der angeklickten Stelle hinein (nach unten) bzw.
+ * heraus (nach oben). Ohne View-Transition-Unterstützung: weiches Scrollen.
+ */
+function zoomJump(el: HTMLElement | null, x = 50, y = 50, push = true, topOnly = false, offset = 0) {
+  const docAny = document as any;
+  const targetTop = el && !topOnly ? el.getBoundingClientRect().top + scrollY + offset : 0;
+  if (reduced || !docAny.startViewTransition) {
+    if (el && !topOnly) smoothTo(el, push, offset);
+    else if (lenis) lenis.scrollTo(0, { duration: 1.4 }); else scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    return;
+  }
+  const dir = targetTop >= scrollY ? 'vt-in' : 'vt-out';
+  root.style.setProperty('--vt-x', `${x}%`);
+  root.style.setProperty('--vt-y', `${y}%`);
+  root.classList.add(dir);
+  programmatic = true;
+  // Achtung: während des Callbacks ist das Rendern angehalten (kein requestAnimationFrame) – daher synchron
+  const vt = docAny.startViewTransition(() => {
+    if (push && el && el.id && !topOnly) history.pushState({ uq: el.id }, '', `#${el.id}`);
+    if (lenis) lenis.scrollTo(targetTop, { immediate: true, force: true });
+    scrollTo({ top: targetTop, behavior: 'instant' as ScrollBehavior });
+  });
+  vt.finished.finally(() => {
+    root.classList.remove(dir);
+    programmatic = false;
+    const f = el && !topOnly ? el : document.getElementById('inhalt');
+    if (f) { if (!f.hasAttribute('tabindex')) f.setAttribute('tabindex', '-1'); f.focus({ preventScroll: true }); }
+  });
+}
+(state as any).zoomJump = zoomJump;
+
 document.addEventListener('click', (e) => {
   const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
-  if (!a || a.target || e.metaKey || e.ctrlKey || e.shiftKey) return;
+  if (!a || a.target || e.metaKey || e.ctrlKey || e.shiftKey || a.hasAttribute('data-to-top')) return;
   const url = new URL(a.href);
   if (url.pathname !== location.pathname || !url.hash) return;
   const el = document.getElementById(decodeURIComponent(url.hash.slice(1)));
   if (!el) return;
   e.preventDefault();
-  scrollToEl(el);
+  const r = a.getBoundingClientRect();
+  zoomJump(el, Math.round((r.left + r.width / 2) / innerWidth * 100), Math.round((r.top + r.height / 2) / innerHeight * 100));
 });
 
 addEventListener('popstate', () => {
   const el = location.hash ? document.getElementById(location.hash.slice(1)) : document.getElementById('wolke');
-  if (el) scrollToEl(el, false);
+  if (el) zoomJump(el, 50, 50, false);
 });
 
 // ── Tastatur: Pfeile / Bild↑↓ springen zwischen Stationen ─────────────────
@@ -225,6 +274,7 @@ initAnfrage();
 initFx();
 initCarousel();
 initViz();
+initImgIn();
 requestAnimationFrame(tick);
 (window as any).__uq = { state, uAt, measure };
 
@@ -328,9 +378,8 @@ bus.on('world:tower', (fw) => {
   const fab = document.querySelector<HTMLElement>('[data-fab-top]');
   const toTop = (e: Event) => {
     e.preventDefault();
-    if (state.lenis) state.lenis.scrollTo(0, { duration: reduced ? 0 : 1.4 });
-    else scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
-    document.getElementById('inhalt')?.focus({ preventScroll: true });
+    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    zoomJump(null, Math.round((r.left + r.width / 2) / innerWidth * 100), Math.round((r.top + r.height / 2) / innerHeight * 100), false, true);
   };
   document.querySelectorAll<HTMLElement>('[data-to-top]').forEach((a) => a.addEventListener('click', toTop));
   if (fab) {

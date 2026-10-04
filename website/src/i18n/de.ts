@@ -193,7 +193,7 @@ export default {
     intro: 'Elf bis dreizehn kurze Fragen je Regelwerk. Antworten Sie mit Ja, Teilweise oder Nein, und zwar so ehrlich wie möglich. Am Ende sehen Sie Ihre größten Lücken und können das Ergebnis als PDF speichern.',
     privacy: 'Ihre Antworten verlassen Ihren Browser nicht. Keine Übertragung, keine Speicherung, kein Tracking.',
     pick: 'Regelwerk wählen',
-    pickHint: 'Wählen Sie ein Regelwerk. Der Quick-Check öffnet sich in einem neuen Tab, diese Seite bleibt offen.',
+    pickHint: 'Wählen Sie ein Regelwerk. Mit „Zurück“ kommen Sie genau hierher zurück.',
     reqLabel: 'Anforderungen im Katalog',
     open: 'Quick-Check öffnen',
     pageTitle: 'Quick-Check',

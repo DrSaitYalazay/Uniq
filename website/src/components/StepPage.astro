@@ -88,8 +88,9 @@ const jsonld = [{
     </section>
 
     <!-- Szenenbild: bewegt sich beim Scrollen leicht -->
-    <figure class="wrap sp-block photo-band" data-rv>
-      <img src={photoSrc(ph).src} srcset={photoSrc(ph).srcset} sizes="(max-width: 1360px) 100vw, 1360px" width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={ph.alt[lang]} />
+    <figure class={`wrap sp-block photo-band${ph.h > ph.w ? ' pb-tall' : ''}`} data-rv>
+      <img class="pb-bg" src={photoSrc(ph).src} width={ph.w} height={ph.h} loading="lazy" decoding="async" alt="" aria-hidden="true" />
+      <img class="pb-img" src={photoSrc(ph).src} srcset={photoSrc(ph).srcset} sizes="(max-width: 1360px) 100vw, 1360px" width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={ph.alt[lang]} />
     </figure>
 
     <!-- 3 · Bildschirmfoto mit Bewegung beim Scrollen, daneben was die Software übernimmt -->

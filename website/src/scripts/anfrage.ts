@@ -16,6 +16,21 @@ const FREEMAIL = new Set([
 const EMAIL_RE = /^[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,24}$/;
 const PHONE_RE = /^\+?[0-9][0-9 ()/.-]{4,30}[0-9]$/;
 
+/** Öffnen und Schließen als Kamerafahrt: hinein zur angeklickten Stelle, heraus beim Schließen. */
+function zoomed(from: HTMLElement | null, dir: 'vt-in' | 'vt-out', change: () => void) {
+  const d = document as any;
+  if (!d.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { change(); return; }
+  const root = document.documentElement;
+  if (from) {
+    const r = from.getBoundingClientRect();
+    root.style.setProperty('--vt-x', `${Math.round((r.left + r.width / 2) / innerWidth * 100)}%`);
+    root.style.setProperty('--vt-y', `${Math.round((r.top + r.height / 2) / innerHeight * 100)}%`);
+  } else { root.style.setProperty('--vt-x', '50%'); root.style.setProperty('--vt-y', '50%'); }
+  root.classList.add(dir);
+  const vt = d.startViewTransition(change);
+  vt.finished.finally(() => root.classList.remove(dir));
+}
+
 export function initAnfrage() {
   const dlg = document.querySelector<HTMLDialogElement>('[data-af-dialog]');
   const form = dlg?.querySelector<HTMLFormElement>('[data-af-form]');
@@ -41,10 +56,9 @@ export function initAnfrage() {
     }
     status.textContent = '';
     status.classList.remove('err');
-    dlg.showModal();
-    field('company').focus();
+    zoomed(from, 'vt-in', () => { dlg.showModal(); field('company').focus(); });
   };
-  const close = () => dlg.close();
+  const close = () => zoomed(null, 'vt-out', () => dlg.close());
   dlg.addEventListener('close', () => opener?.focus());
 
   document.addEventListener('click', (e) => {
@@ -56,6 +70,8 @@ export function initAnfrage() {
   dlg.querySelectorAll('[data-af-close]').forEach((b) => b.addEventListener('click', close));
   // Klick auf den abgedunkelten Hintergrund schließt
   dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+  // Esc ebenfalls mit Zoom heraus
+  dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
 
   // ── Prüfung (Meldung erst nach Interaktion, siehe CSS :user-invalid) ─────
   const email = field('email');
