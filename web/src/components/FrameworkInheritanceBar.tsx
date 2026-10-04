@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFrameworkInheritance } from "@/hooks/useFrameworkInheritance";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 import {
   Popover,
   PopoverContent,
@@ -41,7 +42,7 @@ const FrameworkInheritanceBar = () => {
         .limit(1)
         .maybeSingle();
       if (cancelled) return;
-      setEnabledFrameworks(((data?.enabled_frameworks ?? []) as string[]).filter(Boolean));
+      setEnabledFrameworks(visibleFrameworkCodes(((data?.enabled_frameworks ?? []) as string[]).filter(Boolean)));
     })();
     return () => { cancelled = true; };
   }, [user, tenantId]);
