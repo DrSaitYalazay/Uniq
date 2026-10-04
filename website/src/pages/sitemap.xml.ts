@@ -5,6 +5,8 @@ const pairs: [string, string][] = [
   ['/de/', '/en/'],
   ...steps.de.map((_, i): [string, string] => [stepHref('de', i), stepHref('en', i)]),
   ...features.de.map((_, i): [string, string] => [featureHref('de', i), featureHref('en', i)]),
+  ['/de/whitepaper/', '/en/white-paper/'],
+  ['/de/broschuere/', '/en/brochure/'],
   ['/de/datenschutz/', '/en/privacy/'],
   ['/de/barrierefreiheit/', '/en/accessibility/'],
 ];
