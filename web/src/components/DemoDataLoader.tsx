@@ -73,8 +73,8 @@ export default function DemoDataLoader() {
         <p className="text-xs text-muted-foreground">
           <b>{DEMO_COMPANY}</b> — Energieversorger mit NIS2, ISO 27001, EU AI Act und ISO 42001:
           10 Personen, 7 Services, 20 Assets mit 19 Abhängigkeiten, Gap-Analyse aller vier Frameworks,
-          Umsetzungsverlauf, Audit mit Befunden, Management-Review, 4 KI-Systeme, Dokumente, Richtlinien,
-          Vorfälle, Lieferanten, BCM und Fristen. Laden setzt den Account jedes Mal auf diesen Stand zurück.
+          Umsetzungsverlauf, Audit mit Befunden, 4 KI-Systeme, Richtlinien,
+          Vorfälle, Lieferanten und Fristen. Laden setzt den Account jedes Mal auf diesen Stand zurück.
         </p>
         <div className="flex flex-wrap gap-2">
           <Button size="sm" onClick={load} disabled={!!busy} className="gap-1.5">
