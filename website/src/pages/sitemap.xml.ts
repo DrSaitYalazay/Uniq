@@ -1,10 +1,12 @@
 import { SITE_URL } from '../config';
 import { steps, stepHref } from '../data/steps';
 import { features, featureHref } from '../data/features';
+import { fwOrder, fwHref } from '../data/frameworks';
 const pairs: [string, string][] = [
   ['/de/', '/en/'],
   ...steps.de.map((_, i): [string, string] => [stepHref('de', i), stepHref('en', i)]),
   ...features.de.map((_, i): [string, string] => [featureHref('de', i), featureHref('en', i)]),
+  ...fwOrder.map((f): [string, string] => [fwHref('de', f), fwHref('en', f)]),
   ['/de/whitepaper/', '/en/white-paper/'],
   ['/de/broschuere/', '/en/brochure/'],
   ['/de/datenschutz/', '/en/privacy/'],
