@@ -79,11 +79,9 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
         <Logo id="lg-h" />
         <span>Uniq<span class="suite">Suite</span></span>
       </a>
-      {home && (
-        <nav class="site-nav" aria-label={t.nav.label}>
-          {t.nav.items.map((i) => <a href={`${navBase}${i.href}`}>{i.label}</a>)}
-        </nav>
-      )}
+      <nav class="site-nav" aria-label={t.nav.label}>
+        {t.nav.items.map((i) => <a href={`${navBase}${i.href}`}>{i.label}</a>)}
+      </nav>
       <div class="header-actions">
         <a class="lang" href={altPath} hreflang={altLang} lang={altLang} data-lang-switch aria-label={t.nav.langSwitchLabel}>{altLang.toUpperCase()}</a>
         <a class="btn btn-ghost btn-sm" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
@@ -116,7 +114,6 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
           </ul>
         </nav>
       </div>
-      <p class="foot-mark" aria-hidden="true">Uniq<span>Suite</span></p>
     </footer>
 
     <dialog class="anfrage" id="anfrage" aria-labelledby="af-title" data-af-dialog>
