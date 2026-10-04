@@ -1,5 +1,5 @@
 /**
- * Bildmaterial (von Codex erzeugt, keine realen Teammitglieder – mit Ausnahme von 'founder').
+ * Bildmaterial (KI-erzeugt, keine realen Teammitglieder).
  * Wird als Szenenbild verwendet, nie mit Namen oder als „unser Team“ beschriftet.
  */
 export type Photo = { id: string; w: number; h: number; alt: { de: string; en: string } };
