@@ -91,3 +91,22 @@ Durum işaretleri: `[x]` bu turda uygulandı · `[~]` kısmen · `[ ]` sonraki t
 6. **Mobil için ayrı 3D kurgu** (daha az parçacık, dikey kompozisyon).
 7. **Sayfa geçişleri** (View Transitions) Datenschutz/Barrierefreiheit sayfalarına.
 8. **OG görselleri** yeni tipografiyle yeniden üretmek.
+
+---
+
+## v3 – kullanıcı geri bildirimi (4 Ekim 2026, akşam) ve uygulananlar
+
+Geri bildirim: dil mekanik; site ilk bakışta ne olduğunu anlatmıyor; arka plan yazıları kapatıyor; ilk scroll'lar boş; boş şeyler kayıyor; dağınık; mobil/tablet kayıyor; tarih yazıları gereksiz; broşür indirilebilmeli. Beğenilenler: Fristen bölümü, Quick-Check.
+
+- [x] **Dil:** DE/EN metinler insan diliyle yeniden yazıldı (cws-prose): hitap „Sie“, kısa ve uzun cümleler karışık, sayı/ok başlıkları („910 → 227“) ve mono etiketler kaldırıldı.
+- [x] **İlk bakış:** Hero ne olduğunu tek cümlede söylüyor. Sağda 6 adımlı halka yavaşça dönüyor; altında 6 adım tıklanabilir çip olarak duruyor.
+- [x] **6 adım başta:** Hero'dan hemen sonra geliyor. Liste sabit kalıyor; kaydırdıkça etkin adım değişiyor, kamera halkanın etrafında dönüyor. Fristen bölümündeki desen (liste + sahne) burada da kullanılıyor.
+- [x] **Tıklanabilir adımlar:** Halkadaki segmentler, listedeki başlıklar ve çipler her adımın kendi sayfasını açıyor (`/de/schritte/…`, `/en/steps/…`). Sayfalarda açıklama, yapılacaklar, UniqSuite'in üstlendiği işler, sonuç, norm bağlantıları (ISO 27001 maddeleri, BSIG §§), önceki/sonraki adım ve aynı stil (sabit arka plan, SVG halka gezinmesi) var.
+- [x] **Boş scroll yok:** Bulut ve „Stand“ istasyonları kaldırıldı. Her kaydırma adımında bir şey değişiyor (etkin adım, kamera, kilometre taşı).
+- [x] **Okunabilirlik:** Masaüstünde sol sütun koyu bir geçişle korunuyor. Sahne etiketleri metin sütununa girmiyor; koyulaştırılmış bölümlerde etiketler gizleniyor. Tablette ve mobilde metinler koyu bir zemin üzerinde duruyor, mobilde sahne etiketleri tamamen gizli.
+- [x] **Sadeleşme:** Kayan bant, dev altbilgi yazısı, istatistik şeridi ve kelime animasyonları kaldırıldı. Başlıklar her zaman görünür, hiçbir şey kaybolmuyor.
+- [x] **Tarihler:** „Stand Oktober 2026“ gibi ifadeler siteden ve yasal sayfalardan kaldırıldı. (PDF raporundaki oluşturma tarihi duruyor.)
+- [x] **Downloads:** White paper ve broşür, DE/EN, kapak görselleriyle indirilebilir.
+- [x] **Quick-Check:** Regelwerk seçimi dönen 3D kartlarla yapılıyor (fareyle üzerine gelince ya da odaklanınca duruyor; ok tuşlarıyla da çevrilebiliyor). Seçilen Quick-Check yeni sekmede kendi sayfasında açılıyor (`/de/quick-check/nis2/` gibi). Bitince aynı sayfada başka bir Regelwerk seçilebiliyor.
+- [x] **PDF raporu:** 3D sahne görüntüsünün yerine kullanıcının gerçek sonucunu gösteren bir grafik geldi: her Regelwerk için yüzde halkası ve her soru için yanıta göre sütun (Ja / Teilweise / Nein).
+- [x] **Kontroller:** CSP (30 sayfa), Lighthouse mobil 92 / CLS 0,002. Ekran görüntüleri 390, 768, 1024 ve 1440 piksel genişlikte alındı. Form, Quick-Check ve PDF baştan sona denendi.

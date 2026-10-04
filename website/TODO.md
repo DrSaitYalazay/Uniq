@@ -1,13 +1,14 @@
 # Açık işler – UniqSuite web sitesi
 
-Son güncelleme: 4 Ekim 2026
+Son güncelleme: 4 Ekim 2026 (v3)
 
 ## Senin kararın / bilgin gerekenler
 
 - [ ] **Quick-Check soruları:** 59 soru, tablo halinde `webgenel/UniqSuite-Website-Konzept.html` dosyasında. Tablonun gözden geçirilip onaylanması gerekiyor.
 - [x] **Demo vereinbaren:** buton artık site içinde form açıyor (Firma, Vorname, Nachname, geschäftliche E-Mail, Telefon opsiyonel). Mail info@cyberwerksuite.com'a gidiyor. JavaScript kapalıysa mailto bağlantısı yedek olarak çalışıyor.
 - [ ] Form: canlıda bir test talebi gönderilecek. Datenschutz'taki form bölümü taslak; onayın gerekiyor.
-- [ ] Tasarım: `REDESIGN.md` içindeki „sonraki tur“ maddeleri.
+- [ ] Tasarım: `REDESIGN.md` içindeki „sonraki tur“ maddeleri (v3 uygulandı).
+- [ ] Schritt-Seiten: Normbezüge fachlich gegenlesen (ISO 27001 Abschnitte, BSIG §§).
 - [ ] **Datenschutzerklärung ve Barrierefreiheitserklärung:** şablonlar hazır, hukuki metin TODO olarak işaretli.
   - Eksik bilgiler: sorumlu kişi, hosting firması ve AVV, denetim makamı, e-postaların saklama süresi.
 - [x] **White paper ve broşür:** § 38 BSIG ifadesi „umsetzen und überwachen“ olarak düzeltildi (DE/EN, 4 Ekim 2026); `public/docs/` ve marketing klasörü güncellendi.
