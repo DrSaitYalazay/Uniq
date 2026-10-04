@@ -111,3 +111,18 @@ Geri bildirim: dil mekanik; site ilk bakışta ne olduğunu anlatmıyor; arka pl
 - [x] **PDF raporu:** 3D sahne görüntüsünün yerine kullanıcının gerçek sonucunu gösteren bir grafik geldi: her Regelwerk için yüzde halkası ve her soru için yanıta göre sütun (Ja / Teilweise / Nein).
 - [x] **Funktionen:** Ekran görüntüsü ızgarası yerine altı fonksiyon dönen 3D kartlarla geliyor (Dashboard, Vorfälle, Lieferkette, Richtlinien, KI-Governance, Audit). Her kart kendi sayfasını açıyor (`/de/funktionen/…`, `/en/features/…`): ne işe yaradığı, neler yapılabildiği, kazanım, ilgili adımlar, norm bağlantıları, ekran görüntüsü, önceki/sonraki fonksiyon. Alt sayfalarda üstteki sekme ilgili bölümü işaretliyor; tablette sağdaki nokta etiketleri kartların üstüne binmesin diye gizli.
 - [x] **Kontroller:** CSP (42 sayfa), Lighthouse mobil 92 / CLS 0,002. Ekran görüntüleri 390, 768, 1024 ve 1440 piksel genişlikte alındı. Form, Quick-Check ve PDF baştan sona denendi.
+
+## v4 (geri bildirim: okunurluk, grafikler, sıra, kamera hissi)
+
+- [x] **Yazı stili:** v1'e dönüldü (Inter Display 800 başlıklar, vurgu yalnız yeşil renk). Serif italik ve Inter Display 500 kaldırıldı.
+- [x] **Titreme:** 6 adım bölümünde aktif adım değişince liste yüksekliği değişiyor, bu da kaydırma konumunu değiştirip adımı geri çeviriyordu (geri besleme döngüsü). Sabit yükseklik (100svh) ile kökten çözüldü.
+- [x] **Ekran görüntüsü yerine grafik:** Ana sayfada 6 adımın her biri için büyük başlıklı kart ve kendi çizdiğimiz grafik (Viz.astro). 3D ekran plakası ve dokuları kaldırıldı. Alt sayfalarda ekran görüntüsü kalıyor, yanına grafik, akış kartları, sonuç bandı ve kaydırmaya bağlı animasyonlar eklendi.
+- [x] **Sıra:** Hero aracın ne olduğunu anlatıyor → Regelwerke (5 çerçeve + "bir kez cevapla") → Funktionen → 6 adım → Fristen → Quick-Check → Wer dahinter steht → Vertrauen → Downloads.
+- [x] **Funktionen:** 3D halka yerine sürekli akan kart bandı (her kartta küçük grafik). Quick-Check halkası da artık oklara basmadan sürekli dönüyor; yalnız kartın üzerindeyken duruyor.
+- [x] **Fristen:** Zaman çizelgesi tek adımda; bölüm kamera 1-Monat halkasının içine girince bitiyor.
+- [x] **Quick-Check sayfası:** Yanda cevaplara göre büyüyen grafik (yüzde halkası + soru başına sütun).
+- [x] **Alt sayfa arka planı:** Bulanık, yalnız renk ışığı; metnin arkasında şekil yok.
+- [x] **Fotoğraflar:** 16 görsel (Codex). 13 kullanıcının portresi, "Wer dahinter steht" bölümünde normal boyutta arka plan; G20 · UN · EU, 20+ yıl, Lead Auditor, ECCC (isim yok). Diğerleri yapay zekâ üretimi: yalnız sahne görseli, "ekibimiz" diye etiketlenmiyor.
+- [x] **Kamera hissi:** Regelwerke ve Funktionen sırasında 3D kamera halkanın etrafında açı değiştiriyor; içerik blokları perspektifle girip çıkıyor. Sayfa geçişleri: tıklanan yere doğru zoom in, ana sayfaya dönüşte zoom out (View Transitions, desteklemeyen tarayıcıda normal geçiş).
+- [x] **Sayfa sonu:** "Nach oben" ve alt sayfalarda "Zur Startseite"; sayfa sonuna yaklaşınca yuvarlak yukarı düğmesi.
+- [x] **Kontrol:** CSP 42 sayfa, Lighthouse mobil 93 / CLS 0,002.
