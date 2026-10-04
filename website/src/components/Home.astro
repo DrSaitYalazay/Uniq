@@ -25,7 +25,6 @@ const docs = {
   wp: { de: '/docs/UniqSuite-WhitePaper-NIS2-ISO27001-DE.pdf', en: '/docs/UniqSuite-WhitePaper-NIS2-ISO27001-EN.pdf' },
   br: { de: '/docs/UniqSuite-Broschuere-DE.pdf', en: '/docs/UniqSuite-Brochure-EN.pdf' },
 };
-const order = lang === 'de' ? (['de', 'en'] as const) : (['en', 'de'] as const);
 
 // Strukturierte Daten
 const jsonld = [
@@ -356,7 +355,7 @@ const clientData = {
               <h3>{t.whitepaper.title}</h3>
               <p>{t.whitepaper.text}</p>
               <div class="dl-btns">
-                {order.map((l, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={docs.wp[l]} hreflang={l} download><Icon name="download" />{t.whitepaper[l]}</a>)}
+                <a class="btn btn-primary" href={docs.wp[lang]} hreflang={lang} download><Icon name="download" />{lang === 'de' ? 'PDF herunterladen' : 'Download PDF'}</a>
               </div>
             </div>
           </article>
@@ -367,7 +366,7 @@ const clientData = {
               <h3>{t.whitepaper.bTitle}</h3>
               <p>{t.whitepaper.bText}</p>
               <div class="dl-btns">
-                {order.map((l, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={docs.br[l]} hreflang={l} download><Icon name="download" />{t.whitepaper[l]}</a>)}
+                <a class="btn btn-primary" href={docs.br[lang]} hreflang={lang} download><Icon name="download" />{lang === 'de' ? 'PDF herunterladen' : 'Download PDF'}</a>
               </div>
             </div>
           </article>
