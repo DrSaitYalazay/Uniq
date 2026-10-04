@@ -5,7 +5,7 @@
  */
 import Lenis from 'lenis';
 import { bus, state } from './state';
-import { initFx, initCarousel, initViz, initImgIn } from './fx';
+import { initFx, initCarousel, initViz, initImgIn, initMirror } from './fx';
 import { initAnfrage } from './anfrage';
 
 const root = document.documentElement;
@@ -275,6 +275,7 @@ initFx();
 initCarousel();
 initViz();
 initImgIn();
+initMirror();
 requestAnimationFrame(tick);
 (window as any).__uq = { state, uAt, measure };
 
