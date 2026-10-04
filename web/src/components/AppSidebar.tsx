@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ShieldLogo from "@/components/ShieldLogo";
 import { PHASE_GROUPS_V2, STANDALONE_TOOLS, pdcaTitle } from "@/config/phaseGroups";
+import { VISIBLE_TOOL_IDS } from "@/config/uniqFeatures";
 
 export const SIDEBAR_STATE_KEY = "cws-sidebar-collapsed";
 
@@ -84,7 +85,7 @@ const AppSidebar = ({ collapsed, onToggle }: AppSidebarProps) => {
               {de ? "Werkzeuge" : "Tools"}
             </div>
           )}
-          {STANDALONE_TOOLS.map((tool) => {
+          {STANDALONE_TOOLS.filter((t) => VISIBLE_TOOL_IDS.has(t.id)).map((tool) => {
             const Icon = tool.icon;
             const active = pathname === tool.path || pathname.startsWith(tool.path + "/");
             return (
