@@ -45,8 +45,8 @@ export const PHASE_GROUPS_V2: PhaseGroup[] = [
   { id: "assessment",     path: "/assessment",     de: "Gap-Analyse",      en: "Gap Analysis",      icon: Gauge,         pdca: "P"  },
   { id: "decision",       path: "/decision",       de: "Risikoanalyse",    en: "Risk Analysis",     icon: ScrollText,    pdca: "P"  },
 
-  { id: "roadmap",        path: "/roadmap",        de: "SoA & Roadmap",    en: "SoA & Roadmap",     icon: Route,         pdca: "D"  },
-  { id: "implementation", path: "/implementation", de: "Umsetzung",        en: "Implementation",    icon: Wrench,        pdca: "D"  },
+  // UniqSuite: SoA, Roadmap und Umsetzung sind EINE Phase („Plan & Umsetzung", eine Maßnahmenliste).
+  { id: "roadmap",        path: "/roadmap",        de: "Plan & Umsetzung", en: "Plan & Implementation", icon: Route,     pdca: "D"  },
   { id: "audit",          path: "/audit",          de: "Audit & KVP",      en: "Audit & CI",        icon: Repeat,        pdca: "CA" },
 ];
 
