@@ -38,6 +38,10 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { FolderArchive, Link2, Unlink } from "lucide-react";
+import { VISIBLE_TOOL_IDS } from "@/config/uniqFeatures";
+
+// UniqSuite: Dokumenten-Lebenszyklus ist ausgeblendet → keine Verknüpfungs-Oberfläche dazu.
+const DOCS_TOOL = VISIBLE_TOOL_IDS.has("documents");
 import {
   type LifecycleState, LIFECYCLE_DEFAULT, DOC_TOOL_KEY, DOC_LS_KEY,
   docHealth, DOC_HEALTH_LABEL, policyStatusFromDoc, suggestDocForTitle,
@@ -952,8 +956,8 @@ const Policies = () => {
           />
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+        {/* Stats — UniqSuite: dieselben Zahlen zeigt das Diagramm „Richtlinien-Status" direkt darunter. */}
+        {SHOW_STATS_TILES && <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
           {[
             { label: de ? "Gesamt" : "Total", value: stats.total, color: "bg-primary/10 text-primary" },
             { label: de ? "Umgesetzt" : "Implemented", value: stats.impl, color: "st-ja-tint st-ja-text" },
@@ -966,10 +970,10 @@ const Policies = () => {
               <div className="text-[10px] font-medium">{s.label}</div>
             </div>
           ))}
-        </div>
+        </div>}
 
-        {/* Werkzeug-Brücke: Nachweis-Dokumente */}
-        {(() => {
+        {/* Werkzeug-Brücke: Nachweis-Dokumente — UniqSuite: nur, wenn das Dokumenten-Werkzeug sichtbar ist */}
+        {DOCS_TOOL && (() => {
           const linked = POLICY_TEMPLATES.filter(t => !!data[t.id]?.documentId).length;
           const suggested = POLICY_TEMPLATES.filter(t => !!docSuggestionFor(t)).length;
           return (
@@ -1261,7 +1265,7 @@ const Policies = () => {
                           </div>
 
                           {/* Nachweis-Dokument (Werkzeug-Brücke zum Dokumenten-Lebenszyklus) */}
-                          {(() => {
+                          {DOCS_TOOL && (() => {
                             const linkedDoc = p.documentId ? docById.get(p.documentId) : undefined;
                             const derived = p.documentId && p.implementationStatus !== "entbehrlich" ? policyStatusFromDoc(linkedDoc) : null;
                             const suggestion = docSuggestionFor(t);
@@ -1442,3 +1446,5 @@ const Policies = () => {
 };
 
 export default Policies;
+
+const SHOW_STATS_TILES = false;
