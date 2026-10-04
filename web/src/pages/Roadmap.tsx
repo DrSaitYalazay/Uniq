@@ -61,7 +61,8 @@ import {
   ScatterChart, Scatter, ZAxis, ReferenceLine,
 } from "recharts";
 import { InfoHint } from "@/components/dashboard/InfoHint";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Implementation from "@/pages/Implementation";
 
 import { CHART_IMPL, CHART_PHASE, CHART_SEVERITY, CHART_STATUS, CHART_STATUS_OHNE } from "@/lib/chartPalette";
 import { insideSliceLabel } from "@/lib/chartLabels";
@@ -506,7 +507,10 @@ const Roadmap = () => {
   const de = lang === "de";
   const [dataLoading, setDataLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
-  const [topTab, setTopTab] = useState<"soa" | "roadmap">("soa");
+  const [searchParams] = useSearchParams();
+  // Deep-Links der früheren Phase 06 (/implementation?focus=…) landen hier auf „Maßnahmen".
+  const [topTab, setTopTab] = useState<"soa" | "roadmap">(() =>
+    searchParams.get("tab") === "umsetzung" || searchParams.get("focus") ? "roadmap" : "soa");
   // Per-Framework-Aufschlüsselung (Umsetzung-Standard) — überlagerte (effektive)
   // Compliance je Framework. EINZIGE Antwortquelle für SoA (Node-Projektion +
   // „spätere Phase gewinnt" + Asset-Overrides bereits konsolidiert).
@@ -1415,13 +1419,13 @@ const Roadmap = () => {
           </div>
           <div className="flex-1">
             <h1 className="text-2xl font-bold font-heading text-foreground flex items-center">
-              {de ? "SoA & Roadmap" : "SoA & Roadmap"}
+              {de ? "Plan & Umsetzung" : "Plan & Implementation"}
               <RoadmapRichTip tipKey="page" de={de} />
             </h1>
             <p className="text-sm text-muted-foreground">
               {de
-                ? "Analyse → Behandlung → SoA (Geltungsbereich) → Roadmap (Verantwortliche & Zeitplan)"
-                : "Analysis → Treatment → SoA (Scope) → Roadmap (Owners & Schedule)"}
+                ? "SoA (was gilt) → Maßnahmen (wer macht was bis wann, mit welchem Stand)"
+                : "SoA (what applies) → Measures (who does what by when, and its status)"}
             </p>
           </div>
           {hasManualPhase && (
@@ -1491,7 +1495,7 @@ const Roadmap = () => {
             }`}
           >
             <MapPin className="h-4 w-4" />
-            {de ? "2. Roadmap" : "2. Roadmap"}
+            {de ? "2. Maßnahmen & Umsetzung" : "2. Measures & implementation"}
           </button>
         </div>
 
@@ -1634,7 +1638,12 @@ const Roadmap = () => {
         )}
 
 
-        {topTab === "roadmap" && (
+        {/* UniqSuite: Phase 05 „Plan & Umsetzung" — Maßnahmen stehen in EINER Liste
+            (Status, Zuständige, Fristen). Das frühere Roadmap-Board (Jetzt/Nächste/Später,
+            Zeitplan/Gantt, Ressourcen) wäre dieselbe Liste ein zweites Mal — ausgeblendet. */}
+        {topTab === "roadmap" && <Implementation embedded />}
+
+        {SHOW_ROADMAP_BOARD && topTab === "roadmap" && (
         <>
         {/* Maßnahmen-Übersicht — elegant funnel hero */}
         {(() => {
@@ -1669,7 +1678,7 @@ const Roadmap = () => {
                       {active.length > 1 && (
                         <span className="block mt-0.5">
                           {de
-                            ? `Geltungsbereich: ${primary.displayName}. Die übrigen ${active.length - 1} Framework(s) sind über gemeinsame Kontroll-Knoten abgedeckt — die Gesamtzahlen stehen in der Umsetzung (Phase 06).`
+                            ? `Geltungsbereich: ${primary.displayName}. Die übrigen ${active.length - 1} Framework(s) sind über gemeinsame Kontroll-Knoten abgedeckt — die Gesamtzahlen stehen unter „Maßnahmen & Umsetzung“.`
                             : `Scope: ${primary.displayName}. The other ${active.length - 1} framework(s) are covered via shared control nodes — totals are in Implementation (phase 06).`}
                         </span>
                       )}
@@ -3903,5 +3912,8 @@ function GanttChart({
   );
 }
 
+
+// UniqSuite: Roadmap-Board (Jetzt/Nächste/Später, Gantt, Ressourcen) ausgeblendet — siehe topTab "roadmap".
+const SHOW_ROADMAP_BOARD = false;
 
 export default Roadmap;
