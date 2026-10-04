@@ -155,8 +155,8 @@ export default function ManagementSummaryCard({ overview, loading, de, freshness
       out.push({
         icon: CalendarClock,
         text: de
-          ? `Überfällig${days != null ? ` seit ${days} Tag${days === 1 ? "" : "en"}` : ""}: ${d.label}${fw}`
-          : `Overdue${days != null ? ` by ${days} day${days === 1 ? "" : "s"}` : ""}: ${d.label}${fw}`,
+          ? `Überfällig${days == null ? "" : days === 0 ? " seit heute" : ` seit ${days} Tag${days === 1 ? "" : "en"}`}: ${d.label}${fw}`
+          : `Overdue${days == null ? "" : days === 0 ? " since today" : ` by ${days} day${days === 1 ? "" : "s"}`}: ${d.label}${fw}`,
         to: "/incidents",
         tone: "st-nein-text",
       });
