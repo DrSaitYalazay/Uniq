@@ -1,0 +1,24 @@
+---
+import Legal from '../../components/Legal.astro';
+import { CONTACT_EMAIL } from '../../config';
+---
+<Legal lang="de" path="/de/barrierefreiheit/" altPath="/en/accessibility/" title="Barrierefreiheitserklärung" description="Erklärung zur Barrierefreiheit der Website uniqsuite.cyberwerk.online">
+  <p class="todo">VORLAGE – nach dem Barrierefreiheitstest vervollständigen und rechtlich prüfen.</p>
+  <h2>Stand der Vereinbarkeit</h2>
+  <p>Diese Website soll die Anforderungen der WCAG 2.2 auf Stufe AA erfüllen.</p>
+  <p class="todo">TODO: Ergebnis der Prüfung eintragen (vollständig / teilweise vereinbar) und Prüfdatum.</p>
+  <h2>Alternativen zur 3D-Darstellung</h2>
+  <ul>
+    <li>Alle Inhalte der 3D-Szene stehen auch als Text auf der Seite.</li>
+    <li>Bei aktivierter Einstellung „Bewegung reduzieren“ und in Browsern ohne WebGL zeigt die Seite ruhige Standbilder.</li>
+    <li>Der Quick-Check ist vollständig per Tastatur bedienbar (Tasten 1, 2, 3 und Pfeiltasten); das Ergebnis gibt es zusätzlich als Tabelle.</li>
+    <li>Die Kapitel der Seite erreichen Sie über die Kapitel-Leiste, Pfeiltasten oder Bild-auf/Bild-ab.</li>
+  </ul>
+  <h2>Nicht barrierefreie Inhalte</h2>
+  <p class="todo">TODO: bekannte Einschränkungen nach dem Test benennen (z. B. Bildschirmansichten der Anwendung in den PDF-Dokumenten).</p>
+  <h2>Feedback und Kontakt</h2>
+  <p>Wenn Ihnen Barrieren auffallen, schreiben Sie uns: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <h2>Durchsetzung</h2>
+  <p class="todo">TODO: zuständige Marktüberwachungsbehörde bzw. Schlichtungsstelle ergänzen.</p>
+  <p class="small muted">Erstellt im Oktober 2026</p>
+</Legal>
