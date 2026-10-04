@@ -1582,14 +1582,22 @@ const Roadmap = () => {
                     </div>
                   </div>
 
+                  {/* Framework-Aufschlüsselung direkt unter dem Gesamtstand — nicht am Seitenende. */}
+                  {fwGridItems.length > 0 && (
+                    <FrameworkMiniGrid
+                      items={fwGridItems}
+                      title={de ? "Aufschlüsselung je Framework" : "Breakdown by framework"}
+                      subtitle={de ? "— umgesetzt / offen je gewähltem Framework" : "— implemented / open per selected framework"}
+                    />
+                  )}
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between px-1">
-                      <div className="text-base font-semibold text-foreground">{de ? "SoA-Abdeckung je Thema" : "SoA coverage by topic"}</div>
-                      <div className="text-xs text-muted-foreground">{de ? "Umgesetzt (+½ teilweise) / anwendbar" : "Implemented (+½ partial) / applicable"} · <span className="font-semibold text-foreground">{overall}%</span></div>
+                      <div className="text-base font-semibold text-foreground">{de ? "Größte Lücken" : "Biggest gaps"}</div>
+                      <div className="text-xs text-muted-foreground">{de ? "Die fünf Themen mit dem geringsten Umsetzungsstand" : "The five topics with the lowest implementation"}</div>
                     </div>
                     {rows.length === 0 ? (
                       <div className="text-sm text-muted-foreground">{de ? "Noch keine Kontrollen im Scope." : "No controls in scope yet."}</div>
-                    ) : rows.map((r, i) => {
+                    ) : rows.filter(r => r.applicable > 0).slice(0, TOP_GAPS).map((r, i) => {
                       const band = r.applicable === 0 ? "muted" : r.pct >= 75 ? "ok" : r.pct >= 40 ? "warn" : "bad";
                       const bar = band === "ok" ? "st-ja-bg" : band === "warn" ? "st-teilweise-bg" : band === "bad" ? "st-nein-bg" : "bg-muted-foreground/40";
                       const card = band === "ok" ? "st-ja-border st-ja-tint st-ja-text"
@@ -1611,14 +1619,28 @@ const Roadmap = () => {
                       </button>
                       );
                     })}
+                    {rows.length > TOP_GAPS && (() => {
+                      // UniqSuite-Überblick: statt aller Themen nur die Verteilung in einer Zeile;
+                      // die vollständige Themenliste steht im Detail.
+                      const withScope = rows.filter(r => r.applicable > 0);
+                      const gut = withScope.filter(r => r.pct >= 75).length;
+                      const mittel = withScope.filter(r => r.pct >= 40 && r.pct < 75).length;
+                      const kritisch = withScope.filter(r => r.pct < 40).length;
+                      return (
+                        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-sm">
+                          <span className="text-muted-foreground">
+                            {de ? `${withScope.length} Themen: ` : `${withScope.length} topics: `}
+                            <b className="st-ja-text">{gut} {de ? "gut" : "good"}</b>{" · "}
+                            <b className="st-teilweise-text">{mittel} {de ? "in Arbeit" : "in progress"}</b>{" · "}
+                            <b className="st-nein-text">{kritisch} {de ? "kritisch" : "critical"}</b>
+                          </span>
+                          <button type="button" onClick={() => setMode("expert")} className="text-xs font-semibold text-accent-readable hover:underline">
+                            {de ? "Alle Themen im Detail →" : "All topics in Detail →"}
+                          </button>
+                        </div>
+                      );
+                    })()}
                   </div>
-                  {fwGridItems.length > 0 && (
-                    <FrameworkMiniGrid
-                      items={fwGridItems}
-                      title={de ? "Aufschlüsselung je Framework" : "Breakdown by framework"}
-                      subtitle={de ? "— umgesetzt / offen je gewähltem Framework" : "— implemented / open per selected framework"}
-                    />
-                  )}
                   <div className="text-[11px] text-muted-foreground">
                     {de ? "Vollständige Anwendbarkeitserklärung (je Kontrolle, Begründungen, Version freigeben) im " : "Full Statement of Applicability (per control, justifications, version release) in "}
                     <span className="font-semibold text-foreground">Detail</span>.
@@ -3915,5 +3937,7 @@ function GanttChart({
 
 // UniqSuite: Roadmap-Board (Jetzt/Nächste/Später, Gantt, Ressourcen) ausgeblendet — siehe topTab "roadmap".
 const SHOW_ROADMAP_BOARD = false;
+// UniqSuite-Überblick der SoA: nur die schwächsten Themen, der Rest im Detail.
+const TOP_GAPS = 5;
 
 export default Roadmap;
