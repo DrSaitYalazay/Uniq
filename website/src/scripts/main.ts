@@ -268,6 +268,9 @@ const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.site-
   .filter((x): x is { a: HTMLAnchorElement; el: HTMLElement } => !!x.el && new URL(x.a.href).pathname === location.pathname);
 const navBar = document.querySelector<HTMLElement>('.site-nav');
 let navActive: HTMLAnchorElement | null = null;
+// Unterseite: markierten Reiter sichtbar machen
+const navHere = document.querySelector<HTMLAnchorElement>('.site-nav a[aria-current="location"]');
+if (navHere && navBar && navBar.scrollWidth > navBar.clientWidth) navBar.scrollLeft = Math.max(0, navHere.offsetLeft - (navBar.clientWidth - navHere.offsetWidth) / 2);
 if (navLinks.length) {
   const upd = () => {
     const y = scrollY + innerHeight * 0.4;

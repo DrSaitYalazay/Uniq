@@ -88,9 +88,13 @@ export function initFx() {
  * Bei reduzierter Bewegung zeigt CSS ein einfaches Raster.
  */
 export function initCarousel() {
-  const car = document.querySelector<HTMLElement>('[data-carousel]');
-  const ring = car?.querySelector<HTMLElement>('.ring');
-  if (!car || !ring || reduced) return;
+  if (reduced) return;
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupCarousel);
+}
+
+function setupCarousel(car: HTMLElement) {
+  const ring = car.querySelector<HTMLElement>('.ring');
+  if (!ring) return;
   const items = Array.from(ring.querySelectorAll<HTMLElement>('.ring-item'));
   const step = 360 / items.length;
   let angle = 0;
