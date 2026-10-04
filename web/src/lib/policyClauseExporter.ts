@@ -57,7 +57,7 @@ const margins = { top: 60, bottom: 60, left: 100, right: 100 };
 function metaRow(label: string, value: string) {
   return new TableRow({ children: [
     new TableCell({ borders, shading: { fill: "F0F4F8", type: ShadingType.CLEAR, color: "000000" }, width: { size: 3000, type: WidthType.DXA }, margins,
-      children: [new Paragraph({ children: [new TextRun({ text: label, bold: true, size: 18, font: "Arial", color: "2B1F6B" })] })] }),
+      children: [new Paragraph({ children: [new TextRun({ text: label, bold: true, size: 18, font: "Arial", color: "143264" })] })] }),
     new TableCell({ borders, width: { size: 6360, type: WidthType.DXA }, margins,
       children: [new Paragraph({ children: [new TextRun({ text: value || "—", size: 18, font: "Arial" })] })] }),
   ] });
@@ -79,10 +79,10 @@ export async function generateClausePolicyWord(
 
   // ── Title ──
   children.push(new Paragraph({ spacing: { before: 1600 }, alignment: AlignmentType.CENTER, children: [
-    new TextRun({ text: pName, bold: true, size: 44, color: "2B1F6B", font: "Arial" }),
+    new TextRun({ text: pName, bold: true, size: 44, color: "143264", font: "Arial" }),
   ] }));
   children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200 }, children: [
-    new TextRun({ text: companyName || "Organisation", size: 28, bold: true, color: "C2185B", font: "Arial" }),
+    new TextRun({ text: companyName || "Organisation", size: 28, bold: true, color: "157A50", font: "Arial" }),
   ] }));
   children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200 }, children: [
     new TextRun({ text: new Date().toLocaleDateString(de ? "de-DE" : "en-US"), size: 20, color: "999999", font: "Arial" }),
@@ -95,7 +95,7 @@ export async function generateClausePolicyWord(
 
   // ── Metadata Table ──
   children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 200, after: 100 }, children: [
-    new TextRun({ text: de ? "Dokumentinformationen" : "Document Information", bold: true, size: 28, color: "2B1F6B", font: "Arial" }),
+    new TextRun({ text: de ? "Dokumentinformationen" : "Document Information", bold: true, size: 28, color: "143264", font: "Arial" }),
   ] }));
 
   const statusMap: Record<string, string> = {
@@ -134,14 +134,14 @@ export async function generateClausePolicyWord(
   if (opts.anhang && opts.anhang.eintraege.length > 0) {
     children.push(new Paragraph({ children: [new PageBreak()] }));
     children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 200, after: 100 }, children: [
-      new TextRun({ text: opts.anhang.titel, bold: true, size: 28, color: "2B1F6B", font: "Arial" }),
+      new TextRun({ text: opts.anhang.titel, bold: true, size: 28, color: "143264", font: "Arial" }),
     ] }));
     if (opts.anhang.hinweis) children.push(new Paragraph({ spacing: { after: 200 }, children: [
       new TextRun({ text: opts.anhang.hinweis, size: 18, color: "666666", font: "Arial", italics: true }),
     ] }));
     for (const e of opts.anhang.eintraege) {
       children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 240, after: 100 }, children: [
-        new TextRun({ text: e.titel, bold: true, size: 24, color: "2B1F6B", font: "Arial" }),
+        new TextRun({ text: e.titel, bold: true, size: 24, color: "143264", font: "Arial" }),
       ] }));
       children.push(new Table({
         width: { size: 9360, type: WidthType.DXA },
@@ -154,7 +154,7 @@ export async function generateClausePolicyWord(
   // ── Clauses ──
   children.push(new Paragraph({ children: [new PageBreak()] }));
   children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 200, after: 200 }, children: [
-    new TextRun({ text: de ? "Regelungen" : "Policy Clauses", bold: true, size: 28, color: "2B1F6B", font: "Arial" }),
+    new TextRun({ text: de ? "Regelungen" : "Policy Clauses", bold: true, size: 28, color: "143264", font: "Arial" }),
   ] }));
   children.push(new Paragraph({ spacing: { after: 200 }, children: [
     new TextRun({ text: de
@@ -166,7 +166,7 @@ export async function generateClausePolicyWord(
   selectedClauses.forEach((clause, idx) => {
     // Clause heading
     children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 }, children: [
-      new TextRun({ text: `${idx + 1}. ${de ? clause.title : clause.titleEn}`, bold: true, size: 24, color: "2B1F6B", font: "Arial" }),
+      new TextRun({ text: `${idx + 1}. ${de ? clause.title : clause.titleEn}`, bold: true, size: 24, color: "143264", font: "Arial" }),
     ] }));
 
     const clauseRows: TableRow[] = [];
@@ -174,7 +174,7 @@ export async function generateClausePolicyWord(
     // Description header (optional)
     if (opts.includeSectionHeaders !== false) {
       clauseRows.push(new TableRow({ children: [
-        new TableCell({ borders, shading: { fill: "2B1F6B", type: ShadingType.CLEAR, color: "FFFFFF" }, width: { size: 9360, type: WidthType.DXA }, margins, columnSpan: 2,
+        new TableCell({ borders, shading: { fill: "143264", type: ShadingType.CLEAR, color: "FFFFFF" }, width: { size: 9360, type: WidthType.DXA }, margins, columnSpan: 2,
           children: [new Paragraph({ children: [new TextRun({ text: de ? "Beschreibung" : "Description", bold: true, size: 18, color: "FFFFFF", font: "Arial" })] })] }),
       ] }));
     }
@@ -199,7 +199,7 @@ export async function generateClausePolicyWord(
     if (opts.includeApplicability) {
       clauseRows.push(new TableRow({ children: [
         new TableCell({ borders, shading: { fill: "E8F0FE", type: ShadingType.CLEAR, color: "000000" }, width: { size: 3000, type: WidthType.DXA }, margins,
-          children: [new Paragraph({ children: [new TextRun({ text: de ? "Anwendbarkeit" : "Applicability", bold: true, size: 16, font: "Arial", color: "2B1F6B" })] })] }),
+          children: [new Paragraph({ children: [new TextRun({ text: de ? "Anwendbarkeit" : "Applicability", bold: true, size: 16, font: "Arial", color: "143264" })] })] }),
         new TableCell({ borders, shading: { fill: "E8F0FE", type: ShadingType.CLEAR, color: "000000" }, width: { size: 6360, type: WidthType.DXA }, margins,
           children: [new Paragraph({ children: [new TextRun({ text: resolvePolicyRefs(de ? clause.whenRequired : clause.whenRequiredEn, de), size: 16, font: "Arial" })] })] }),
       ] }));
@@ -228,7 +228,7 @@ export async function generateClausePolicyWord(
   if (state.exceptions) {
     children.push(new Paragraph({ children: [new PageBreak()] }));
     children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 200, after: 100 }, children: [
-      new TextRun({ text: de ? "Ausnahmen" : "Exceptions", bold: true, size: 28, color: "2B1F6B", font: "Arial" }),
+      new TextRun({ text: de ? "Ausnahmen" : "Exceptions", bold: true, size: 28, color: "143264", font: "Arial" }),
     ] }));
     children.push(new Paragraph({ children: [new TextRun({ text: state.exceptions, size: 20, font: "Arial" })] }));
   }
