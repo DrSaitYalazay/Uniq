@@ -5,6 +5,8 @@
  */
 import Lenis from 'lenis';
 import { bus, state } from './state';
+import { initFx } from './fx';
+import { initAnfrage } from './anfrage';
 
 const root = document.documentElement;
 const params = new URLSearchParams(location.search);
@@ -201,6 +203,8 @@ if (isHome) {
   addEventListener('resize', measure, { passive: true });
   addEventListener('load', measure);
 }
+initAnfrage();
+initFx();
 requestAnimationFrame(tick);
 (window as any).__uq = { state, uAt, measure };
 
