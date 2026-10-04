@@ -1,0 +1,35 @@
+# ─── In die Caddyfile von ClaudeCWS einfügen (eigener Block, NICHT im nis2plat-Bereich) ───
+# Der Edge-Caddy macht TLS (Let's Encrypt) und HTTP→HTTPS. Er erreicht den Website-Container
+# über das bestehende externe Netz uniqsuite_edge (Alias uniqsuite-www).
+# Sicherheits-Header setzt der Website-Container selbst; hier wird nur Server entfernt.
+uniqsuite.cyberwerk.online {
+	encode zstd gzip
+	header -Server
+
+	# Zugriffsprotokoll: IP gekürzt, 7 Tage (Art. 5 Abs. 1 lit. c, e DSGVO)
+	log {
+		output file /data/uniqsuite-www.access.log {
+			roll_size 10MiB
+			roll_keep 7
+			roll_keep_for 168h
+		}
+		format filter {
+			wrap json
+			fields {
+				request>remote_ip ip_mask {
+					ipv4 24
+					ipv6 48
+				}
+				request>client_ip ip_mask {
+					ipv4 24
+					ipv6 48
+				}
+				request>headers>Referer delete
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+			}
+		}
+	}
+
+	reverse_proxy uniqsuite-www:8080
+}
