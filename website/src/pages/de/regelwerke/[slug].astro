@@ -1,0 +1,9 @@
+---
+import FrameworkPage from '../../../components/FrameworkPage.astro';
+import { frameworks } from '../../../data/frameworks';
+export function getStaticPaths() {
+  return frameworks.de.map((f) => ({ params: { slug: f.slug }, props: { fw: f.fw } }));
+}
+const { fw } = Astro.props;
+---
+<FrameworkPage lang="de" fw={fw} />
