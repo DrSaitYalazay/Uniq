@@ -65,5 +65,19 @@ for i in $(seq 1 24); do
 done
 echo "--- Antwort-Header ---"
 curl -sSI --max-time 10 "https://$HOST/de/" | grep -iE "^(HTTP|content-security|strict-transport|x-frame|referrer|permissions|cross-origin|server)" || true
+if [ "$HEALTH" != ok ]; then
+  # Diagnose: ohne sie bleibt unsichtbar, ob der Block geladen ist, der Container antwortet
+  # oder die Zertifikatsausstellung (ACME) scheitert.
+  echo "--- Diagnose: Edge-Block in der Datei ---"
+  grep -n "^$HOST {" "$CWS/Caddyfile" || echo "FEHLT in $CWS/Caddyfile"
+  echo "--- Diagnose: laufende Caddy-Konfiguration kennt $HOST? ---"
+  (cd "$CWS" && docker compose exec -T caddy wget -qO- http://127.0.0.1:2019/config/ 2>/dev/null | grep -o "$HOST" | head -1) || echo "nein (oder Admin-API nicht erreichbar)"
+  echo "--- Diagnose: Website-Container aus Sicht von Caddy ---"
+  (cd "$CWS" && docker compose exec -T caddy wget -S -qO /dev/null http://uniqsuite-www:8080/de/ 2>&1 | head -3) || echo "nicht erreichbar"
+  echo "--- Diagnose: Caddy-Meldungen zu Zertifikat/ACME (30 min) ---"
+  (cd "$CWS" && docker compose logs caddy --since 30m 2>/dev/null | grep -iE "$HOST|acme|challenge|obtain|certificate|error" | tail -60) || true
+  echo "--- Diagnose: Website-Container ---"
+  docker compose ps || true
+fi
 echo "Website-Deploy: $(date) | aktiv=$(readlink site/current) | health=$HEALTH"
 [ "$HEALTH" = ok ] || { echo "::error::GESUNDHEITSPRUEFUNG FEHLGESCHLAGEN (Zertifikat kann beim ersten Mal einige Minuten dauern)"; exit 1; }
