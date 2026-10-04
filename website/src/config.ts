@@ -10,8 +10,6 @@ export const LOGIN_URL = 'https://uniq.cyberwerk.online';
  */
 export const DEMO_URL: string | null = null;
 export const CONTACT_EMAIL = 'info@cyberwerksuite.com';
-/** Stand der Inhalte (Broschüre, White Paper, Quick-Check). */
-export const CONTENT_DATE = { de: 'Oktober 2026', en: 'October 2026' };
 
 export type Lang = 'de' | 'en';
 
