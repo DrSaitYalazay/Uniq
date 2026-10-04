@@ -280,7 +280,7 @@ export function themeMatrixPalette(): ColorPalette {
 const FIXED_PALETTES: ColorPalette[] = [
   { id: "iso", labelDe: "ISO Standard", labelEn: "ISO Standard", low: "#22c55e", medium: "#eab308", high: "#f97316", critical: "#dc2626" },
   { id: "vivid", labelDe: "Kräftig", labelEn: "Vivid", low: "#10b981", medium: "#f59e0b", high: "#ef4444", critical: "#991b1b" },
-  { id: "pastel", labelDe: "Pastell", labelEn: "Pastel", low: "#86efac", medium: "#fde68a", high: "#f4a3c9", critical: "#fca5a5" },
+  { id: "pastel", labelDe: "Pastell", labelEn: "Pastel", low: "#86efac", medium: "#fde68a", high: "#A7DFC3", critical: "#fca5a5" },
   { id: "corporate", labelDe: "Unternehmen", labelEn: "Corporate", low: "#6ee7b7", medium: "#93c5fd", high: "#c084fc", critical: "#f87171" },
   { id: "contrast", labelDe: "Hoher Kontrast", labelEn: "High Contrast", low: "#15803d", medium: "#ca8a04", high: "#ea580c", critical: "#b91c1c" },
 ];

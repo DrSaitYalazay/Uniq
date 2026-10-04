@@ -30,8 +30,8 @@ const FW_LABELS: Record<string, string> = {
   NIST_AI_RMF: "NIST AI RMF", MaRisk: "MaRisk", CRA: "Cyber Resilience Act",
 };
 
-const NAVY = "FF241A4D";
-const COPPER = "FFC2185B";
+const NAVY = "FF1A2E41";
+const COPPER = "FF157A50";
 const CRIT_FG = "FFB91C1C";
 const LOW_BG = "FFDCFCE7";
 const WARN_BG = "FFFEF3C7";

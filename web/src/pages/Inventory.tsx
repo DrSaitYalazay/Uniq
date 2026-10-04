@@ -391,10 +391,13 @@ const Inventory = () => {
           </div>
           <div className="flex gap-2 items-center flex-wrap">
             <ModeToggle de={de} />
+            {/* UniqSuite: im Überblick stehen diese Zahlen in den Kennzahl-Kacheln — Kopf-Badges nur im Detail. */}
+            {mode === "expert" && <>
             <Badge variant="outline" className="text-xs">{services.length} Services</Badge>
             <Badge variant="outline" className="text-xs">{assets.length} Assets</Badge>
             <Badge variant="outline" className="text-xs">{deps.length} {t("Abhängigkeiten","Dependencies")}</Badge>
             {criticalCount > 0 && <Badge className="text-xs bg-destructive/20 text-destructive">{criticalCount} {t("kritisch","critical")}</Badge>}
+            </>}
             <ExportMenu
               onPdf={() => runInventoryExport("pdf")}
               onWord={() => runInventoryExport("docx")}
@@ -600,9 +603,7 @@ const Inventory = () => {
                   <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
                     <div className="text-base font-semibold text-foreground">{t("Assets nach Typ", "Assets by type")}</div>
                     <div className="flex items-center gap-2 text-xs">
-                      <span className={`rounded-lg border px-2.5 py-0.5 font-medium tabular-nums ${assetsNoOwner > 0 ? "st-teilweise-border st-teilweise-tint st-teilweise-text" : "st-ja-border st-ja-tint st-ja-text"}`}>
-                        <UserX size={11} className="inline mr-1 -mt-0.5" />{assetsNoOwner} {t("ohne Owner", "without owner")}
-                      </span>
+                      {/* UniqSuite: „ohne Owner" steht schon als Kennzahl-Kachel oben. */}
                       <span className="rounded-lg border border-border px-2.5 py-0.5 font-medium tabular-nums text-muted-foreground">
                         <Globe size={11} className="inline mr-1 -mt-0.5" />{assetsExposed} {t("extern erreichbar", "externally exposed")}
                       </span>
@@ -681,7 +682,7 @@ const Inventory = () => {
                              className="text-base font-semibold border-0 shadow-none px-0 h-auto focus-visible:ring-0" />
                     </CardTitle>
                     <div className="flex items-center gap-2">
-                      <Badge className={CRIT_COLOR[s.criticality]}>{critLabel(s.criticality)}</Badge>
+                      {/* UniqSuite: Kritikalität steht im Feld „Kritikalität (0-4)" der Karte — kein zweites Badge. */}
                       <Button size="sm" variant="outline" onClick={() => saveService(s)} disabled={saving}><Save size={14}/></Button>
                       <Button size="sm" variant="ghost" onClick={() => deleteService(s.id)}><Trash2 size={14}/></Button>
                     </div>

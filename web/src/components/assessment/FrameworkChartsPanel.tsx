@@ -22,6 +22,8 @@ interface Props {
   effective: Map<string, EffectiveAnswer>;
   stats: FrameworkStats;
   de: boolean;
+  /** UniqSuite: „simple" = Überblick (nur Status-Verteilung; Themenliste darunter zeigt die Kategorien). */
+  mode?: "simple" | "expert";
 }
 
 import { CHART_STATUS, CHART_STATUS_OHNE } from "@/lib/chartPalette";
@@ -33,7 +35,7 @@ const STATUS_COLORS = {
   ohne:      CHART_STATUS_OHNE,
 };
 
-export function FrameworkChartsPanel({ controls, effective, stats, de }: Props) {
+export function FrameworkChartsPanel({ controls, effective, stats, de, mode = "expert" }: Props) {
   const donutData = useMemo(() => {
     const ohne = stats.total - (stats.ja + stats.teilweise + stats.nein + stats.na);
     return [
@@ -82,8 +84,9 @@ export function FrameworkChartsPanel({ controls, effective, stats, de }: Props) 
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* 1) Compliance % ring */}
+      {/* UniqSuite: der Konformitäts-Ring wiederholte die Kennzahl „Konformität" direkt darüber — entfällt. */}
+      <div className={`grid grid-cols-1 gap-4 ${mode === "simple" ? "" : "md:grid-cols-2"}`}>
+        {SHOW_COMPLIANCE_RING && (
         <div className="rounded-lg border border-border/60 p-3 min-h-[220px] flex flex-col">
           <div className="text-[11px] text-muted-foreground mb-1">
             {de ? "Konformität" : "Compliance"}
@@ -103,6 +106,8 @@ export function FrameworkChartsPanel({ controls, effective, stats, de }: Props) 
             </div>
           </div>
         </div>
+
+        )}
 
         {/* 2) Status donut */}
         <div className="rounded-lg border border-border/60 p-3 min-h-[220px] flex flex-col">
@@ -130,7 +135,8 @@ export function FrameworkChartsPanel({ controls, effective, stats, de }: Props) 
           </div>
         </div>
 
-        {/* 3) Family bar chart (worst first) */}
+        {/* 3) Family bar chart (worst first) — Überblick: die Themenliste darunter zeigt dasselbe */}
+        {mode !== "simple" && (
         <div className="rounded-lg border border-border/60 p-3 min-h-[220px] flex flex-col">
           <div className="text-[11px] text-muted-foreground mb-1">
             {de ? "Schwächste Kategorien" : "Weakest categories"}
@@ -159,7 +165,10 @@ export function FrameworkChartsPanel({ controls, effective, stats, de }: Props) 
             </ResponsiveContainer>
           )}
         </div>
+        )}
       </div>
     </div>
   );
 }
+
+const SHOW_COMPLIANCE_RING = false;

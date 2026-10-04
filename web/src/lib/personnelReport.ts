@@ -142,7 +142,7 @@ const margins = { top: 60, bottom: 60, left: 100, right: 100 };
 function hCell(text: string, width: number): TableCell {
   return new TableCell({
     borders, width: { size: width, type: WidthType.DXA },
-    shading: { fill: "241A4D", type: ShadingType.CLEAR }, margins,
+    shading: { fill: "1A2E41", type: ShadingType.CLEAR }, margins,
     children: [new Paragraph({ children: [new TextRun({ text, bold: true, color: "FFFFFF", size: 18, font: "Arial" })] })],
   });
 }
@@ -158,7 +158,7 @@ function dCell(text: string, width: number, opts?: { bold?: boolean; fill?: stri
 function sectionHeading(num: number, text: string): Paragraph {
   return new Paragraph({
     heading: HeadingLevel.HEADING_1, spacing: { before: 300 },
-    children: [new TextRun({ text: `${num}. ${text}`, bold: true, font: "Arial", color: "241A4D" })],
+    children: [new TextRun({ text: `${num}. ${text}`, bold: true, font: "Arial", color: "1A2E41" })],
   });
 }
 
@@ -181,12 +181,12 @@ export async function generatePersonnelReportWord(people: Person[], opts: Person
   children.push(new Paragraph({ heading: HeadingLevel.TITLE, children: [
     new TextRun({
       text: `${getReportBrandName(de)} — ${de ? "IT-Sicherheits-Organigramm" : "IT Security Organization Chart"}`,
-      bold: true, size: 36, font: "Arial", color: "241A4D",
+      bold: true, size: 36, font: "Arial", color: "1A2E41",
     }),
   ] }));
   children.push(new Paragraph({ children: [new TextRun({
     text: de ? "Verantwortliche Personen & Rollen" : "Responsible Persons & Roles",
-    size: 24, color: "DB2477", font: "Arial",
+    size: 24, color: "1E9E6A", font: "Arial",
   })] }));
   children.push(new Paragraph({ spacing: { after: 100 }, children: [
     ...(companyName ? [new TextRun({ text: `${de ? "Organisation" : "Organization"}: ${companyName}  `, size: 20, font: "Arial" })] : []),
@@ -214,7 +214,7 @@ export async function generatePersonnelReportWord(people: Person[], opts: Person
   children.push(sectionHeading(2, de ? "Organigramm nach Abteilung" : "Chart by Department"));
   for (const [dept, list] of groups) {
     children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 220 }, children: [
-      new TextRun({ text: dept, bold: true, size: 22, font: "Arial", color: "241A4D" }),
+      new TextRun({ text: dept, bold: true, size: 22, font: "Arial", color: "1A2E41" }),
       new TextRun({ text: `  (${list.length})`, size: 18, font: "Arial", color: "718096" }),
     ] }));
     children.push(new Table({
@@ -228,7 +228,7 @@ export async function generatePersonnelReportWord(people: Person[], opts: Person
         ...list.map(p => new TableRow({ children: [
           dCell(p.name, 3120, { bold: true }),
           dCell(p.title, 3120),
-          dCell(p.email || "—", 3120, { size: 16, color: p.email ? "241A4D" : "999999" }),
+          dCell(p.email || "—", 3120, { size: 16, color: p.email ? "1A2E41" : "999999" }),
         ] })),
       ],
     }));

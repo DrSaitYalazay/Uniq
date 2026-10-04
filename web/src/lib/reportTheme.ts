@@ -40,9 +40,9 @@ export const hexToRgb = (hex: string): [number, number, number] => {
 
 // ─── Fixed navy + neutrals + severity (never change with accent) ────────────
 const FIXED = {
-  navy:        "#2B1F6B",
-  navyDeep:    "#24195e",
-  navyLight:   "#3A2C85",
+  navy:        "#143264",
+  navyDeep:    "#112754",
+  navyLight:   "#1A3366",
 
   ink:         "#1A202C",
   inkSoft:     "#2D3748",

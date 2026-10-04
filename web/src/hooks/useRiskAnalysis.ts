@@ -35,6 +35,7 @@ import { useToolData } from "@/hooks/useToolData";
 import { useImplementationStatus } from "@/hooks/useImplementationStatus";
 import { computeUmsetzungEffective } from "@/hooks/useUmsetzungEffective";
 import { applyUmsetzungOverlay } from "@/hooks/useComplianceOverview";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 
 
 interface ServiceRow {
@@ -219,7 +220,7 @@ export function useRiskAnalysis(config: RiskMatrixConfig = DEFAULT_RISK_CONFIG):
           .limit(1)
           .maybeSingle();
 
-        const userSelected = ((profile?.enabled_frameworks ?? []) as string[]).filter(Boolean);
+        const userSelected = visibleFrameworkCodes(((profile?.enabled_frameworks ?? []) as string[]).filter(Boolean));
         // Node-only: exakt die gewählten Frameworks — kein erzwungenes ISO27001 (kein
         // Hub). Nur wenn NICHTS gewählt ist, ISO als sinnvoller Default (leere Ansicht vermeiden).
         const enabledFrameworks = userSelected.length ? Array.from(new Set(userSelected)) : [HUB];

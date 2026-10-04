@@ -18,6 +18,7 @@ import { useFrameworkInheritance } from "@/hooks/useFrameworkInheritance";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 
 
 export default function FrameworkInheritanceButton() {
@@ -36,7 +37,7 @@ export default function FrameworkInheritanceButton() {
         .eq("user_id", tenantId ?? user.id)
         .order("updated_at", { ascending: false }).limit(1).maybeSingle();
       if (cancelled) return;
-      setEnabledFrameworks(((data?.enabled_frameworks ?? []) as string[]).filter(Boolean));
+      setEnabledFrameworks(visibleFrameworkCodes(((data?.enabled_frameworks ?? []) as string[]).filter(Boolean)));
     })();
     return () => { cancelled = true; };
   }, [user, tenantId]);

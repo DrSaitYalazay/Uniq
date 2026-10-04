@@ -41,8 +41,8 @@ const theme = {
   ink3:     "#718096",
   line:     "#DBE3EF",
   bg:       "#F8FAFC",
-  head1:    "#241A4D", // shield navy
-  head2:    "#24195e", // navy deep
+  head1:    "#1A2E41", // shield navy
+  head2:    "#112754", // navy deep
   accent:   RT.copper, // copper
   primary:  "#E56E19", // copper light (CTA)
   scoreColors: [

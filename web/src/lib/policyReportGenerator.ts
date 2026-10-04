@@ -204,7 +204,7 @@ export async function generatePolicyWord(policies: PolicyData[], lang: Lang, com
   const de = lang === "de";
   const cellBorder = { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" };
   const borders = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
-  const headerShading = { fill: "2B1F6B", type: ShadingType.CLEAR, color: "FFFFFF" };
+  const headerShading = { fill: "143264", type: ShadingType.CLEAR, color: "FFFFFF" };
 
   const sections: any[] = [];
 
@@ -213,13 +213,13 @@ export async function generatePolicyWord(policies: PolicyData[], lang: Lang, com
     properties: { page: { margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
     children: [
       new Paragraph({ spacing: { before: 3000 }, alignment: AlignmentType.CENTER, children: [
-        new TextRun({ text: de ? "Richtlinien-Bericht" : "Policy Report", bold: true, size: 48, color: "2B1F6B", font: "Arial" }),
+        new TextRun({ text: de ? "Richtlinien-Bericht" : "Policy Report", bold: true, size: 48, color: "143264", font: "Arial" }),
       ] }),
       new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200 }, children: [
         new TextRun({ text: de ? "Richtlinien" : "Policies", size: 24, color: "666666", font: "Arial" }),
       ] }),
       new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 400 }, children: [
-        new TextRun({ text: companyName || (de ? "Ihr Unternehmen" : "Your organisation"), size: 28, bold: true, color: "DB2477", font: "Arial" }),
+        new TextRun({ text: companyName || (de ? "Ihr Unternehmen" : "Your organisation"), size: 28, bold: true, color: "1E9E6A", font: "Arial" }),
       ] }),
       new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200 }, children: [
         new TextRun({ text: new Date().toLocaleDateString(de ? "de-DE" : "en-US"), size: 20, color: "999999", font: "Arial" }),
@@ -240,7 +240,7 @@ export async function generatePolicyWord(policies: PolicyData[], lang: Lang, com
 
   const summaryChildren: any[] = [
     new Paragraph({ heading: HeadingLevel.HEADING_1, children: [
-      new TextRun({ text: de ? "Zusammenfassung" : "Executive Summary", bold: true, size: 28, color: "2B1F6B", font: "Arial" }),
+      new TextRun({ text: de ? "Zusammenfassung" : "Executive Summary", bold: true, size: 28, color: "143264", font: "Arial" }),
     ] }),
     new Paragraph({ spacing: { before: 200, after: 100 }, children: [
       new TextRun({ text: summaryLine, size: 20, font: "Arial" }),
@@ -268,7 +268,7 @@ export async function generatePolicyWord(policies: PolicyData[], lang: Lang, com
   policies.forEach(p => {
     summaryChildren.push(new Paragraph({ children: [new PageBreak()] }));
     summaryChildren.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 200 }, children: [
-      new TextRun({ text: de ? p.name : p.nameEn, bold: true, size: 24, color: "2B1F6B", font: "Arial" }),
+      new TextRun({ text: de ? p.name : p.nameEn, bold: true, size: 24, color: "143264", font: "Arial" }),
     ] }));
 
     const fieldRows = (label: string, value: string) => new TableRow({ children: [

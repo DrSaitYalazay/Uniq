@@ -12,9 +12,10 @@ const LS_KEY = "cws-assessment-mode";
 
 function read(): AssessmentMode {
   try {
-    return localStorage.getItem(LS_KEY) === "simple" ? "simple" : "expert";
+    // UniqSuite: Standard ist der Überblick; Detail nur nach bewusster Wahl.
+    return localStorage.getItem(LS_KEY) === "expert" ? "expert" : "simple";
   } catch {
-    return "expert";
+    return "simple";
   }
 }
 

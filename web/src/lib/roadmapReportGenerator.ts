@@ -198,7 +198,7 @@ function drawText(ctx: PdfCtx, text: string, x: number, width: number, fontSize 
 
 function drawTitle(ctx: PdfCtx, data: RoadmapReportData) {
   const t = ctx.lang === "de";
-  setFont(ctx, 18, "#241A4D", "bold");
+  setFont(ctx, 18, "#1A2E41", "bold");
   ctx.pdf.text(ctx.lang === "de" ? "Roadmap – Jetzt / Nächste / Später" : "Roadmap – Now / Next / Later", PDF.margin, ctx.y);
   ctx.y += 7;
   setFont(ctx, 8, RT.stNa);
@@ -211,7 +211,7 @@ function drawTitle(ctx: PdfCtx, data: RoadmapReportData) {
   ctx.y += 7;
 }
 
-function drawSection(ctx: PdfCtx, title: string, color = "#241A4D") {
+function drawSection(ctx: PdfCtx, title: string, color = "#1A2E41") {
   addPageIfNeeded(ctx, 12);
   setFont(ctx, 12, color, "bold");
   ctx.pdf.text(title, PDF.margin, ctx.y);
@@ -226,7 +226,7 @@ function drawMetricCards(ctx: PdfCtx, data: RoadmapReportData) {
   const t = ctx.lang === "de";
   const s = data.stats;
   const cards = [
-    [`${s.completionPct}%`, t ? "Gesamtfortschritt" : "Overall progress", "#241A4D", "#F8FAFC"],
+    [`${s.completionPct}%`, t ? "Gesamtfortschritt" : "Overall progress", "#1A2E41", "#F8FAFC"],
     [`${s.fullyDone}/${s.totalApplicable}`, t ? "Fertig" : "Done", RT.stJa, RT.stJaBg],
     [`${s.inProgressCount}`, t ? "Laufend" : "In progress", RT.stTeilweise, "#FFFBEB"],
     [`${s.overdueCount}`, t ? "Überfällig" : "Overdue", RT.stNein, RT.stNeinBg],
@@ -439,7 +439,7 @@ function wordMetricTable(data: RoadmapReportData, lang: Lang) {
   const s = data.stats;
   const w = Math.floor(WORD_W / 4);
   const cells = [
-    [`${s.completionPct}%`, t ? "Gesamtfortschritt" : "Overall progress", "241A4D", "F8FAFC"],
+    [`${s.completionPct}%`, t ? "Gesamtfortschritt" : "Overall progress", "1A2E41", "F8FAFC"],
     [`${s.fullyDone}/${s.totalApplicable}`, t ? "Fertig" : "Done", "16A34A", "F0FDF4"],
     [`${s.inProgressCount}`, t ? "Laufend" : "In progress", "D97706", "FFFBEB"],
     [`${s.overdueCount}`, t ? "Überfällig" : "Overdue", "DC2626", "FEF2F2"],
@@ -511,23 +511,23 @@ export async function generateRoadmapWord(data: RoadmapReportData, lang: Lang, c
 
   children.push(new Paragraph({
     spacing: { after: 80 },
-    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: "241A4D", space: 6 } },
-    children: [wordText(lang === "de" ? "Roadmap – Jetzt / Nächste / Später" : "Roadmap – Now / Next / Later", { bold: true, size: 34, color: "241A4D" })],
+    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: "1A2E41", space: 6 } },
+    children: [wordText(lang === "de" ? "Roadmap – Jetzt / Nächste / Später" : "Roadmap – Now / Next / Later", { bold: true, size: 34, color: "1A2E41" })],
   }));
   children.push(wordPara(`${t ? "Unternehmen" : "Company"}: ${companyName || "—"} | ${t ? "Erstellt am" : "Generated"}: ${new Date().toLocaleDateString(t ? "de-DE" : "en-GB")}${data.stats.targetDate ? ` | ${t ? "Audit-Zieltermin" : "Audit target"}: ${fmtDate(data.stats.targetDate, lang)}` : ""}`, { size: 18, color: "64748B", after: 180 }));
   children.push(wordMetricTable(data, lang));
   children.push(wordPara(" ", { after: 120 }));
 
-  children.push(wordPara(t ? "Phasenübersicht" : "Phase overview", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "241A4D", after: 120 }));
+  children.push(wordPara(t ? "Phasenübersicht" : "Phase overview", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "1A2E41", after: 120 }));
   children.push(wordPara(t ? "Der Bericht wird aus den Roadmap-Daten als echte Word-Struktur erzeugt. Jede Maßnahme steht einzeln im Maßnahmenregister; Screenshot-only Inhalte werden nicht verwendet." : "The report is generated from Roadmap data as a real Word structure. Every action appears individually in the action register; screenshot-only content is not used.", { size: 18, color: "475569", after: 160 }));
   children.push(wordBundleTable(data, lang));
   children.push(wordPara(" ", { after: 140 }));
 
-  children.push(wordPara(t ? "Ressourcenübersicht" : "Resource overview", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "241A4D", after: 120 }));
+  children.push(wordPara(t ? "Ressourcenübersicht" : "Resource overview", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "1A2E41", after: 120 }));
   children.push(wordOwnerTable(data, lang));
   children.push(wordPara(" ", { after: 140 }));
 
-  children.push(wordPara(t ? "Maßnahmenregister" : "Action register", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "241A4D", after: 120 }));
+  children.push(wordPara(t ? "Maßnahmenregister" : "Action register", { heading: HeadingLevel.HEADING_1, bold: true, size: 26, color: "1A2E41", after: 120 }));
   sortActions(data.actions).forEach((action, idx) => {
     children.push(wordActionCard(action, lang, idx));
     children.push(wordPara(" ", { after: 70 }));
@@ -537,7 +537,7 @@ export async function generateRoadmapWord(data: RoadmapReportData, lang: Lang, c
     styles: {
       default: { document: { run: { font: "Arial", size: 20 } } },
       paragraphStyles: [
-        { id: "Heading1", name: "Heading 1", basedOn: "Normal", next: "Normal", quickFormat: true, run: { size: 26, bold: true, font: "Arial", color: "241A4D" }, paragraph: { spacing: { before: 180, after: 120 }, outlineLevel: 0 } },
+        { id: "Heading1", name: "Heading 1", basedOn: "Normal", next: "Normal", quickFormat: true, run: { size: 26, bold: true, font: "Arial", color: "1A2E41" }, paragraph: { spacing: { before: 180, after: 120 }, outlineLevel: 0 } },
       ],
     },
     sections: [{

@@ -19,6 +19,7 @@ export {
   type FristAmpel,
 } from "@/lib/incidentTriggerEngine";
 import { type FristAmpel } from "@/lib/incidentTriggerEngine";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 
 // ── Typen der Tabelle public.compliance_deadlines (ARCHITECTURE.md §2.5) ────
 export type DeadlineKind =
@@ -130,7 +131,7 @@ export async function listOpenDeadlines(
       .order("updated_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    const active = new Set(((prof?.enabled_frameworks ?? []) as string[]).filter(Boolean));
+    const active = new Set(visibleFrameworkCodes(((prof?.enabled_frameworks ?? []) as string[]).filter(Boolean)));
     if (active.size) {
       if (active.has("KRITIS")) active.add("KRITIS_DACHG");
       active.add("GDPR"); active.add("DSGVO");

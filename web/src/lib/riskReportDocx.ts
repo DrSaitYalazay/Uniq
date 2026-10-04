@@ -20,8 +20,8 @@ import {
 import type { BuildRiskReportInput } from "./riskReport";
 
 const FONT = "Arial";
-const NAVY = "241A4D";
-const COPPER = "C2185B";
+const NAVY = "1A2E41";
+const COPPER = "157A50";
 const CRIT = "B91C1C";
 const MUTED = "6B7280";
 const BORDER = "DBE3EF";

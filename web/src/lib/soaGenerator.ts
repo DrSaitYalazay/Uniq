@@ -186,7 +186,7 @@ function sectionShell(title: string, content: string, subtitle?: string) {
   return `
     <section data-pdf-section style="box-sizing:border-box;width:770px;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:24px 26px;margin:0 0 14px;box-shadow:0 10px 30px rgba(15,23,42,0.05);overflow:visible;">
       <div style="margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid ${RT.copper};">
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:800;color:#241A4D;letter-spacing:-0.2px;">${escapeHtml(title)}</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:800;color:#1A2E41;letter-spacing:-0.2px;">${escapeHtml(title)}</div>
         ${subtitle ? `<div style="margin-top:4px;font-family:Arial,sans-serif;font-size:10px;line-height:1.5;color:${RT.stNa};">${escapeHtml(subtitle)}</div>` : ""}
       </div>
       ${content}
@@ -269,7 +269,7 @@ function controlRowHtml(ctrl: SoAProjectedControl, lang: Lang): string {
 
 function tableHeader(lang: Lang): string {
   const de = lang === "de";
-  return `<thead><tr style="background:#241A4D;">
+  return `<thead><tr style="background:#1A2E41;">
     <th style="padding:8px;color:white;font-size:10px;text-align:left;font-family:Arial,sans-serif;font-weight:600;">ID</th>
     <th style="padding:8px;color:white;font-size:10px;text-align:left;font-family:Arial,sans-serif;font-weight:600;">${de ? "Kontrolle" : "Control"}</th>
     <th style="padding:8px;color:white;font-size:10px;text-align:center;font-family:Arial,sans-serif;font-weight:600;">${de ? "Anwendbar" : "Applicable"}</th>
@@ -290,7 +290,7 @@ export const generateSoAPDF = async (projection: SoAProjection, lang: Lang, gapS
 
   // Hero section
   const heroSection = `
-    <section data-pdf-section style="box-sizing:border-box;width:770px;background:linear-gradient(135deg,#241A4D 0%,#4B3BA6 100%);border-radius:16px;padding:28px 32px;margin:0 0 14px;color:white;overflow:visible;">
+    <section data-pdf-section style="box-sizing:border-box;width:770px;background:linear-gradient(135deg,#1A2E41 0%,#28488A 100%);border-radius:16px;padding:28px 32px;margin:0 0 14px;color:white;overflow:visible;">
       <div style="font-family:Arial,sans-serif;font-size:24px;font-weight:800;margin-bottom:6px;">${getReportBrandName(lang)}</div>
       <div style="font-family:Arial,sans-serif;font-size:16px;font-weight:600;margin-bottom:4px;opacity:0.95;">
         ${escapeHtml(T.title)}
@@ -314,7 +314,7 @@ export const generateSoAPDF = async (projection: SoAProjection, lang: Lang, gapS
   // SoA stats section (prominent, first)
   const statsContent = `
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      ${statBox(de ? "Gesamt" : "Total", s.total, "#241A4D")}
+      ${statBox(de ? "Gesamt" : "Total", s.total, "#1A2E41")}
       ${statBox(de ? "Anwendbar" : "Applicable", s.applicable, RT.stJa)}
       ${statBox(de ? "Manuell hinzugef." : "Manual Added", s.manualCount, RT.stTeilweise)}
       ${statBox(de ? "Umgesetzt" : "Implemented", s.implemented, RT.stJa)}
@@ -423,7 +423,7 @@ export const generateSoAPDF = async (projection: SoAProjection, lang: Lang, gapS
     </tr>`).join("");
     matrixSections.push(sectionShell(
       de ? "KI-Systeme × Rolle × Kontrolle" : "AI systems × role × control",
-      `<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#241A4D;">
+      `<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#1A2E41;">
         ${th("ID")}${th(de ? "System · Version" : "System · version")}${th(de ? "Rolle" : "Role")}${th(de ? "Klasse" : "Class")}${th(de ? "Verantwortlich" : "Owner")}${th(de ? "Bewertet" : "Assessed")}${th(de ? "Freigabe" : "Approved by")}${th(de ? "Anw." : "Appl.")}${th(de ? "Umg." : "Impl.")}${th(de ? "Teilw." : "Part.")}${th(de ? "Offen" : "Open")}${th(de ? "Später" : "Later")}
       </tr></thead><tbody>${sumRows}</tbody></table>`,
       MATRIX_NOTE[de ? "de" : "en"],
@@ -461,7 +461,7 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
   const baseline = ctx?.frameworkKey ? LEGAL_BASELINE[ctx.frameworkKey]?.[de ? "de" : "en"] : undefined;
   const cellBorder = { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" };
   const borders = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
-  const headerShading = { fill: "241A4D", type: ShadingType.CLEAR, color: "241A4D" };
+  const headerShading = { fill: "1A2E41", type: ShadingType.CLEAR, color: "1A2E41" };
   const headerRun = (text: string) => new TextRun({ text, color: "FFFFFF", bold: true, size: 20, font: "Arial" });
   const margins = { top: 60, bottom: 60, left: 80, right: 80 };
 
@@ -516,7 +516,7 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
   const sectionChildren = projection.categories.flatMap(cat => {
     const dataRows = cat.controls.map(controlToRow);
     return [
-      new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 }, children: [new TextRun({ text: `${cat.article} — ${de ? cat.title : cat.titleEn}`, bold: true, color: "241A4D", font: "Arial" })] }),
+      new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 }, children: [new TextRun({ text: `${cat.article} — ${de ? cat.title : cat.titleEn}`, bold: true, color: "1A2E41", font: "Arial" })] }),
       new Table({ width: { size: 9360, type: WidthType.DXA }, columnWidths: [900, 3200, 1200, 1400, 2660], rows: [makeHeaderRow(), ...dataRows] }),
     ];
   });
@@ -548,7 +548,7 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
       children: [new Paragraph({ children: [head ? headerRun(t) : new TextRun({ text: t, size: 16, font: "Arial" })] })] });
     const hdr = [ "ID", de ? "System · Version" : "System · version", de ? "Rolle" : "Role", de ? "Klasse" : "Class", de ? "Verantwortlich / Freigabe" : "Owner / approved by", de ? "Bewertet" : "Assessed", de ? "Anw. / umg. / teilw. / offen / später" : "Appl. / impl. / part. / open / later" ];
     matrixChildren.push(
-      new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 }, children: [new TextRun({ text: de ? "KI-Systeme × Rolle × Kontrolle" : "AI systems × role × control", bold: true, color: "241A4D", font: "Arial" })] }),
+      new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 }, children: [new TextRun({ text: de ? "KI-Systeme × Rolle × Kontrolle" : "AI systems × role × control", bold: true, color: "1A2E41", font: "Arial" })] }),
       new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: MATRIX_NOTE[de ? "de" : "en"], size: 16, font: "Arial", color: "475569" })] }),
       new Table({ width: { size: 9360, type: WidthType.DXA }, columnWidths: W, rows: [
         new TableRow({ tableHeader: true, children: hdr.map((h, i) => cell(h, W[i], true)) }),
@@ -562,7 +562,7 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
     );
     for (const x of md.summary) {
       const mine = md.rows.filter(r => r.systemId === x.systemId && r.applies);
-      matrixChildren.push(new Paragraph({ spacing: { before: 160, after: 40 }, children: [new TextRun({ text: `${x.systemId} — ${x.name}`, bold: true, size: 18, font: "Arial", color: "241A4D" })] }));
+      matrixChildren.push(new Paragraph({ spacing: { before: 160, after: 40 }, children: [new TextRun({ text: `${x.systemId} — ${x.name}`, bold: true, size: 18, font: "Arial", color: "1A2E41" })] }));
       for (const k of ["nein", "teilweise", "offen", "spaeter", "ja"] as const) {
         const ids = mine.filter(r => r.status === k).map(r => r.controlId.replace("AIACT-", ""));
         if (ids.length) matrixChildren.push(new Paragraph({ spacing: { after: 20 }, children: [
@@ -573,7 +573,7 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
       if (x.evidence.length) matrixChildren.push(new Paragraph({ spacing: { after: 20 }, children: [new TextRun({ text: `${de ? "Nachweise" : "Evidence"}: ${x.evidence.join(" · ")}`, size: 14, font: "Arial", color: "475569" })] }));
     }
     if (md.issues.length) {
-      matrixChildren.push(new Paragraph({ spacing: { before: 200, after: 60 }, children: [new TextRun({ text: de ? "Rollenkonsistenz je System" : "Role consistency per system", bold: true, size: 20, font: "Arial", color: "241A4D" })] }));
+      matrixChildren.push(new Paragraph({ spacing: { before: 200, after: 60 }, children: [new TextRun({ text: de ? "Rollenkonsistenz je System" : "Role consistency per system", bold: true, size: 20, font: "Arial", color: "1A2E41" })] }));
       for (const i of md.issues) matrixChildren.push(new Paragraph({ spacing: { after: 20 }, children: [
         new TextRun({ text: `${ISSUE_LABEL[i.kind][de ? "de" : "en"]}: `, bold: true, size: 16, font: "Arial", color: i.kind === "konflikt" ? "DC2626" : i.kind === "pruefen" ? "B45309" : "475569" }),
         new TextRun({ text: i.text[de ? "de" : "en"], size: 16, font: "Arial" }),
@@ -633,13 +633,13 @@ export const generateSoAWord = async (projection: SoAProjection, lang: Lang, gap
         ] })] }),
       },
       children: [
-        new Paragraph({ heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER, children: [new TextRun({ text: getReportBrandName(de), bold: true, color: "241A4D", size: 36, font: "Arial" })] }),
+        new Paragraph({ heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER, children: [new TextRun({ text: getReportBrandName(de), bold: true, color: "1A2E41", size: 36, font: "Arial" })] }),
         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 80 }, children: [new TextRun({ text: T.title, size: 24, font: "Arial" })] }),
         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: T.subtitle, size: 18, font: "Arial", color: "64748B" })] }),
         new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: `${de ? "Datum" : "Date"}: ${new Date().toLocaleDateString(de ? "de-DE" : "en-US")}`, size: 20, font: "Arial" })] }),
         ...(baseline ? [new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: baseline, size: 18, font: "Arial", color: "475569" })] })] : []),
         ...(T.note ? [new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: T.note, size: 18, font: "Arial", color: "475569" })] })] : []),
-        new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 }, children: [new TextRun({ text: de ? "SoA Übersicht" : "SoA Overview", bold: true, color: "241A4D", font: "Arial" })] }),
+        new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 200, after: 100 }, children: [new TextRun({ text: de ? "SoA Übersicht" : "SoA Overview", bold: true, color: "1A2E41", font: "Arial" })] }),
         soaStatsLine,
         ...legendParas,
         ...gapChildren,

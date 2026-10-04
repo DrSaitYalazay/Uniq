@@ -194,7 +194,7 @@ function sectionShell(title: string, content: string, infoText?: string) {
   return `
     <section data-pdf-section style="box-sizing:border-box;width:770px;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:24px 26px;margin:0 0 14px;box-shadow:0 10px 30px rgba(15,23,42,0.05);overflow:visible;">
       <div style="margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid ${RT.copper};">
-        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:800;color:#241A4D;letter-spacing:-0.2px;">${escapeHtml(title)}</div>
+        <div style="font-family:Arial,sans-serif;font-size:18px;font-weight:800;color:#1A2E41;letter-spacing:-0.2px;">${escapeHtml(title)}</div>
       </div>
       ${infoText ? `<div style="background:#f0f4ff;border:1px solid ${RT.copperLight};border-radius:8px;padding:10px 14px;margin:0 0 14px;font-family:Arial,sans-serif;font-size:10px;color:#4338ca;line-height:1.5;">ⓘ ${escapeHtml(infoText)}</div>` : ""}
       ${content}
@@ -208,8 +208,8 @@ function buildHeroSection(data: ExecutionReportData, lang: Lang, companyName: st
 
   return `
     <section data-pdf-section style="box-sizing:border-box;width:770px;background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:24px 26px;margin:0 0 14px;box-shadow:0 10px 30px rgba(15,23,42,0.05);overflow:visible;">
-      <div style="margin:0 0 18px;padding-bottom:10px;border-bottom:3px solid #241A4D;">
-        <div style="font-family:Arial,sans-serif;font-size:22px;font-weight:900;color:#241A4D;letter-spacing:-0.3px;">${t ? "Umsetzung & Monitoring" : "Execution & Monitoring"}</div>
+      <div style="margin:0 0 18px;padding-bottom:10px;border-bottom:3px solid #1A2E41;">
+        <div style="font-family:Arial,sans-serif;font-size:22px;font-weight:900;color:#1A2E41;letter-spacing:-0.3px;">${t ? "Umsetzung & Monitoring" : "Execution & Monitoring"}</div>
         <div style="font-family:Arial,sans-serif;font-size:11px;color:${RT.stNa};margin-top:4px;">
           ${t ? "Unternehmen" : "Company"}: <strong style="color:#1e293b;">${escapeHtml(companyName || "—")}</strong> &nbsp;|&nbsp;
           ${t ? "Erstellt am" : "Generated"}: <strong style="color:#1e293b;">${new Date().toLocaleDateString(t ? "de-DE" : "en-US")}</strong>
@@ -218,7 +218,7 @@ function buildHeroSection(data: ExecutionReportData, lang: Lang, companyName: st
 
       <div style="display:flex;gap:14px;margin-bottom:18px;">
         <div style="flex:1;border:1px solid #e2e8f0;border-radius:12px;padding:14px;background:#f8fafc;text-align:center;">
-          <div style="font-family:Arial,sans-serif;font-size:28px;font-weight:900;color:#241A4D;">${implPct}%</div>
+          <div style="font-family:Arial,sans-serif;font-size:28px;font-weight:900;color:#1A2E41;">${implPct}%</div>
           <div style="font-family:Arial,sans-serif;font-size:10px;color:${RT.stNa};">${t ? "Umsetzung" : "Implementation"}</div>
         </div>
         <div style="flex:1;border:1px solid #e2e8f0;border-radius:12px;padding:14px;background:${RT.stJaBg};text-align:center;">
@@ -244,7 +244,7 @@ function buildHeroSection(data: ExecutionReportData, lang: Lang, companyName: st
           <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:800;color:${RT.stTeilweise};">${data.quickWinCount}</div>
           <div style="font-family:Arial,sans-serif;font-size:9px;color:${RT.stTeilweise};">Quick Wins</div>
         </div>
-        <div style="flex:1;border:2px solid #f4a3c9;border-radius:10px;padding:10px;background:#fff7ed;text-align:center;">
+        <div style="flex:1;border:2px solid #A7DFC3;border-radius:10px;padding:10px;background:#fff7ed;text-align:center;">
           <div style="font-family:Arial,sans-serif;font-size:20px;font-weight:800;color:#ea580c;">${data.overdueCount}</div>
           <div style="font-family:Arial,sans-serif;font-size:9px;color:#ea580c;">${t ? "Überfällig" : "Overdue"}</div>
         </div>
@@ -260,12 +260,12 @@ function buildAboutSection(lang: Lang): string {
     : "The maturity analysis showed how mature the organisation is. Implementation turns that into concrete actions: who does what, by when, and what is blocked.";
   const cards: Array<{ title: string; body: string; color: string }> = t
     ? [
-        { title: "Eingang", color: "#241A4D", body: "Anwendbare Kontrollen aus der Erklärung zur Anwendbarkeit (SoA), den Risikobehandlungen und der Reifegrad-Baseline." },
+        { title: "Eingang", color: "#1A2E41", body: "Anwendbare Kontrollen aus der Erklärung zur Anwendbarkeit (SoA), den Risikobehandlungen und der Reifegrad-Baseline." },
         { title: "Vorgang", color: RT.stTeilweise, body: "Jede Kontrolle wird eine Maßnahme mit Status (Offen/Laufend/Fertig/Blockiert), Verantwortlichem, Fälligkeit und automatischer Priorität." },
         { title: "Ergebnis", color: RT.stJa, body: "Fortschrittsübersicht, Überfällig-Liste, Quick Wins, kritische Punkte — plus PDF/Word-Bericht für Management und Auditoren." },
       ]
     : [
-        { title: "Input", color: "#241A4D", body: "Applicable controls from the Statement of Applicability (SoA), risk treatments, and the maturity baseline." },
+        { title: "Input", color: "#1A2E41", body: "Applicable controls from the Statement of Applicability (SoA), risk treatments, and the maturity baseline." },
         { title: "Process", color: RT.stTeilweise, body: "Each control becomes an action with status (Open/In Progress/Done/Blocked), owner, due date and auto-derived priority." },
         { title: "Output", color: RT.stJa, body: "Progress overview, overdue list, quick wins, critical items — and a PDF/Word report for management and auditors." },
       ];
@@ -307,7 +307,7 @@ function buildControlScopeSection(data: ExecutionReportData, lang: Lang): string
           <tr><td style="padding:4px 0 4px 16px;color:${RT.stNa};font-size:11px;">${t ? "Entbehrlich (N/A)" : "Not Applicable"}</td><td style="text-align:right;font-family:monospace;">− ${cs.entbehrlich}</td></tr>
           <tr><td style="padding:4px 0 4px 16px;color:${RT.stNa};font-size:11px;">${t ? "SoA-Ausschlüsse" : "SoA Excluded"}</td><td style="text-align:right;font-family:monospace;">− ${cs.soaExcluded}</td></tr>
           <tr><td style="padding:4px 0 4px 16px;color:${RT.stNa};font-size:11px;">${t ? "Manuell hinzugefügt" : "Manually Added"}</td><td style="text-align:right;font-family:monospace;">+ ${cs.soaAdded}</td></tr>
-          <tr style="border-top:2px solid #e2e8f0;"><td style="padding:8px 0;font-weight:700;">${t ? "Finale Maßnahmen (Aufgaben)" : "Final actions (tasks)"}</td><td style="text-align:right;font-size:18px;font-weight:900;color:#241A4D;">${cs.finalScope}</td></tr>
+          <tr style="border-top:2px solid #e2e8f0;"><td style="padding:8px 0;font-weight:700;">${t ? "Finale Maßnahmen (Aufgaben)" : "Final actions (tasks)"}</td><td style="text-align:right;font-size:18px;font-weight:900;color:#1A2E41;">${cs.finalScope}</td></tr>
         </table>
         <div style="font-family:monospace;font-size:9px;color:${RT.stNa};margin-top:4px;">${cs.BASELINE} − ${cs.entbehrlich} − ${cs.soaExcluded} + ${cs.soaAdded} = ${cs.finalScope}</div>
       </div>
@@ -331,7 +331,7 @@ function buildControlScopeSection(data: ExecutionReportData, lang: Lang): string
           <tr><td style="padding:4px 0;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${RT.stJa};margin-right:6px;vertical-align:middle;"></span>${t ? "Umgesetzt" : "Implemented"}</td><td style="text-align:right;font-weight:700;">${cb.implemented}</td></tr>
           <tr><td style="padding:4px 0;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${RT.stTeilweise};margin-right:6px;vertical-align:middle;"></span>${t ? "Teilweise" : "Partial"}</td><td style="text-align:right;font-weight:700;">${cb.partial}</td></tr>
           <tr><td style="padding:4px 0;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${RT.stNein};margin-right:6px;vertical-align:middle;"></span>${t ? "Offen" : "Open"}</td><td style="text-align:right;font-weight:700;">${cb.open}</td></tr>
-          <tr style="border-top:2px solid #e2e8f0;"><td style="padding:8px 0;font-weight:700;">${t ? "Umsetzungsgrad" : "Implementation level"}</td><td style="text-align:right;font-size:18px;font-weight:900;color:#241A4D;">${cb.gradePct}%</td></tr>
+          <tr style="border-top:2px solid #e2e8f0;"><td style="padding:8px 0;font-weight:700;">${t ? "Umsetzungsgrad" : "Implementation level"}</td><td style="text-align:right;font-size:18px;font-weight:900;color:#1A2E41;">${cb.gradePct}%</td></tr>
           <tr><td style="padding:4px 0;color:${RT.stTeilweise};font-weight:600;">${t ? "Fertig ohne Nachweis" : "Done without evidence"}</td><td style="text-align:right;font-weight:800;color:${RT.stTeilweise};">${cb.noEvidence}</td></tr>
           <tr><td style="padding:4px 0;color:${RT.stNein};font-weight:600;">${t ? "Überfällig" : "Overdue"}</td><td style="text-align:right;font-weight:800;color:${RT.stNein};">${cb.overdue}</td></tr>
         </table>
@@ -440,7 +440,7 @@ function buildActionTableSections(items: ActionItemForReport[], lang: Lang): str
   ];
 
   const header = headerCells.map(h =>
-    `<th style="padding:8px 6px;text-align:left;font-family:Arial,sans-serif;font-size:9px;color:#ffffff;background:#241A4D;border-bottom:2px solid ${RT.copper};width:${h.width};">${h.label}</th>`
+    `<th style="padding:8px 6px;text-align:left;font-family:Arial,sans-serif;font-size:9px;color:#ffffff;background:#1A2E41;border-bottom:2px solid ${RT.copper};width:${h.width};">${h.label}</th>`
   ).join("");
 
   const sections: string[] = [];
@@ -574,8 +574,8 @@ export async function generateExecutionPDF(data: ExecutionReportData, lang: Lang
 
 export async function generateExecutionWord(data: ExecutionReportData, lang: Lang, companyName: string) {
   const t = lang === "de";
-  const accentColor = "241A4D";
-  const goldColor = "DB2477";
+  const accentColor = "1A2E41";
+  const goldColor = "1E9E6A";
   const lightBg = "F1F5F9";
   const infoBg = "EEF2FF";
   const infoColor = "4338CA";
@@ -644,12 +644,12 @@ export async function generateExecutionWord(data: ExecutionReportData, lang: Lan
   }));
   const aboutCards: Array<[string, string, string]> = t
     ? [
-        ["Eingang", "Anwendbare Kontrollen aus der Erklärung zur Anwendbarkeit (SoA), den Risikobehandlungen und der Reifegrad-Baseline.", "241A4D"],
+        ["Eingang", "Anwendbare Kontrollen aus der Erklärung zur Anwendbarkeit (SoA), den Risikobehandlungen und der Reifegrad-Baseline.", "1A2E41"],
         ["Vorgang", "Jede Kontrolle wird eine Maßnahme mit Status (Offen/Laufend/Fertig/Blockiert), Verantwortlichem, Fälligkeit und automatischer Priorität.", "D97706"],
         ["Ergebnis", "Fortschrittsübersicht, Überfällig-Liste, Quick Wins, kritische Punkte — plus PDF/Word-Bericht für Management und Auditoren.", "16A34A"],
       ]
     : [
-        ["Input", "Applicable controls from the Statement of Applicability (SoA), risk treatments, and the maturity baseline.", "241A4D"],
+        ["Input", "Applicable controls from the Statement of Applicability (SoA), risk treatments, and the maturity baseline.", "1A2E41"],
         ["Process", "Each control becomes an action with status (Open/In Progress/Done/Blocked), owner, due date and auto-derived priority.", "D97706"],
         ["Output", "Progress overview, overdue list, quick wins, critical items — and a PDF/Word report for management and auditors.", "16A34A"],
       ];

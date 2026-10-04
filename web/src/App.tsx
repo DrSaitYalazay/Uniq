@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
 import PdfProgressOverlay from "./components/PdfProgressOverlay";
 import RouteSEO from "./components/RouteSEO";
+import { isToolPathHidden } from "./config/uniqFeatures";
 
 import NotFound from "./pages/NotFound";
 
@@ -40,7 +41,6 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Integrations = lazy(() => import("./pages/Integrations"));
 const Risk = lazy(() => import("./pages/Risk"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
-const Implementation = lazy(() => import("./pages/Implementation"));
 const Policies = lazy(() => import("./pages/Policies"));
 const Trainings = lazy(() => import("./pages/Trainings"));
 const IncidentManagement = lazy(() => import("./pages/IncidentManagement"));
@@ -64,6 +64,14 @@ const PageLoader = () => (
     </div>
   </div>
 );
+
+// UniqSuite: frühere Phase 06 ist Teil von 05 „Plan & Umsetzung" — alte Links (auch ?focus=…) weiterleiten.
+const ImplementationRedirect = () => {
+  const { search } = useLocation();
+  const q = new URLSearchParams(search);
+  q.set("tab", "umsetzung");
+  return <Navigate to={`/roadmap?${q.toString()}`} replace />;
+};
 
 const ScrollToTopOnRouteChange = () => {
   const { pathname } = useLocation();
@@ -103,20 +111,20 @@ const App = () => (
                   <Route path="/inventory" element={<Inventory />} />
                   <Route path="/assessment" element={<Assessment />} />
                   <Route path="/decision" element={<Risk />} />
-                  <Route path="/implementation" element={<Implementation />} />
+                  <Route path="/implementation" element={<ImplementationRedirect />} />
                   <Route path="/roadmap" element={<Roadmap />} />
                   <Route path="/policies" element={<Policies />} />
-                  <Route path="/trainings" element={<Trainings />} />
+                  <Route path="/trainings" element={isToolPathHidden("/trainings") ? <Navigate to="/dashboard" replace /> : <Trainings />} />
                   <Route path="/incidents" element={<IncidentManagement />} />
-                  <Route path="/documents" element={<DocumentLifecycle />} />
-                  <Route path="/procurement" element={<ProcurementCheck />} />
+                  <Route path="/documents" element={isToolPathHidden("/documents") ? <Navigate to="/dashboard" replace /> : <DocumentLifecycle />} />
+                  <Route path="/procurement" element={isToolPathHidden("/procurement") ? <Navigate to="/dashboard" replace /> : <ProcurementCheck />} />
                   <Route path="/suppliers" element={<SupplierCheck />} />
-                  <Route path="/tprm" element={<ThirdPartyRisk />} />
-                  <Route path="/datenschutz-cockpit" element={<DatenschutzCockpit />} />
-                  <Route path="/bcm" element={<BusinessContinuity />} />
+                  <Route path="/tprm" element={isToolPathHidden("/tprm") ? <Navigate to="/dashboard" replace /> : <ThirdPartyRisk />} />
+                  <Route path="/datenschutz-cockpit" element={isToolPathHidden("/datenschutz-cockpit") ? <Navigate to="/dashboard" replace /> : <DatenschutzCockpit />} />
+                  <Route path="/bcm" element={isToolPathHidden("/bcm") ? <Navigate to="/dashboard" replace /> : <BusinessContinuity />} />
                   <Route path="/ki-governance" element={<KiGovernance />} />
-                  <Route path="/management-review" element={<ManagementReview />} />
-                  <Route path="/control-monitoring" element={<ControlMonitoring />} />
+                  <Route path="/management-review" element={isToolPathHidden("/management-review") ? <Navigate to="/dashboard" replace /> : <ManagementReview />} />
+                  <Route path="/control-monitoring" element={isToolPathHidden("/control-monitoring") ? <Navigate to="/dashboard" replace /> : <ControlMonitoring />} />
                   <Route path="/audit" element={<AuditWorkbench />} />
                 </Route>
 

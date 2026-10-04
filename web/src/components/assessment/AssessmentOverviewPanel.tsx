@@ -28,6 +28,8 @@ interface Props {
   onSelectFramework: (fw: string) => void;
   /** Klick in der Detail-Liste: Anforderung im Framework-Tab öffnen. */
   onOpenControl?: (fw: string, controlId: string) => void;
+  /** UniqSuite: Überblick zeigt nur Kennzahlen + Framework-Karten; Analysen und Gesamtliste im Detail. */
+  mode?: "simple" | "expert";
 }
 
 import { CHART_STATUS, CHART_STATUS_OHNE } from "@/lib/chartPalette";
@@ -41,7 +43,7 @@ const STATUS_COLORS = {
   ohne:      CHART_STATUS_OHNE,
 };
 
-export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onOpenControl }: Props) {
+export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onOpenControl, mode = "expert" }: Props) {
   // 1) Framework compliance comparison
   const complianceBarData = useMemo(() =>
     frameworks.map(f => ({
@@ -166,13 +168,13 @@ export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onO
         </div>
         <p className="text-[11px] text-muted-foreground mt-2">
           {de
-            ? "Konformität = umgesetzte Anforderungen ÷ anwendbar (die Management-Kennzahl; steigt, wenn Sie Lücken schließen). Beantwortungsgrad = wie viel des Fragebogens beantwortet ist — KEINE Umsetzungs-Kennzahl. Die Umsetzung (Phase 6) hebt die Konformität im Dashboard/SoA/Berichten an („spätere Phase gewinnt“)."
-            : "Compliance = met requirements ÷ applicable (the management figure; rises as you close open gaps). Answered = how much of the questionnaire is filled in — NOT an implementation figure. Implementation (Phase 6) raises compliance on the dashboard/SoA/reports (\"later phase wins\")."}
+            ? "Konformität = umgesetzte Anforderungen ÷ anwendbar (die Management-Kennzahl; steigt, wenn Sie Lücken schließen). Beantwortungsgrad = wie viel des Fragebogens beantwortet ist — KEINE Umsetzungs-Kennzahl. Die Umsetzung (Phase 5, Plan & Umsetzung) hebt die Konformität im Dashboard/SoA/Berichten an („spätere Phase gewinnt“)."
+            : "Compliance = met requirements ÷ applicable (the management figure; rises as you close open gaps). Answered = how much of the questionnaire is filled in — NOT an implementation figure. Implementation (Phase 5, Plan & Implementation) raises compliance on the dashboard/SoA/reports (\"later phase wins\")."}
         </p>
       </div>
 
-      {/* Framework compliance bar */}
-      <div className="rounded-xl border border-border bg-card p-4 card-elevated">
+      {/* Framework compliance bar — UniqSuite: entfällt, die Framework-Karten darunter zeigen dieselben Prozente. */}
+      {SHOW_COMPLIANCE_BAR && <div className="rounded-xl border border-border bg-card p-4 card-elevated">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-foreground">
             {de ? "Konformität pro Framework" : "Compliance per framework"}
@@ -203,7 +205,7 @@ export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onO
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </div>}
 
       {/* Per-Framework mini-donut grid (Umsetzung-Standard) */}
       <div className="rounded-xl border border-border bg-card p-4 card-elevated">
@@ -214,8 +216,8 @@ export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onO
         />
       </div>
 
-      {/* Two-column: donut + radar */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Two-column: donut + radar — nur im Detail */}
+      {mode === "expert" && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-xl border border-border bg-card p-4 card-elevated">
           <h3 className="text-sm font-semibold text-foreground mb-2">
             {de ? "Status-Verteilung (aggregiert)" : "Status distribution (aggregated)"}
@@ -280,14 +282,14 @@ export function AssessmentOverviewPanel({ frameworks, de, onSelectFramework, onO
             </div>
           )}
         </div>
-      </div>
+      </div>}
 
       {/* Detail: alle Anforderungen aller Frameworks in einer Liste */}
-      <AllControlsList
+      {mode === "expert" && <AllControlsList
         frameworks={frameworks}
         de={de}
         onOpenControl={onOpenControl ?? ((fw) => onSelectFramework(fw))}
-      />
+      />}
     </div>
   );
 }
@@ -422,4 +424,4 @@ function compactWords(text: string, n: number, de: boolean): string {
   return shortestWholeWord ?? (de ? "Bereich" : "Area");
 }
 
-
+const SHOW_COMPLIANCE_BAR = false;

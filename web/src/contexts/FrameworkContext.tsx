@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { supabase } from "@/integrations/supabase/client";
 import { onFrameworksUpdated } from "@/lib/frameworkBus";
 import { useAuth } from "@/contexts/AuthContext";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 
 
 /**
@@ -301,7 +302,7 @@ export const FrameworkProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const applyEnabledFromDb = useCallback((codes: string[]) => {
-    const keys = codes.map(codeToKey).filter((k): k is FrameworkKey => !!k);
+    const keys = visibleFrameworkCodes(codes).map(codeToKey).filter((k): k is FrameworkKey => !!k);
     if (keys.length === 0) return;
     setActiveKeys(keys);
     setPrimaryKey((prev) => (keys.includes(prev) ? prev : keys[0]));

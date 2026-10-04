@@ -21,6 +21,7 @@ import { useToolData } from "@/hooks/useToolData";
 import { useUmsetzungEffective } from "@/hooks/useUmsetzungEffective";
 import { useSoaNotApplicable } from "@/hooks/useSoaNotApplicable";
 import { onFrameworksUpdated } from "@/lib/frameworkBus";
+import { visibleFrameworkCodes } from "@/config/uniqFeatures";
 import {
   computeStats, projectAnswer, buildAnchorAnswerMap,
   type AnswerRow, type ControlRow, type EffectiveAnswer, type FrameworkStats,
@@ -69,7 +70,7 @@ export function useComplianceOverview(opts?: {
         .limit(1)
         .maybeSingle();
       if (!alive) return;
-      setEnabledFrameworks(((data?.enabled_frameworks ?? []) as string[]));
+      setEnabledFrameworks(visibleFrameworkCodes((data?.enabled_frameworks ?? []) as string[]));
       setProfileLoaded(true);
     })();
     return () => { alive = false; };
@@ -79,7 +80,7 @@ export function useComplianceOverview(opts?: {
   // Dashboard-Compliance bis zum Reload stale).
   useEffect(() => {
     const off = onFrameworksUpdated(({ enabled_frameworks }) => {
-      setEnabledFrameworks((enabled_frameworks ?? []) as string[]);
+      setEnabledFrameworks(visibleFrameworkCodes((enabled_frameworks ?? []) as string[]));
     });
     return off;
   }, []);

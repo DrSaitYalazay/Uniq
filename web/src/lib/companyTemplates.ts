@@ -2,7 +2,7 @@
  * NIS2 Governance Document Templates — Word (.docx) generators.
  *
  * Style matches the rest of the tenant reports (policy / report look):
- *   Arial · navy #2B1F6B headings · gold #C2185B accent
+ *   Arial · navy #143264 headings · gold #157A50 accent
  *   light-blue meta tables (#E8F0FE) · cream callouts (#FFF8E1)
  *
  * Each generator outputs a real .docx file (docx-js) — not HTML-as-doc —
@@ -35,15 +35,15 @@ export type TemplateKind =
   | "company-structure";
 
 // ── Style tokens — matches HealthCore Governance Pack reference ───────────
-// Arial · navy #2B1F6B headings/banners · gold #C2185B rules & callouts
+// Arial · navy #143264 headings/banners · gold #157A50 rules & callouts
 // Navy-filled section banners (white text), navy-filled table header rows.
 const FONT = "Arial";
 const TEXT = "1F2A44";           // body text — deep slate
-const NAVY = "2B1F6B";           // primary navy
+const NAVY = "143264";           // primary navy
 const NAVY_DARK = "0E2347";      // darker navy for filled banners
 const HEAD = NAVY;
 const HEAD_DARK = NAVY_DARK;
-const GOLD = "C2185B";           // accent gold
+const GOLD = "157A50";           // accent gold
 const GOLD_SOFT = "E6C977";      // softer gold (borders / rules)
 const CREAM = "FFF7E0";          // callout fill
 const MUTED = "5B6B82";          // muted captions

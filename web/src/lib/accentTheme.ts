@@ -10,7 +10,7 @@
 
 import { applyChartVars } from "@/lib/chartPalette";
 
-const LS_KEY = "cws.accent.hsl.v1";
+const LS_KEY = "uniq.accent.hsl.v2"; // v2: neuer Default Grün — alte Auswahl (Test) verwerfen
 
 export interface AccentHSL {
   h: number; // 0-360
@@ -27,16 +27,15 @@ export interface AccentHSL {
  * `resetAccent()` auf genau diesen Markenwert zurücksetzen.
  */
 // NIS2Suite-Palette (2026-09-10): Bakır/Gold hsl(25 80% 50%) #CC7733.
-// UniqSuite-Marke (2026-10-03): Magenta-Rosé hsl(330 72% 50%).
-export const DEFAULT_ACCENT: AccentHSL = { h: 330, s: 72, l: 50 };
+// UniqSuite-Marke (2026-10-04): Navy + Weiß + Grün + Grau; Akzent = Grün hsl(152 62% 36%).
+export const DEFAULT_ACCENT: AccentHSL = { h: 152, s: 62, l: 36 };
 
 export const ACCENT_PRESETS: { label: string; hsl: AccentHSL }[] = [
-  { label: "Rosé (Marke)",   hsl: { h: 330, s: 72, l: 50 } },
+  { label: "Grün (Marke)",   hsl: { h: 152, s: 62, l: 36 } },
   { label: "Bakır/Gold",     hsl: { h: 25, s: 80, l: 50 } },
   { label: "Azur #1463FF",   hsl: { h: 220, s: 100, l: 54 } }, // Dr. Sait 2026-09-10: künftiger Default-Kandidat
   { label: "Gold hell",      hsl: { h: 36,  s: 84, l: 50 } },
   { label: "Teal",           hsl: { h: 174, s: 72, l: 40 } },
-  { label: "Emerald",        hsl: { h: 152, s: 62, l: 36 } },
   { label: "Forest",         hsl: { h: 145, s: 55, l: 30 } },
   { label: "Royal Blue",     hsl: { h: 220, s: 75, l: 45 } },
   { label: "Indigo",         hsl: { h: 245, s: 62, l: 50 } },

@@ -33,6 +33,7 @@ import { RiskHeatmap } from "@/components/risk/RiskHeatmap";
 import { MatrixConfigPanel } from "@/components/risk/MatrixConfigPanel";
 import { TreatmentTable } from "@/components/risk/TreatmentTable";
 import { QuantRiskPanel } from "@/components/risk/QuantRiskPanel";
+import { FEATURES } from "@/config/uniqFeatures";
 import { ManualRiskPanel } from "@/components/risk/ManualRiskPanel";
 import { LIOverrideEditor } from "@/components/risk/LIOverrideEditor";
 import { RiskPicker } from "@/components/RiskPicker";
@@ -448,10 +449,7 @@ const Risk = () => {
                 {de ? "Zur Bewertung" : "To Assessment"} <ArrowRight className="h-3 w-3" />
               </Link>
             </Button>
-            <Button size="sm" variant="outline" className="gap-1" onClick={() => { setTab("analysis"); openPickerNew(); }}
-                    disabled={loading}>
-              <Plus className="h-3.5 w-3.5" /> {de ? "Eigenes Risiko" : "Custom risk"}
-            </Button>
+            {/* UniqSuite: „+ Eigenes Risiko" steht in der Karte „Eigene Risiken" — kein zweiter Knopf im Kopf. */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button size="sm" variant="outline" className="gap-2"
@@ -538,7 +536,7 @@ const Risk = () => {
                   </Badge>
                 )}
               </TabsTrigger>
-              {mode === "expert" && (
+              {FEATURES.fairQuant && mode === "expert" && (
                 <TabsTrigger value="quant">
                   {de ? "Quantitatives Risiko (FAIR)" : "Quantitative risk (FAIR)"}
                 </TabsTrigger>
@@ -564,7 +562,8 @@ const Risk = () => {
                 ))}
               </div>
 
-              {s!.totalRisks > 0 && (() => {
+              {/* UniqSuite: Schwere-Ring wiederholte die Kennzahlen Kritisch/Hoch/Mittel/Niedrig direkt darüber. */}
+              {SHOW_SEVERITY_DONUT && s!.totalRisks > 0 && (() => {
                 const RC: Record<string, string> = { critical: CHART_SEVERITY.kritisch, high: CHART_STATUS.nein, medium: CHART_STATUS.teilweise, low: CHART_STATUS.ja };
                 const donut = [
                   { name: de ? "Kritisch" : "Critical", value: s!.bySeverity.critical, color: RC.critical },
@@ -932,7 +931,7 @@ const Risk = () => {
             <TabsContent value="quant" className="space-y-4">
               {/* Quantitative FAIR-/LEC-Analyse: nur im Detail-Modus. Überblick
                   bleibt bei Matrix + Risikoliste (Management-Sicht). */}
-              {mode === "expert" && <QuantRiskPanel risks={result.risks} de={de} />}
+              {FEATURES.fairQuant && mode === "expert" && <QuantRiskPanel risks={result.risks} de={de} />}
             </TabsContent>
           </Tabs>
         )}
@@ -1149,3 +1148,5 @@ function RiskAccordionList({
 }
 
 export default Risk;
+
+const SHOW_SEVERITY_DONUT = false;

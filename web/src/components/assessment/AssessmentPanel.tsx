@@ -3,6 +3,8 @@ import { ChevronDown, Server } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { ControlRowItem } from "./ControlRowItem";
+import { QuestionCard } from "./QuestionCard";
+import { FEATURES } from "@/config/uniqFeatures";
 import { AssessmentFilters, type StatusFilter } from "./AssessmentFilters";
 import { FrameworkChartsPanel } from "./FrameworkChartsPanel";
 import type { AssessmentAsset } from "./AssetOverridePanel";
@@ -223,21 +225,10 @@ export function AssessmentPanel({
             : `MUST not implemented${(stats.criticalUnanswered ?? 0) > 0 ? ` · ${stats.criticalUnanswered} MUST unanswered` : ""}${(stats.criticalLater ?? 0) > 0 ? ` · ${stats.criticalLater} apply later` : ""}`} tone="destructive" />
           <StatBox label={de ? "Nicht anwendbar" : "Not applicable"} value={String(stats.na)} sub={de ? "N.a." : "N/A"} />
         </div>
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground w-24">{de ? "Konformität" : "Compliance"}</span>
-            <Progress value={stats.compliancePct} className="h-2 flex-1" />
-            <span className="text-xs font-medium w-10 text-right">{stats.compliancePct}%</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground w-24">{de ? "Fortschritt" : "Progress"}</span>
-            <Progress value={stats.progressPct} className="h-2 flex-1" />
-            <span className="text-xs font-medium w-10 text-right">{stats.progressPct}%</span>
-          </div>
-        </div>
+        {/* UniqSuite: Fortschrittsbalken „Konformität/Fortschritt" wiederholten die Kennzahlen oben — entfallen. */}
       </div>
 
-      <FrameworkChartsPanel controls={controls} effective={effective} stats={stats} de={de} />
+      <FrameworkChartsPanel controls={controls} effective={effective} stats={stats} de={de} mode={simple ? "simple" : "expert"} />
 
 
 
@@ -255,36 +246,12 @@ export function AssessmentPanel({
       )}
 
 
-      {simple && (() => {
-        // Geführter Fortschritt: „X von Y Bausteinen bewertet" (Z fertig).
-        const total = groups.length;
-        const bewertet = groups.filter(g => familyStats(g.items).ans > 0).length;
-        const fertig = groups.filter(g => { const s = familyStats(g.items); return s.total > 0 && s.pct >= 100; }).length;
-        const pct = total ? Math.round((bewertet / total) * 100) : 0;
-        return (
-          <div className="mb-3 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5">
-            <div className="text-xs text-muted-foreground">
-              {de
-                ? "Überblick-Modus: Konformität je Baustein/Thema auf einen Blick. Zum Bewerten einzelner Anforderungen oben auf Detail wechseln."
-                : "Overview mode: assess per building block/topic with one click (Done / Partial / No). Switch to Detail above to rate every single requirement."}
-            </div>
-            {total > 0 && (
-              <div className="mt-2">
-                <div className="flex items-center justify-between text-[11px] font-medium mb-1">
-                  <span className="text-foreground">
-                    {de ? `${bewertet} von ${total} Bausteinen bewertet` : `${bewertet} of ${total} building blocks assessed`}
-                    {fertig > 0 && <span className="st-ja-text"> · {fertig} {de ? "erfüllt" : "met"}</span>}
-                  </span>
-                  <span className="tabular-nums text-muted-foreground">{pct}%</span>
-                </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div className="h-full bg-primary transition-all" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      })()}
+      {/* UniqSuite-Überblick: eine Anforderung pro Karte (Umgesetzt / Teilweise / Nicht umgesetzt).
+          Der frühere Fortschrittskasten („X von Y Bausteinen bewertet") wiederholte den Beantwortungsgrad. */}
+      {simple && (
+        <QuestionCard controls={controls} effective={effective} de={de} isMust={isMustControl}
+          onSetStatus={onSetStatus} onSetNote={onSetNote} />
+      )}
 
       {/* ── ÜBERBLICK: grafischer Themen-Überblick statt editierbarer Liste ── */}
       {simple && (() => {
@@ -338,11 +305,7 @@ export function AssessmentPanel({
                 );
               })}
             </div>
-            <div className="pt-1 text-[11px] text-muted-foreground border-t border-border">
-              {de ? "Zum Bewerten einzelner Anforderungen oben auf " : "To assess individual requirements, switch to "}
-              <span className="font-semibold text-foreground">Detail</span>
-              {de ? " wechseln." : " above."}
-            </div>
+
           </div>
         );
       })()}
@@ -350,7 +313,8 @@ export function AssessmentPanel({
       {/* ISO 27001 wird auch im Überblick bis zur Norm-Ebene gezeigt: Annex A hat
           93 Kontrollen, und genau auf dieser Ebene will der Nutzer entscheiden.
           Für alle anderen Frameworks bleibt der Überblick auf Themenebene. */}
-      {(!simple || isIso) && (
+      {/* UniqSuite: im Überblick bewertet die Karte oben — auch für ISO 27001 keine zweite Liste. */}
+      {!simple && (
       <div className="space-y-3">
         {(() => { return null; })()}
         {groups.map(g => {
@@ -557,7 +521,7 @@ export function AssessmentPanel({
                 {/* Familien-Ebene (A.5, A.8, Klausel 6 …): scopeRef = Familie,
                     damit ein Sammel-N.a. keine Kontrolle trifft, deren
                     Primärreferenz in einer anderen Familie liegt. */}
-                {renderBulkButtons(g.items, "sm", g.label, isIso ? g.id : undefined)}
+                {FEATURES.bulkAssessment && renderBulkButtons(g.items, "sm", g.label, isIso ? g.id : undefined)}
 
               </div>
 
@@ -658,7 +622,7 @@ export function AssessmentPanel({
                                 <div className="flex-1" />
                                 {/* scopeRef = die Überschrift selbst (A.5.23, 6.1.3 …);
                                     Y6-Filter braucht sie, um Zweitbeiträge zu erkennen. */}
-                                {renderBulkButtons(sg.items, "xs", sg.label, isIso ? sg.id : undefined)}
+                                {FEATURES.bulkAssessment && renderBulkButtons(sg.items, "xs", sg.label, isIso ? sg.id : undefined)}
 
                               </div>
                               {subOpen && (
