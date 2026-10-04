@@ -126,3 +126,5 @@ Geri bildirim: dil mekanik; site ilk bakışta ne olduğunu anlatmıyor; arka pl
 - [x] **Kamera hissi:** Regelwerke ve Funktionen sırasında 3D kamera halkanın etrafında açı değiştiriyor; içerik blokları perspektifle girip çıkıyor. Sayfa geçişleri: tıklanan yere doğru zoom in, ana sayfaya dönüşte zoom out (View Transitions, desteklemeyen tarayıcıda normal geçiş).
 - [x] **Sayfa sonu:** "Nach oben" ve alt sayfalarda "Zur Startseite"; sayfa sonuna yaklaşınca yuvarlak yukarı düğmesi.
 - [x] **Kontrol:** CSP 42 sayfa, Lighthouse mobil 93 / CLS 0,002.
+- [x] **White Paper ve broşür:** Metin DE/EN yeniden yazıldı (insan dili, kişi adı yok, "UniqSuite-Team"; tarih ifadeleri kaldırıldı; olgular değişmedi). Premium katman: kapakta fotoğraf, Inter Display başlıklar, sayfa altlarında sahne bantları (kurucu fotoğrafı yok). Kaynak: Mac `Documents/uniqsuite/whitepaper/kaynak/` (premium.css).
+- [x] **Online okuma:** `/de/whitepaper/`, `/de/broschuere/`, `/en/white-paper/`, `/en/brochure/`. Kapağa tıklayınca kapak görseli sayfanın içine doğru büyüyerek açılıyor (paylaşılan view-transition-name), sayfalar kaydırırken perspektifle geliyor. İndirmeler sayfanın diline göre.
