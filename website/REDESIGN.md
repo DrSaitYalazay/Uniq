@@ -78,7 +78,7 @@ Durum işaretleri: `[x]` bu turda uygulandı · `[~]` kısmen · `[ ]` sonraki t
 ### 2.11 Erişilebilirlik ve performans (premium'un görünmeyen yarısı)
 - [x] Yeni animasyonların hepsi `prefers-reduced-motion`'da kapalı.
 - [x] Form: etiketler, `autocomplete`, `:user-invalid` ile etkileşimden sonra hata, `aria-invalid` eşlemesi, odak yönetimi (`<dialog>`).
-- [x] Yeni fontlar ~94 KB; yalnızca başlık fontu ön yükleniyor.
+- [x] Yeni fontlar toplam ~70 KB (Inter Display 500, Instrument Serif İtalik, JetBrains Mono 400). Lighthouse mobil (yerel): eski 94 → yeni 93, CLS 0,002. Ölçüm sırasında görülen gerilemeyi (89, CLS 0,23) gidermek için yedek fontlar ölçülerek ayarlandı ve kesit sayısı azaltıldı.
 - [ ] Mobil LCP < 2,5 sn hedefi (şu an ~3,0 sn). *Gerekçe: ayrı ölçüm turu.*
 
 ## 3. Sonraki tur (bu turda yapılmadı)
