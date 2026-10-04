@@ -53,6 +53,9 @@ import { LegalBadges } from "@/components/LegalBadges";
 
 import { CHART_EMPTY, CHART_IMPL, CHART_STATUS } from "@/lib/chartPalette";
 import { insideSliceLabel } from "@/lib/chartLabels";
+import { isoRefOf, isoRefOfMany, isoThemeOf, isoThemeOfMany, type IsoTheme } from "@/data/isoThemes";
+import { annexBucketLabel, annexFamilyLabel } from "@/data/isoAnnexMap";
+import { IsoThemeGroups, type ThemeTopic } from "@/components/assessment/IsoThemeGroups";
 const STATUS_META: Record<ImplStatus, { de: string; en: string; color: string; Icon: any }> = {
   offen:      { de: "Offen",     en: "Open",       color: "text-muted-foreground", Icon: Circle },
   laufend:    { de: "Laufend",   en: "In progress", color: "st-teilweise-text",        Icon: Loader2 },
@@ -350,7 +353,6 @@ interface AuditActionLite { id: string; framework: string; controlId: string; co
  *  KVP-Schleife: Abhaken hier schließt den Audit-Befund (Sync in AuditWorkbench);
  *  Owner + Frist werden je Maßnahme gepflegt; „Zur Aufgabe" springt auf die Aufgabenzeile. */
 // UniqSuite-Überblick „Maßnahmen": allgemein halten — Details stehen im Detail-Modus.
-const TOP_THEMEN = 5;
 const SHOW_EVIDENCE_BAR = false;
 
 function AuditActionsCard({ de, actions, setActions, people, onAddPerson, onFocus, compact = false, onShowAll }: {
@@ -1065,6 +1067,35 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
     return [...m.entries()].sort((a, b) => a[0].localeCompare(b[0], de ? "de" : "en"));
   }, [view, activeKeys, ctrlIndex, de, deltaGruppe]);
 
+  /** Überblick: Aufgaben je ISO-27001-Bereich (Kap. 4–10, A.5–A.8) und darin je Thema. */
+  const themenIso = useMemo(() => {
+    const m = new Map<IsoTheme, Map<string, { done: number; total: number }>>();
+    const dazu = (th: IsoTheme, label: string, fertig: boolean) => {
+      const inner = m.get(th) ?? m.set(th, new Map()).get(th)!;
+      const e = inner.get(label) ?? inner.set(label, { done: 0, total: 0 }).get(label)!;
+      e.total++; if (fertig) e.done++;
+    };
+    // Thema im Bereich = die ISO-Referenz der Aufgabe (Anhang-A-Kontrolle bzw. Kapitel 4–10);
+    // nur Aufgaben ohne ISO-Bezug behalten ihr bisheriges Thema.
+    const lang = de ? "de" : "en";
+    const ohneIso = (fw: string | undefined) =>
+      `${(fw && fwDef(fw)?.short) || fw || ""} · ${de ? "ohne direkte ISO-Entsprechung" : "no direct ISO counterpart"}`;
+    const thema = (ref: string | undefined, fw: string | undefined) =>
+      !ref ? ohneIso(fw) : ref.startsWith("A.") ? annexBucketLabel(ref, lang) : annexFamilyLabel(ref.split(".")[0], lang);
+    for (const t of view.shared) {
+      const ids = t.memberControlIds ?? [];
+      const th = isoThemeOfMany(ids);
+      dazu(th, thema(isoRefOfMany(ids, th), t.frameworks?.[0]), effStatus(t.bundle_key, ids) === "fertig");
+    }
+    for (const fw of activeKeys) for (const t of (view.deltaByFramework[fw] ?? [])) {
+      const th = isoThemeOf(t.control_id);
+      dazu(th, thema(isoRefOf(t.control_id), t.framework), effStatus(t.bundle_key, (t as any).memberControlIds ?? []) === "fertig");
+    }
+    const out = new Map<IsoTheme, ThemeTopic[]>();
+    for (const [th, inner] of m) out.set(th, [...inner.entries()].map(([label, e]) => ({ label, num: e.done, den: e.total, ratio: `${e.done}/${e.total}` })));
+    return out;
+  }, [view, activeKeys, de, effStatus]);
+
   const summary = useMemo(() => {
     const counts = { offen: 0, laufend: 0, fertig: 0, blockiert: 0 };
     const track = (k: string) => counts[getStatus(k)]++;
@@ -1307,13 +1338,6 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
             ];
             const tot = Math.max(1, ctrlApp);
             const pieData = seg.filter(s => s.n > 0);
-            // Überblick: Themen nach Fortschritt aufsteigend — nur die schwächsten werden gezeigt.
-            const themen = gruppenFortschritt
-              .map(([gLabel, items]) => {
-                const done = items.filter(i => effStatus(i.bundle_key, (i as any).memberControlIds ?? []) === "fertig").length;
-                return { gLabel, items, done, pct: items.length ? Math.round((done / items.length) * 100) : 0 };
-              })
-              .sort((a, b) => a.pct - b.pct);
 
             // ── DETAIL: ein Streifen, keine Auswertung ──────────────────────
             // Dieselben Zahlen wie im Überblick, aber eine Zeile statt fünf
@@ -1501,61 +1525,9 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     </div>
                   </div>
                 )}
-                {gruppenFortschritt.length > 0 && (
-                  <div className="space-y-2">
-                    <div className="text-sm font-semibold text-foreground">
-                      {de ? "Themen mit dem größten Rückstand" : "Topics furthest behind"}
-                      <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {de ? "— Anteil erledigter Aufgaben" : "— share of tasks done"}
-                      </span>
-                    </div>
-                    {themen.slice(0, TOP_THEMEN).map(({ gLabel, items, done, pct }) => {
-                      // Schwellenfarbe aus der Palette, nicht als feste Klasse:
-                      // im Themen-Modus („mono") folgen Balken und Kachel damit
-                      // der gewählten Farbe, im Ampel-/Hybrid-Modus bleiben sie
-                      // grün/gelb/rot. Vorher waren sie fest verdrahtet und
-                      // blieben beim Themenwechsel amber.
-                      const barColor = pct >= 75 ? CHART_STATUS.ja
-                        : pct >= 40 ? CHART_STATUS.teilweise
-                        : pct > 0 ? CHART_STATUS.nein
-                        : CHART_STATUS.na;
-                      const neutral = pct === 0;
-                      return (
-                        <div key={gLabel} className="flex items-center gap-4 rounded-xl border border-border bg-card px-3 py-2.5 hover:border-accent hover:shadow-sm transition-all">
-                          <span className="text-sm md:text-base text-foreground flex-1 min-w-0 truncate font-semibold" title={gLabel}>
-                            {gLabel}
-                          </span>
-                          <div className="w-28 sm:w-44 h-2.5 rounded-full bg-muted overflow-hidden shrink-0">
-                            <div className="h-full rounded-full transition-all duration-500"
-                                 style={{ width: `${Math.max(pct, 2)}%`, background: barColor }} />
-                          </div>
-                          <div className="shrink-0 rounded-lg border px-2.5 py-1 text-right leading-tight"
-                               style={neutral ? undefined : {
-                                 borderColor: `color-mix(in srgb, ${barColor} 45%, transparent)`,
-                                 background: `color-mix(in srgb, ${barColor} 8%, transparent)`,
-                                 color: barColor,
-                               }}>
-                            <span className="text-base font-bold tabular-nums">{pct}%</span>
-                            <span className="block text-[10px] text-muted-foreground tabular-nums">{done}/{items.length}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                    {themen.length > TOP_THEMEN && (
-                      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-sm">
-                        <span className="text-muted-foreground">
-                          {de ? `${themen.length} Themen: ` : `${themen.length} topics: `}
-                          <b className="st-ja-text">{themen.filter(t => t.pct >= 75).length} {de ? "gut" : "good"}</b>{" · "}
-                          <b className="st-teilweise-text">{themen.filter(t => t.pct >= 40 && t.pct < 75).length} {de ? "in Arbeit" : "in progress"}</b>{" · "}
-                          <b className="st-nein-text">{themen.filter(t => t.pct < 40).length} {de ? "kritisch" : "critical"}</b>
-                        </span>
-                        <button type="button" onClick={() => setMode("expert")} className="text-xs font-semibold text-accent-readable hover:underline">
-                          {de ? "Alle Themen im Detail →" : "All topics in Detail →"}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
+                {/* UniqSuite-Überblick: Fortschritt in der Gliederung von ISO/IEC 27001 —
+                    5 Bereiche zugeklappt, Themen beim Aufklappen. Gilt für alle Frameworks. */}
+                {themenIso.size > 0 && <IsoThemeGroups de={de} topics={themenIso} />}
                 {mode !== "expert" && (
                   <div className="text-[11px] text-muted-foreground border-t border-border pt-2">
                     {de ? "Zum Setzen von Status, Verantwortlichen und Terminen auf " : "To set status, owners and dates, switch to "}
