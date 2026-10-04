@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import type { Lang } from '../config';
+interface Props { lang: Lang; path: string; altPath: string; title: string; description: string }
+const { lang, path, altPath, title, description } = Astro.props;
+---
+<Base lang={lang} path={path} altPath={altPath} title={`${title} – UniqSuite`} description={description}>
+  <section class="legal"><div class="wrap"><article class="doc">
+    <h1>{title}</h1>
+    <slot />
+  </article></div></section>
+</Base>

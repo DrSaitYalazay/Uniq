@@ -1,0 +1,11 @@
+---
+// UniqSuite-App-Icon („U“), aus den Markenunterlagen (logo.svg der App)
+interface Props { id?: string; size?: number }
+const { id = 'lg', size = 34 } = Astro.props;
+---
+<svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+  <defs><linearGradient id={id} x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse"><stop stop-color="#3DBE86"/><stop offset="1" stop-color="#157A50"/></linearGradient></defs>
+  <rect x="3" y="3" width="34" height="34" rx="10" fill={`url(#${id})`}/>
+  <path d="M13 11.5V21a7 7 0 0 0 14 0v-4" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>
+  <circle cx="27" cy="10.6" r="3.1" fill="#143264" stroke="#fff" stroke-width="1.4"/>
+</svg>
