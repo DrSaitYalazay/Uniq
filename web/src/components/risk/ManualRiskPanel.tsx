@@ -44,7 +44,7 @@ export function ManualRiskPanel({ risks, config, de, onAdd, onEdit, onDelete }: 
         </div>
         <Button size="sm" variant="outline" className="h-7 text-[11px] gap-1" onClick={onAdd}>
           <Plus className="h-3 w-3" />
-          {de ? "+ Eigenes Risiko" : "+ Custom risk"}
+          {de ? "Eigenes Risiko" : "Custom risk"}
         </Button>
       </div>
 
