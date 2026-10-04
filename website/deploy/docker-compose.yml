@@ -10,6 +10,10 @@ services:
     user: "65534:65534"
     read_only: true
     cap_drop: [ALL]
+    # Das offizielle Caddy-Image setzt auf /usr/bin/caddy die Datei-Capability cap_net_bind_service
+    # (setcap ...=+ep). Fehlt sie im Bounding-Set (cap_drop ALL), verweigert der Kernel den Start
+    # (EPERM, Container startet in Schleife neu). Daher genau diese eine Capability zurück.
+    cap_add: [NET_BIND_SERVICE]
     security_opt:
       - no-new-privileges:true
     tmpfs:
