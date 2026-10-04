@@ -28,6 +28,8 @@ const ogImage = new URL(`/og/og-${lang}.jpg`, SITE_URL).href;
 const deHref = new URL(lang === 'de' ? path : altPath, SITE_URL).href;
 const enHref = new URL(lang === 'en' ? path : altPath, SITE_URL).href;
 const navBase = home ? '' : `/${lang}/`;
+// Unterseiten markieren ihren Bereich in der Navigation
+const navCur = home ? '' : /\/(funktionen|features)\//.test(path) ? '#funktionen' : /\/(schritte|steps)\//.test(path) ? '#pdca' : /\/quick-check\//.test(path) ? '#quick-check' : '';
 const a = t.anfrage;
 const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
 ---
@@ -80,7 +82,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
         <span>Uniq<span class="suite">Suite</span></span>
       </a>
       <nav class="site-nav" aria-label={t.nav.label}>
-        {t.nav.items.map((i) => <a href={`${navBase}${i.href}`}>{i.label}</a>)}
+        {t.nav.items.map((i) => <a href={`${navBase}${i.href}`} aria-current={i.href === navCur ? 'location' : undefined}>{i.label}</a>)}
       </nav>
       <div class="header-actions">
         <a class="lang" href={altPath} hreflang={altLang} lang={altLang} data-lang-switch aria-label={t.nav.langSwitchLabel}>{altLang.toUpperCase()}</a>
