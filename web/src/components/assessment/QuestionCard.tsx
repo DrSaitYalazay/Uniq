@@ -132,7 +132,7 @@ export function QuestionCard({ controls, effective, de, isMust, onSetStatus, onS
               return (
                 <button key={a.value} type="button" onClick={() => answer(a.value)} aria-pressed={active}
                   className={`h-12 rounded-xl border text-sm font-semibold transition-all ${
-                    active ? `${a.cls} ring-2 ring-offset-1 ring-offset-card shadow` : "border-border bg-background text-foreground hover:bg-muted/60"
+                    active ? `${a.cls} ring-2 ring-current ring-offset-1 ring-offset-card shadow` : "border-border bg-background text-foreground hover:bg-muted/60"
                   }`}>
                   <span className="mr-1.5">{a.icon}</span>{de ? a.de : a.en}
                 </button>
