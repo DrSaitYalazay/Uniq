@@ -1398,7 +1398,7 @@ export default function Implementation({ embedded = false }: { embedded?: boolea
                     <ResponsiveContainer>
                       <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
                         <Pie data={pieData} dataKey="n" nameKey="label" cx="50%" cy="50%"
-                             innerRadius={58} outerRadius={100} paddingAngle={2}
+                             innerRadius={58} outerRadius={100} paddingAngle={2} isAnimationActive={false}
                              labelLine={false}
                              label={insideSliceLabel("percent", 0.06)}>
                           {pieData.map((s, i) => <Cell key={i} fill={s.color} stroke="hsl(var(--card))" strokeWidth={2} />)}
