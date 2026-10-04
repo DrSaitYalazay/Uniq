@@ -29,7 +29,9 @@ async function processQueue(queue) {
       const p = m.message || {};
       const { subject, html } = renderTemplate(p.template_name, p.variables || {});
       if (process.env.SMTP_HOST) {
-        await transporter.sendMail({ from: FROM, to: p.recipient_email, subject, html });
+        // reply_to nur, wenn es eine schlichte Adresse ist (Website-Anfrage: bereits geprüft).
+        const replyTo = typeof p.reply_to === 'string' && /^[^\s@<>,;"]+@[^\s@<>,;"]+$/.test(p.reply_to) ? p.reply_to : undefined;
+        await transporter.sendMail({ from: FROM, to: p.recipient_email, subject, html, ...(replyTo ? { replyTo } : {}) });
       } else {
         console.log(`[email:dev] -> ${p.recipient_email} | ${subject}`); // SMTP yoksa logla
       }
