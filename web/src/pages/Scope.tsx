@@ -17,6 +17,7 @@ import { useAssessmentMode } from "@/hooks/useAssessmentMode";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { emitFrameworksUpdated } from "@/lib/frameworkBus";
+import { isFrameworkVisible, visibleFrameworkCodes } from "@/config/uniqFeatures";
 
 
 import AccentColorPicker from "@/components/AccentColorPicker";
@@ -249,7 +250,8 @@ const Scope = () => {
         .from("frameworks")
         .select("code, name_de, name_en, role, sort_order")
         .order("sort_order", { ascending: true, nullsFirst: false });
-      setFrameworks((data as FrameworkRow[]) ?? []);
+      // UniqSuite: nur freigegebene Frameworks sind wählbar (config/uniqFeatures).
+      setFrameworks(((data as FrameworkRow[]) ?? []).filter(fw => isFrameworkVisible(fw.code)));
     })();
   }, []);
 
@@ -274,7 +276,7 @@ const Scope = () => {
         company_size: row.company_size ?? "",
         employee_count: row.employee_count,
         annual_revenue: row.annual_revenue,
-        enabled_frameworks: row.enabled_frameworks ?? [],
+        enabled_frameworks: visibleFrameworkCodes(row.enabled_frameworks ?? []),
         kritis_sub_sectors: row.kritis_sub_sectors ?? [],
       });
     }
@@ -769,8 +771,8 @@ const Scope = () => {
                   AI: {
                     de: "KI-Governance",
                     en: "AI Governance",
-                    descDe: "Wählen Sie einen oder mehrere KI-Standards. Kombinieren Sie EU-Recht (AI Act) mit einem zertifizierbaren Management­system (ISO 42001) und/oder dem US-Framework (NIST AI RMF).",
-                    descEn: "Pick one or more AI standards. Combine EU law (AI Act) with a certifiable management system (ISO 42001) and/or the US framework (NIST AI RMF).",
+                    descDe: "Wählen Sie einen oder beide KI-Standards: EU-Recht (AI Act) und/oder das zertifizierbare Management­system (ISO 42001).",
+                    descEn: "Pick one or both AI standards: EU law (AI Act) and/or the certifiable management system (ISO 42001).",
                     children: ["AIACT", "ISO42001", "NIST_AI_RMF"],
                   },
                   PRIVACY: {
@@ -789,6 +791,11 @@ const Scope = () => {
                   },
                 };
 
+                // UniqSuite: ausgeblendete Frameworks aus den Gruppen entfernen, leere Gruppen ganz weglassen.
+                for (const k of Object.keys(GROUPS)) {
+                  GROUPS[k].children = GROUPS[k].children.filter(c => isFrameworkVisible(c));
+                  if (GROUPS[k].children.length === 0) delete GROUPS[k];
+                }
                 const groupedCodes = new Set(Object.values(GROUPS).flatMap(g => g.children));
                 const soloFrameworks = frameworks.filter(fw => !groupedCodes.has(fw.code));
                 const childMeta = (code: string) => frameworks.find(f => f.code === code);
