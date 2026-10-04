@@ -38,7 +38,9 @@ function wrapWords(el: HTMLElement) {
 export function initFx() {
   if (reduced || !('IntersectionObserver' in window)) return;
 
-  const heads = Array.from(document.querySelectorAll<HTMLElement>('[data-split]'));
+  // Überschriften bleiben immer sichtbar (keine Wort-Enthüllung mehr: nichts soll
+  // verschwinden oder erst beim Scrollen auftauchen).
+  const heads: HTMLElement[] = [];
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
@@ -78,4 +80,45 @@ export function initFx() {
   }, { threshold: 0.6 });
   // nur Zahlen unterhalb des ersten Bildschirms (sonst springt die Zahl sichtbar auf 0)
   nums.filter((n) => n.getBoundingClientRect().top >= innerHeight).forEach((n) => ioN.observe(n));
+}
+
+/**
+ * Drehauswahl der Regelwerke (Quick-Check): dreht sich langsam, hält bei Zeiger
+ * oder Fokus an. Pfeile drehen um eine Karte; eine fokussierte Karte dreht nach vorn.
+ * Bei reduzierter Bewegung zeigt CSS ein einfaches Raster.
+ */
+export function initCarousel() {
+  const car = document.querySelector<HTMLElement>('[data-carousel]');
+  const ring = car?.querySelector<HTMLElement>('.ring');
+  if (!car || !ring || reduced) return;
+  const items = Array.from(ring.querySelectorAll<HTMLElement>('.ring-item'));
+  const step = 360 / items.length;
+  let angle = 0;
+  ring.classList.add('spin');
+  const current = () => {
+    const m = new DOMMatrix(getComputedStyle(ring).transform);
+    return (Math.atan2(m.m31, m.m11) * 180) / Math.PI;
+  };
+  const stop = () => {
+    if (!ring.classList.contains('spin')) return;
+    angle = current();
+    ring.classList.remove('spin');
+    ring.style.transition = 'none';
+    ring.style.transform = `rotateY(${angle}deg)`;
+    void ring.offsetWidth;
+    ring.style.transition = '';
+  };
+  const turnTo = (target: number) => {
+    stop();
+    // kürzester Weg
+    while (target - angle > 180) target -= 360;
+    while (target - angle < -180) target += 360;
+    angle = target;
+    ring.style.transform = `rotateY(${angle}deg)`;
+  };
+  car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {
+    stop();
+    turnTo(Math.round(angle / step) * step - Number(b.dataset.car) * step);
+  }));
+  items.forEach((it, k) => it.addEventListener('focusin', () => turnTo(-k * step)));
 }
