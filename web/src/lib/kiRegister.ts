@@ -117,7 +117,7 @@ export async function exportRegisterXlsx(systeme: KiSystem[], de: boolean, compa
   ws.addRow(["Nr.", ...kopf]);
   const h = ws.getRow(1);
   h.font = { bold: true, color: { argb: "FFFFFFFF" } };
-  h.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF2B1F6B" } };
+  h.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF143264" } };
   h.alignment = { vertical: "middle", wrapText: true };
   systeme.forEach((s, i) => ws.addRow([i + 1, ...systemFelder(s, de).map(([, v]) => v)]));
   ws.columns.forEach((c, i) => { c.width = i === 0 ? 6 : [2, 14, 15].includes(i) ? 50 : 24; c.alignment = { wrapText: true, vertical: "top" }; });
