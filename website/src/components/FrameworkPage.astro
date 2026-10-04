@@ -1,0 +1,132 @@
+---
+/**
+ * Seite zu einem Regelwerk: was es ist, für wen es gilt, was es verlangt, welche Fristen laufen.
+ * Kein Quick-Check-Einstieg (dafür gibt es den eigenen Abschnitt), dafür Fakten, Fristen und FAQ.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import Portal from './Portal.astro';
+import { photos, photoSrc } from '../data/photos';
+import { demoHref, SITE_URL, type Lang } from '../config';
+import { frameworks, fwOrder, fwHref, type Fw } from '../data/frameworks';
+import de from '../i18n/de';
+import en from '../i18n/en';
+
+interface Props { lang: Lang; fw: Fw }
+const { lang, fw } = Astro.props;
+const t = lang === 'de' ? de : en;
+const list = frameworks[lang];
+const f = list.find((x) => x.fw === fw)!;
+const other = lang === 'de' ? 'en' : 'de';
+const path = fwHref(lang, fw);
+const altPath = fwHref(other, fw);
+const n = t.regelwerke.items.find((x) => x.fw === fw)?.n ?? 0;
+const short = (x: Fw) => t.skyline.towers.find((y) => y.fw === x)?.label ?? x;
+const L = lang === 'de'
+  ? { all: 'Die fünf Regelwerke', facts: 'Auf einen Blick', dates: 'Fristen und Termine', help: 'So hilft UniqSuite', req: 'prüfbare Anforderungen in UniqSuite', faq: 'Häufige Fragen', more: 'Weitere Regelwerke', src: 'Quellen', note: 'Stand Oktober 2026. Diese Seite gibt einen Überblick und ersetzt keine rechtliche Prüfung im Einzelfall.', ctaH: 'Sehen Sie, was davon bei Ihnen offen ist.', ctaT: 'In einer halben Stunde zeigen wir Ihnen, wie UniqSuite die Anforderungen ordnet, Lücken sichtbar macht und Nachweise erzeugt.', home: 'Startseite', rw: 'Regelwerke' }
+  : { all: 'The five frameworks', facts: 'At a glance', dates: 'Deadlines and dates', help: 'How UniqSuite helps', req: 'testable requirements in UniqSuite', faq: 'Frequently asked questions', more: 'Other frameworks', src: 'Sources', note: 'As of October 2026. This page gives an overview and does not replace a legal assessment of your case.', ctaH: 'See what is still open for you.', ctaT: 'In half an hour we show you how UniqSuite organises the requirements, makes gaps visible and produces evidence.', home: 'Home', rw: 'Frameworks' };
+const ph = photos[({ nis2: 'briefing', iso27001: 'audit', aiact: 'it', iso42001: 'collab', cra: 'strategy' } as const)[fw]];
+const url = (p: string) => new URL(p, SITE_URL).href;
+const jsonld = [
+  { '@context': 'https://schema.org', '@type': 'WebPage', name: `${f.name}: ${f.sub}`, description: f.lead, inLanguage: lang, url: url(path), isPartOf: { '@type': 'WebSite', name: 'UniqSuite', url: url(`/${lang}/`) }, about: { '@type': 'Thing', name: f.name } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: L.home, item: url(`/${lang}/`) },
+    { '@type': 'ListItem', position: 2, name: L.rw, item: url(`/${lang}/#regelwerke`) },
+    { '@type': 'ListItem', position: 3, name: f.name, item: url(path) },
+  ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: f.faq.map((x) => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base lang={lang} path={path} altPath={altPath} title={`${f.title}: ${f.sub.replace(/\.$/, '')} – UniqSuite`} description={f.lead} jsonld={jsonld}>
+  <Fragment slot="world">
+    <picture>
+      <source media="(max-width: 820px)" srcset="/img/still/regelwerke-m.webp" type="image/webp" width="720" height="1280" />
+      <img class="poster sub" src="/img/still/regelwerke-d.webp" width="1600" height="900" alt="" decoding="async" />
+    </picture>
+  </Fragment>
+
+  <article class={`sp fwp fw-${fw}`}>
+    <nav class="wrap fwp-nav" aria-label={L.all}>
+      {fwOrder.map((x) => <a class={`fw-${x}`} href={fwHref(lang, x)} aria-current={x === fw ? 'page' : undefined}><i></i>{short(x)}</a>)}
+    </nav>
+
+    <header class="wrap fwp-head">
+      <div>
+        <p class="kicker">{f.kind}</p>
+        <h1>{f.title} <span class="accent">{f.sub}</span></h1>
+        <p class="lead">{f.lead}</p>
+      </div>
+      <Portal size="lg"><b class="pn">{n}</b><small>{L.req}</small></Portal>
+    </header>
+
+    <!-- Auf einen Blick -->
+    <section class="wrap sp-block" aria-labelledby="fwp-facts">
+      <h2 id="fwp-facts" class="sp-h">{L.facts}</h2>
+      <dl class="fwp-facts">
+        {f.facts.map((x) => <div><dt>{x.k}</dt><dd>{x.v}</dd></div>)}
+      </dl>
+    </section>
+
+    <!-- Für wen -->
+    <section class="wrap sp-block fwp-who" aria-labelledby="fwp-who">
+      <div>
+        <h2 id="fwp-who" class="sp-h">{f.whoTitle}</h2>
+        <ul class="fwp-list">{f.who.map((x) => <li><Icon name="check" /><span>{x}</span></li>)}</ul>
+      </div>
+      <figure class="photo-frame"><img src={photoSrc(ph).src} srcset={photoSrc(ph).srcset} sizes="(max-width: 820px) 92vw, 44vw" width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={ph.alt[lang]} /></figure>
+    </section>
+
+    <!-- Was verlangt wird -->
+    <section class="wrap sp-block" aria-labelledby="fwp-what">
+      <h2 id="fwp-what" class="sp-h">{f.whatTitle}</h2>
+      <ul class="fp-can fwp-what">{f.what.map((x, k) => <li><span>{String(k + 1).padStart(2, '0')}</span><h3>{x.h}</h3><p>{x.t}</p></li>)}</ul>
+    </section>
+
+    <!-- Fristen als Zeitleiste -->
+    <section class="wrap sp-block fwp-dates" aria-labelledby="fwp-dates">
+      <h2 id="fwp-dates" class="sp-h">{L.dates}</h2>
+      <ol class="hon-tl tl-v">{f.dates.map((x) => <li><span class="hn"></span><time>{x.d}</time><p>{x.t}</p></li>)}</ol>
+    </section>
+
+    <!-- So hilft UniqSuite -->
+    <section class="wrap sp-block fwp-help" aria-labelledby="fwp-help">
+      <div class="fwp-num"><b>{n}</b><span>{L.req}</span></div>
+      <div>
+        <h2 id="fwp-help" class="sp-h">{L.help}</h2>
+        <p>{f.overlap}</p>
+      </div>
+    </section>
+
+    <!-- Häufige Fragen -->
+    <section class="wrap sp-block" aria-labelledby="fwp-faq">
+      <h2 id="fwp-faq" class="sp-h">{L.faq}</h2>
+      <div class="fwp-faq">
+        {f.faq.map((x, k) => <details open={k === 0}><summary>{x.q}<Icon name="down" /></summary><p>{x.a}</p></details>)}
+      </div>
+    </section>
+
+    <!-- Weitere Regelwerke -->
+    <nav class="wrap sp-block" aria-labelledby="fwp-more">
+      <h2 id="fwp-more" class="sp-h">{L.more}</h2>
+      <ul class="fwp-more">
+        {fwOrder.filter((x) => x !== fw).map((x) => {
+          const o = list.find((y) => y.fw === x)!;
+          return <li class={`fw-${x}`}><a href={fwHref(lang, x)}><Portal><b class="pn pn-s">{short(x)}</b></Portal><span>{o.sub}</span></a></li>;
+        })}
+      </ul>
+    </nav>
+
+    <section class="wrap sp-cta">
+      <h2>{L.ctaH}</h2>
+      <p>{L.ctaT}</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={demoHref(lang)} data-anfrage>{t.nav.demo}<Icon name="arrow" /></a>
+      </div>
+    </section>
+
+    <footer class="wrap fwp-src">
+      <p><b>{L.src}:</b> {f.sources.join(' · ')}</p>
+      <p>{L.note}</p>
+    </footer>
+  </article>
+</Base>

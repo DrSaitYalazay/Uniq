@@ -9,6 +9,7 @@ import { stepHref } from '../data/steps';
 import { features, featureHref } from '../data/features';
 import Viz from './Viz.astro';
 import Portal from './Portal.astro';
+import { fwHref, type Fw } from '../data/frameworks';
 import { photos, photoSrc } from '../data/photos';
 import { docInfo } from '../data/docs';
 
@@ -115,7 +116,7 @@ const clientData = {
         </div>
         <p class="cta-note">{t.hero.ctaNote}</p>
         <ul class="hero-fw" aria-label={t.regelwerke.kicker}>
-          {t.regelwerke.items.map((f) => <li class={`fw-${f.fw}`}><a href="#regelwerke"><i></i><b>{t.skyline.towers.find((x) => x.fw === f.fw)?.label ?? f.name}</b><span>{f.n} {t.regelwerke.req.replace('{n} ', '')}</span></a></li>)}
+          {t.regelwerke.items.map((f) => <li class={`fw-${f.fw}`}><a href={fwHref(lang, f.fw as Fw)}><i></i><b>{t.skyline.towers.find((x) => x.fw === f.fw)?.label ?? f.name}</b><span>{f.n} {t.regelwerke.req.replace('{n} ', '')}</span></a></li>)}
         </ul>
       </div>
     </div></div>
@@ -148,7 +149,7 @@ const clientData = {
               <div class="rw-txt">
                 <p class="rw-kind">{f.kind}</p>
                 <h3>{f.name}</h3>
-                <a class="rw-go" href={`/${lang}/quick-check/${f.fw}/`}>{t.regelwerke.check}<Icon name="arrow" /></a>
+                <a class="rw-go" href={fwHref(lang, f.fw as Fw)}>{t.regelwerke.more}<Icon name="arrow" /></a>
               </div>
             </li>
           ))}
