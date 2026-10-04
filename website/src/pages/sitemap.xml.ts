@@ -1,5 +1,13 @@
 import { SITE_URL } from '../config';
-const pairs: [string, string][] = [['/de/', '/en/'], ['/de/datenschutz/', '/en/privacy/'], ['/de/barrierefreiheit/', '/en/accessibility/']];
+import { steps, stepHref } from '../data/steps';
+import { features, featureHref } from '../data/features';
+const pairs: [string, string][] = [
+  ['/de/', '/en/'],
+  ...steps.de.map((_, i): [string, string] => [stepHref('de', i), stepHref('en', i)]),
+  ...features.de.map((_, i): [string, string] => [featureHref('de', i), featureHref('en', i)]),
+  ['/de/datenschutz/', '/en/privacy/'],
+  ['/de/barrierefreiheit/', '/en/accessibility/'],
+];
 export function GET() {
   const url = (p: string) => new URL(p, SITE_URL).href;
   const entries = pairs.flatMap(([de, en]) => [de, en].map((p) => `  <url>

@@ -17,6 +17,7 @@ import adminResetMfa from './admin-reset-mfa.js';
 import adminSetLicense from './admin-set-license.js';
 import orgTeam from './org-team.js';
 import adminSettings from './admin-settings.js';
+import websiteAnfrage from './website-anfrage.js';
 
 export const functionsRouter = Router();
 
@@ -38,3 +39,5 @@ mount('admin-reset-mfa', adminResetMfa);
 mount('admin-set-license', adminSetLicense);
 mount('org-team', orgTeam);
 mount('admin-settings', adminSettings);
+// Öffentlich: Demo-Anfrage aus der Marketing-Website (eigene Bremse in der Funktion)
+mount('website-anfrage', websiteAnfrage);

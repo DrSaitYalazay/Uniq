@@ -1,11 +1,14 @@
 # Açık işler – UniqSuite web sitesi
 
-Son güncelleme: 4 Ekim 2026
+Son güncelleme: 4 Ekim 2026 (v3)
 
 ## Senin kararın / bilgin gerekenler
 
 - [ ] **Quick-Check soruları:** 59 soru, tablo halinde `webgenel/UniqSuite-Website-Konzept.html` dosyasında. Tablonun gözden geçirilip onaylanması gerekiyor.
-- [ ] **DEMO_URL:** randevu aracı henüz yok. Şimdilik buton `mailto:info@cyberwerksuite.com` adresine gidiyor (`src/config.ts`).
+- [x] **Demo vereinbaren:** buton artık site içinde form açıyor (Firma, Vorname, Nachname, geschäftliche E-Mail, Telefon opsiyonel). Mail info@cyberwerksuite.com'a gidiyor. JavaScript kapalıysa mailto bağlantısı yedek olarak çalışıyor.
+- [ ] Form: canlıda bir test talebi gönderilecek. Datenschutz'taki form bölümü taslak; onayın gerekiyor.
+- [ ] Tasarım: `REDESIGN.md` içindeki „sonraki tur“ maddeleri (v3 uygulandı).
+- [ ] Schritt-Seiten: Normbezüge fachlich gegenlesen (ISO 27001 Abschnitte, BSIG §§).
 - [ ] **Datenschutzerklärung ve Barrierefreiheitserklärung:** şablonlar hazır, hukuki metin TODO olarak işaretli.
   - Eksik bilgiler: sorumlu kişi, hosting firması ve AVV, denetim makamı, e-postaların saklama süresi.
 - [x] **White paper ve broşür:** § 38 BSIG ifadesi „umsetzen und überwachen“ olarak düzeltildi (DE/EN, 4 Ekim 2026); `public/docs/` ve marketing klasörü güncellendi.
@@ -14,8 +17,8 @@ Son güncelleme: 4 Ekim 2026
 ## Teknik
 
 - [ ] Uygulama (uniq.cyberwerk.online) `?lang=de|en` parametresini henüz okumuyor. Site parametreyi gönderiyor; uygulamada küçük bir ek gerekiyor.
-- [ ] **Uniq deposu, `website` dalı:** PR birleştirilince site otomatik yayınlanır (`.github/workflows/website.yml`). İlk yayında edge bloğu sunucudaki ClaudeCWS Caddyfile'ına otomatik eklenir.
-- [ ] Edge bloğu (`deploy/edge-block.caddy`) kalıcı olarak ClaudeCWS deposunun `Caddyfile`'ına da eklenecek. Aksi halde bir sonraki ClaudeCWS deploy'u bloğu siler.
+- [x] Site yayında (4 Ekim 2026). `website/**` altındaki her değişiklik otomatik yayınlanıyor.
+- [x] Edge bloğu ClaudeCWS deposunda (PR #1). Eski Caddyfile sorunu PR #2 ile çözüldü.
 - [ ] Cloudflare'de CAA kaydı açılacak (yalnızca letsencrypt.org).
 - [ ] Canlıda kontrol edilecekler: securityheaders.com, Mozilla Observatory, SSL Labs.
 - [ ] Gerçek cihazlarda test: iPhone Safari, Android Chrome, Firefox masaüstü. Headless testler yazılım tabanlı WebGL ile yapıldı.

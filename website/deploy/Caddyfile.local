@@ -15,6 +15,11 @@ import security-headers.caddy
 	@static path /fonts/* /img/* /docs/* /favicon.svg /og/*
 	header @static Cache-Control "public, max-age=604800"
 	redir / /de/ 301
+	# lokaler Test der Demo-Anfrage gegen eine lokal laufende API
+	handle /api/anfrage {
+		rewrite * /functions/website-anfrage
+		reverse_proxy 127.0.0.1:18080
+	}
 	try_files {path} {path}/index.html
 	file_server
 	handle_errors {

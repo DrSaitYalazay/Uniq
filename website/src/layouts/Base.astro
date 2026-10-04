@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import Icon from '../components/Icon.astro';
-import { SITE_URL, loginHref, demoHref, type Lang } from '../config';
+import { SITE_URL, loginHref, demoHref, CONTACT_EMAIL, type Lang } from '../config';
 import de from '../i18n/de';
 import en from '../i18n/en';
 
@@ -28,6 +28,10 @@ const ogImage = new URL(`/og/og-${lang}.jpg`, SITE_URL).href;
 const deHref = new URL(lang === 'de' ? path : altPath, SITE_URL).href;
 const enHref = new URL(lang === 'en' ? path : altPath, SITE_URL).href;
 const navBase = home ? '' : `/${lang}/`;
+// Unterseiten markieren ihren Bereich in der Navigation
+const navCur = home ? '' : /\/(funktionen|features)\//.test(path) ? '#funktionen' : /\/(schritte|steps)\//.test(path) ? '#pdca' : /\/quick-check\//.test(path) ? '#quick-check' : '';
+const a = t.anfrage;
+const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
 ---
 <!doctype html>
 <html lang={lang} dir="ltr">
@@ -45,8 +49,9 @@ const navBase = home ? '' : `/${lang}/`;
     <meta name="color-scheme" content="dark" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/fonts/inter-display-800.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-display-500.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="UniqSuite" />
     <meta property="og:title" content={title} />
@@ -76,14 +81,12 @@ const navBase = home ? '' : `/${lang}/`;
         <Logo id="lg-h" />
         <span>Uniq<span class="suite">Suite</span></span>
       </a>
-      {home && (
-        <nav class="site-nav" aria-label={t.nav.label}>
-          {t.nav.items.map((i) => <a href={`${navBase}${i.href}`}>{i.label}</a>)}
-        </nav>
-      )}
+      <nav class="site-nav" aria-label={t.nav.label}>
+        {t.nav.items.map((i) => <a href={`${navBase}${i.href}`} aria-current={i.href === navCur ? 'location' : undefined}>{i.label}</a>)}
+      </nav>
       <div class="header-actions">
         <a class="lang" href={altPath} hreflang={altLang} lang={altLang} data-lang-switch aria-label={t.nav.langSwitchLabel}>{altLang.toUpperCase()}</a>
-        <a class="btn btn-ghost btn-sm" href={demoHref(lang)} data-magnetic>{t.nav.demo}</a>
+        <a class="btn btn-ghost btn-sm" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
         <a class="btn btn-primary btn-sm" href={loginHref(lang)} data-magnetic><Icon name="login" />{t.nav.login}</a>
       </div>
       <i class="progress-line" data-progress></i>
@@ -114,6 +117,63 @@ const navBase = home ? '' : `/${lang}/`;
         </nav>
       </div>
     </footer>
+
+    <dialog class="anfrage" id="anfrage" aria-labelledby="af-title" data-af-dialog>
+      <div class="anfrage-in">
+        <button type="button" class="x" data-af-close aria-label={a.close}><Icon name="x" /></button>
+        <div data-af-form-wrap>
+          <p class="kicker"><span class="idx">→</span>{a.kicker}</p>
+          <h2 id="af-title">{a.title}</h2>
+          <p class="intro">{a.intro}</p>
+          <form data-af-form novalidate data-lang={lang} data-mail={CONTACT_EMAIL}
+            data-sending={a.sending} data-err-limit={a.errLimit} data-err-server={a.errServer}
+            data-err-business={a.errBusiness} data-err-email={a.errEmail} data-err-required={a.errRequired} data-err-phone={a.errPhone}>
+            <div class="af-grid">
+              <div class="af-field full">
+                <label for="af-company">{a.company}</label>
+                <input id="af-company" name="company" type="text" required minlength="2" maxlength="160" autocomplete="organization" aria-errormessage="af-company-err" />
+                <p class="af-err" id="af-company-err">{a.errRequired}</p>
+              </div>
+              <div class="af-field">
+                <label for="af-first">{a.firstName}</label>
+                <input id="af-first" name="firstName" type="text" required maxlength="80" autocomplete="given-name" aria-errormessage="af-first-err" />
+                <p class="af-err" id="af-first-err">{a.errRequired}</p>
+              </div>
+              <div class="af-field">
+                <label for="af-last">{a.lastName}</label>
+                <input id="af-last" name="lastName" type="text" required maxlength="80" autocomplete="family-name" aria-errormessage="af-last-err" />
+                <p class="af-err" id="af-last-err">{a.errRequired}</p>
+              </div>
+              <div class="af-field full">
+                <label for="af-email">{a.email}</label>
+                <input id="af-email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" spellcheck="false" aria-errormessage="af-email-err" />
+                <p class="af-err" id="af-email-err" data-af-email-err>{a.errEmail}</p>
+              </div>
+              <div class="af-field full">
+                <label for="af-phone">{a.phone} <em>{a.optional}</em></label>
+                <input id="af-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" aria-errormessage="af-phone-err" />
+                <p class="af-err" id="af-phone-err">{a.errPhone}</p>
+              </div>
+              <div class="af-hp" aria-hidden="true">
+                <label for="af-website">Website</label>
+                <input id="af-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+            </div>
+            <p class="af-note">{a.note} <a href={privacyHref}>{a.noteLink}</a>.</p>
+            <div class="af-actions">
+              <button type="submit" class="btn btn-primary" data-af-submit>{a.submit}<Icon name="arrow" /></button>
+              <p class="af-status" data-af-status role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+        <div class="af-done" data-af-done hidden>
+          <div class="ok"><Icon name="check" /></div>
+          <h2 tabindex="-1" data-af-done-title>{a.doneTitle}</h2>
+          <p>{a.doneText}</p>
+          <div class="af-actions"><button type="button" class="btn btn-ghost" data-af-close>{a.close}</button></div>
+        </div>
+      </div>
+    </dialog>
     <div class="grain" aria-hidden="true"></div>
     <script>
       import '../scripts/main.ts';

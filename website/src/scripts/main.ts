@@ -5,6 +5,8 @@
  */
 import Lenis from 'lenis';
 import { bus, state } from './state';
+import { initFx, initCarousel } from './fx';
+import { initAnfrage } from './anfrage';
 
 const root = document.documentElement;
 const params = new URLSearchParams(location.search);
@@ -88,6 +90,8 @@ function setActive(id: string) {
     const url = id && id !== 'wolke' ? `#${id}` : location.pathname + location.search;
     history.replaceState(history.state, '', url);
   }
+  document.querySelector('.rail')?.classList.toggle('off', !id);
+  root.classList.toggle('in-flow', id === 'prinzip' || id === 'funktionen');
   bus.emit('station', id);
 }
 
@@ -127,7 +131,7 @@ addEventListener('popstate', () => {
 });
 
 // ── Tastatur: Pfeile / Bild↑↓ springen zwischen Stationen ─────────────────
-const stops = ['wolke', 'konvergenz', 'stand', 'pdca', 'pdca-1', 'pdca-2', 'pdca-3', 'pdca-4', 'pdca-5', 'pdca-6', 'funktionen', 'fristen', 'zeitachse', 'regelwerke', 'quick-check']
+const stops = ['wolke', 'pdca', 'pdca-1', 'pdca-2', 'pdca-3', 'pdca-4', 'pdca-5', 'pdca-6', 'prinzip', 'funktionen', 'fristen', 'zeitachse', 'quick-check']
   .map((id) => document.getElementById(id))
   .filter((x): x is HTMLElement => !!x);
 
@@ -166,6 +170,9 @@ if (!reduced && matchMedia('(pointer: fine)').matches) {
 const dimEl = document.querySelector<HTMLElement>('.world .dim');
 const msEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ms]'));
 let lastMs = -1;
+const phEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ph]'));
+const stepsEl = document.querySelector<HTMLElement>('[data-steps]');
+let lastPh = -2;
 
 function tick(time: number) {
   lenis?.raf(time);
@@ -185,6 +192,13 @@ function tick(time: number) {
     setActive(id);
     // aktiver Meilenstein
     const ms = Math.round(Math.min(6, Math.max(0, (state.u - 14.6) / (17.6 - 14.6) * 6)));
+    // aktiver Schritt in der Liste „Sechs Schritte“ (folgt der Kamera)
+    const ph = state.u < 5.97 ? -1 : Math.round(Math.min(5, Math.max(0, state.u - 6)));
+    if (ph !== lastPh) {
+      lastPh = ph;
+      phEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ph) === ph));
+      stepsEl?.classList.toggle('has-active', ph >= 0);
+    }
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;
       msEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ms) === ms));
@@ -201,6 +215,9 @@ if (isHome) {
   addEventListener('resize', measure, { passive: true });
   addEventListener('load', measure);
 }
+initAnfrage();
+initFx();
+initCarousel();
 requestAnimationFrame(tick);
 (window as any).__uq = { state, uAt, measure };
 
@@ -245,8 +262,41 @@ function loadQc() {
   qcLoading ??= import('./qc/qc').then((m) => m.init());
   return qcLoading;
 }
-const qcEl = document.querySelector('[data-qc]');
-if (qcEl) {
+// ── Reiter in der Kopfzeile: aktiven Abschnitt markieren (auf Tablet/Handy sichtbar als Reiter) ──
+const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.site-nav a[href*="#"]'))
+  .map((a) => ({ a, el: document.getElementById(decodeURIComponent(a.hash.slice(1))) }))
+  .filter((x): x is { a: HTMLAnchorElement; el: HTMLElement } => !!x.el && new URL(x.a.href).pathname === location.pathname);
+const navBar = document.querySelector<HTMLElement>('.site-nav');
+let navActive: HTMLAnchorElement | null = null;
+// Unterseite: markierten Reiter sichtbar machen
+const navHere = document.querySelector<HTMLAnchorElement>('.site-nav a[aria-current="location"]');
+if (navHere && navBar && navBar.scrollWidth > navBar.clientWidth) navBar.scrollLeft = Math.max(0, navHere.offsetLeft - (navBar.clientWidth - navHere.offsetWidth) / 2);
+if (navLinks.length) {
+  const upd = () => {
+    const y = scrollY + innerHeight * 0.4;
+    let cur: HTMLAnchorElement | null = null;
+    for (const { a, el } of navLinks) if (el.getBoundingClientRect().top + scrollY <= y) cur = a;
+    if (cur === navActive) return;
+    navActive = cur;
+    navLinks.forEach(({ a }) => a.setAttribute('aria-current', a === cur ? 'true' : 'false'));
+    // aktiven Reiter in den sichtbaren Bereich der Leiste schieben (nur waagerecht)
+    if (cur && navBar && navBar.scrollWidth > navBar.clientWidth) {
+      const l = cur.offsetLeft - (navBar.clientWidth - cur.offsetWidth) / 2;
+      navBar.scrollTo({ left: Math.max(0, l), behavior: reduced ? 'auto' : 'smooth' });
+    }
+  };
+  addEventListener('scroll', upd, { passive: true });
+  addEventListener('resize', upd, { passive: true });
+  upd();
+}
+
+const qcEl = document.querySelector<HTMLElement>('[data-qc]');
+const qcBase = (() => { try { return JSON.parse(document.getElementById('uq-data')?.textContent || '{}').qcBase as string | undefined; } catch { return undefined; } })();
+// Eigene Quick-Check-Seite: direkt mit dem gewählten Regelwerk starten
+if (qcEl?.dataset.autostart) {
+  const fw = qcEl.dataset.autostart;
+  loadQc().then(() => bus.emit('qc:start', fw));
+} else if (qcEl) {
   const io = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) { loadQc(); io.disconnect(); }
   }, { rootMargin: '1200px 0px' });
@@ -255,9 +305,13 @@ if (qcEl) {
 // Turm-/Regelwerk-Buttons: Quick-Check direkt starten
 document.addEventListener('click', (e) => {
   const b = (e.target as Element).closest<HTMLElement>('[data-start]');
-  if (!b) return;
+  if (!b || !qcEl) return;
   e.preventDefault();
   const fw = b.dataset.start!;
   loadQc().then(() => bus.emit('qc:start', fw));
 });
-bus.on('world:tower', (fw) => loadQc().then(() => bus.emit('qc:start', fw)));
+// Klick auf einen Turm in der 3D-Szene: Quick-Check in neuem Tab (Startseite) bzw. direkt starten
+bus.on('world:tower', (fw) => {
+  if (qcEl) loadQc().then(() => bus.emit('qc:start', fw));
+  else if (qcBase) window.open(`${qcBase}${fw}/`, '_blank', 'noopener');
+});

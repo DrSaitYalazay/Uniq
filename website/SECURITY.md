@@ -73,6 +73,17 @@ Son güncelleme: 4 Ekim 2026
   - En fazla 7 gün saklanır.
 - [x] Datenschutzerklärung şablonu hazır (DE/EN): sunucu kayıtları, çerez yok, Quick-Check'in yerel çalışması, e-posta. Açık noktalar TODO olarak işaretli (bkz. TODO.md).
 
+## 4a · Demo-Anfrage formu (4 Ekim 2026)
+
+- [x] Site statik kalıyor; tek istisna `POST /api/anfrage`. Website Caddy'si yalnızca bu yolu, yalnızca POST ile ve en fazla 8 KB gövdeyle uygulamanın web konteynerine iletiyor. Cookie ve Authorization başlıkları silinerek gönderiliyor.
+- [x] CSP değişmedi: `connect-src 'self'` (aynı kaynak), `form-action 'none'` (gönderim fetch ile).
+- [x] Gerçek istemci IP'si: Website Caddy'si yalnızca Docker iç ağındaki edge Caddy'ye güveniyor (`trusted_proxies private_ranges`). Dışarıdan gönderilen sahte X-Forwarded-For dikkate alınmıyor.
+- [x] Sunucu tarafı denetim (`api/src/functions/website-anfrage.js`): alan uzunlukları, e-posta biçimi, freemail listesi, telefon biçimi. Kontrol karakterleri (CR/LF dahil) siliniyor, böylece mail başlığına enjeksiyon yapılamıyor. Mail şablonunda HTML kaçışı yapılıyor.
+- [x] Kötüye kullanım sınırları veritabanında tutuluyor (`auth.login_attempts`, kind=`anfrage`): IP başına saatte 5, adres başına günde 3, toplam günde 200 talep. Bu kayıtlar 30 gün sonra otomatik siliniyor.
+- [x] Bot filtresi: bal küpü alanı ve en kısa doldurma süresi. Yakalanan istek „başarılı“ yanıtı alıyor ama gönderilmiyor.
+- [x] Talep edene otomatik mail gitmiyor. Böylece form, üçüncü kişilere mail göndermek için kullanılamıyor.
+- [ ] Canlıda bir test talebi gönderilip mailin info@ adresine ulaştığı doğrulanacak. Uygulamada SMTP ayarlı olmalı.
+
 ## 5 · Sunucu ve DNS
 
 - [x] `/.well-known/security.txt` (iletişim: info@cyberwerksuite.com, geçerlilik: 1 Ekim 2027).

@@ -5,6 +5,11 @@
 	admin off
 	auto_https off
 	persist_config off
+	# Der Edge-Caddy (Docker-Netz) setzt X-Forwarded-For mit der echten Client-IP.
+	# Nur ihm wird vertraut; die App bremst Demo-Anfragen je IP.
+	servers {
+		trusted_proxies static private_ranges
+	}
 }
 
 import security-headers.caddy
@@ -25,6 +30,24 @@ import security-headers.caddy
 
 	# Deutsch ist Standard
 	redir / /de/ 301
+
+	# Demo-Anfrage (Formular): der EINZIGE Pfad, der an die App geht – nur POST,
+	# kleiner Body, ohne Cookies/Authorization. Ziel ist der Web-Container der App
+	# (nginx -> api /functions/website-anfrage) im gemeinsamen Netz uniqsuite_edge.
+	handle /api/anfrage {
+		@post method POST
+		handle @post {
+			request_body {
+				max_size 8KB
+			}
+			rewrite * /functions/website-anfrage
+			reverse_proxy uniqsuite-web:80 {
+				header_up -Cookie
+				header_up -Authorization
+			}
+		}
+		respond 405
+	}
 
 	# Nur GET/HEAD (statische Seite)
 	@notread not method GET HEAD

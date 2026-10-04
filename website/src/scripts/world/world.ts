@@ -118,7 +118,7 @@ export async function init(canvas: HTMLCanvasElement) {
     renderer.toneMapping = THREE.NoToneMapping;
     composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: tier >= 3 ? 4 : 0 });
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 1.25, radius: 0.75 });
+    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
     const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
     const tone = new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL });
     composer.addPass(new EffectPass(camera, bloom, vignette, tone));
@@ -202,11 +202,14 @@ export async function init(canvas: HTMLCanvasElement) {
   const place = (name: string, pos: THREE.Vector3, op: number) => {
     const el = lbl.get(name);
     if (!el) return;
+    op *= 1 - Math.min(1, state.dim * 1.4); // abgedunkelte Abschnitte: Beschriftungen ausblenden
     if (op < 0.01) { if (el.style.opacity !== '0') el.style.opacity = '0'; return; }
     v.copy(pos).project(camera);
     if (v.z > 1 || v.z < -1) { el.style.opacity = '0'; return; }
     const x = (v.x * 0.5 + 0.5) * innerWidth;
     const y = (-v.y * 0.5 + 0.5) * innerHeight;
+    // Desktop: die linke Spalte gehört dem Text, dort keine Beschriftungen der Szene
+    if (!portrait && name.startsWith('seg-') && x < innerWidth * 0.5) { el.style.opacity = '0'; return; }
     el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     el.style.opacity = op.toFixed(3);
   };
@@ -215,7 +218,7 @@ export async function init(canvas: HTMLCanvasElement) {
   const mouse = new THREE.Vector2(9, 9);
   const ndc = new THREE.Vector2();
   let pointerX = -1, pointerY = -1, overUi = true, pointerDirty = false;
-  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, .panel, .qc-card, .card, .site-header, .rail, .trust, .wp, .final, .site-footer');
+  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .steps-panel, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
   addEventListener('pointermove', (e) => {
     pointerX = e.clientX; pointerY = e.clientY; overUi = isUi(e.target); pointerDirty = true;
     ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
@@ -223,8 +226,12 @@ export async function init(canvas: HTMLCanvasElement) {
   addEventListener('pointerleave', () => { pointerX = -1; mouse.set(9, 9); });
   const ray = new THREE.Raycaster();
   let hoverTower = -1;
+  let hoverSeg = -1;
   addEventListener('click', (e) => {
-    if (hoverTower < 0 || isUi(e.target)) return;
+    if (isUi(e.target)) return;
+    // Schritt im Ring angeklickt: Seite zu diesem Schritt öffnen
+    if (hoverSeg >= 0 && data?.seg?.[hoverSeg]?.href) { location.href = data.seg[hoverSeg].href; return; }
+    if (hoverTower < 0) return;
     bus.emit('world:tower', S.towers[hoverTower].fw);
   });
 
@@ -276,6 +283,7 @@ export async function init(canvas: HTMLCanvasElement) {
   let lastPanel = -1;
   pathAt(uS, curP, curT);
 
+  const heroP = new THREE.Vector3(), heroT = new THREE.Vector3();
   const frame = (now: number) => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
@@ -292,6 +300,11 @@ export async function init(canvas: HTMLCanvasElement) {
 
     // Kamera
     pathAt(u, camP, camT);
+    // Startbild: der ganze Ring mit allen sechs Schritten im Blick
+    {
+      const hw = 1 - sstep(5.93, 6.08, u);
+      if (hw > 0.001) { heroP.set(portrait ? 0 : -3.2, 15, 19); heroT.set(portrait ? 0 : -3.2, -1.6, 0); camP.lerp(heroP, hw); camT.lerp(heroT, hw); }
+    }
     if (portrait) {
       // im Hochformat weiter zurück, damit alles ins Bild passt
       const k = 1.28 + 0.15 * band(12.4, 13, 14.2, 14.8, u) + 0.7 * sstep(17.4, 18.4, u);
@@ -336,6 +349,15 @@ export async function init(canvas: HTMLCanvasElement) {
     const ringOut = 1 - sstep(11.7, 12.6, u);
     R.group.visible = ringIn > 0.001 && ringOut > 0.001;
     R.group.rotation.x = (-Math.PI / 2) * sstep(4.85, 5.85, u);
+    // Startbild: Der Ring mit den sechs Schritten dreht sich langsam; zum ersten Schritt hin
+    // kehrt er auf dem kürzesten Weg in die Ausgangslage zurück.
+    {
+      const w = 1 - sstep(5.93, 6.05, u);
+      let a = ((time * 0.16) % (Math.PI * 2));
+      if (a > Math.PI) a -= Math.PI * 2;
+      R.group.rotation.z = stillU !== null ? 0 : a * w;
+      R.group.updateMatrixWorld();
+    }
     R.group.scale.setScalar(0.86 + 0.14 * ringIn);
     const fillT = sstep(3.85, 4.6, u);
     R.fill.material.uniforms.uFill.value = 0.59 * fillT;
@@ -354,13 +376,13 @@ export async function init(canvas: HTMLCanvasElement) {
       s.root.visible = open > 0.001 && ringOut > 0.001;
       const out = 0.55 * open;
       s.root.position.set(Math.cos(s.angle) * out, Math.sin(s.angle) * out, 0);
-      const isA = k === active && u > 5.6;
-      const target = (isA ? 1.6 : 0.5) * open * ringOut;
+      const isA = (k === active && u > 5.97) || k === hoverSeg;
+      const target = (isA ? 1.6 : u < 5.97 ? 1.05 : 0.5) * open * ringOut;
       s.core.material.opacity += (target - s.core.material.opacity) * 0.15;
       (s.glass.material as THREE.Material).opacity = (tier >= 3 ? 1 : 0.5) * open * ringOut;
     });
     // Screenshot-Platte vor dem aktiven Segment, zur Kamera gedreht
-    const panelVis = band(5.75, 6.15, 11.2, 11.65, u) * (portrait ? 0 : 1);
+    const panelVis = band(5.97, 6.25, 11.2, 11.65, u) * (portrait ? 0 : 1);
     R.panel.visible = panelVis > 0.001;
     if (R.panel.visible) {
       const th = Math.atan2(camera.position.x, camera.position.z);
@@ -370,7 +392,13 @@ export async function init(canvas: HTMLCanvasElement) {
       const dip = 1 - sstep(0.3, 0.5, Math.abs(frac));
       if (active !== lastPanel) { lastPanel = active; }
       R.setPanelTexture(active);
-      R.panel.material.uniforms.uOpacity.value = panelVis * dip;
+      // Desktop: das Bild nie über die Textspalte links legen
+      let side = 1;
+      if (!portrait) {
+        R.panel.getWorldPosition(v).project(camera);
+        side = clamp(((v.x * 0.5 + 0.5) - 0.5) / 0.08, 0, 1);
+      }
+      R.panel.material.uniforms.uOpacity.value = panelVis * dip * side;
       R.panel.material.uniforms.uTime.value = time;
     }
 
@@ -452,7 +480,17 @@ export async function init(canvas: HTMLCanvasElement) {
       pointerDirty = false;
       let tipSet = false;
       hoverTower = -1;
+      hoverSeg = -1;
       if (!overUi && pointerX >= 0) {
+        if (u > 5.8 && u < 11.7) {
+          ray.setFromCamera(ndc, camera);
+          const hits = ray.intersectObjects(R.segments.map((sg) => sg.glass), false);
+          if (hits.length) {
+            hoverSeg = R.segments.findIndex((sg) => sg.glass === hits[0].object);
+            const sd = data?.seg?.[hoverSeg];
+            if (sd) { setTip({ title: `${sd.n} ${sd.title}`, text: `${data?.more ?? ''} →` }); tipSet = true; }
+          }
+        }
         if (u > 2.2 && u < 3.4) {
           // nächster Knoten am Cursor
           let best = 24 * 24, bi = -1;
@@ -484,7 +522,7 @@ export async function init(canvas: HTMLCanvasElement) {
         }
       }
       if (!tipSet) setTip(null);
-      root.classList.toggle('pointer-3d', hoverTower >= 0);
+      root.classList.toggle('pointer-3d', hoverTower >= 0 || hoverSeg >= 0);
     }
 
     // Labels
@@ -493,14 +531,14 @@ export async function init(canvas: HTMLCanvasElement) {
     R.segments.forEach((s, k) => {
       const w = new THREE.Vector3(Math.cos(s.angle) * 6.1, Math.sin(s.angle) * 6.1, 0);
       w.applyMatrix4(R.group.matrixWorld);
-      place(`seg-${k}`, w, band(5.7, 6.1, 11.3, 11.7, u) * (k === active ? 1 : 0.55));
-      segLbl[k]?.classList.toggle('on', k === active);
+      place(`seg-${k}`, w, band(5.7, 6.1, 11.3, 11.7, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
+      segLbl[k]?.classList.toggle('on', (u >= 5.97 && k === active) || k === hoverSeg);
     });
     D.timers.forEach((t, i) => place(`timer-${i}`, t.center, band(12.7, 13.2, 14.4, 15.0, u)));
     D.milestones.forEach((m, i) => {
       const dist = camera.position.distanceTo(m.pos);
       const ahead = v.copy(m.pos).sub(camera.position).dot(camera.getWorldDirection(new THREE.Vector3())) > 0;
-      place(`ms-${i}`, m.pos, ahead ? sstep(60, 34, dist) * sstep(3, 8, dist) * m.mat.opacity * band(14, 14.6, 17.9, 18.4, u) : 0);
+      place(`ms-${i}`, m.pos, ahead ? sstep(60, 34, dist) * sstep(3, 8, dist) * m.mat.opacity * band(14, 14.6, 17.4, 17.75, u) : 0);
     });
     S.towers.forEach((t, i) => {
       const top = new THREE.Vector3(t.x, FLOOR_Y + t.h + 0.6, -140);
