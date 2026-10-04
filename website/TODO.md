@@ -14,7 +14,8 @@ Son güncelleme: 4 Ekim 2026
 ## Teknik
 
 - [ ] Uygulama (uniq.cyberwerk.online) `?lang=de|en` parametresini henüz okumuyor. Site parametreyi gönderiyor; uygulamada küçük bir ek gerekiyor.
-- [ ] Edge bloğu (`deploy/edge-block.caddy`) ClaudeCWS Caddyfile'ına eklenecek ve ilk deploy yapılacak.
+- [ ] **Uniq deposu, `website` dalı:** PR birleştirilince site otomatik yayınlanır (`.github/workflows/website.yml`). İlk yayında edge bloğu sunucudaki ClaudeCWS Caddyfile'ına otomatik eklenir.
+- [ ] Edge bloğu (`deploy/edge-block.caddy`) kalıcı olarak ClaudeCWS deposunun `Caddyfile`'ına da eklenecek. Aksi halde bir sonraki ClaudeCWS deploy'u bloğu siler.
 - [ ] Cloudflare'de CAA kaydı açılacak (yalnızca letsencrypt.org).
 - [ ] Canlıda kontrol edilecekler: securityheaders.com, Mozilla Observatory, SSL Labs.
 - [ ] Gerçek cihazlarda test: iPhone Safari, Android Chrome, Firefox masaüstü. Headless testler yazılım tabanlı WebGL ile yapıldı.

@@ -59,27 +59,30 @@ Sunucudaki düzen (ClaudeCWS ve Uniq depolarından kontrol edildi):
 - UniqSuite uygulaması (`/root/UniqSuite`) bu Caddy'ye `uniqsuite_edge` ağı üzerinden bağlıdır.
 - Web sitesi kendi küçük konteynerinde çalışır (`/root/UniqSuiteWeb`) ve aynı ağa bağlanır. Uygulamanın ayarlarına dokunulmaz.
 
-### İlk kurulum (bir kez)
+### Otomatik yayın (GitHub Actions)
 
-1. `deploy/` içindeki dosyaları sunucuya kopyalayın: `/root/UniqSuiteWeb/` altına `docker-compose.yml`, `Caddyfile`, `security-headers.caddy` ve `release.sh`.
-2. `deploy/edge-block.caddy` içindeki bloğu ClaudeCWS deposundaki `Caddyfile`'a ekleyin.
-   - Blok ayrı tutulmalı; nis2plat işaretli bölüme dokunulmaz.
-   - Değişiklik ClaudeCWS'in normal deploy süreciyle yayınlanır.
-   - Caddy Let's Encrypt sertifikasını kendisi alır.
-3. İlk sürümü yükleyip konteyneri başlatın (aşağıdaki adımlar 1–3, sonra `docker compose up -d`).
+Site, Uniq deposunun `website/` klasöründedir. `main` dalında `website/**` altında bir değişiklik olunca `.github/workflows/website.yml` çalışır:
 
-### Her yeni sürüm
+1. `npm ci`, `npm audit` (yüksek/kritik açık varsa durur), `npm run build:check` (build + CSP denetimi).
+2. `website/deploy/` dosyaları ve `uniqsuite-site.tgz` paketi SSH ile `/root/UniqSuiteWeb/` klasörüne kopyalanır (uygulamanın deploy'uyla aynı anahtar ve aynı `ssh-vorbereiten.sh`).
+3. Sunucuda `deploy_remote.sh` çalışır:
+   - Website konteynerinin Caddy yapılandırmasını doğrular.
+   - Yeni sürümü etkinleştirir (`release.sh`).
+   - Konteyneri başlatır.
+   - ClaudeCWS Caddyfile'ında `uniqsuite.cyberwerk.online` bloğu yoksa ekler, doğrular ve Caddy'yi yeniden yükler. Hata olursa Caddyfile eski haline döner.
+   - Sonunda `https://uniqsuite.cyberwerk.online/de/` adresini ve güvenlik başlıklarını kontrol eder.
+
+Uygulamanın deploy'u (`deploy.yml`) yalnızca website değişikliklerinde çalışmaz (`paths-ignore`); app ve site birbirinden bağımsız yayınlanır.
+
+**Kalıcı edge bloğu:** `deploy/edge-block.caddy` içeriği ClaudeCWS deposundaki `Caddyfile`'a da eklenmelidir. Aksi halde bir sonraki ClaudeCWS deploy'u dosyayı depo sürümüyle değiştirir ve site, bir sonraki website deploy'una kadar erişilemez olur. Blok ayrı tutulmalı, nis2plat işaretli bölüme dokunulmaz.
+
+### Elle yayın (gerekirse)
 
 ```sh
-# 1) Yerelde
 npm ci && npm audit --omit=dev && npm run build:check
 tar -czf uniqsuite-site.tgz -C dist .
-
-# 2) Yükleme
-scp uniqsuite-site.tgz <sunucu>:/root/UniqSuiteWeb/
-
-# 3) Sunucuda: yeni sürümü etkinleştir (anında, yeniden başlatma gerekmez)
-cd /root/UniqSuiteWeb && sh release.sh uniqsuite-site.tgz
+scp uniqsuite-site.tgz deploy/* <sunucu>:/root/UniqSuiteWeb/
+ssh <sunucu> 'bash /root/UniqSuiteWeb/deploy_remote.sh'
 ```
 
 `release.sh` sürümü `site/releases/<zaman damgası>` klasörüne açar ve `site/current` linkini atomik olarak yeni sürüme çevirir. Son 5 sürüm saklanır.

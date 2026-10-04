@@ -18,7 +18,13 @@ Son güncelleme: 4 Ekim 2026
   - Salt okunur dosya sistemi; site dosyaları da salt okunur bağlanır.
   - Tüm Linux yetkileri kaldırıldı (`cap_drop: ALL`), `no-new-privileges` açık.
   - Bellek ve süreç sınırı var, healthcheck var.
-- [ ] Edge bloğu (`deploy/edge-block.caddy`) ClaudeCWS Caddyfile'ına eklenecek. nis2plat işaretli bölüme dokunulmayacak. Değişiklik ClaudeCWS deposu üzerinden deploy edilecek.
+- [~] Edge bloğu (`deploy/edge-block.caddy`) ilk website deploy'unda sunucudaki ClaudeCWS Caddyfile'ına kendi işaretleri arasında eklenir. Önce doğrulanır, hata olursa dosya eski haline döner. nis2plat bölümüne dokunulmaz.
+- [ ] Edge bloğu kalıcı olarak ClaudeCWS deposuna da eklenecek.
+- [x] Deploy GitHub Actions ile yapılıyor (`.github/workflows/website.yml`):
+  - Yalnızca `contents: read` izni var; Action'lar commit'e sabitlenmiş.
+  - SSH için uygulamayla aynı `ssh-vorbereiten.sh` kullanılıyor; dışarıdan Action yüklenmiyor.
+  - `npm audit` yüksek/kritik açıkta deploy'u durduruyor.
+  - CSP denetimi başarısız olursa sunucuya hiç dokunulmuyor.
 - [x] E-posta formu yok. cyberwerk.online alan adından posta gönderilmez (null MX, SPF -all, DMARC reject). Demo butonu yalnızca `mailto:info@cyberwerksuite.com` linkidir.
 - [x] Quick-Check tamamen tarayıcıda çalışır. Cevaplar hiçbir sunucuya gönderilmez ve kaydedilmez.
 - [x] PDF raporu tarayıcıda oluşturulur (pdf-lib); veri yüklenmez.
