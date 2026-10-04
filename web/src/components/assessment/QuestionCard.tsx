@@ -110,7 +110,7 @@ export function QuestionCard({ controls, effective, de, isMust, onSetStatus, onS
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-[11px]">
               <span className="font-mono font-semibold text-foreground">{current.id}</span>
-              {isMust(current) && <span className="px-1.5 py-0.5 rounded-full st-nein-tint st-nein-text font-semibold">MUSS</span>}
+              {isMust(current) && <span className="px-1.5 py-0.5 rounded-full st-nein-tint st-nein-text font-semibold">{de ? "MUSS" : "MUST"}</span>}
               {fam && <span className="text-muted-foreground truncate">{fam}</span>}
               <span className="ml-auto text-muted-foreground tabular-nums">
                 {de ? `${idx + 1} von ${order.length}` : `${idx + 1} of ${order.length}`}
