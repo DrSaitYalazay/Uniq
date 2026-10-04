@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Truck, Plus, Trash2, ShieldCheck, AlertTriangle, Network, ShoppingCart } from "lucide-react";
 import ToolStatusChart from "@/components/tools/ToolStatusChart";
 import { CHART_SEVERITY } from "@/lib/chartPalette";
+import { VISIBLE_TOOL_IDS } from "@/config/uniqFeatures";
 import {
   type Supplier, type SupplierState, type SupplierCriticality as Criticality, type SupplierDataAccess as DataAccess,
   type SupplierAnswer as Answer, type SupplierCert as Cert, SUPPLIER_CERTS as CERTS,
@@ -102,7 +103,7 @@ export default function SupplierCheck() {
     setData(d => ({ suppliers: (d.suppliers ?? []).map(s => s.id === id ? { ...s, ...p } : s) }));
   const remove = (id: string) => {
     // TPRM-Zusatz wird NICHT stumm gelöscht: er bleibt im DORA-Register und wird dort als „verwaist" markiert.
-    if (tprmBySupplier.has(id)) {
+    if (VISIBLE_TOOL_IDS.has("tprm") && tprmBySupplier.has(id)) {
       toast.info(de
         ? "Lieferant entfernt. Der DORA-Register-Eintrag (TPRM) bleibt erhalten und wird dort als verwaist markiert."
         : "Supplier removed. The DORA-register entry (TPRM) is kept and flagged as orphaned there.");
@@ -125,16 +126,16 @@ export default function SupplierCheck() {
         </h1>
         <p className="text-sm text-muted-foreground max-w-3xl">
           {de
-            ? "Bewertung der Lieferantensicherheit nach ISO 27001 A.5.19–A.5.23, NIS2 Art. 21 (Lieferkette) und BSI. Je Lieferant: Kritikalität, Kontrollen, Risikoscore und Review-Zyklus."
-            : "Assess supplier security per ISO 27001 A.5.19–A.5.23, NIS2 Art. 21 (supply chain) and BSI. Per supplier: criticality, controls, risk score and review cycle."}
+            ? "Bewertung der Lieferantensicherheit nach ISO 27001 A.5.19–A.5.23 und NIS2 Art. 21 (Lieferkette). Je Lieferant: Kritikalität, Kontrollen, Risikoscore und Review-Zyklus."
+            : "Assess supplier security per ISO 27001 A.5.19–A.5.23 and NIS2 Art. 21 (supply chain). Per supplier: criticality, controls, risk score and review cycle."}
         </p>
       </header>
 
       <ToolStatusChart
         title={de ? "Lieferantenrisiko" : "Supplier risk"}
         subtitle={de
-          ? `${suppliers.filter(s => !s.archived).length} aktive Lieferant(en) · ${tprmBySupplier.size} im DORA-Register (TPRM) geführt`
-          : `${suppliers.filter(s => !s.archived).length} active supplier(s) · ${tprmBySupplier.size} tracked in the DORA register (TPRM)`}
+          ? `${suppliers.filter(s => !s.archived).length} aktive Lieferant(en)${VISIBLE_TOOL_IDS.has("tprm") ? ` · ${tprmBySupplier.size} im DORA-Register (TPRM) geführt` : ""}`
+          : `${suppliers.filter(s => !s.archived).length} active supplier(s)${VISIBLE_TOOL_IDS.has("tprm") ? ` · ${tprmBySupplier.size} tracked in the DORA register (TPRM)` : ""}`}
         items={[
           { label: de ? "gering" : "low", value: riskStats.low, color: CHART_SEVERITY.niedrig },
           { label: de ? "mittel" : "medium", value: riskStats.medium, color: CHART_SEVERITY.mittel },
@@ -191,7 +192,7 @@ export default function SupplierCheck() {
                       </span>
                     )}
                     {s.lastReview && <span className="text-[11px] text-muted-foreground">{de ? "geprüft " : "checked "}{s.lastReview}</span>}
-                    {(() => {
+                    {VISIBLE_TOOL_IDS.has("tprm") && (() => {
                       const t = tprmBySupplier.get(s.id);
                       return t ? (
                         <Link to="/tprm" title={de ? "DORA-Register (TPRM) öffnen" : "Open DORA register (TPRM)"}
@@ -205,7 +206,7 @@ export default function SupplierCheck() {
                         </Link>
                       );
                     })()}
-                    {s.sourceRequestId && (
+                    {VISIBLE_TOOL_IDS.has("procurement") && s.sourceRequestId && (
                       <Link to="/procurement" className="text-[11px] px-2 py-1 rounded-md border border-border bg-muted/40 text-muted-foreground inline-flex items-center gap-1 hover:border-primary/50" title={de ? "Aus Beschaffungs-Freigabe übernommen" : "Imported from procurement approval"}>
                         <ShoppingCart size={11} />{de ? "aus Beschaffung" : "from procurement"}
                       </Link>
@@ -299,7 +300,7 @@ export default function SupplierCheck() {
         )}
       </div>
       <p className="text-[11px] text-muted-foreground">
-        {de ? "Bezug: ISO 27001 A.5.19–A.5.23, NIS2 Art. 21, BSI IT-Grundschutz. ● = kritische Kontrolle." : "Reference: ISO 27001 A.5.19–A.5.23, NIS2 Art. 21, BSI. ● = critical control."}
+        {de ? "Bezug: ISO 27001 A.5.19–A.5.23, NIS2 Art. 21. ● = kritische Kontrolle." : "Reference: ISO 27001 A.5.19–A.5.23, NIS2 Art. 21. ● = critical control."}
       </p>
     </div>
   );
