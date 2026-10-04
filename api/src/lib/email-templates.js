@@ -59,6 +59,24 @@ const TEMPLATES = {
     subject: v.lang === 'en' ? 'Invitation accepted' : 'Einladung angenommen',
     html: `<p>${esc(v.memberName || v.memberEmail)} — ${esc(v.orgName)}</p><p><a href="${esc(v.manageUrl)}">${esc(v.manageUrl)}</a></p>`,
   }),
+  // Demo-Anfrage aus der Website (functions/website-anfrage.js). Geht an das
+  // Vertriebspostfach; "Antworten" landet beim Anfragenden (reply_to im Worker).
+  // Der Betreff ist Klartext (kein HTML): die Felder sind dort bereits von
+  // Steuerzeichen befreit.
+  'website-anfrage': (v) => ({
+    subject: `Demo-Anfrage: ${String(v.company || '').slice(0, 120)} (${v.firstName || ''} ${v.lastName || ''})`.trim(),
+    html: '<p>Neue Demo-Anfrage über uniqsuite.cyberwerk.online:</p>'
+      + '<table cellpadding="4" style="border-collapse:collapse">'
+      + `<tr><td><strong>Firma</strong></td><td>${esc(v.company)}</td></tr>`
+      + `<tr><td><strong>Vorname</strong></td><td>${esc(v.firstName)}</td></tr>`
+      + `<tr><td><strong>Nachname</strong></td><td>${esc(v.lastName)}</td></tr>`
+      + `<tr><td><strong>E-Mail</strong></td><td><a href="mailto:${esc(v.email)}">${esc(v.email)}</a></td></tr>`
+      + `<tr><td><strong>Telefon</strong></td><td>${v.phone ? esc(v.phone) : '—'}</td></tr>`
+      + `<tr><td><strong>Sprache</strong></td><td>${v.lang === 'en' ? 'Englisch' : 'Deutsch'}</td></tr>`
+      + `<tr><td><strong>Eingang</strong></td><td>${esc(v.receivedAt)}</td></tr>`
+      + '</table>'
+      + '<p>„Antworten“ schreibt direkt an die angegebene Adresse.</p>',
+  }),
 };
 
 export function renderTemplate(name, variables) {
