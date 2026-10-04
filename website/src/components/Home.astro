@@ -5,6 +5,7 @@ import { SITE_URL, LOGIN_URL, loginHref, demoHref, CONTACT_EMAIL, type Lang } fr
 import de from '../i18n/de';
 import en from '../i18n/en';
 import qcData from '../data/quickcheck.json';
+import { stepHref } from '../data/steps';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -17,6 +18,13 @@ const still = (k: string) => `/img/still/${k}`;
 
 // Schritte des Zeitstrahls: [Start, Ende) je Scroll-Schritt
 const msGroups = [[0, 2], [2, 4], [4, 6], [6, 7]];
+// Bild im Hero und je Phase (responsive)
+const pic = (n: string, sizes: string) => ({ avif: `${shot(n)}-800.avif 800w, ${shot(n)}-1600.avif 1600w`, webp: `${shot(n)}-800.webp 800w, ${shot(n)}-1600.webp 1600w`, src: `${shot(n)}-800.webp`, sizes });
+const docs = {
+  wp: { de: '/docs/UniqSuite-WhitePaper-NIS2-ISO27001-DE.pdf', en: '/docs/UniqSuite-WhitePaper-NIS2-ISO27001-EN.pdf' },
+  br: { de: '/docs/UniqSuite-Broschuere-DE.pdf', en: '/docs/UniqSuite-Brochure-EN.pdf' },
+};
+const order = lang === 'de' ? (['de', 'en'] as const) : (['en', 'de'] as const);
 
 // Strukturierte Daten
 const jsonld = [
@@ -58,14 +66,16 @@ const clientData = {
   pdf: t.pdfText,
   fwNames: t.frameworks,
   data: qcData,
-  seg: t.pdca.phases.map((p) => ({ n: p.n, title: p.title, img: p.img })),
+  seg: t.pdca.phases.map((p, i) => ({ n: p.n, title: p.title, img: p.img, href: stepHref(lang, i) })),
+  qcBase: `/${lang}/quick-check/`,
+  more: lang === 'de' ? 'Mehr zu diesem Schritt' : 'More about this step',
 };
 ---
 <Base lang={lang} path={`/${lang}/`} altPath={other} home jsonld={jsonld}>
   <Fragment slot="world">
     <picture>
-      <source media="(max-width: 820px)" srcset={`${still('wolke')}-m.webp`} type="image/webp" width="720" height="1280" />
-      <img class="poster" src={`${still('wolke')}-d.webp`} width="1600" height="900" alt="" fetchpriority="high" decoding="async" />
+      <source media="(max-width: 820px)" srcset={`${still('hero')}-m.webp`} type="image/webp" width="720" height="1280" />
+      <img class="poster" src={`${still('hero')}-d.webp`} width="1600" height="900" alt="" fetchpriority="high" decoding="async" />
     </picture>
     <canvas data-world></canvas>
   </Fragment>
@@ -86,15 +96,12 @@ const clientData = {
     </ol>
   </nav>
 
-  <!-- 01 · Wolke (Hero) -->
-  <section id="wolke" class="station hero" data-u0="0" data-u1="1" aria-labelledby="h-hero">
-    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('wolke')}-m.webp`} width="720" height="1280" /><img src={`${still('wolke')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap">
+  <!-- Start: was UniqSuite ist, auf einen Blick -->
+  <section id="wolke" class="station hero" data-u0="5.85" data-u1="5.95" aria-labelledby="h-hero">
+    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('hero')}-m.webp`} width="720" height="1280" /><img src={`${still('hero')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
+    <div class="hero-step"><div class="wrap hero-grid">
       <div class="hero-inner">
-        <ul class="hero-meta" aria-label={lang === 'de' ? 'Regelwerke' : 'Frameworks'}>
-          <li class="asof">{t.asOf}</li>
-          {FW.map((f) => <li class={`fw-${f}`}><i></i>{t.frameworks[f]}</li>)}
-        </ul>
+        <p class="eyebrow">{t.hero.eyebrow}</p>
         <h1 id="h-hero" class="hero-h1" aria-label={`${t.hero.h1a} ${t.hero.h1b}`}>
           <span aria-hidden="true">{t.hero.h1a.split(' ').map((w) => <><span class="w"><span>{w}</span></span>{' '}</>)}</span>
           <span class="accent" aria-hidden="true">{t.hero.h1b.split(' ').map((w) => <><span class="w"><span>{w}</span></span>{' '}</>)}</span>
@@ -104,108 +111,92 @@ const clientData = {
           <a class="btn btn-primary" href="#quick-check" data-magnetic>{t.hero.ctaCheck}<Icon name="arrow" /></a>
           <a class="btn btn-ghost" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
         </div>
-        <ul class="stats">
-          <li><strong data-countup="910">910</strong><span>{t.stats[0]}</span></li>
-          <li><strong data-countup="227">227</strong><span>{t.stats[1]}</span></li>
-          <li><strong>5</strong><span>{t.stats[2]}</span></li>
-        </ul>
+        <p class="cta-note">{t.hero.ctaNote}</p>
+        <nav class="step-chips" aria-label={t.pdca.kicker}>
+          <p>{t.hero.stepsLabel}</p>
+          <ol>
+            {t.pdca.phases.map((p, i) => <li><a href={stepHref(lang, i)}><b>{i + 1}</b>{p.title}</a></li>)}
+          </ol>
+        </nav>
       </div>
     </div></div>
-    <div class="spacer"></div>
-    <div class="scroll-hint" aria-hidden="true"><i></i>{t.hero.scroll}</div>
   </section>
 
-  <!-- 02 · Konvergenz -->
-  <section id="konvergenz" class="station" data-u0="1" data-u1="3.6" aria-labelledby="h-conv">
-    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('konvergenz')}-m.webp`} width="720" height="1280" /><img src={`${still('konvergenz')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="kicker"><span class="idx">01</span>{t.convergence.kicker}</p>
-      <h2 id="h-conv" data-split class="h2">{t.convergence.h2a} <span class="accent">{t.convergence.h2b}</span></h2>
-      <p class="lead">{t.convergence.steps[0]}</p>
-    </div></div></div>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="big"><strong class="accent" data-countup="227">227</strong> {t.convergence.steps[1].replace(/^227 /, '')}</p>
-    </div></div></div>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="big">{t.convergence.steps[2]}</p>
-    </div></div></div>
-  </section>
-
-  <!-- 03 · Ein klarer Stand -->
-  <section id="stand" class="station" data-u0="3.6" data-u1="5" aria-labelledby="h-stand">
-    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('stand')}-m.webp`} width="720" height="1280" /><img src={`${still('stand')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="kicker"><span class="idx">02</span>{t.status.kicker}</p>
-      <h2 id="h-stand" data-split class="h2">{t.status.h2}</h2>
-      <p class="lead">{t.status.text}</p>
-    </div></div></div>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="gauge-num only-no3d">59<small>%</small></p>
-      <p class="small muted">{t.status.byFramework}</p>
-      <div class="fw-rows">
-        {t.status.rows.map((r) => (
-          <div class={`fw-row fw-${r.fw}`}>
-            <span>{r.label}</span>
-            <svg class="bar" viewBox="0 0 100 6" preserveAspectRatio="none" role="img" aria-label={`${r.value} %`}><rect class="track" width="100" height="6" rx="3" /><rect class="val" width={r.value} height="6" rx="3" /></svg>
-            <b>{r.value} %</b>
-          </div>
-        ))}
-      </div>
-      <p class="small muted">{t.status.caption}</p>
-    </div></div></div>
-  </section>
-
-  <!-- 04 · Sechs Phasen -->
-  <section id="pdca" class="station" data-u0="5" data-u1="11.6" aria-labelledby="h-pdca">
+  <!-- Sechs Schritte: Liste bleibt stehen, beim Scrollen wird der jeweilige Schritt aktiv -->
+  <section id="pdca" class="station steps" data-u0="5.95" data-u1="11.6" aria-labelledby="h-pdca">
     <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('pdca')}-m.webp`} width="720" height="1280" /><img src={`${still('pdca')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="kicker"><span class="idx">03</span>{t.pdca.kicker}</p>
-      <h2 id="h-pdca" data-split class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
-      <p class="lead">{t.pdca.intro}</p>
-      <p class="small muted">{t.pdca.note}</p>
+    <div class="steps-sticky"><div class="wrap"><div class="steps-panel" data-steps>
+      <p class="kicker">{t.pdca.kicker}</p>
+      <h2 id="h-pdca" class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
+      <p class="steps-intro">{t.pdca.intro}</p>
+      <ol class="phase-list">
+        {t.pdca.phases.map((p, i) => (
+          <li class="ph" data-ph={i}>
+            <a class="ph-head" href={stepHref(lang, i)}><span class="ph-n">{p.n}</span><span class="ph-t">{p.title}</span><span class="ph-c">{p.cycle}</span></a>
+            <div class="ph-body">
+              <p>{p.text}</p>
+              <p class="ph-res">{t.pdca.resultLabel}: <b>{p.result}</b></p>
+              <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
+              <figure class="shot">
+                <picture>
+                  <source srcset={pic(p.img, '').avif} sizes="(max-width: 820px) 92vw, 34rem" type="image/avif" />
+                  <img src={pic(p.img, '').src} srcset={pic(p.img, '').webp} sizes="(max-width: 820px) 92vw, 34rem" width="800" height="500" loading="lazy" decoding="async" alt={`${p.title} – ${lang === 'de' ? 'Bildschirmansicht' : 'screenshot'}`} />
+                </picture>
+              </figure>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="fine">{t.pdca.note}</p>
     </div></div></div>
-    {t.pdca.phases.map((p, i) => (
-      <div class="step phase" id={`pdca-${i + 1}`} data-phase={i}><div class="wrap"><div class="panel reveal">
-        <div class="phase-head"><span class="phase-num">{p.n}</span><span class="cycle">{p.cycle}</span></div>
-        <h3 class="phase-title">{p.title}</h3>
-        <p class="lead">{p.text}</p>
-        <p class="result-chip">{t.pdca.resultLabel}: <b>{p.result}</b></p>
-        <figure class="shot">
-          <picture>
-            <source srcset={`${shot(p.img)}-800.avif 800w, ${shot(p.img)}-1600.avif 1600w`} sizes="(max-width: 820px) 92vw, 34rem" type="image/avif" />
-            <img src={`${shot(p.img)}-800.webp`} srcset={`${shot(p.img)}-800.webp 800w, ${shot(p.img)}-1600.webp 1600w`} sizes="(max-width: 820px) 92vw, 34rem" width="800" height="500" loading="lazy" decoding="async" alt={`${p.title} – ${lang === 'de' ? 'Bildschirmansicht' : 'screenshot'}`} />
-          </picture>
-          <figcaption>{t.pdca.note}</figcaption>
-        </figure>
-      </div></div></div>
-    ))}
+    <div class="steps-track" aria-hidden="true">
+      {t.pdca.phases.map((_, i) => <span class={`track-mark m${i + 1}`} id={`pdca-${i + 1}`}></span>)}
+    </div>
+  </section>
+
+  <!-- Prinzip: einmal beantworten -->
+  <section id="prinzip" class="station flow prinzip" data-u0="11.6" data-u1="11.8" data-dim="0.9" data-dim-m="0.95" aria-labelledby="h-prinzip">
+    <div class="wrap prinzip-grid">
+      <div>
+        <p class="kicker">{t.convergence.kicker}</p>
+        <h2 id="h-prinzip" data-split class="h2">{t.convergence.h2a} <span class="accent">{t.convergence.h2b}</span></h2>
+        <p class="lead">{t.convergence.text}</p>
+        <ol class="facts">
+          {t.convergence.facts.map((f) => <li><strong data-countup={f.n}>{f.n}</strong><span>{f.text}</span></li>)}
+        </ol>
+        <p class="fine">{t.convergence.note}</p>
+      </div>
+      <figure class="prinzip-fig">
+        <img src={`${still('konvergenz')}-d.webp`} width="1600" height="900" loading="lazy" decoding="async" alt={t.convergence.figAlt} />
+      </figure>
+    </div>
   </section>
 
   <!-- Funktionen -->
-  <section id="funktionen" class="station features" data-u0="11.6" data-u1="12.2" data-dim="0.55" aria-labelledby="h-feat">
+  <section id="funktionen" class="station flow features" data-u0="11.8" data-u1="12.2" data-dim="0.9" data-dim-m="0.95" aria-labelledby="h-feat">
     <div class="wrap">
-      <p class="kicker reveal"><span class="idx">04</span>{t.features.kicker}</p>
+      <p class="kicker">{t.features.kicker}</p>
       <h2 id="h-feat" data-split class="h2">{t.features.h2a} <span class="accent">{t.features.h2b}</span></h2>
-      <div class="bento">
-        {t.features.items.map((f, i) => (
-          <article class={`card reveal ${['c-7', 'c-5', 'c-5', 'c-7', 'c-4', 'c-4', 'c-4'][i]}`}>
+      <div class="feat-grid">
+        {t.features.items.map((f) => (
+          <article class="card">
             <div class="txt"><p class="lbl">{f.label}</p><h3>{f.title}</h3><p>{f.text}</p></div>
             <picture>
-              <source srcset={`${shot(f.key)}-800.avif 800w, ${shot(f.key)}-1600.avif 1600w`} sizes="(max-width: 820px) 92vw, 50vw" type="image/avif" />
-              <img src={`${shot(f.key)}-800.webp`} srcset={`${shot(f.key)}-800.webp 800w, ${shot(f.key)}-1600.webp 1600w`} sizes="(max-width: 820px) 92vw, 50vw" width="800" height="500" loading="lazy" decoding="async" alt={`${f.label} – ${lang === 'de' ? 'Bildschirmansicht, Demo-Mandant' : 'screenshot, demo tenant'}`} />
+              <source srcset={pic(f.key, '').avif} sizes="(max-width: 820px) 92vw, 30vw" type="image/avif" />
+              <img src={pic(f.key, '').src} srcset={pic(f.key, '').webp} sizes="(max-width: 820px) 92vw, 30vw" width="800" height="500" loading="lazy" decoding="async" alt={`${f.label} – ${lang === 'de' ? 'Bildschirmansicht, Demo-Mandant' : 'screenshot, demo tenant'}`} />
             </picture>
           </article>
         ))}
       </div>
-      <p class="reports reveal"><Icon name="file" />{t.features.reports}</p>
+      <p class="reports"><Icon name="file" />{t.features.reports}</p>
     </div>
   </section>
 
-  <!-- 05 · Fristen -->
+  <!-- Fristen -->
   <section id="fristen" class="station" data-u0="12.2" data-u1="18" aria-labelledby="h-dead">
     <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('fristen')}-m.webp`} width="720" height="1280" /><img src={`${still('fristen')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="kicker"><span class="idx">05</span>{t.deadlines.kicker}</p>
+    <div class="step"><div class="wrap"><div class="panel">
+      <p class="kicker">{t.deadlines.kicker}</p>
       <h2 id="h-dead" data-split class="h2">{t.deadlines.h2a} <span class="accent">{t.deadlines.h2b}</span></h2>
       <p class="lead">{t.deadlines.intro}</p>
       <h3 class="res-h">{t.deadlines.timersTitle}</h3>
@@ -214,10 +205,10 @@ const clientData = {
           <p class={`timer ${['fw-cra', 'fw-nis2', 'fw-iso27001'][i]}`}><b>{x.value}</b><span>{x.label}<small>{x.sub}</small></span></p>
         ))}
       </div>
-      <p class="small muted">{t.deadlines.timersNote}</p>
+      <p class="fine">{t.deadlines.timersNote}</p>
     </div></div></div>
     {msGroups.map(([a, b], gi) => (
-      <div class="step" id={gi === 0 ? 'zeitachse' : undefined}><div class="wrap"><div class="panel reveal">
+      <div class="step" id={gi === 0 ? 'zeitachse' : undefined}><div class="wrap"><div class="panel">
         {gi === 0 && <h3 class="res-h">{t.deadlines.timelineTitle}</h3>}
         <ol class="timeline" start={a + 1}>
           {t.deadlines.timeline.slice(a, b).map((m, j) => (
@@ -232,97 +223,100 @@ const clientData = {
     ))}
   </section>
 
-  <!-- 06 · Regelwerke -->
-  <section id="regelwerke" class="station" data-u0="18" data-u1="20" aria-labelledby="h-sky">
+  <!-- Quick-Check: Regelwerk wählen, öffnet in neuem Tab -->
+  <section id="quick-check" class="station qc" data-u0="18" data-u1="20" data-dim="0.72" data-dim-m="0.85" aria-labelledby="h-qc">
     <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('regelwerke')}-m.webp`} width="720" height="1280" /><img src={`${still('regelwerke')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p class="kicker"><span class="idx">06</span>{t.skyline.kicker}</p>
-      <h2 id="h-sky" data-split class="h2">{t.skyline.h2a} <span class="accent">{t.skyline.h2b}</span></h2>
-    </div></div></div>
-    <div class="step"><div class="wrap"><div class="panel reveal">
-      <p>{t.skyline.text}</p>
-      <div class="towers">
-        {t.skyline.towers.map((x) => (
-          <button type="button" class={`tower-btn fw-${x.fw}`} data-start={x.fw}>
-            <b>{x.n}</b><span>{x.label}</span><small>{x.sub}</small>
-          </button>
-        ))}
+    <div class="wrap qc-wrap">
+      <div class="qc-shell">
+        <p class="kicker">{t.qc.kicker}</p>
+        <h2 id="h-qc" data-split class="h2">{t.qc.h2a} <span class="accent">{t.qc.h2b}</span></h2>
+        <p class="lead">{t.qc.intro}</p>
+        <p class="privacy"><Icon name="eye" />{t.qc.privacy}</p>
       </div>
-    </div></div></div>
-  </section>
-
-  <!-- Quick-Check -->
-  <section id="quick-check" class="station qc" data-u0="20" data-u1="20.5" data-dim-m="0.72" aria-labelledby="h-qc">
-    <div class="wrap"><div class="qc-shell">
-      <p class="kicker"><span class="idx">07</span>{t.qc.kicker}</p>
-      <h2 id="h-qc" data-split class="h2">{t.qc.h2a} <span class="accent">{t.qc.h2b}</span></h2>
-      <p class="lead">{t.qc.intro}</p>
-      <p class="privacy"><Icon name="eye" />{t.qc.privacy}</p>
-      <div class="qc-card" data-qc aria-live="polite">
-        <h3 class="res-h" data-qc-focus tabindex="-1">{t.qc.pick}</h3>
-        <div class="qc-pick">
-          {FW.map((f) => {
+      <div class="carousel" data-carousel>
+        <p class="carousel-hint" id="qc-hint">{t.qc.pickHint}</p>
+        <ul class="ring" aria-describedby="qc-hint">
+          {FW.map((f, i) => {
             const fw = qcData.frameworks.find((x) => x.id === f)!;
+            const tw = t.skyline.towers.find((x) => x.fw === f)!;
             return (
-              <button type="button" class={`fw-choice fw-${f}`} data-start={f}>
-                <i></i>
-                <span><b>{fw.name[lang]}</b>{f === 'cra' && <small>{t.qc.craNote}</small>}</span>
-                <span class="meta">{t.qc.questionsCount.replace('{n}', String(fw.questions.length))}</span>
-              </button>
+              <li class={`ring-item fw-${f} r${i}`}>
+                <a href={`/${lang}/quick-check/${f}/`} target="_blank" rel="noopener">
+                  <i></i>
+                  <b>{fw.name[lang]}</b>
+                  <span>{t.qc.questionsCount.replace('{n}', String(fw.questions.length))}</span>
+                  <small>{f === 'cra' ? t.qc.craNote : `${tw.n} ${t.qc.reqLabel}`}</small>
+                  <em>{t.qc.open}<Icon name="ext" /></em>
+                </a>
+              </li>
             );
           })}
+        </ul>
+        <div class="carousel-nav">
+          <button type="button" class="prev" data-car="-1" aria-label={lang === 'de' ? 'Vorheriges Regelwerk' : 'Previous framework'}><Icon name="arrow" /></button>
+          <button type="button" class="next" data-car="1" aria-label={lang === 'de' ? 'Nächstes Regelwerk' : 'Next framework'}><Icon name="arrow" /></button>
         </div>
-        <noscript><p class="qc-note">{lang === 'de' ? 'Der Quick-Check benötigt JavaScript. Ihre Antworten bleiben trotzdem in Ihrem Browser.' : 'The quick check needs JavaScript. Your answers still stay in your browser.'}</p></noscript>
       </div>
-    </div></div>
+    </div>
   </section>
 
-  <div class="solid" data-dim="0.94">
-    <div class="marquee" aria-hidden="true"><div class="marquee-track">
-      {[0, 1].map(() => FW.map((f, i) => <span><i>{String(i + 1).padStart(2, '0')}</i>{t.frameworks[f]}</span>))}
-    </div></div>
-    <p class="sr-only">{t.marquee}</p>
+  <div class="solid" data-dim="0.96">
     <!-- Vertrauen -->
     <section id="vertrauen" class="trust" aria-labelledby="h-trust">
       <div class="wrap">
-        <p class="kicker reveal"><span class="idx">08</span>{t.trust.kicker}</p>
+        <p class="kicker">{t.trust.kicker}</p>
         <h2 id="h-trust" data-split class="h2">{t.trust.h2a} <span class="accent">{t.trust.h2b}</span></h2>
-        <ol class="trust-list">
+        <ul class="trust-list">
           {t.trust.items.map((x) => (
-            <li class="reveal"><h3>{x.title}</h3><p>{x.text}</p></li>
+            <li><h3>{x.title}</h3><p>{x.text}</p></li>
           ))}
-        </ol>
-        <div class="honest reveal">
+        </ul>
+        <div class="honest">
           <div><p class="kicker">{t.trust.honestKicker}</p><h3>{t.trust.honestTitle}</h3></div>
           <div><p>{t.trust.honestIntro}</p><ul>{t.trust.honest.map((h) => <li>{h}</li>)}</ul></div>
         </div>
       </div>
     </section>
 
-    <!-- White Paper -->
-    <section id="white-paper" class="wp" aria-labelledby="h-wp">
-      <div class="wrap"><div class="wp-card reveal">
-        <div class="wp-cover"><img src={`/img/wp-cover-${lang}.webp`} width="420" height="594" loading="lazy" decoding="async" alt={t.whitepaper.title} /></div>
-        <div>
-          <p class="kicker"><span class="idx">09</span>{t.whitepaper.kicker}</p>
-          <h2 id="h-wp">{t.whitepaper.title}</h2>
-          <p>{t.whitepaper.text}</p>
-          <p class="meta">{t.whitepaper.meta}</p>
-          <div class="cta-row">
-            {lang === 'de'
-              ? <><a class="btn btn-primary" href="/docs/UniqSuite-WhitePaper-NIS2-ISO27001-DE.pdf" download data-magnetic><Icon name="download" />{t.whitepaper.de}</a><a class="btn btn-ghost" href="/docs/UniqSuite-WhitePaper-NIS2-ISO27001-EN.pdf" hreflang="en" download>{t.whitepaper.en}</a></>
-              : <><a class="btn btn-primary" href="/docs/UniqSuite-WhitePaper-NIS2-ISO27001-EN.pdf" download data-magnetic><Icon name="download" />{t.whitepaper.en}</a><a class="btn btn-ghost" href="/docs/UniqSuite-WhitePaper-NIS2-ISO27001-DE.pdf" hreflang="de" download>{t.whitepaper.de}</a></>}
-          </div>
+    <!-- Downloads: White Paper und Broschüre -->
+    <section id="downloads" class="downloads" aria-labelledby="h-dl">
+      <div class="wrap">
+        <p class="kicker">{t.whitepaper.kicker}</p>
+        <h2 id="h-dl" data-split class="h2">{t.whitepaper.h2a} <span class="accent">{t.whitepaper.h2b}</span></h2>
+        <p class="lead">{t.whitepaper.intro}</p>
+        <div class="dl-grid">
+          <article class="dl-card">
+            <div class="dl-cover"><img src={`/img/wp-cover-${lang}.webp`} width="420" height="594" loading="lazy" decoding="async" alt="" /></div>
+            <div class="dl-txt">
+              <p class="dl-meta">{t.whitepaper.meta}</p>
+              <h3>{t.whitepaper.title}</h3>
+              <p>{t.whitepaper.text}</p>
+              <div class="dl-btns">
+                {order.map((l, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={docs.wp[l]} hreflang={l} download><Icon name="download" />{t.whitepaper[l]}</a>)}
+              </div>
+            </div>
+          </article>
+          <article class="dl-card">
+            <div class="dl-cover"><img src={`/img/br-cover-${lang}.webp`} width="420" height="594" loading="lazy" decoding="async" alt="" /></div>
+            <div class="dl-txt">
+              <p class="dl-meta">{t.whitepaper.bMeta}</p>
+              <h3>{t.whitepaper.bTitle}</h3>
+              <p>{t.whitepaper.bText}</p>
+              <div class="dl-btns">
+                {order.map((l, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={docs.br[l]} hreflang={l} download><Icon name="download" />{t.whitepaper[l]}</a>)}
+              </div>
+            </div>
+          </article>
         </div>
-      </div></div>
+      </div>
     </section>
 
     <!-- Schluss -->
     <section class="final" aria-labelledby="h-final">
       <div class="wrap">
         <h2 id="h-final" data-split>{t.final.h2a} <span class="accent">{t.final.h2b}</span></h2>
-        <p class="reveal">{t.final.text}</p>
-        <div class="cta-row reveal">
+        <p>{t.final.text}</p>
+        <div class="cta-row">
           <a class="btn btn-primary" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}<Icon name="arrow" /></a>
           <a class="btn btn-ghost" href={loginHref(lang)} data-magnetic><Icon name="login" />{t.nav.login}</a>
         </div>

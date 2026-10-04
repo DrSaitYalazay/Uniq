@@ -1,0 +1,41 @@
+---
+/**
+ * Quick-Check für ein Regelwerk auf eigener Seite (öffnet von der Startseite in einem neuen Tab).
+ * Dieselbe Logik wie zuvor (scripts/qc), Start direkt mit dem gewählten Regelwerk.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { loginHref, demoHref, type Lang } from '../config';
+import de from '../i18n/de';
+import en from '../i18n/en';
+import qcData from '../data/quickcheck.json';
+
+interface Props { lang: Lang; fw: string }
+const { lang, fw } = Astro.props;
+const t = lang === 'de' ? de : en;
+const f = qcData.frameworks.find((x) => x.id === fw)!;
+const other = lang === 'de' ? 'en' : 'de';
+const clientData = { lang, login: loginHref(lang), demo: demoHref(lang), qc: t.qc, pdf: t.pdfText, fwNames: t.frameworks, data: qcData, autostart: fw };
+---
+<Base lang={lang} path={`/${lang}/quick-check/${fw}/`} altPath={`/${other}/quick-check/${fw}/`} title={`${t.qc.pageTitle}: ${f.name[lang]} – UniqSuite`} description={t.qc.intro} noindex>
+  <Fragment slot="world">
+    <picture>
+      <source media="(max-width: 820px)" srcset="/img/still/regelwerke-m.webp" type="image/webp" width="720" height="1280" />
+      <img class="poster sub" src="/img/still/regelwerke-d.webp" width="1600" height="900" alt="" decoding="async" />
+    </picture>
+  </Fragment>
+  <section id="quick-check" class="qc qc-page" aria-labelledby="h-qc">
+    <div class="wrap"><div class="qc-shell">
+      <p class="kicker"><a href={`/${lang}/#quick-check`} class="back"><Icon name="arrow" />{t.qc.pageBack}</a></p>
+      <h1 id="h-qc" class="h2">{t.qc.pageTitle}: <span class="accent">{f.name[lang]}</span></h1>
+      <p class="lead">{t.qc.intro}</p>
+      <p class="privacy"><Icon name="eye" />{t.qc.privacy}</p>
+      <div class="qc-card" data-qc data-autostart={fw} aria-live="polite">
+        <h2 class="res-h" data-qc-focus tabindex="-1">{f.name[lang]}</h2>
+        <p class="qc-note">{lang === 'de' ? 'Der Quick-Check wird geladen …' : 'Loading the quick check …'}</p>
+        <noscript><p class="qc-note">{lang === 'de' ? 'Der Quick-Check benötigt JavaScript. Ihre Antworten bleiben trotzdem in Ihrem Browser.' : 'The quick check needs JavaScript. Your answers still stay in your browser.'}</p></noscript>
+      </div>
+    </div></div>
+  </section>
+  <script type="application/json" id="uq-data" is:inline set:html={JSON.stringify(clientData)} />
+</Base>
