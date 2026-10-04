@@ -6,6 +6,7 @@ import de from '../i18n/de';
 import en from '../i18n/en';
 import qcData from '../data/quickcheck.json';
 import { stepHref } from '../data/steps';
+import { features, featureHref } from '../data/features';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -172,23 +173,35 @@ const clientData = {
     </div>
   </section>
 
-  <!-- Funktionen -->
+  <!-- Funktionen: drehender Ring, jede Karte öffnet die Funktionsseite -->
   <section id="funktionen" class="station flow features" data-u0="11.8" data-u1="12.2" data-dim="0.9" data-dim-m="0.95" aria-labelledby="h-feat">
-    <div class="wrap">
-      <p class="kicker">{t.features.kicker}</p>
-      <h2 id="h-feat" data-split class="h2">{t.features.h2a} <span class="accent">{t.features.h2b}</span></h2>
-      <div class="feat-grid">
-        {t.features.items.map((f) => (
-          <article class="card">
-            <div class="txt"><p class="lbl">{f.label}</p><h3>{f.title}</h3><p>{f.text}</p></div>
-            <picture>
-              <source srcset={pic(f.key, '').avif} sizes="(max-width: 820px) 92vw, 30vw" type="image/avif" />
-              <img src={pic(f.key, '').src} srcset={pic(f.key, '').webp} sizes="(max-width: 820px) 92vw, 30vw" width="800" height="500" loading="lazy" decoding="async" alt={`${f.label} – ${lang === 'de' ? 'Bildschirmansicht, Demo-Mandant' : 'screenshot, demo tenant'}`} />
-            </picture>
-          </article>
-        ))}
+    <div class="wrap qc-wrap">
+      <div class="qc-shell">
+        <p class="kicker">{t.features.kicker}</p>
+        <h2 id="h-feat" data-split class="h2">{t.features.h2a} <span class="accent">{t.features.h2b}</span></h2>
+        <p class="lead">{t.features.intro}</p>
+        <p class="reports"><Icon name="file" />{t.features.reports}</p>
       </div>
-      <p class="reports"><Icon name="file" />{t.features.reports}</p>
+      <div class="carousel car6" data-carousel>
+        <p class="carousel-hint" id="feat-hint">{t.features.pickHint}</p>
+        <ul class="ring" aria-describedby="feat-hint">
+          {features[lang].map((f, i) => (
+            <li class={`ring-item ft-${i} r${i}`}>
+              <a href={featureHref(lang, i)}>
+                <i></i>
+                <span class="ft-l">{f.label}</span>
+                <b>{f.title}</b>
+                <small>{f.short}</small>
+                <em>{t.features.more}<Icon name="arrow" /></em>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="carousel-nav">
+          <button type="button" class="prev" data-car="-1" aria-label={lang === 'de' ? 'Vorherige Funktion' : 'Previous feature'}><Icon name="arrow" /></button>
+          <button type="button" class="next" data-car="1" aria-label={lang === 'de' ? 'Nächste Funktion' : 'Next feature'}><Icon name="arrow" /></button>
+        </div>
+      </div>
     </div>
   </section>
 
