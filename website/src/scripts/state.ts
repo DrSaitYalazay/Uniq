@@ -28,7 +28,7 @@ export interface QcView {
 }
 
 export const state = {
-  /** Weltparameter aus der Scrollposition (0 … 20.5) */
+  /** Weltparameter aus der Scrollposition (0 … 18.1) */
   u: 0,
   /** Abdunkelung der Szene (0 … 1) */
   dim: 0,

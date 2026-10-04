@@ -5,7 +5,7 @@
  */
 import Lenis from 'lenis';
 import { bus, state } from './state';
-import { initFx, initCarousel } from './fx';
+import { initFx, initCarousel, initViz } from './fx';
 import { initAnfrage } from './anfrage';
 
 const root = document.documentElement;
@@ -91,7 +91,7 @@ function setActive(id: string) {
     history.replaceState(history.state, '', url);
   }
   document.querySelector('.rail')?.classList.toggle('off', !id);
-  root.classList.toggle('in-flow', id === 'prinzip' || id === 'funktionen');
+  root.classList.toggle('in-flow', id === 'regelwerke' || id === 'funktionen');
   bus.emit('station', id);
 }
 
@@ -131,7 +131,7 @@ addEventListener('popstate', () => {
 });
 
 // ── Tastatur: Pfeile / Bild↑↓ springen zwischen Stationen ─────────────────
-const stops = ['wolke', 'pdca', 'pdca-1', 'pdca-2', 'pdca-3', 'pdca-4', 'pdca-5', 'pdca-6', 'prinzip', 'funktionen', 'fristen', 'zeitachse', 'quick-check']
+const stops = ['wolke', 'regelwerke', 'funktionen', 'pdca', 'pdca-1', 'pdca-2', 'pdca-3', 'pdca-4', 'pdca-5', 'pdca-6', 'fristen', 'zeitachse', 'quick-check']
   .map((id) => document.getElementById(id))
   .filter((x): x is HTMLElement => !!x);
 
@@ -172,6 +172,7 @@ const msEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ms]'));
 let lastMs = -1;
 const phEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ph]'));
 const stepsEl = document.querySelector<HTMLElement>('[data-steps]');
+const stageEls = Array.from(document.querySelectorAll<HTMLElement>('[data-stage]'));
 let lastPh = -2;
 
 function tick(time: number) {
@@ -191,13 +192,18 @@ function tick(time: number) {
     if (!id && sections.length && mid < sections[0].y0) id = 'wolke';
     setActive(id);
     // aktiver Meilenstein
-    const ms = Math.round(Math.min(6, Math.max(0, (state.u - 14.6) / (17.6 - 14.6) * 6)));
+    const ms = Math.round(Math.min(6, Math.max(0, (state.u - 13.3) / (14.9 - 13.3) * 6)));
     // aktiver Schritt in der Liste „Sechs Schritte“ (folgt der Kamera)
     const ph = state.u < 5.97 ? -1 : Math.round(Math.min(5, Math.max(0, state.u - 6)));
     if (ph !== lastPh) {
       lastPh = ph;
       phEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ph) === ph));
       stepsEl?.classList.toggle('has-active', ph >= 0);
+      stageEls.forEach((el) => {
+        const on = Number(el.dataset.stage) === Math.max(0, ph);
+        el.classList.toggle('is-active', on);
+        el.querySelector('[data-viz]')?.classList.toggle('on', on);
+      });
     }
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;
@@ -218,6 +224,7 @@ if (isHome) {
 initAnfrage();
 initFx();
 initCarousel();
+initViz();
 requestAnimationFrame(tick);
 (window as any).__uq = { state, uAt, measure };
 
@@ -259,7 +266,7 @@ if (want3d) {
 // ── Quick-Check bei Bedarf laden ───────────────────────────────────────────
 let qcLoading: Promise<unknown> | null = null;
 function loadQc() {
-  qcLoading ??= import('./qc/qc').then((m) => m.init());
+  qcLoading ??= import('./qc/qc').then((m) => m.init()).then(() => (document.querySelector('[data-qc-live]') ? import('./qc/live').then((m) => m.initLive()) : undefined));
   return qcLoading;
 }
 // ── Reiter in der Kopfzeile: aktiven Abschnitt markieren (auf Tablet/Handy sichtbar als Reiter) ──
@@ -315,3 +322,23 @@ bus.on('world:tower', (fw) => {
   if (qcEl) loadQc().then(() => bus.emit('qc:start', fw));
   else if (qcBase) window.open(`${qcBase}${fw}/`, '_blank', 'noopener');
 });
+
+// ── Nach oben: Knopf erscheint gegen Ende der Seite ─────────────────────────
+{
+  const fab = document.querySelector<HTMLElement>('[data-fab-top]');
+  const toTop = (e: Event) => {
+    e.preventDefault();
+    if (state.lenis) state.lenis.scrollTo(0, { duration: reduced ? 0 : 1.4 });
+    else scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    document.getElementById('inhalt')?.focus({ preventScroll: true });
+  };
+  document.querySelectorAll<HTMLElement>('[data-to-top]').forEach((a) => a.addEventListener('click', toTop));
+  if (fab) {
+    const upd = () => {
+      const doc = document.documentElement.scrollHeight;
+      fab.classList.toggle('show', scrollY > innerHeight && scrollY + innerHeight > doc - innerHeight * 1.5);
+    };
+    addEventListener('scroll', upd, { passive: true });
+    upd();
+  }
+}

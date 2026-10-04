@@ -35,6 +35,30 @@ function wrapWords(el: HTMLElement) {
   walk(el);
 }
 
+/** Grafiken (Viz) und Abschnitte mit [data-rv] einmal beim Erscheinen einblenden. */
+export function initViz() {
+  if (reduced || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('viz-anim');
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add(e.target.hasAttribute('data-viz') ? 'on' : 'rv-in');
+      io.unobserve(e.target);
+    }
+  }, { threshold: 0.25 });
+  document.querySelectorAll<HTMLElement>('[data-viz]').forEach((v) => {
+    if (v.closest('[data-stage]')) return;
+    if (v.closest('.belt')) { v.classList.add('on'); return; } // im laufenden Band sofort fertig
+    io.observe(v);
+  });
+  // Abschnitte auf Unterseiten: nur unterhalb des ersten Bildschirms (nichts blitzt auf)
+  document.querySelectorAll<HTMLElement>('[data-rv]').forEach((el) => {
+    if (el.getBoundingClientRect().top < innerHeight * 0.9) return;
+    el.classList.add('rv');
+    io.observe(el);
+  });
+}
+
 export function initFx() {
   if (reduced || !('IntersectionObserver' in window)) return;
 
@@ -83,46 +107,105 @@ export function initFx() {
 }
 
 /**
- * Drehauswahl der Regelwerke (Quick-Check): dreht sich langsam, hält bei Zeiger
- * oder Fokus an. Pfeile drehen um eine Karte; eine fokussierte Karte dreht nach vorn.
- * Bei reduzierter Bewegung zeigt CSS ein einfaches Raster.
+ * Drehauswahl der Regelwerke (Quick-Check, 3D-Ring) und Band der Funktionen.
+ * Beide bewegen sich ständig langsam weiter. Sie halten nur an, solange der Zeiger
+ * auf einer Karte liegt oder eine Karte den Fokus hat. Pfeile springen um eine Karte,
+ * danach geht die Bewegung weiter. Bewegung nur, solange der Bereich sichtbar ist.
+ * Bei reduzierter Bewegung: CSS zeigt ein Raster bzw. eine waagerecht scrollbare Reihe.
  */
 export function initCarousel() {
-  if (reduced) return;
-  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupCarousel);
+  if (reduced) {
+    document.querySelectorAll<HTMLElement>('[data-belt]').forEach((belt) => {
+      const sec = belt.closest('section');
+      sec?.querySelectorAll<HTMLButtonElement>('[data-belt-go]').forEach((b) => b.addEventListener('click', () => belt.scrollBy({ left: Number(b.dataset.beltGo) * 320 })));
+    });
+    return;
+  }
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupRing);
+  document.querySelectorAll<HTMLElement>('[data-belt]').forEach(setupBelt);
 }
 
-function setupCarousel(car: HTMLElement) {
+function whenVisible(el: HTMLElement, cb: (v: boolean) => void) {
+  new IntersectionObserver((e) => cb(e[0].isIntersecting), { rootMargin: '100px 0px' }).observe(el);
+}
+
+function setupRing(car: HTMLElement) {
   const ring = car.querySelector<HTMLElement>('.ring');
   if (!ring) return;
   const items = Array.from(ring.querySelectorAll<HTMLElement>('.ring-item'));
   const step = 360 / items.length;
-  let angle = 0;
-  ring.classList.add('spin');
-  const current = () => {
-    const m = new DOMMatrix(getComputedStyle(ring).transform);
-    return (Math.atan2(m.m31, m.m11) * 180) / Math.PI;
+  const speed = 9; // Grad pro Sekunde, eine Runde in 40 s
+  let angle = 0, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0;
+  ring.classList.add('js');
+  const frame = (now: number) => {
+    const dt = Math.min(0.1, (now - last) / 1000 || 0);
+    last = now;
+    if (target !== null) {
+      angle += (target - angle) * Math.min(1, dt * 6);
+      if (Math.abs(target - angle) < 0.05) { angle = target; target = null; hold = now + 1500; }
+    } else if (!paused && now > hold) angle -= speed * dt;
+    ring.style.transform = `rotateY(${angle.toFixed(3)}deg)`;
+    raf = visible ? requestAnimationFrame(frame) : 0;
   };
-  const stop = () => {
-    if (!ring.classList.contains('spin')) return;
-    angle = current();
-    ring.classList.remove('spin');
-    ring.style.transition = 'none';
-    ring.style.transform = `rotateY(${angle}deg)`;
-    void ring.offsetWidth;
-    ring.style.transition = '';
+  whenVisible(car, (v) => { visible = v; if (v && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } });
+  const turnTo = (t: number) => {
+    while (t - angle > 180) t -= 360;
+    while (t - angle < -180) t += 360;
+    target = t;
   };
-  const turnTo = (target: number) => {
-    stop();
-    // kürzester Weg
-    while (target - angle > 180) target -= 360;
-    while (target - angle < -180) target += 360;
-    angle = target;
-    ring.style.transform = `rotateY(${angle}deg)`;
-  };
+  items.forEach((it, k) => {
+    it.addEventListener('pointerenter', () => { paused = true; });
+    it.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 600; });
+    it.addEventListener('focusin', () => { paused = true; turnTo(-k * step); });
+    it.addEventListener('focusout', () => { paused = false; });
+  });
   car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {
-    stop();
-    turnTo(Math.round(angle / step) * step - Number(b.dataset.car) * step);
+    turnTo(Math.round((target ?? angle) / step) * step - Number(b.dataset.car) * step);
   }));
-  items.forEach((it, k) => it.addEventListener('focusin', () => turnTo(-k * step)));
+}
+
+function setupBelt(belt: HTMLElement) {
+  const track = belt.querySelector<HTMLElement>('.belt-track');
+  if (!track) return;
+  const originals = Array.from(track.children) as HTMLElement[];
+  // zweite Reihe für den nahtlosen Übergang (für Bildschirmleser und Tastatur verborgen)
+  originals.forEach((li) => {
+    const c = li.cloneNode(true) as HTMLElement;
+    c.setAttribute('aria-hidden', 'true');
+    c.setAttribute('inert', '');
+    track.append(c);
+  });
+  belt.classList.add('js');
+  const speed = 26; // Pixel pro Sekunde
+  let x = 0, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0;
+  const setW = () => track.scrollWidth / 2;
+  const cardW = () => originals[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || '0');
+  const wrap = () => { const w = setW(); if (x <= -w) { x += w; if (target !== null) target += w; } if (x > 0) { x -= w; if (target !== null) target -= w; } };
+  const frame = (now: number) => {
+    const dt = Math.min(0.1, (now - last) / 1000 || 0);
+    last = now;
+    if (target !== null) {
+      x += (target - x) * Math.min(1, dt * 6);
+      if (Math.abs(target - x) < 0.5) { x = target; target = null; hold = now + 1500; }
+    } else if (!paused && now > hold) x -= speed * dt;
+    wrap();
+    track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
+    raf = visible ? requestAnimationFrame(frame) : 0;
+  };
+  whenVisible(belt, (v) => { visible = v; if (v && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } });
+  track.addEventListener('pointerover', (e) => { if ((e.target as Element).closest('.belt-item')) paused = true; });
+  track.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 600; });
+  track.addEventListener('focusin', (e) => {
+    paused = true;
+    const li = (e.target as Element).closest<HTMLElement>('.belt-item');
+    if (!li) return;
+    const r = li.getBoundingClientRect(), br = belt.getBoundingClientRect();
+    if (r.left < br.left + 16 || r.right > br.right - 16) target = x - (r.left - br.left - 24);
+  });
+  track.addEventListener('focusout', () => { paused = false; });
+  belt.closest('section')?.querySelectorAll<HTMLButtonElement>('[data-belt-go]').forEach((b) => b.addEventListener('click', () => {
+    const w = cardW();
+    const base = target ?? x;
+    target = Math.round(base / w) * w - Number(b.dataset.beltGo) * w;
+  }));
 }
