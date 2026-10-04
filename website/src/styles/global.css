@@ -1749,3 +1749,70 @@ html.mirror-js .trust-list li.in::after { animation: mirror-sheen 1.3s ease-out 
 /* v5 · Lange Wörter in Überschriften (z. B. „Datenschutzerklärung“) dürfen auf dem Telefon nicht über den Rand laufen */
 h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
 .legal h1 { font-size: clamp(1.9rem, 1.2rem + 3.6vw, var(--step-3-max, 4rem)); }
+/* v5 · Regelwerksseiten (/de/regelwerke/…, /en/frameworks/…) */
+.fwp-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.4rem; }
+.fwp-nav a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid rgb(255 255 255 / 0.12); background: rgb(10 16 32 / 0.6); color: var(--text-2); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: border-color 0.25s, color 0.25s; }
+.fwp-nav a i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.fwp-nav a:hover, .fwp-nav a[aria-current] { color: var(--text); border-color: var(--c); }
+.fwp-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(1.5rem, 5vw, 5rem); align-items: center; }
+.fwp-head .kicker { color: var(--c); }
+.fwp-head h1 { font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.6rem); line-height: 1; letter-spacing: -0.045em; margin-top: 0.7rem; }
+.fwp-head h1 .accent { display: block; font-size: 0.5em; margin-top: 0.35em; letter-spacing: -0.03em; line-height: 1.15; }
+.fwp-head .lead { max-width: 44rem; margin-top: 1.4rem; }
+.fwp-facts { margin: 1.8rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.fwp-facts div { padding: 1.3rem 1.3rem 1.4rem; border-radius: 20px; border: 1px solid rgb(255 255 255 / 0.09); background: radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--c) 14%, transparent), transparent 60%), rgb(10 16 32 / 0.88); }
+.fwp-facts dt { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--c); }
+.fwp-facts dd { margin: 0.55rem 0 0; color: var(--text); line-height: 1.5; }
+.fwp-who { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+.fwp-list { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 0.9rem; }
+.fwp-list li { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.7rem; color: var(--text-2); line-height: 1.55; }
+.fwp-list svg { width: 20px; height: 20px; color: var(--c); margin-top: 0.15rem; }
+.fwp-who .photo-frame img { aspect-ratio: auto; height: auto; }
+.fwp-what li span { font-family: var(--mono); font-size: 0.78rem; color: var(--c); }
+.fwp-what li h3 { font-size: 1.15rem; margin-top: 0.6rem; letter-spacing: -0.02em; }
+.fwp-what li p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.96rem; line-height: 1.55; }
+.tl-v { list-style: none; position: relative; margin: 1.8rem 0 0; padding: 0 0 0 3.2rem; display: grid; gap: 1rem; max-width: 46rem; }
+.tl-v::before, .tl-v::after { content: ''; position: absolute; left: 1.05rem; top: 0.6rem; bottom: 0.6rem; width: 2px; border-radius: 2px; }
+.tl-v::before { background: rgb(255 255 255 / 0.1); }
+.tl-v::after { background: linear-gradient(180deg, var(--c), var(--mint)); box-shadow: 0 0 14px var(--c); transform-origin: 50% 0; }
+.tl-v li { position: relative; padding: 0.95rem 1.1rem; border-radius: 14px; background: rgb(255 255 255 / 0.035); border: 1px solid rgb(255 255 255 / 0.08); }
+.tl-v .hn { position: absolute; left: -2.75rem; top: 50%; translate: 0 -50%; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 5px rgb(10 16 32), 0 0 16px var(--c); }
+.tl-v time { display: block; font-family: var(--mono); font-size: 0.8rem; color: var(--c); }
+.tl-v p { margin: 0.3rem 0 0; color: var(--text); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: 0% 100%)) {
+    .tl-v { view-timeline-name: --tlv; }
+    .tl-v::after { animation: tl-grow linear both; animation-timeline: --tlv; animation-range: entry 20% cover 55%; }
+    .tl-v li { animation: tl-item linear both; animation-timeline: view(); animation-range: entry 10% cover 35%; }
+    .tl-v .hn { animation: tl-node linear both; animation-timeline: view(); animation-range: entry 15% cover 35%; }
+    .fwp-facts div, .fwp-what li { animation: sd-pop linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+  }
+}
+.fwp-help { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; padding: clamp(1.6rem, 4vw, 2.8rem); border-radius: 28px; border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); background: radial-gradient(90% 120% at 0% 50%, color-mix(in srgb, var(--c) 16%, transparent), transparent 60%), rgb(10 16 32 / 0.9); }
+.fwp-help.wrap { width: calc(min(100%, 1360px) - 2 * var(--gutter)); }
+.fwp-num b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(3.2rem, 2rem + 4vw, 5.5rem); letter-spacing: -0.05em; line-height: 1; color: var(--c); }
+.fwp-num span { display: block; max-width: 11rem; color: var(--text-2); font-size: 0.9rem; margin-top: 0.4rem; }
+.fwp-help p { margin-top: 0.8rem; color: var(--text-2); font-size: 1.08rem; line-height: 1.6; max-width: 44rem; }
+.fwp-faq { margin-top: 1.6rem; display: grid; gap: 0.8rem; max-width: 52rem; }
+.fwp-faq details { border-radius: 16px; border: 1px solid rgb(255 255 255 / 0.1); background: rgb(10 16 32 / 0.85); }
+.fwp-faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 1.05rem 1.2rem; font-weight: 600; color: var(--text); }
+.fwp-faq summary::-webkit-details-marker { display: none; }
+.fwp-faq summary svg { width: 18px; height: 18px; flex: none; color: var(--c); transition: rotate 0.35s var(--ease-expo); }
+.fwp-faq details[open] summary svg { rotate: 180deg; }
+.fwp-faq details p { padding: 0 1.2rem 1.1rem; color: var(--text-2); line-height: 1.6; }
+.fwp-more { list-style: none; margin: 1.8rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1rem; }
+.fwp-more a { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; text-align: center; padding: 1.4rem 1rem; border-radius: 22px; text-decoration: none; color: var(--text-2); border: 1px solid rgb(255 255 255 / 0.09); background: radial-gradient(90% 60% at 50% 25%, color-mix(in srgb, var(--c) 18%, rgb(10 16 32)) 0%, rgb(10 16 32 / 0.95) 72%); transition: border-color 0.25s, translate 0.5s var(--ease-expo); }
+.fwp-more a:hover, .fwp-more a:focus-visible { border-color: var(--c); translate: 0 -5px; }
+.fwp-more .portal { --s: 6.6rem; }
+.fwp-more .pn-s { font-size: 0.95rem; letter-spacing: -0.01em; max-width: 5rem; line-height: 1.15; }
+.fwp-more span { font-size: 0.92rem; line-height: 1.45; }
+.fwp-src { margin-top: 3rem; font-size: 0.84rem; color: var(--muted); }
+.fwp-src p + p { margin-top: 0.5rem; }
+@media (max-width: 820px) {
+  .fwp-head, .fwp-who, .fwp-help { grid-template-columns: 1fr; }
+  .fwp-head .portal { justify-self: center; }
+}
+.fwp { overflow-x: clip; }
+.qc-fwlink { margin-top: 0.9rem; }
+.qc-fwlink a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--mint); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgb(142 230 184 / 0.4); padding-bottom: 2px; }
+.qc-fwlink svg { width: 15px; height: 15px; }
