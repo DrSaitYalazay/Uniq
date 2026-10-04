@@ -15,6 +15,9 @@ import ManagementSummaryCard from "@/components/dashboard/ManagementSummaryCard"
 import UmsetzungFortschrittCard from "@/components/dashboard/UmsetzungFortschrittCard";
 import RiskAppetiteCard from "@/components/dashboard/RiskAppetiteCard";
 import { PostureCard } from "@/components/PostureCard";
+import { ModeToggle } from "@/components/ModeToggle";
+import { SetupGate } from "@/components/SetupWizard";
+import { useAssessmentMode } from "@/hooks/useAssessmentMode";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -186,6 +189,10 @@ function FristenCard({ de, frameworkFilter = null }: { de: boolean; frameworkFil
   );
 }
 
+// UniqSuite: KPI-Kacheln und „Entscheidungsbedarf" wiederholten Zahlen der Kopfkarte.
+const SHOW_KPI_TILES = false;
+const SHOW_DECISION_CARD = false;
+
 const Dashboard = () => {
   const { lang } = useLanguage();
   const de = lang === "de";
@@ -258,6 +265,9 @@ const Dashboard = () => {
   const umsLiveTotal = useMemo(() => overview.reduce((a, o) => a + (o.stats.applicable || 0), 0), [overview]);
   const umsLiveDone = useMemo(() => overview.reduce((a, o) => a + (o.stats.ja || 0) + 0.5 * (o.stats.teilweise || 0), 0), [overview]);
 
+  const { mode } = useAssessmentMode();
+  const detail = mode === "expert";
+
   const kpis = [
     {
       icon: ShieldCheck,
@@ -305,6 +315,7 @@ const Dashboard = () => {
   ];
 
   return (
+    <SetupGate de={de}>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       <div className="flex items-center gap-3">
         <LayoutDashboard className="size-7 text-accent" />
@@ -318,8 +329,10 @@ const Dashboard = () => {
               : (de ? "Executive-Übersicht über alle Phasen und Frameworks." : "Executive overview across all phases and frameworks.")}
           </p>
         </div>
+        <div className="ml-auto flex items-center gap-3">
+        <ModeToggle de={de} />
         {enabledFrameworks.length > 1 && (
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Filter className="size-4 text-muted-foreground" aria-hidden="true" />
             <label htmlFor="dash-fw" className="text-xs text-muted-foreground">{de ? "Framework" : "Framework"}</label>
             <select
@@ -335,6 +348,7 @@ const Dashboard = () => {
             </select>
           </div>
         )}
+        </div>
       </div>
 
       {fwSel && (
@@ -351,9 +365,11 @@ const Dashboard = () => {
       )}
 
       {/* Chef-Sicht in 5 Sekunden: Score + Ampel + Handlungsbedarf ganz oben. */}
-      <ManagementSummaryCard overview={overview} loading={loading} de={de} freshness={freshness} frameworkFilter={fwSel} />
+      <ManagementSummaryCard overview={overview} loading={loading} de={de} freshness={freshness} frameworkFilter={fwSel} hideDeadlines={detail} />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* UniqSuite: KPI-Kacheln entfallen — Gesamtwert und Trend stehen in der Kopfkarte,
+          Kontrollen/Frameworks/kritische MUSS in den Framework-Karten bzw. -Grafiken. */}
+      {SHOW_KPI_TILES && <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k) => {
           const Icon = k.icon;
           return (
@@ -379,10 +395,10 @@ const Dashboard = () => {
             </Card>
           );
         })}
-      </div>
+      </div>}
 
       {/* Entscheidungsbedarf — die wirkungsvollste nächste Führungsentscheidung. */}
-      {!loading && hasFw && (() => {
+      {SHOW_DECISION_CARD && !loading && hasFw && (() => {
         const worst = [...overview]
           .filter(o => (o.stats.criticalOpen || 0) > 0)
           .sort((a, b) => (b.stats.criticalOpen || 0) - (a.stats.criticalOpen || 0))[0]
@@ -422,21 +438,21 @@ const Dashboard = () => {
 
       {/* Sicherheits-Posture (additive Kennzahl aus vorhandenen Daten) — framework-übergreifend,
           daher nur ohne Framework-Filter. */}
-      {!fwSel && <PostureCard de={de} />}
+      {detail && !fwSel && <PostureCard de={de} />}
 
       {/* Fortschrittskurve Plan vs. Ist vs. Prognose (monatlich/wöchentlich, Zeitraum) */}
-      <UmsetzungFortschrittCard de={de} liveTotal={umsLiveTotal} liveDone={umsLiveDone} scopeCodes={fwSel ? [fwSel] : enabledFrameworks} strictScope={!!fwSel} />
+      {detail && <UmsetzungFortschrittCard de={de} liveTotal={umsLiveTotal} liveDone={umsLiveDone} scopeCodes={fwSel ? [fwSel] : enabledFrameworks} strictScope={!!fwSel} />}
 
       {/* Management-Grafiken (Führungssicht) — direkt unter den Kennzahlen ganz oben */}
-      {!loading && overview.length > 0 && (
+      {detail && !loading && overview.length > 0 && (
         <FrameworkChartsGrid overviews={overview} de={de} />
       )}
 
       {/* Legende & Begriffe — erklärt ALLE Kürzel/Kennzahlen der Grafiken */}
-      <GlossaryCard de={de} />
+      {detail && <GlossaryCard de={de} />}
 
-      {/* Framework compliance breakdown */}
-      <Card>
+      {/* Framework compliance breakdown — UniqSuite: nur im Überblick; im Detail zeigen die Grafiken dieselben Zahlen. */}
+      {!detail && <Card>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between flex-wrap gap-2">
             <div>
@@ -496,7 +512,7 @@ const Dashboard = () => {
                       <div className={`text-2xl font-bold tabular-nums ${toneOf(pct)}`}>{pct}%</div>
                     </div>
                     <Progress value={pct} className="mt-3 h-2" />
-                    <div className="mt-3 grid grid-cols-4 gap-3 text-xs">
+                    <div className="mt-3 grid grid-cols-3 gap-3 text-xs">
                       <div>
                         <div className="text-muted-foreground">{de ? "Umgesetzt" : "Implemented"}</div>
                         <div className="font-semibold st-ja-text">{o.stats.ja}</div>
@@ -509,10 +525,6 @@ const Dashboard = () => {
                         <div className="text-muted-foreground">{de ? "Nicht umgesetzt" : "Not implemented"}</div>
                         <div className="font-semibold st-nein-text">{o.stats.nein}</div>
                       </div>
-                      <div>
-                        <div className="text-muted-foreground">{de ? "Kritische MUSS" : "Critical MUST"}</div>
-                        <div className="font-semibold st-nein-text">{o.stats.criticalOpen}</div>
-                      </div>
                     </div>
                   </div>
                 );
@@ -520,15 +532,16 @@ const Dashboard = () => {
             </div>
           )}
         </CardContent>
-      </Card>
+      </Card>}
 
-      <div className={`grid gap-4 ${fwSel ? "" : "md:grid-cols-2"}`}>
-        <FristenCard de={de} frameworkFilter={fwSel} />
+      <div className={`grid gap-4 ${fwSel || !detail ? "" : "md:grid-cols-2"}`}>
+        {/* Fristen: im Überblick stehen die überfälligen bereits in der Kopfkarte. */}
+        {detail && <FristenCard de={de} frameworkFilter={fwSel} />}
         {/* Risiko-Appetit ist framework-übergreifend → nur ohne Filter. */}
         {!fwSel && <RiskAppetiteCard de={de} />}
       </div>
 
-      <DashboardDeltaBacklog frameworkFilter={fwSel} />
+      {detail && <DashboardDeltaBacklog frameworkFilter={fwSel} />}
 
       <Card>
         <CardHeader>
@@ -572,6 +585,7 @@ const Dashboard = () => {
       </Card>
 
     </div>
+    </SetupGate>
   );
 };
 
