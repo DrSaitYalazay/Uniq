@@ -1,0 +1,34 @@
+---
+import Legal from '../../components/Legal.astro';
+import { CONTACT_EMAIL } from '../../config';
+---
+<Legal lang="en" path="/en/privacy/" altPath="/de/datenschutz/" title="Privacy policy" description="Privacy policy for uniqsuite.cyberwerk.online">
+  <p class="todo">TEMPLATE – have this reviewed before publication and complete the items marked TODO. The German version is legally authoritative.</p>
+
+  <h2>1. Controller</h2>
+  <p>The controller for this website is the provider named in the <a href="https://cyberwerksuite.com/impressum" rel="noopener noreferrer">legal notice (Impressum)</a>.</p>
+  <p class="todo">TODO: name and address of the controller; data protection officer, if any.</p>
+
+  <h2>2. Principle: as little data as possible</h2>
+  <p>This website sets no cookies, uses no analytics or tracking services and loads no content from third parties. Fonts, images and code are served from our own server.</p>
+
+  <h2>3. Server logs</h2>
+  <p>When you visit the website, the web server stores technically necessary information: a shortened IP address (the last digits are removed before storage), date and time, the address requested, status code, amount of data transferred and the browser identifier. The purpose is secure and stable operation. The legal basis is Art. 6(1)(f) GDPR. Logs are deleted after seven days at the latest.</p>
+  <p class="todo">TODO: name the hosting provider and the data processing agreement (Art. 28 GDPR).</p>
+
+  <h2>4. Quick check and PDF report</h2>
+  <p>The quick check runs entirely in your browser. Your answers, the result and any company name you enter are not transferred to us or to third parties and are not stored. The PDF report is also created locally in your browser. Closing the page deletes the information.</p>
+
+  <h2>5. Contact by email</h2>
+  <p>If you email us at {CONTACT_EMAIL} via “Book a demo”, we process your details to answer your enquiry (Art. 6(1)(b) or (f) GDPR).</p>
+  <p class="todo">TODO: add retention period and email provider.</p>
+
+  <h2>6. Signing in to the application</h2>
+  <p>The “Sign in” button leads to the application at uniq.cyberwerk.online, which has its own privacy policy.</p>
+
+  <h2>7. Your rights</h2>
+  <p>You have the right of access, rectification, erasure, restriction of processing, data portability and objection (Art. 15–21 GDPR), and the right to lodge a complaint with a supervisory authority (Art. 77 GDPR).</p>
+  <p class="todo">TODO: add the competent supervisory authority.</p>
+
+  <p class="small muted">As of October 2026</p>
+</Legal>
