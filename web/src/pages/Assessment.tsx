@@ -30,6 +30,7 @@ import { LayoutDashboard } from "lucide-react";
 
 import { onFrameworksUpdated } from "@/lib/frameworkBus";
 import { isIsoClause } from "@/data/isoAnnexMap";
+import { visibleFrameworkCodes, FEATURES } from "@/config/uniqFeatures";
 import {
   computeStats, projectAnswer, buildAnchorAnswerMap,
   type AnswerRow, type AnswerStatus, type ControlRow, type EffectiveAnswer,
@@ -68,7 +69,10 @@ const Assessment = () => {
   const [enabledFrameworks, setEnabledFrameworks] = useState<string[]>([]);
   const [maturityFlags, setMaturityFlags] = useState<Record<string, boolean>>({});
   const [profileLoaded, setProfileLoaded] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>("__overview__");
+  // UniqSuite: Einstieg aus dem Einrichtungsassistenten (/assessment?fw=NIS2) öffnet direkt die Bewertungskarte.
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    try { return new URLSearchParams(window.location.search).get("fw") || "__overview__"; } catch { return "__overview__"; }
+  });
   /** Sprung aus der „Alle"-Liste: diese Anforderung im Framework-Tab öffnen. */
   const [focus, setFocus] = useState<{ fw: string; controlId: string; nonce: number } | null>(null);
   const openControl = (fw: string, controlId: string) => {
@@ -118,7 +122,7 @@ const Assessment = () => {
       supabase.from("company_profiles").select("enabled_frameworks").eq("user_id", tenantId).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
       supabase.from("frameworks").select("code, uses_maturity"),
     ]);
-    const list = (profile?.enabled_frameworks ?? []) as string[];
+    const list = visibleFrameworkCodes((profile?.enabled_frameworks ?? []) as string[]);
     setEnabledFrameworks(list);
     const flags: Record<string, boolean> = {};
     (fwRows ?? []).forEach((r: any) => { flags[r.code] = !!r.uses_maturity; });
@@ -131,7 +135,7 @@ const Assessment = () => {
   // Live-refresh when Scope persists a new framework selection.
   useEffect(() => {
     return onFrameworksUpdated(({ enabled_frameworks }) => {
-      setEnabledFrameworks(enabled_frameworks);
+      setEnabledFrameworks(visibleFrameworkCodes(enabled_frameworks));
     });
   }, []);
 
@@ -351,22 +355,8 @@ const Assessment = () => {
 
         {profileLoaded && (
           <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs">
-            <Layers className="h-3.5 w-3.5 text-accent" />
-            <span className="font-medium text-foreground">
-              {de ? "Aktive Frameworks:" : "Active frameworks:"}
-            </span>
-            {tabFrameworks.length === 0 ? (
-              <span className="text-muted-foreground">{de ? "keine" : "none"}</span>
-            ) : (
-              tabFrameworks.map(fw => {
-                const meta = FRAMEWORK_LABELS[fw] ?? { short: fw };
-                return (
-                  <Badge key={fw} variant="secondary" className="text-[10px] px-1.5 py-0.5 gap-1">
-                                        {meta.short}
-                  </Badge>
-                );
-              })
-            )}
+
+            {/* UniqSuite: Framework-Chips entfallen — die Tabs darunter nennen dieselben Frameworks (mit Prozent). */}
             <span className="flex-1" />
             {/* Einfach (Baustein) ↔ Experte (Kontrolle) — pro Nutzer/Gerät */}
             <div className="inline-flex items-center rounded-lg border border-border overflow-hidden" role="group"
@@ -578,6 +568,7 @@ const Assessment = () => {
             <TabsContent value="__overview__" className="mt-4">
               <AssessmentOverviewPanel
                 de={de}
+                mode={assessmentMode}
                 onSelectFramework={setActiveTab}
                 onOpenControl={openControl}
                 frameworks={tabFrameworks.map(fw => {
@@ -626,7 +617,7 @@ const Assessment = () => {
                     onBulkStatus={(ids, s, note) => handleBulk(fw, ids, s, note)}
                     mode={assessmentMode}
                     focus={focus && focus.fw === fw ? { controlId: focus.controlId, nonce: focus.nonce } : undefined}
-                    assets={inventory.assets}
+                    assets={FEATURES.assetAssessment ? inventory.assets : []}
                     getAssetEffective={(control, assetId, orgEffective) => buildAssetEffective(fw, control, assetId, orgEffective)}
                     isAssetOverride={(controlId, assetId) => !!answers[answerKey(fw, controlId, assetId)]?.antwort}
                     onSetAssetStatus={(controlId, assetId, s) => handleAssetStatus(fw, controlId, assetId, s)}
