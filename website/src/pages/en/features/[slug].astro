@@ -1,0 +1,9 @@
+---
+import FeaturePage from '../../../components/FeaturePage.astro';
+import { features } from '../../../data/features';
+export function getStaticPaths() {
+  return features.en.map((f, i) => ({ params: { slug: f.slug }, props: { index: i } }));
+}
+const { index } = Astro.props;
+---
+<FeaturePage lang="en" index={index} />
