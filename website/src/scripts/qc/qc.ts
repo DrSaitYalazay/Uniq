@@ -229,7 +229,7 @@ export function init() {
       h('div', { class: 'whatuniq' }, h('b', {}, T.whatUniqTitle), h('p', {}, T.whatUniq)),
       h('div', { class: 'res-actions' },
         h('a', { class: 'btn btn-primary', href: D.login }, T.ctaLogin),
-        h('a', { class: 'btn btn-ghost', href: D.demo }, document.querySelector('.header-actions .btn-ghost')?.textContent?.trim() || 'Demo'),
+        h('a', { class: 'btn btn-ghost', href: D.demo, 'data-anfrage': '' }, document.querySelector('.header-actions .btn-ghost')?.textContent?.trim() || 'Demo'),
       ),
       h('label', { class: 'field', for: 'qc-company' }, T.company, company),
       h('div', { class: 'res-actions' }, pdfBtn,
