@@ -118,7 +118,7 @@ export async function init(canvas: HTMLCanvasElement) {
     renderer.toneMapping = THREE.NoToneMapping;
     composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: tier >= 3 ? 4 : 0 });
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 1.25, radius: 0.75 });
+    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
     const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
     const tone = new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL });
     composer.addPass(new EffectPass(camera, bloom, vignette, tone));
