@@ -63,6 +63,8 @@ import {
 import { InfoHint } from "@/components/dashboard/InfoHint";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Implementation from "@/pages/Implementation";
+import { isoThemeOf, type IsoTheme as IsoBereich } from "@/data/isoThemes";
+import { IsoThemeGroups, type ThemeTopic } from "@/components/assessment/IsoThemeGroups";
 
 import { CHART_IMPL, CHART_PHASE, CHART_SEVERITY, CHART_STATUS, CHART_STATUS_OHNE } from "@/lib/chartPalette";
 import { insideSliceLabel } from "@/lib/chartLabels";
@@ -1527,13 +1529,21 @@ const Roadmap = () => {
               const clauseN = ((projection.allControls ?? []) as any[]).length - soaControls.length;
               const cats = new Map<string, { title: string; applicable: number; done: number; teil: number; excluded: number; na: number }>();
               for (const c of soaControls) {
-                const key = c.categoryId ?? "—";
+                const th = isoThemeOf(String(c.id));
+                const key = `${th}|${c.categoryId ?? "—"}`;
                 const title = (de ? (c.categoryTitle || key) : (c.categoryTitleEn || c.categoryTitle || key)) as string;
                 if (!cats.has(key)) cats.set(key, { title, applicable: 0, done: 0, teil: 0, excluded: 0, na: 0 });
                 const e = cats.get(key)!;
                 if (!c.applicable) e.na++;
                 else if (c.isExcluded) e.excluded++;
                 else { e.applicable++; if (c.implStatus === "ja") e.done++; else if (c.implStatus === "teilweise") e.teil++; }
+              }
+              // Themen je ISO-27001-Bereich für den Überblick (Schlüssel „Bereich|Kategorie").
+              const soaThemen = new Map<IsoBereich, ThemeTopic[]>();
+              for (const [key, e] of cats) {
+                if (e.applicable === 0) continue;
+                const th = key.split("|")[0] as IsoBereich;
+                (soaThemen.get(th) ?? soaThemen.set(th, []).get(th)!).push({ label: e.title, num: e.done + 0.5 * e.teil, den: e.applicable, ratio: `${e.done}/${e.applicable}` });
               }
               const rows = [...cats.values()]
                 .map(e => ({ ...e, pct: e.applicable > 0 ? Math.round(((e.done + 0.5 * e.teil) / e.applicable) * 100) : 0 }))
@@ -1590,57 +1600,13 @@ const Roadmap = () => {
                       subtitle={de ? "— umgesetzt / offen je gewähltem Framework" : "— implemented / open per selected framework"}
                     />
                   )}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between px-1">
-                      <div className="text-base font-semibold text-foreground">{de ? "Größte Lücken" : "Biggest gaps"}</div>
-                      <div className="text-xs text-muted-foreground">{de ? "Die fünf Themen mit dem geringsten Umsetzungsstand" : "The five topics with the lowest implementation"}</div>
-                    </div>
-                    {rows.length === 0 ? (
-                      <div className="text-sm text-muted-foreground">{de ? "Noch keine Kontrollen im Scope." : "No controls in scope yet."}</div>
-                    ) : rows.filter(r => r.applicable > 0).slice(0, TOP_GAPS).map((r, i) => {
-                      const band = r.applicable === 0 ? "muted" : r.pct >= 75 ? "ok" : r.pct >= 40 ? "warn" : "bad";
-                      const bar = band === "ok" ? "st-ja-bg" : band === "warn" ? "st-teilweise-bg" : band === "bad" ? "st-nein-bg" : "bg-muted-foreground/40";
-                      const card = band === "ok" ? "st-ja-border st-ja-tint st-ja-text"
-                        : band === "warn" ? "st-teilweise-border st-teilweise-tint st-teilweise-text"
-                        : band === "bad" ? "st-nein-border st-nein-tint st-nein-text"
-                        : "border-border bg-muted/30 text-muted-foreground";
-                      return (
-                      <button key={i} type="button" onClick={() => setMode("expert")}
-                              title={de ? "Für Details in den Detail-Modus wechseln" : "Switch to Detail for the control list"}
-                              className="w-full flex items-center gap-4 rounded-xl border border-border bg-card px-3 py-2.5 hover:border-accent hover:shadow-sm transition-all group">
-                        <span className="text-sm md:text-base text-foreground flex-1 min-w-0 truncate text-left font-semibold group-hover:text-accent" title={r.title}>{r.title}</span>
-                        <div className="w-32 sm:w-48 h-2.5 rounded-full bg-muted overflow-hidden shrink-0">
-                          <div className={`h-full rounded-full ${bar} transition-all duration-500`} style={{ width: `${Math.max(r.pct, 2)}%` }} />
-                        </div>
-                        <div className={`shrink-0 rounded-lg border px-2.5 py-1 text-right leading-tight ${card}`}>
-                          <span className="text-base font-bold tabular-nums">{r.pct}%</span>
-                          <span className="block text-[10px] text-muted-foreground tabular-nums">{r.done}/{r.applicable}</span>
-                        </div>
-                      </button>
-                      );
-                    })}
-                    {rows.length > TOP_GAPS && (() => {
-                      // UniqSuite-Überblick: statt aller Themen nur die Verteilung in einer Zeile;
-                      // die vollständige Themenliste steht im Detail.
-                      const withScope = rows.filter(r => r.applicable > 0);
-                      const gut = withScope.filter(r => r.pct >= 75).length;
-                      const mittel = withScope.filter(r => r.pct >= 40 && r.pct < 75).length;
-                      const kritisch = withScope.filter(r => r.pct < 40).length;
-                      return (
-                        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-sm">
-                          <span className="text-muted-foreground">
-                            {de ? `${withScope.length} Themen: ` : `${withScope.length} topics: `}
-                            <b className="st-ja-text">{gut} {de ? "gut" : "good"}</b>{" · "}
-                            <b className="st-teilweise-text">{mittel} {de ? "in Arbeit" : "in progress"}</b>{" · "}
-                            <b className="st-nein-text">{kritisch} {de ? "kritisch" : "critical"}</b>
-                          </span>
-                          <button type="button" onClick={() => setMode("expert")} className="text-xs font-semibold text-accent-readable hover:underline">
-                            {de ? "Alle Themen im Detail →" : "All topics in Detail →"}
-                          </button>
-                        </div>
-                      );
-                    })()}
-                  </div>
+                  {/* UniqSuite-Überblick: SoA in der Gliederung von ISO/IEC 27001 — 5 Bereiche
+                      zugeklappt, Themen beim Aufklappen. Vollständige Liste je Kontrolle im Detail. */}
+                  {rows.length === 0 ? (
+                    <div className="text-sm text-muted-foreground px-1">{de ? "Noch keine Kontrollen im Scope." : "No controls in scope yet."}</div>
+                  ) : (
+                    <IsoThemeGroups de={de} topics={soaThemen} />
+                  )}
                   <div className="text-[11px] text-muted-foreground">
                     {de ? "Vollständige Anwendbarkeitserklärung (je Kontrolle, Begründungen, Version freigeben) im " : "Full Statement of Applicability (per control, justifications, version release) in "}
                     <span className="font-semibold text-foreground">Detail</span>.
@@ -3937,7 +3903,5 @@ function GanttChart({
 
 // UniqSuite: Roadmap-Board (Jetzt/Nächste/Später, Gantt, Ressourcen) ausgeblendet — siehe topTab "roadmap".
 const SHOW_ROADMAP_BOARD = false;
-// UniqSuite-Überblick der SoA: nur die schwächsten Themen, der Rest im Detail.
-const TOP_GAPS = 5;
 
 export default Roadmap;
