@@ -8,6 +8,11 @@ name: Deploy UniqSuite to IONOS
 on:
   push:
     branches: [main]
+    # Die Marketing-Website (website/) hat einen eigenen Workflow (website.yml)
+    # und loest keinen App-Deploy aus.
+    paths-ignore:
+      - 'website/**'
+      - '.github/workflows/website.yml'
   workflow_dispatch:
 
 # V-4: der Job braucht nur Lesezugriff auf das Repository.
