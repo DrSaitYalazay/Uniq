@@ -1,0 +1,57 @@
+name: Deploy Website (uniqsuite.cyberwerk.online)
+
+# Baut die statische Marketing-Website aus website/ und aktiviert sie auf dem Server
+# (/root/UniqSuiteWeb, eigener Container). Die App wird dabei nicht angefasst.
+# Secrets wie deploy.yml: SSH_HOST, SSH_USER, SSH_KEY, optional SSH_KNOWN_HOSTS.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - '.github/workflows/website.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Node 24 bereitstellen
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      # Build und Prüfungen VOR jedem Zugriff auf den Server
+      - name: Abhängigkeiten prüfen, bauen, CSP-Prüfung
+        working-directory: website
+        run: |
+          npm ci --no-fund
+          npm audit --omit=dev --audit-level=high
+          npm run build:check
+          tar -czf ../uniqsuite-site.tgz -C dist .
+
+      - name: SSH vorbereiten
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: sh .github/scripts/ssh-vorbereiten.sh
+
+      - name: Dateien übertragen
+        run: |
+          tar -czf - -C website/deploy . | ssh -F ~/.ssh/cy_config cy 'mkdir -p /root/UniqSuiteWeb && tar -xzf - --no-same-owner -C /root/UniqSuiteWeb'
+          ssh -F ~/.ssh/cy_config cy 'cat > /root/UniqSuiteWeb/uniqsuite-site.tgz' < uniqsuite-site.tgz
+
+      - name: Aktivieren und prüfen (ssh)
+        timeout-minutes: 10
+        run: ssh -F ~/.ssh/cy_config cy 'bash /root/UniqSuiteWeb/deploy_remote.sh' < /dev/null

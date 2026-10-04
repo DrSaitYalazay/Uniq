@@ -1,0 +1,24 @@
+---
+import Legal from '../../components/Legal.astro';
+import { CONTACT_EMAIL } from '../../config';
+---
+<Legal lang="en" path="/en/accessibility/" altPath="/de/barrierefreiheit/" title="Accessibility statement" description="Accessibility statement for uniqsuite.cyberwerk.online">
+  <p class="todo">TEMPLATE – complete after the accessibility test and have it reviewed.</p>
+  <h2>Compliance status</h2>
+  <p>This website aims to meet WCAG 2.2 at level AA.</p>
+  <p class="todo">TODO: enter the test result (fully / partially compliant) and the test date.</p>
+  <h2>Alternatives to the 3D scene</h2>
+  <ul>
+    <li>Everything shown in the 3D scene is also available as text on the page.</li>
+    <li>With “reduce motion” enabled, and in browsers without WebGL, the page shows calm still images.</li>
+    <li>The quick check can be used entirely with the keyboard (keys 1, 2, 3 and the arrow keys); the result is also available as a table.</li>
+    <li>You can reach the chapters via the chapter rail, the arrow keys or Page Up/Page Down.</li>
+  </ul>
+  <h2>Non-accessible content</h2>
+  <p class="todo">TODO: name known limitations after the test.</p>
+  <h2>Feedback and contact</h2>
+  <p>If you notice any barriers, please write to us: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <h2>Enforcement</h2>
+  <p class="todo">TODO: add the competent market surveillance authority or conciliation body.</p>
+  <p class="small muted">Prepared in October 2026</p>
+</Legal>

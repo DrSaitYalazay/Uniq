@@ -1,0 +1,44 @@
+# UniqSuite Marketing-Website (uniqsuite.cyberwerk.online)
+# Auf dem Server unter /root/UniqSuiteWeb. Start: docker compose up -d
+# Die Website-Dateien liegen in ./site/releases/<zeitstempel>, ./site/current zeigt auf die aktive Version.
+name: uniqsuite-www
+
+services:
+  www:
+    image: public.ecr.aws/docker/library/caddy:2-alpine
+    restart: unless-stopped
+    user: "65534:65534"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /config:mode=1777,size=1m
+      - /data:mode=1777,size=1m
+      - /tmp:mode=1777,size=4m
+    environment:
+      XDG_CONFIG_HOME: /config
+      XDG_DATA_HOME: /data
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./security-headers.caddy:/etc/caddy/security-headers.caddy:ro
+      - ./site:/srv:ro
+    mem_limit: 128m
+    pids_limit: 64
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/de/"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    networks:
+      uniqsuite_edge:
+        aliases: [uniqsuite-www]
+
+networks:
+  uniqsuite_edge:
+    external: true
