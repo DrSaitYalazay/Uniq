@@ -87,6 +87,7 @@ export default {
     who: 'Für wen',
     what: 'Was verlangt wird',
     req: '{n} prüfbare Anforderungen',
+    more: 'Mehr zum Regelwerk',
     check: 'Quick-Check starten',
     items: [
       { fw: 'nis2', name: 'NIS2', kind: 'Gesetz · BSI-Gesetz', who: 'Wichtige und besonders wichtige Einrichtungen in 18 Sektoren, in der Regel ab 50 Beschäftigten oder 10 Mio. € Umsatz.', what: 'Risikomanagement, Meldepflichten, Registrierung und die Verantwortung der Geschäftsleitung.', n: 268 },

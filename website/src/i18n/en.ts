@@ -88,6 +88,7 @@ const en: typeof de = {
     who: 'Who it is for',
     what: 'What it requires',
     req: '{n} assessable requirements',
+    more: 'More about this framework',
     check: 'Start the quick check',
     items: [
       { fw: 'nis2', name: 'NIS2', kind: 'Law · German BSI Act', who: 'Important and essential entities in 18 sectors, as a rule from 50 staff or €10 million turnover.', what: 'Risk management, reporting duties, registration and the accountability of management.', n: 268 },
