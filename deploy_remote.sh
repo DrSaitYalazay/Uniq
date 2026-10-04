@@ -34,6 +34,18 @@ docker compose pull --quiet db migrate backup || echo "::warning::Image-Aktualis
 #     wird NICHTS migriert und der Deploy endet rot. Die letzten 10 Sicherungen
 #     bleiben in ./backups (cy_predeploy_*).
 mkdir -p backups && chmod 700 backups
+# Erster Deploy: es laeuft noch keine DB. Starten und warten, bis die
+# Erst-Initialisierung (schema.sql) fertig ist. TCP-Pruefung, weil Postgres
+# waehrend initdb nur ueber den Socket erreichbar ist.
+if [ -z "$(docker compose ps --status running -q db)" ]; then
+  docker compose up -d db
+  i=0
+  until docker compose exec -T db pg_isready -h 127.0.0.1 -U postgres -d cy > /dev/null 2>&1; do
+    i=$((i + 1))
+    if [ "$i" -ge 60 ]; then echo "::error::DB startet nicht (5 Minuten gewartet)"; exit 1; fi
+    sleep 5
+  done
+fi
 if ! docker compose run --rm --no-deps -T backup once predeploy < /dev/null; then
   echo "::error::SICHERUNG FEHLGESCHLAGEN - Deploy abgebrochen, es wurde nichts migriert."
   exit 1
