@@ -49,9 +49,9 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
     <meta name="color-scheme" content="dark" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/fonts/inter-display-500.woff2" as="font" type="font/woff2" crossorigin />
+    <script src="/vt.js" is:inline></script>
+    <link rel="preload" href="/fonts/inter-display-800.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="UniqSuite" />
     <meta property="og:title" content={title} />
@@ -99,6 +99,10 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
     </main>
 
     <footer class="site-footer">
+      <div class="wrap foot-top">
+        {!home && <a class="btn btn-ghost btn-sm" href={`/${lang}/`}><Icon name="arrow" class="flip" />{t.footer.home}</a>}
+        <a class="btn btn-ghost btn-sm to-top" href="#inhalt" data-to-top>{t.footer.top}<Icon name="arrow" class="up" /></a>
+      </div>
       <div class="wrap foot">
         <div>
           <a class="brand" href={`/${lang}/`} aria-label="UniqSuite – Start"><Logo id="lg-f" size={30} /><span>Uniq<span class="suite">Suite</span></span></a>
@@ -117,6 +121,8 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
         </nav>
       </div>
     </footer>
+
+    <a class="fab-top" href="#inhalt" data-to-top data-fab-top aria-label={t.footer.top}><Icon name="arrow" class="up" /></a>
 
     <dialog class="anfrage" id="anfrage" aria-labelledby="af-title" data-af-dialog>
       <div class="anfrage-in">

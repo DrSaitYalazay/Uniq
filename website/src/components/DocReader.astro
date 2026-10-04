@@ -1,0 +1,57 @@
+---
+/**
+ * Leseseite für White Paper und Broschüre. Die Titelseite trägt denselben
+ * view-transition-name wie das Titelbild auf der Startseite: beim Klick wächst
+ * das Titelbild in die Seite hinein (Zoom), beim Zurückgehen schrumpft es wieder.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { type Lang } from '../config';
+import { docInfo, pageImg, type DocKey } from '../data/docs';
+import de from '../i18n/de';
+import en from '../i18n/en';
+
+interface Props { lang: Lang; doc: DocKey }
+const { lang, doc } = Astro.props;
+const t = lang === 'de' ? de : en;
+const w = t.whitepaper;
+const info = docInfo[doc];
+const other = lang === 'de' ? 'en' : 'de';
+const title = doc === 'wp' ? w.title : w.bTitle;
+const meta = doc === 'wp' ? w.meta : w.bMeta;
+const text = doc === 'wp' ? w.text : w.bText;
+const fmt = (s: string, o: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(o[k] ?? ''));
+const pages = Array.from({ length: info.pages }, (_, i) => i);
+---
+<Base lang={lang} path={info.path[lang]} altPath={info.path[other]} title={`${title} – UniqSuite`} description={text}>
+  <Fragment slot="world">
+    <picture>
+      <source media="(max-width: 820px)" srcset="/img/still/konvergenz-m.webp" type="image/webp" width="720" height="1280" />
+      <img class="poster sub" src="/img/still/konvergenz-d.webp" width="1600" height="900" alt="" decoding="async" />
+    </picture>
+  </Fragment>
+  <article class={`dr dr-${doc}`}>
+    <header class="wrap dr-head">
+      <a class="dr-back" href={`/${lang}/#downloads`}><Icon name="arrow" class="flip" />{w.readerBack}</a>
+      <p class="kicker">{meta}</p>
+      <h1>{title}</h1>
+      <p class="lead">{text}</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={info.pdf[lang]} hreflang={lang} download><Icon name="download" />{w.download}</a>
+        <span class="dr-hint">{w.readerHint}</span>
+      </div>
+    </header>
+    <ol class="dr-pages">
+      {pages.map((i) => (
+        <li class="dr-page">
+          <img class={i === 0 ? `vt-${doc}` : undefined} src={pageImg(doc, lang, i)} width="1200" height="1697" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" alt={`${title} – ${fmt(w.pageLabel, { i: i + 1, n: info.pages })}`} />
+          <span class="dr-n">{fmt(w.pageLabel, { i: i + 1, n: info.pages })}</span>
+        </li>
+      ))}
+    </ol>
+    <div class="wrap dr-end">
+      <a class="btn btn-primary" href={info.pdf[lang]} hreflang={lang} download><Icon name="download" />{w.download}</a>
+      <a class="btn btn-ghost" href={`/${lang}/#downloads`}>{w.readerBack}</a>
+    </div>
+  </article>
+</Base>

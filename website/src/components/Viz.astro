@@ -1,0 +1,238 @@
+---
+/**
+ * Selbst gezeichnete Grafiken statt Bildschirmfotos: je Schritt und je Funktion
+ * eine kleine, ruhige Darstellung mit Beispielwerten. Kein style-Attribut (CSP):
+ * Werte stecken in SVG-Attributen, Bewegung kommt aus CSS (.viz.on).
+ */
+import type { Lang } from '../config';
+
+interface Props { kind: string; lang: Lang; title?: string; kicker?: string; sub?: string; big?: boolean }
+const { kind, lang, title, kicker, sub, big = false } = Astro.props;
+const de = lang === 'de';
+const L = (d: string, e: string) => (de ? d : e);
+const note = L('Beispielwerte', 'Sample values');
+
+// Balken 0…100 (SVG, damit kein style-Attribut nötig ist)
+type Bar = { label: string; v: number; c?: string; meta?: string };
+
+// Matrix für Risiken (5 × 5): Punkte vorher / nachher
+const before = [[4, 4], [5, 3], [3, 4], [4, 2], [2, 5], [3, 3]];
+const after = [[2, 2], [3, 1], [2, 3], [2, 1], [1, 3], [2, 2]];
+const cell = (x: number, y: number) => ({ cx: 18 + (x - 1) * 36 + 18, cy: 18 + (5 - y) * 30 + 15 });
+const heat = (x: number, y: number) => { const s = x * y; return s >= 15 ? 'h4' : s >= 9 ? 'h3' : s >= 5 ? 'h2' : 'h1'; };
+
+// Donut-Bogen
+const R = 42, C = 2 * Math.PI * R;
+const arcs = (parts: number[]) => {
+  const tot = parts.reduce((a, b) => a + b, 0);
+  let acc = 0;
+  return parts.map((p) => { const len = (p / tot) * C; const o = { len, gap: C - len, off: -acc }; acc += len; return o; });
+};
+
+const gapBars: Bar[] = [
+  { label: 'NIS2', v: 62, c: 'nis2' }, { label: 'ISO 27001', v: 48, c: 'iso27001' }, { label: 'AI Act', v: 35, c: 'aiact' },
+];
+const answers = [ { k: 'yes', n: 54 }, { k: 'partly', n: 31 }, { k: 'no', n: 21 }, { k: 'open', n: 14 } ];
+const ansTot = answers.reduce((a, b) => a + b.n, 0);
+let ansAcc = 0;
+const ansSeg = answers.map((a) => { const w = (a.n / ansTot) * 100; const o = { ...a, x: ansAcc, w }; ansAcc += w; return o; });
+const ansLbl: Record<string, string> = de ? { yes: 'Ja', partly: 'Teilweise', no: 'Nein', open: 'Offen' } : { yes: 'Yes', partly: 'Partly', no: 'No', open: 'Open' };
+
+const auditParts = arcs([1, 4, 6]);
+const trend = [31, 36, 41, 44, 52, 59];
+const tx = (i: number) => 8 + i * 56.8, ty = (v: number) => 92 - v * 1.1;
+const trendPath = trend.map((v, i) => `${i ? 'L' : 'M'} ${tx(i).toFixed(1)} ${ty(v).toFixed(1)}`).join(' ');
+const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 96 Z`;
+---
+<figure class={`viz viz-${kind}${big ? ' big' : ''}`} data-viz>
+  {(title || kicker) && (
+    <figcaption class="viz-h">
+      {kicker && <span class="viz-k">{kicker}</span>}
+      {title && <b>{title}</b>}
+      {sub && <span class="viz-s">{sub}</span>}
+    </figcaption>
+  )}
+  <div class="viz-b">
+    {kind === 'scope' && (
+      <div class="vz-scope">
+        <ul class="vz-in">
+          <li><span>{L('Branche', 'Sector')}</span><b>{L('Energie', 'Energy')}</b></li>
+          <li><span>{L('Größe', 'Size')}</span><b>{L('480 Beschäftigte', '480 staff')}</b></li>
+          <li><span>{L('KI im Einsatz', 'AI in use')}</span><b>{L('Ja', 'Yes')}</b></li>
+        </ul>
+        <svg class="vz-arrow" viewBox="0 0 40 120" aria-hidden="true"><path class="ln" d="M4 20 C 24 20, 16 60, 36 60 M4 60 H36 M4 100 C 24 100, 16 60, 36 60" /></svg>
+        <ul class="vz-out">
+          <li class="fw-nis2 yes"><i></i><b>NIS2</b><span>{L('betroffen: wichtige Einrichtung', 'in scope: important entity')}</span></li>
+          <li class="fw-iso27001 yes"><i></i><b>ISO 27001</b><span>{L('als Rahmen empfohlen', 'recommended framework')}</span></li>
+          <li class="fw-aiact yes"><i></i><b>AI Act</b><span>{L('Pflichten als Betreiber', 'duties as deployer')}</span></li>
+          <li class="fw-cra no"><i></i><b>CRA</b><span>{L('nicht betroffen', 'not in scope')}</span></li>
+        </ul>
+      </div>
+    )}
+
+    {kind === 'inventory' && (
+      <div class="vz-inv">
+        <svg viewBox="0 0 360 190" role="img" aria-label={L('Abhängigkeiten eines Dienstes', 'Dependencies of a service')}>
+          <g class="links">
+            <path class="ln" d="M180 40 L 70 110" /><path class="ln" d="M180 40 L 180 110" /><path class="ln" d="M180 40 L 290 110" />
+            <path class="ln" d="M70 110 L 70 165" /><path class="ln" d="M180 110 L 130 165" /><path class="ln" d="M180 110 L 230 165" /><path class="ln" d="M290 110 L 290 165" />
+          </g>
+          <g class="nodes">
+            <g class="n svc"><rect x="120" y="22" width="120" height="36" rx="18" /><text x="180" y="45">{L('Kundenportal', 'Customer portal')}</text></g>
+            <g class="n sys"><rect x="22" y="94" width="96" height="32" rx="10" /><text x="70" y="115">{L('Webserver', 'Web server')}</text></g>
+            <g class="n sys"><rect x="132" y="94" width="96" height="32" rx="10" /><text x="180" y="115">{L('Datenbank', 'Database')}</text></g>
+            <g class="n sup"><rect x="242" y="94" width="96" height="32" rx="10" /><text x="290" y="115">{L('Cloud-Hoster', 'Cloud host')}</text></g>
+            <g class="n dat"><rect x="30" y="150" width="80" height="28" rx="14" /><text x="70" y="169">{L('Logdaten', 'Logs')}</text></g>
+            <g class="n dat"><rect x="90" y="150" width="80" height="28" rx="14" /><text x="130" y="169">{L('Kunden', 'Customers')}</text></g>
+            <g class="n dat"><rect x="190" y="150" width="80" height="28" rx="14" /><text x="230" y="169">{L('Verträge', 'Contracts')}</text></g>
+            <g class="n sup"><rect x="250" y="150" width="80" height="28" rx="14" /><text x="290" y="169">{L('Backup', 'Backup')}</text></g>
+          </g>
+        </svg>
+        <ul class="vz-legend"><li class="svc">{L('Dienst', 'Service')}</li><li class="sys">{L('System', 'System')}</li><li class="dat">{L('Daten', 'Data')}</li><li class="sup">{L('Dienstleister', 'Supplier')}</li></ul>
+      </div>
+    )}
+
+    {kind === 'gap' && (
+      <div class="vz-gap">
+        <ul class="vz-bars">
+          {gapBars.map((b) => (
+            <li class={`fw-${b.c}`}><span>{b.label}</span>
+              <svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width={b.v} height="8" rx="4" /></svg>
+              <b>{b.v} %</b></li>
+          ))}
+        </ul>
+        <p class="vz-cap">{L('Antworten', 'Answers')} · {ansTot}</p>
+        <svg class="vz-stack" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+          {ansSeg.map((a) => <rect class={`v a-${a.k}`} x={a.x.toFixed(2)} width={(a.w - 0.6).toFixed(2)} height="10" />)}
+        </svg>
+        <ul class="vz-keys">{ansSeg.map((a) => <li class={`a-${a.k}`}><i></i>{ansLbl[a.k]} <b>{a.n}</b></li>)}</ul>
+      </div>
+    )}
+
+    {kind === 'risk' && (
+      <div class="vz-risk">
+        <svg viewBox="0 0 216 186" role="img" aria-label={L('Risikomatrix vorher und nachher', 'Risk matrix before and after')}>
+          {[1, 2, 3, 4, 5].map((x) => [1, 2, 3, 4, 5].map((y) => <rect class={`c ${heat(x, y)}`} x={18 + (x - 1) * 36 + 1} y={18 + (5 - y) * 30 + 1} width="34" height="28" rx="5" />))}
+          {before.map(([x, y], i) => { const a = cell(x, y), b = cell(after[i][0], after[i][1]); return <path class="mv" d={`M ${a.cx} ${a.cy} L ${b.cx} ${b.cy}`} />; })}
+          {before.map(([x, y]) => { const a = cell(x, y); return <circle class="p0" cx={a.cx} cy={a.cy} r="5" />; })}
+          {after.map(([x, y]) => { const a = cell(x, y); return <circle class="p1" cx={a.cx} cy={a.cy} r="5" />; })}
+          <text class="ax" x="108" y="184">{L('Auswirkung →', 'Impact →')}</text>
+          <text class="ax" x="8" y="96" transform="rotate(-90 8 96)">{L('Wahrscheinlichkeit →', 'Likelihood →')}</text>
+        </svg>
+        <ul class="vz-keys"><li class="p0"><i></i>{L('vor der Behandlung', 'before treatment')}</li><li class="p1"><i></i>{L('danach', 'after')}</li></ul>
+      </div>
+    )}
+
+    {kind === 'plan' && (
+      <div class="vz-plan">
+        <div class="vz-cols">
+          <div><span>{L('Offen', 'Open')}</span><b>14</b></div>
+          <div><span>{L('In Arbeit', 'In progress')}</span><b>9</b></div>
+          <div class="ok"><span>{L('Erledigt', 'Done')}</span><b>23</b></div>
+        </div>
+        <ul class="vz-tasks">
+          <li><b>{L('MFA für alle Admin-Konten', 'MFA for all admin accounts')}</b><span class="who">IT</span><span class="st ok">{L('erledigt', 'done')}</span></li>
+          <li><b>{L('Notfallhandbuch aktualisieren', 'Update the emergency manual')}</b><span class="who">ISB</span><span class="st run">{L('in Arbeit', 'in progress')}</span></li>
+          <li><b>{L('Lieferanten-Prüfung Cloud', 'Review cloud supplier')}</b><span class="who">{L('Einkauf', 'Purchasing')}</span><span class="st late">{L('überfällig', 'overdue')}</span></li>
+        </ul>
+        <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="50" height="8" rx="4" /></svg>
+        <p class="vz-cap">{L('23 von 46 Maßnahmen umgesetzt', '23 of 46 measures implemented')}</p>
+      </div>
+    )}
+
+    {kind === 'audit' && (
+      <div class="vz-audit">
+        <svg class="vz-donut" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="t" cx="50" cy="50" r={R} />
+          {auditParts.map((p, i) => <circle class={`v d${i}`} cx="50" cy="50" r={R} stroke-dasharray={`${p.len.toFixed(1)} ${p.gap.toFixed(1)}`} stroke-dashoffset={p.off.toFixed(1)} />)}
+          <text x="50" y="49" class="n">11</text><text x="50" y="62" class="l">{L('Befunde', 'findings')}</text>
+        </svg>
+        <div>
+          <ul class="vz-keys col"><li class="d0"><i></i>{L('Abweichung (schwer)', 'Major nonconformity')} <b>1</b></li><li class="d1"><i></i>{L('Abweichung (leicht)', 'Minor nonconformity')} <b>4</b></li><li class="d2"><i></i>{L('Hinweis', 'Observation')} <b>6</b></li></ul>
+          <p class="vz-cap">{L('Korrekturen abgeschlossen', 'Corrections closed')} · 9 / 11</p>
+          <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="82" height="8" rx="4" /></svg>
+        </div>
+      </div>
+    )}
+
+    {kind === 'dashboard' && (
+      <div class="vz-dash">
+        <div class="vz-kpis">
+          <div><span>{L('Gesamtstand', 'Overall')}</span><b>59 %</b></div>
+          <div class="late"><span>{L('Überfällig', 'Overdue')}</span><b>3</b></div>
+          <div><span>{L('Meldungen offen', 'Reports open')}</span><b>1</b></div>
+        </div>
+        <svg class="vz-trend" viewBox="0 0 300 100" preserveAspectRatio="none" role="img" aria-label={L('Verlauf des Gesamtstands über sechs Monate', 'Overall status over six months')}>
+          <path class="area" d={trendArea} />
+          <path class="ln" d={trendPath} />
+          {trend.map((v, i) => <circle cx={tx(i)} cy={ty(v)} r="3" />)}
+        </svg>
+        <p class="vz-cap">{L('Verlauf der letzten sechs Monate', 'Last six months')}</p>
+      </div>
+    )}
+
+    {kind === 'incident' && (
+      <div class="vz-inc">
+        <p class="vz-cap">{L('Phishing-Welle, Kenntnis vor 31 Stunden', 'Phishing wave, known for 31 hours')}</p>
+        <ul class="vz-clock">
+          <li class="ok"><span>{L('Frühe Erstmeldung', 'Early warning')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="100" height="8" rx="4" /></svg><b>24 h · {L('gesendet', 'sent')}</b></li>
+          <li class="run"><span>{L('Meldung mit Bewertung', 'Incident notification')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="43" height="8" rx="4" /></svg><b>72 h · {L('noch 41 h', '41 h left')}</b></li>
+          <li><span>{L('Abschlussmeldung', 'Final report')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="4" height="8" rx="4" /></svg><b>{L('1 Monat', '1 month')}</b></li>
+        </ul>
+      </div>
+    )}
+
+    {kind === 'supplier' && (
+      <ul class="vz-rows">
+        <li><b>{L('Cloud-Hoster', 'Cloud host')}</b><span class="pill crit">{L('kritisch', 'critical')}</span><span class="d">{L('Prüfung in 12 Tagen', 'review in 12 days')}</span></li>
+        <li><b>{L('Lohnabrechnung', 'Payroll service')}</b><span class="pill high">{L('hoch', 'high')}</span><span class="d">{L('geprüft, ohne Befund', 'reviewed, no findings')}</span></li>
+        <li><b>{L('IT-Dienstleister', 'IT service provider')}</b><span class="pill high">{L('hoch', 'high')}</span><span class="d late">{L('Prüfung überfällig', 'review overdue')}</span></li>
+        <li><b>{L('Druckerei', 'Print shop')}</b><span class="pill low">{L('gering', 'low')}</span><span class="d">{L('alle 2 Jahre', 'every 2 years')}</span></li>
+      </ul>
+    )}
+
+    {kind === 'policies' && (
+      <div class="vz-pol">
+        <ul class="vz-rows">
+          <li><b>{L('Informationssicherheitsleitlinie', 'Information security policy')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
+          <li><b>{L('Zugriffskontrolle', 'Access control')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
+          <li><b>{L('Umgang mit Vorfällen', 'Incident handling')}</b><span class="pill run">{L('in Prüfung', 'in review')}</span></li>
+          <li><b>{L('Einsatz von KI', 'Use of AI')}</b><span class="pill draft">{L('Entwurf', 'draft')}</span></li>
+        </ul>
+        <p class="vz-cap">{L('Abgedeckte Anforderungen', 'Requirements covered')} · 72 %</p>
+        <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="72" height="8" rx="4" /></svg>
+      </div>
+    )}
+
+    {kind === 'ai' && (
+      <div class="vz-ai">
+        <svg viewBox="0 0 240 150" role="img" aria-label={L('Einstufung der KI-Systeme nach Risiko', 'AI systems by risk class')}>
+          <path class="lv l0" d="M120 8 L 148 44 H 92 Z" />
+          <path class="lv l1" d="M90 48 H 150 L 178 84 H 62 Z" />
+          <path class="lv l2" d="M60 88 H 180 L 206 122 H 34 Z" />
+          <path class="lv l3" d="M32 126 H 208 L 222 144 H 18 Z" />
+          <text x="120" y="36">0</text><text x="120" y="72">1</text><text x="120" y="110">2</text><text x="120" y="140">3</text>
+        </svg>
+        <ul class="vz-keys col">
+          <li class="l0"><i></i>{L('Verboten', 'Prohibited')} <b>0</b></li>
+          <li class="l1"><i></i>{L('Hochrisiko: Bewerberauswahl', 'High risk: applicant screening')} <b>1</b></li>
+          <li class="l2"><i></i>{L('Transparenzpflicht: Chatbots', 'Transparency: chatbots')} <b>2</b></li>
+          <li class="l3"><i></i>{L('Minimal: Übersetzung, Code', 'Minimal: translation, code')} <b>3</b></li>
+        </ul>
+      </div>
+    )}
+
+    {kind === 'evidence' && (
+      <div class="vz-ev">
+        <ol class="vz-flow">
+          <li class="ok"><b>{L('Vorbereitung', 'Preparation')}</b><span>{L('Nachweise 42 / 48', 'Evidence 42 / 48')}</span></li>
+          <li class="run"><b>{L('Audit', 'Audit')}</b><span>{L('Prüfer liest mit', 'Auditor has read access')}</span></li>
+          <li><b>{L('Korrektur', 'Correction')}</b><span>{L('Maßnahmen mit Frist', 'Actions with deadlines')}</span></li>
+        </ol>
+        <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="88" height="8" rx="4" /></svg>
+        <p class="vz-cap">{L('88 % der Nachweise liegen vor', '88 % of the evidence is in place')}</p>
+      </div>
+    )}
+  </div>
+  <p class="viz-note">{note}</p>
+</figure>

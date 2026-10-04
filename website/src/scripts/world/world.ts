@@ -53,7 +53,7 @@ export async function init(canvas: HTMLCanvasElement) {
 
   const segImgs: string[] = (data?.seg ?? []).map((s: any) => s.img);
   const R = buildRing(tier >= 3 ? 3 : 2, lang, segImgs);
-  scene.add(R.group, R.panel);
+  scene.add(R.group);
 
   const msFw = ['nis2', 'nis2', 'aiact', 'cra', 'aiact', 'cra', 'aiact'];
   const D = buildDeadlines(msFw);
@@ -142,18 +142,13 @@ export async function init(canvas: HTMLCanvasElement) {
   K.push({ u: 12.2, p: [0, 10, 15], t: [0, -2.5, -14] });
   K.push({ u: 13, p: [-6, -2.8, -6], t: [1.2, -3.6, -34] });
   K.push({ u: 14, p: [-6, -3.2, -13], t: [-2, -3.6, -38] });
-  for (let j = 0; j <= 12; j++) {
-    const s = 0.22 + (j * (0.86 - 0.22)) / 12;
-    const c = D.curve.getPointAt(s);
-    const tan = D.curve.getTangentAt(s);
-    const side = new THREE.Vector3(-tan.z, 0, tan.x).normalize().multiplyScalar(0.9);
-    const ahead = D.curve.getPointAt(Math.min(1, s + 0.075));
-    K.push({ u: 14.6 + j * 0.25, p: [c.x + side.x, FLOOR_Y + 1.9, c.z + side.z], t: [ahead.x, FLOOR_Y + 1.1, ahead.z] });
-  }
-  K.push({ u: 18, p: [0, -3.2, -98], t: [3, 0.5, -140] });
-  K.push({ u: 19, p: [0, -4.3, -101], t: [3.5, 3, -140] });
-  K.push({ u: 20, p: [0, -3, -103], t: [3.5, 2, -140] });
-  K.push({ u: 20.5, p: [0, -2.8, -104], t: [3.5, 2, -140] });
+  // in den 1-Monats-Ring hinein, dort endet der Abschnitt Fristen
+  K.push({ u: 14.5, p: [-10.2, -3.5, -35.5], t: [-10.5, -3.6, -44] });
+  K.push({ u: 14.9, p: [-10.5, -3.6, -41.8], t: [-10.5, -3.6, -60] });
+  K.push({ u: 15.6, p: [0, -3.2, -98], t: [3, 0.5, -140] });
+  K.push({ u: 16.6, p: [0, -4.3, -101], t: [3.5, 3, -140] });
+  K.push({ u: 17.6, p: [0, -3, -103], t: [3.5, 2, -140] });
+  K.push({ u: 18.1, p: [0, -2.8, -104], t: [3.5, 2, -140] });
 
   const cr = (a: number, b: number, c: number, d: number, t: number) => {
     const t2 = t * t, t3 = t2 * t;
@@ -218,7 +213,7 @@ export async function init(canvas: HTMLCanvasElement) {
   const mouse = new THREE.Vector2(9, 9);
   const ndc = new THREE.Vector2();
   let pointerX = -1, pointerY = -1, overUi = true, pointerDirty = false;
-  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .steps-panel, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
+  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .steps-panel, .steps-stage, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
   addEventListener('pointermove', (e) => {
     pointerX = e.clientX; pointerY = e.clientY; overUi = isUi(e.target); pointerDirty = true;
     ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
@@ -280,7 +275,6 @@ export async function init(canvas: HTMLCanvasElement) {
   let first = true;
   let time = stillU !== null ? 8 : 0;
   const segLbl = Array.from({ length: 6 }, (_, i) => lbl.get(`seg-${i}`));
-  let lastPanel = -1;
   pathAt(uS, curP, curT);
 
   const heroP = new THREE.Vector3(), heroT = new THREE.Vector3();
@@ -303,16 +297,25 @@ export async function init(canvas: HTMLCanvasElement) {
     // Startbild: der ganze Ring mit allen sechs Schritten im Blick
     {
       const hw = 1 - sstep(5.93, 6.08, u);
-      if (hw > 0.001) { heroP.set(portrait ? 0 : -3.2, 15, 19); heroT.set(portrait ? 0 : -3.2, -1.6, 0); camP.lerp(heroP, hw); camT.lerp(heroT, hw); }
+      if (hw > 0.001) {
+        // Kamerafahrt um den Ring, während Regelwerke und Funktionen vorbeiziehen (u 5.85 … 5.93)
+        const o = sstep(0, 1, clamp((u - 5.85) / 0.08, 0, 1));
+        const th = -0.17 + 1.3 * o;
+        const r = 20 - 5 * o;
+        const ox = portrait ? 0 : -3.2 * (1 - o);
+        heroP.set(ox + r * Math.sin(th), 15 - 8.5 * o + 2.2 * Math.sin(o * Math.PI), r * Math.cos(th));
+        heroT.set(ox, -1.6 + 0.4 * o, 0);
+        camP.lerp(heroP, hw); camT.lerp(heroT, hw);
+      }
     }
     if (portrait) {
       // im Hochformat weiter zurück, damit alles ins Bild passt
-      const k = 1.28 + 0.15 * band(12.4, 13, 14.2, 14.8, u) + 0.7 * sstep(17.4, 18.4, u);
+      const k = 1.28 + 0.15 * band(12.4, 13, 14.2, 14.8, u) + 0.7 * sstep(15.0, 16.0, u);
       camP.sub(camT).multiplyScalar(k).add(camT);
-      camT.x *= 1 - 0.5 * sstep(17.4, 18.4, u);
+      camT.x *= 1 - 0.5 * sstep(15.0, 16.0, u);
     }
     // Quick-Check: Kamera auf Ergebnisbühne
-    const inQc = u > 19.7 && qc.mode !== 'pick';
+    const inQc = u > 17.3 && qc.mode !== 'pick';
     qcBlend += ((inQc ? 1 : 0) - qcBlend) * (1 - Math.exp(-dt * 3));
     if (qcBlend > 0.001) {
       qP.set(0, 1.0, -101); qT.set(0, -0.2, -134);
@@ -381,32 +384,11 @@ export async function init(canvas: HTMLCanvasElement) {
       s.core.material.opacity += (target - s.core.material.opacity) * 0.15;
       (s.glass.material as THREE.Material).opacity = (tier >= 3 ? 1 : 0.5) * open * ringOut;
     });
-    // Screenshot-Platte vor dem aktiven Segment, zur Kamera gedreht
-    const panelVis = band(5.97, 6.25, 11.2, 11.65, u) * (portrait ? 0 : 1);
-    R.panel.visible = panelVis > 0.001;
-    if (R.panel.visible) {
-      const th = Math.atan2(camera.position.x, camera.position.z);
-      R.panel.position.set(Math.sin(th) * 6.4, 1.7, Math.cos(th) * 6.4);
-      R.panel.lookAt(camera.position);
-      const frac = clamp(phaseF, 0, 5) - Math.floor(clamp(phaseF, 0, 5) + 0.5);
-      const dip = 1 - sstep(0.3, 0.5, Math.abs(frac));
-      if (active !== lastPanel) { lastPanel = active; }
-      R.setPanelTexture(active);
-      // Desktop: das Bild nie über die Textspalte links legen
-      let side = 1;
-      if (!portrait) {
-        R.panel.getWorldPosition(v).project(camera);
-        side = clamp(((v.x * 0.5 + 0.5) - 0.5) / 0.08, 0, 1);
-      }
-      R.panel.material.uniforms.uOpacity.value = panelVis * dip * side;
-      R.panel.material.uniforms.uTime.value = time;
-    }
-
     // Fristen
-    const tIn = band(12.3, 13.0, 15.4, 16.2, u);
+    const tIn = band(12.0, 12.8, 14.95, 15.25, u);
     D.timers.forEach((t, i) => {
       t.group.visible = tIn > 0.001;
-      t.fill.material.uniforms.uFill.value = t.target * (0.18 + 0.82 * sstep(12.8 + i * 0.15, 14.2 + i * 0.1, u));
+      t.fill.material.uniforms.uFill.value = t.target * (0.18 + 0.82 * sstep(12.4 + i * 0.15, 13.6 + i * 0.1, u));
       t.fill.material.uniforms.uOpacity.value = tIn;
       t.track.material.opacity = 0.6 * tIn;
       t.group.rotation.z = 0;
@@ -415,12 +397,12 @@ export async function init(canvas: HTMLCanvasElement) {
     (D.sparks.material as THREE.ShaderMaterial).uniforms.uOpacity.value = tIn;
     D.sparks.visible = tIn > 0.001;
     const roadU = D.road.material.uniforms;
-    roadU.uDraw.value = 0.02 + 0.98 * sstep(13.1, 17.9, u);
-    roadU.uOpacity.value = sstep(12.6, 13.2, u);
+    roadU.uDraw.value = 0.02 + 0.98 * sstep(12.6, 15.4, u);
+    roadU.uOpacity.value = sstep(12.2, 12.8, u);
     roadU.uTime.value = time;
-    D.road.visible = u > 12.5;
+    D.road.visible = u > 12.1;
     D.milestones.forEach((m) => {
-      const lit = sstep(m.s - 0.02, m.s + 0.01, roadU.uDraw.value) * (1 - sstep(17.7, 18.2, u));
+      const lit = sstep(m.s - 0.02, m.s + 0.01, roadU.uDraw.value) * (1 - sstep(15.3, 15.8, u));
       m.mat.opacity = lit;
       m.group.visible = lit > 0.001;
     });
@@ -433,7 +415,7 @@ export async function init(canvas: HTMLCanvasElement) {
     const towerU = u;
     const isResult = qc.mode === 'result' && qc.scores && Object.keys(qc.scores).length > 1;
     S.towers.forEach((t, i) => {
-      const grow = sstep(17.6 + i * 0.12, 18.9 + i * 0.12, towerU);
+      const grow = sstep(15.2 + i * 0.12, 16.5 + i * 0.12, towerU);
       let h = t.hReq * grow;
       if (isResult && qcBlend > 0.01) {
         const sc = qc.scores![t.fw];
@@ -506,7 +488,7 @@ export async function init(canvas: HTMLCanvasElement) {
             tipSet = true;
           }
         }
-        if (u > 18.3) {
+        if (u > 15.9) {
           ray.setFromCamera(ndc, camera);
           const hits = ray.intersectObjects(S.towers.map((t) => t.shell), false);
           if (hits.length) hoverTower = S.towers.findIndex((t) => t.shell === hits[0].object);
@@ -531,18 +513,18 @@ export async function init(canvas: HTMLCanvasElement) {
     R.segments.forEach((s, k) => {
       const w = new THREE.Vector3(Math.cos(s.angle) * 6.1, Math.sin(s.angle) * 6.1, 0);
       w.applyMatrix4(R.group.matrixWorld);
-      place(`seg-${k}`, w, band(5.7, 6.1, 11.3, 11.7, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
+      place(`seg-${k}`, w, band(5.7, 5.8, 5.855, 5.87, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
       segLbl[k]?.classList.toggle('on', (u >= 5.97 && k === active) || k === hoverSeg);
     });
-    D.timers.forEach((t, i) => place(`timer-${i}`, t.center, band(12.7, 13.2, 14.4, 15.0, u)));
+    D.timers.forEach((t, i) => place(`timer-${i}`, t.center, band(12.4, 12.9, 14.3, 14.75, u)));
     D.milestones.forEach((m, i) => {
       const dist = camera.position.distanceTo(m.pos);
       const ahead = v.copy(m.pos).sub(camera.position).dot(camera.getWorldDirection(new THREE.Vector3())) > 0;
-      place(`ms-${i}`, m.pos, ahead ? sstep(60, 34, dist) * sstep(3, 8, dist) * m.mat.opacity * band(14, 14.6, 17.4, 17.75, u) : 0);
+      place(`ms-${i}`, m.pos, ahead ? sstep(60, 34, dist) * sstep(3, 8, dist) * m.mat.opacity * 0 : 0); // Meilensteine stehen kompakt im Text
     });
     S.towers.forEach((t, i) => {
       const top = new THREE.Vector3(t.x, FLOOR_Y + t.h + 0.6, -140);
-      place(`tower-${i}`, top, sstep(18.3, 19.0, u) * (1 - sstep(19.75, 19.95, u) * (portrait ? 1 : 1 - qcBlend)) * (t.h > 0.5 ? 1 : 0));
+      place(`tower-${i}`, top, sstep(15.9, 16.6, u) * (1 - sstep(17.35, 17.55, u) * (portrait ? 1 : 1 - qcBlend)) * (t.h > 0.5 ? 1 : 0));
       const valEl = lbl.get(`tower-${i}`)?.querySelector<HTMLElement>('[data-tower-val]');
       if (valEl) {
         const sc = isResult ? qc.scores?.[t.fw] : undefined;

@@ -5,6 +5,8 @@
  */
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
+import Viz from './Viz.astro';
+import { photos, photoSrc } from '../data/photos';
 import { demoHref, type Lang } from '../config';
 import { features, featureHref } from '../data/features';
 import { steps, stepHref } from '../data/steps';
@@ -22,6 +24,8 @@ const altPath = featureHref(other, index);
 const L = lang === 'de'
   ? { of: 'Funktion {i} von 6', why: 'Worum es geht', can: 'Was Sie damit tun', gain: 'Was Sie davon haben', steps: 'Gehört zu diesen Schritten', step: 'Schritt', refs: 'Bezug zu den Regelwerken', prev: 'Vorherige Funktion', next: 'Nächste Funktion', all: 'Alle Funktionen', ring: 'Die sechs Funktionen', note: 'Bildschirmfoto aus einem Demo-Mandanten mit erfundenen Daten.', ctaH: 'Sehen Sie sich das mit Ihren eigenen Fragen an.', ctaT: 'In einer halben Stunde zeigen wir Ihnen, wie diese Funktion in Ihrem Alltag aussieht. Oder Sie prüfen vorher im Quick-Check, wo Sie stehen.', refsNote: 'Die Bezüge zeigen, wo die Anforderungen herkommen. Sie ersetzen keine rechtliche Prüfung.' }
   : { of: 'Feature {i} of 6', why: 'What it is about', can: 'What you do with it', gain: 'What you get out of it', steps: 'Part of these steps', step: 'Step', refs: 'Where the requirements come from', prev: 'Previous feature', next: 'Next feature', all: 'All features', ring: 'The six features', note: 'Screenshot from a demo tenant with made-up data.', ctaH: 'See it with your own questions.', ctaT: 'In half an hour we show you what this feature looks like in your day-to-day work. Or check first where you stand with the quick check.', refsNote: 'The references show where the requirements come from. They do not replace a legal assessment.' };
+const vizKind = ['dashboard', 'incident', 'supplier', 'policies', 'ai', 'evidence'][index];
+const ph = photos[(['leader', 'manWindow', 'relaxed', 'ciso', 'womanWindow', 'consultant'] as const)[index]];
 const shot = (n: string) => `/img/shots/${lang}-${n}`;
 const prev = (index + list.length - 1) % list.length;
 const next = (index + 1) % list.length;
@@ -67,45 +71,59 @@ const jsonld = [{
       </div>
     </header>
 
-    <div class="wrap sp-grid">
-      <figure class="sp-shot">
+    <!-- 1 · Worum es geht, daneben die Grafik -->
+    <section class="wrap sp-block sp-intro" data-rv>
+      <div class="sp-body">
+        <h2>{L.why}</h2>
+        <p>{f.why}</p>
+      </div>
+      <Viz kind={vizKind} lang={lang} kicker={f.label} title={f.title} />
+    </section>
+
+    <!-- 2 · Was Sie damit tun: Kacheln -->
+    <section class="wrap sp-block" data-rv>
+      <h2 class="sp-h">{L.can}</h2>
+      <ul class="fp-can">{f.can.map((x, k) => <li><span>{String(k + 1).padStart(2, '0')}</span><p>{x}</p></li>)}</ul>
+    </section>
+
+    <!-- Szenenbild: bewegt sich beim Scrollen leicht -->
+    <figure class="wrap sp-block photo-band" data-rv>
+      <img src={photoSrc(ph).src} srcset={photoSrc(ph).srcset} sizes="(max-width: 1360px) 100vw, 1360px" width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={ph.alt[lang]} />
+    </figure>
+
+    <!-- 3 · Bildschirmfoto und Nutzen -->
+    <section class="wrap sp-block sp-tool-grid" data-rv>
+      <figure class="sp-shot-wide">
         <div class="frame">
           <picture>
-            <source srcset={`${shot(f.img)}-800.avif 800w, ${shot(f.img)}-1600.avif 1600w`} sizes="(max-width: 980px) 92vw, 52vw" type="image/avif" />
-            <img src={`${shot(f.img)}-1600.webp`} srcset={`${shot(f.img)}-800.webp 800w, ${shot(f.img)}-1600.webp 1600w`} sizes="(max-width: 980px) 92vw, 52vw" width="1600" height="1000" decoding="async" alt={`${f.label} – ${lang === 'de' ? 'Bildschirmansicht in UniqSuite' : 'screen in UniqSuite'}`} />
+            <source srcset={`${shot(f.img)}-800.avif 800w, ${shot(f.img)}-1600.avif 1600w`} sizes="(max-width: 980px) 92vw, 60vw" type="image/avif" />
+            <img src={`${shot(f.img)}-1600.webp`} srcset={`${shot(f.img)}-800.webp 800w, ${shot(f.img)}-1600.webp 1600w`} sizes="(max-width: 980px) 92vw, 60vw" width="1600" height="1000" loading="lazy" decoding="async" alt={`${f.label} – ${lang === 'de' ? 'Bildschirmansicht in UniqSuite' : 'screen in UniqSuite'}`} />
           </picture>
         </div>
         <figcaption>{L.note}</figcaption>
       </figure>
-
-      <div class="sp-body">
-        <section>
-          <h2>{L.why}</h2>
-          <p>{f.why}</p>
-        </section>
-        <section>
-          <h2>{L.can}</h2>
-          <ul class="sp-tool">{f.can.map((x) => <li>{x}</li>)}</ul>
-        </section>
-        <div class="sp-result">
-          <p class="kicker">{L.gain}</p>
-          <ul class="fp-gain">{f.gain.map((x) => <li>{x}</li>)}</ul>
-        </div>
-        <section>
-          <h2>{L.steps}</h2>
-          <ul class="fp-steps">
-            {f.steps.map((k) => (
-              <li><a href={stepHref(lang, k)}><span>{L.step} {k + 1}</span><b>{steps[lang][k].title}</b><Icon name="arrow" /></a></li>
-            ))}
-          </ul>
-        </section>
-        <section>
-          <h2>{L.refs}</h2>
-          <ul class="sp-refs">{f.refs.map((x) => <li>{x}</li>)}</ul>
-          <p class="fine">{L.refsNote}</p>
-        </section>
+      <div class="sp-result">
+        <p class="kicker">{L.gain}</p>
+        <ul class="fp-gain">{f.gain.map((x) => <li>{x}</li>)}</ul>
       </div>
-    </div>
+    </section>
+
+    <!-- 4 · Passende Schritte und Bezüge -->
+    <section class="wrap sp-block fp-links" data-rv>
+      <div>
+        <h2 class="sp-h">{L.steps}</h2>
+        <ul class="fp-steps">
+          {f.steps.map((k) => (
+            <li><a href={stepHref(lang, k)}><span>{L.step} {k + 1}</span><b>{steps[lang][k].title}</b><Icon name="arrow" /></a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="sp-h">{L.refs}</h2>
+        <ul class="sp-refs">{f.refs.map((x) => <li>{x}</li>)}</ul>
+        <p class="fine">{L.refsNote}</p>
+      </div>
+    </section>
 
     <nav class="wrap sp-pager" aria-label={L.all}>
       <a class="pg prev" href={featureHref(lang, prev)} rel="prev"><span>{L.prev}</span><b>{list[prev].label}</b></a>

@@ -25,7 +25,7 @@ const clientData = { lang, login: loginHref(lang), demo: demoHref(lang), qc: t.q
     </picture>
   </Fragment>
   <section id="quick-check" class="qc qc-page" aria-labelledby="h-qc">
-    <div class="wrap"><div class="qc-shell">
+    <div class="wrap qc-page-grid"><div class="qc-shell">
       <p class="kicker"><a href={`/${lang}/#quick-check`} class="back"><Icon name="arrow" />{t.qc.pageBack}</a></p>
       <h1 id="h-qc" class="h2">{t.qc.pageTitle}: <span class="accent">{f.name[lang]}</span></h1>
       <p class="lead">{t.qc.intro}</p>
@@ -35,7 +35,9 @@ const clientData = { lang, login: loginHref(lang), demo: demoHref(lang), qc: t.q
         <p class="qc-note">{lang === 'de' ? 'Der Quick-Check wird geladen …' : 'Loading the quick check …'}</p>
         <noscript><p class="qc-note">{lang === 'de' ? 'Der Quick-Check benötigt JavaScript. Ihre Antworten bleiben trotzdem in Ihrem Browser.' : 'The quick check needs JavaScript. Your answers still stay in your browser.'}</p></noscript>
       </div>
-    </div></div>
+    </div>
+    <aside class={`qc-live fw-${fw}`} data-qc-live aria-label={t.qc.liveTitle}></aside>
+    </div>
   </section>
   <script type="application/json" id="uq-data" is:inline set:html={JSON.stringify(clientData)} />
 </Base>

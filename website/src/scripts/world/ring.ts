@@ -12,8 +12,6 @@ export interface RingParts {
   fill: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
   halo: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
   segments: { root: THREE.Group; glass: THREE.Mesh; core: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>; angle: number }[];
-  panel: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
-  setPanelTexture: (i: number) => void;
 }
 
 export function glassMaterial(tier: number, tint = '#c4d6f2') {
@@ -81,51 +79,5 @@ export function buildRing(tier: number, lang: string, segImgs: string[]): RingPa
     segments.push({ root, glass: sg, core, angle });
   }
 
-  // Screenshot-Platte (16:10) mit abgerundeten Ecken und Frostkante
-  const texLoader = new THREE.TextureLoader();
-  const textures: (THREE.Texture | null)[] = segImgs.map(() => null);
-  const panelMat = new THREE.ShaderMaterial({
-    uniforms: { uMap: { value: null }, uHas: { value: 0 }, uOpacity: { value: 0 }, uTime: { value: 0 } },
-    transparent: true, depthWrite: false, side: THREE.DoubleSide,
-    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: /* glsl */ `
-      uniform sampler2D uMap; uniform float uHas, uOpacity, uTime; varying vec2 vUv;
-      float rbox(vec2 p, vec2 b, float r){ vec2 q = abs(p) - b + r; return length(max(q,0.0)) + min(max(q.x,q.y),0.0) - r; }
-      void main(){
-        vec2 p = (vUv - 0.5) * vec2(1.6, 1.0);
-        float d = rbox(p, vec2(0.8, 0.5), 0.035);
-        float a = smoothstep(0.004, -0.002, d);
-        if (a <= 0.0) discard;
-        vec2 iuv = (vUv - 0.5) * 1.035 + 0.5;
-        vec3 img = texture2D(uMap, clamp(iuv, 0.0, 1.0)).rgb;
-        vec3 frost = vec3(0.62, 0.74, 0.8) * 0.18 + vec3(0.1, 0.18, 0.24);
-        float inner = smoothstep(-0.012, -0.022, d);
-        vec3 c = mix(frost, img * 0.86, uHas * inner);
-        float rim = smoothstep(-0.02, 0.0, d) * 0.9;
-        c += vec3(0.55, 0.95, 0.75) * rim * 0.6;
-        float sheen = smoothstep(0.0, 1.0, 1.0 - abs(vUv.x + vUv.y - 1.2 - sin(uTime*0.2)*0.1) * 3.0) * 0.06;
-        c += sheen;
-        gl_FragColor = vec4(c, a * uOpacity * mix(0.55, 1.0, uHas));
-      }`,
-  });
-  const panel = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 3), panelMat);
-  panel.renderOrder = 5;
-  let loaded = false;
-  const setPanelTexture = (i: number) => {
-    if (!loaded) {
-      loaded = true;
-      segImgs.forEach((name, j) => {
-        texLoader.load(`/img/tex/${lang}-${name}.webp`, (t) => {
-          t.colorSpace = THREE.SRGBColorSpace;
-          t.anisotropy = 4;
-          textures[j] = t;
-        });
-      });
-    }
-    const t = textures[i];
-    panelMat.uniforms.uMap.value = t;
-    panelMat.uniforms.uHas.value = t ? 1 : 0;
-  };
-
-  return { group, glass, track, fill, halo, segments, panel, setPanelTexture };
+  return { group, glass, track, fill, halo, segments };
 }
