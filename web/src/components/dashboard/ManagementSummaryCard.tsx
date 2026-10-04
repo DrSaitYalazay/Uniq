@@ -35,6 +35,8 @@ interface Props {
   freshness?: Freshness;
   /** Dashboard-Filter: nur Fristen dieses Frameworks; Score-Verlauf ausgeblendet (gibt es nur gesamt). */
   frameworkFilter?: string | null;
+  /** UniqSuite Detail-Ansicht: Fristen stehen dort in der eigenen Fristen-Karte — hier nicht doppelt zeigen. */
+  hideDeadlines?: boolean;
 }
 
 /** Ampel-Ton je Gesamtscore (konsistent zum restlichen Dashboard). */
@@ -69,7 +71,7 @@ const FW_SHORT: Record<string, string> = {
   MaRisk: "MaRisk", CRA: "CRA", NIST_CSF: "NIST CSF", TR03183: "TR-03183",
 };
 
-export default function ManagementSummaryCard({ overview, loading, de, freshness, frameworkFilter = null }: Props) {
+export default function ManagementSummaryCard({ overview, loading, de, freshness, frameworkFilter = null, hideDeadlines = false }: Props) {
   const { tenantId } = useAuth();
   const [deadlines, setDeadlines] = useState<ComplianceDeadline[]>([]);
   const [trend, setTrend] = useState<number[]>([]);
@@ -147,7 +149,7 @@ export default function ManagementSummaryCard({ overview, loading, de, freshness
   // Management will To-dos, nicht „44 kritische MUSS".
   const items = useMemo(() => {
     const out: { icon: any; text: string; to: string; tone: string }[] = [];
-    for (const d of overdueList.slice(0, 3)) {
+    for (const d of (hideDeadlines ? [] : overdueList.slice(0, 3))) {
       const days = d.due_at ? Math.max(0, Math.floor((Date.now() - new Date(d.due_at).getTime()) / 86400000)) : null;
       const fw = d.framework ? ` (${FW_SHORT[d.framework] ?? d.framework})` : "";
       out.push({
@@ -161,7 +163,8 @@ export default function ManagementSummaryCard({ overview, loading, de, freshness
     }
     const critFw = overview.filter((o) => (o.stats.criticalOpen || 0) > 0)
       .sort((x, y) => (y.stats.criticalOpen || 0) - (x.stats.criticalOpen || 0));
-    for (const o of critFw.slice(0, Math.max(0, 5 - out.length))) {
+    // UniqSuite: alle Frameworks mit kritischen MUSS nennen — die Framework-Karten zeigen die Zahl nicht noch einmal.
+    for (const o of critFw) {
       const n = o.stats.criticalOpen;
       out.push({
         icon: AlertTriangle,
@@ -172,8 +175,8 @@ export default function ManagementSummaryCard({ overview, loading, de, freshness
         tone: "st-teilweise-text",
       });
     }
-    return out.slice(0, 5);
-  }, [overdueList, overview, de]);
+    return out.slice(0, 8);
+  }, [overdueList, overview, de, hideDeadlines]);
 
   // Der gespeicherte Verlauf (kpi_snapshots) existiert nur über alle Frameworks → bei Filter ausblenden.
   const trendData = useMemo(
