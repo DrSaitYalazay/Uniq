@@ -1,0 +1,122 @@
+---
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
+import { SITE_URL, loginHref, demoHref, type Lang } from '../config';
+import de from '../i18n/de';
+import en from '../i18n/en';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Pfad dieser Seite, z. B. /de/ */
+  path: string;
+  /** Pfad der Seite in der anderen Sprache */
+  altPath: string;
+  home?: boolean;
+  jsonld?: object[];
+  noindex?: boolean;
+}
+const { lang, path, altPath, home = false, jsonld = [], noindex = false } = Astro.props;
+const t = lang === 'de' ? de : en;
+const title = Astro.props.title ?? t.meta.title;
+const description = Astro.props.description ?? t.meta.description;
+const canonical = new URL(path, SITE_URL).href;
+const altLang = lang === 'de' ? 'en' : 'de';
+const ogImage = new URL(`/og/og-${lang}.jpg`, SITE_URL).href;
+const deHref = new URL(lang === 'de' ? path : altPath, SITE_URL).href;
+const enHref = new URL(lang === 'en' ? path : altPath, SITE_URL).href;
+const navBase = home ? '' : `/${lang}/`;
+---
+<!doctype html>
+<html lang={lang} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="de" href={deHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={deHref} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0a1226" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/inter-display-800.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="UniqSuite" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={t.locale} />
+    <meta property="og:locale:alternate" content={lang === 'de' ? 'en_GB' : 'de_DE'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {jsonld.map((j) => <script type="application/ld+json" is:inline set:html={JSON.stringify(j)} />)}
+  </head>
+  <body>
+    <a class="skip" href="#inhalt">{t.skip}</a>
+
+    <div class="world" aria-hidden="true">
+      <slot name="world" />
+      <div class="dim"></div>
+    </div>
+    <div class="labels" aria-hidden="true"><slot name="labels" /></div>
+    <div class="tip" aria-hidden="true"></div>
+
+    <header class="site-header" data-header>
+      <a class="brand" href={`/${lang}/`} aria-label="UniqSuite – Start">
+        <Logo id="lg-h" />
+        <span>Uniq<span class="suite">Suite</span></span>
+      </a>
+      {home && (
+        <nav class="site-nav" aria-label={t.nav.label}>
+          {t.nav.items.map((i) => <a href={`${navBase}${i.href}`}>{i.label}</a>)}
+        </nav>
+      )}
+      <div class="header-actions">
+        <a class="lang" href={altPath} hreflang={altLang} lang={altLang} data-lang-switch aria-label={t.nav.langSwitchLabel}>{altLang.toUpperCase()}</a>
+        <a class="btn btn-ghost btn-sm" href={demoHref(lang)} data-magnetic>{t.nav.demo}</a>
+        <a class="btn btn-primary btn-sm" href={loginHref(lang)} data-magnetic><Icon name="login" />{t.nav.login}</a>
+      </div>
+      <i class="progress-line" data-progress></i>
+    </header>
+
+    <slot name="rail" />
+
+    <main id="inhalt" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap foot">
+        <div>
+          <a class="brand" href={`/${lang}/`} aria-label="UniqSuite – Start"><Logo id="lg-f" size={30} /><span>Uniq<span class="suite">Suite</span></span></a>
+          <p>{t.footer.claim}</p>
+          <p class="tm">{t.footer.trademark}</p>
+        </div>
+        <nav aria-label={t.footer.nav}>
+          <ul>
+            {t.footer.legal.map((l) => (
+              <li>{l.external
+                ? <a href={l.href} rel="noopener noreferrer">{l.label}</a>
+                : <a href={l.href}>{l.label}</a>}</li>
+            ))}
+            <li><a href={altPath} hreflang={altLang} lang={altLang}>{t.nav.langSwitch}</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+    <div class="grain" aria-hidden="true"></div>
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>
