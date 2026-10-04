@@ -339,14 +339,14 @@ const clientData = {
           </div>
           <figure class="photo-frame"><img src={photoSrc(photos.audit).src} srcset={photoSrc(photos.audit).srcset} sizes="(max-width: 820px) 92vw, 40vw" width={photos.audit.w} height={photos.audit.h} loading="lazy" decoding="async" alt={photos.audit.alt[lang]} /></figure>
         </div>
-        <ul class="trust-list cam">
-          {t.trust.items.map((x) => (
-            <li><h3>{x.title}</h3><p>{x.text}</p></li>
+        <ul class="trust-list" data-mirror>
+          {t.trust.items.map((x, i) => (
+            <li class={`m${i % 3}`}><span class="tr-ic"><Icon name={(['layers', 'key', 'refresh', 'rules', 'globe', 'file'] as const)[i % 6]} /></span><h3>{x.title}</h3><p>{x.text}</p></li>
           ))}
         </ul>
         <div class="honest cam cam-l">
           <div><p class="kicker">{t.trust.honestKicker}</p><h3>{t.trust.honestTitle}</h3></div>
-          <div><p>{t.trust.honestIntro}</p><ul>{t.trust.honest.map((h) => <li>{h}</li>)}</ul></div>
+          <div><p>{t.trust.honestIntro}</p><ol class="hon-tl">{t.trust.honest.map((h, i) => <li><span class="hn">{String(i + 1).padStart(2, '0')}</span><p>{h}</p></li>)}</ol></div>
         </div>
       </div>
     </section>
@@ -362,7 +362,7 @@ const clientData = {
           </div>
           <figure class="photo-frame"><img src={photoSrc(photos.duo).src} srcset={photoSrc(photos.duo).srcset} sizes="(max-width: 820px) 92vw, 40vw" width={photos.duo.w} height={photos.duo.h} loading="lazy" decoding="async" alt={photos.duo.alt[lang]} /></figure>
         </div>
-        <div class="dl-grid cam">
+        <div class="dl-grid">
           <article class="dl-card">
             <a class="dl-cover" href={docInfo.wp.path[lang]} aria-label={t.whitepaper.read}><img class="vt-wp" src={`/img/wp-cover-${lang}.webp`} width="420" height="594" loading="lazy" decoding="async" alt="" /><span class="dl-read"><Icon name="eye" />{t.whitepaper.read}</span></a>
             <div class="dl-txt">
