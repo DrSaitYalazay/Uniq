@@ -183,7 +183,7 @@ export async function exportScopeReportDocx(inp: ScopeReportInput): Promise<void
 }
 
 // ── Excel ────────────────────────────────────────────────────────────────
-const NAVY = "FF241A4D";
+const NAVY = "FF1A2E41";
 const HEADER_FONT: Partial<ExcelJS.Font> = { name: "Arial", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
 const BORDER: Partial<ExcelJS.Border> = { style: "thin", color: { argb: "FFDBE3EF" } };
 const ALL_BORDERS: Partial<ExcelJS.Borders> = { top: BORDER, bottom: BORDER, left: BORDER, right: BORDER };
