@@ -11,10 +11,11 @@
 @font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/inter-display-800.woff2') format('woff2'); }
 /* v2: Display-Schnitte (Inter, optische Größe 32), Serif-Akzent, Mono für technische Angaben */
 @font-face { font-family: 'Inter Display'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/inter-display-500.woff2') format('woff2'); }
-@font-face { font-family: 'Inter Display'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-display-600.woff2') format('woff2'); }
 @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-italic.woff2') format('woff2'); }
 @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/jetbrains-mono-400.woff2') format('woff2'); }
-@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/jetbrains-mono-500.woff2') format('woff2'); }
+/* Metrisch angepasste Ersatzschriften (gemessen an Liberation Serif/Mono) gegen Layout-Sprünge */
+@font-face { font-family: 'Instrument Serif Fallback'; font-style: italic; src: local('Times New Roman Italic'), local('TimesNewRomanPS-ItalicMT'), local('Liberation Serif Italic'); size-adjust: 89.9%; ascent-override: 110%; descent-override: 34.5%; line-gap-override: 0%; }
+@font-face { font-family: 'JetBrains Mono Fallback'; src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono'); size-adjust: 100%; ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; }
 /* Metrisch angepasster Ersatz gegen Layout-Sprünge beim Font-Tausch */
 @font-face { font-family: 'Inter Fallback'; src: local('Arial'); ascent-override: 90.2%; descent-override: 22.48%; line-gap-override: 0%; size-adjust: 107.4%; }
 
@@ -469,8 +470,8 @@ main:focus, section:focus, .step:focus { outline: none; }
   --text: #f1f3f7;
   --text-2: #c9d0dc;
   --muted: #98a3b7;
-  --serif: 'Instrument Serif', 'Times New Roman', serif;
-  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --serif: 'Instrument Serif', 'Instrument Serif Fallback', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', 'JetBrains Mono Fallback', 'Courier New', monospace;
   --display: 'Inter Display', var(--font);
   --step-3: clamp(2.5rem, 1.6rem + 4vw, 5.6rem);
   --step-4: clamp(3.1rem, 1.5rem + 7vw, 8.6rem);
@@ -488,11 +489,12 @@ body { background: var(--ink); }
 
 /* Typografie: groß, aber leichter */
 h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -0.045em; line-height: 0.98; }
-h3, .phase-title { font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; }
+h3 { font-family: var(--font); font-weight: 600; letter-spacing: -0.025em; }
+.phase-title { font-family: var(--display); font-weight: 500; letter-spacing: -0.045em; }
 .accent { color: var(--mint); font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; padding-right: 0.04em; }
 h1 .accent, h2 .accent { font-size: 1.08em; line-height: 0.9; }
 .lead { color: var(--text-2); font-size: clamp(1.08rem, 1rem + 0.45vw, 1.32rem); line-height: 1.55; letter-spacing: -0.008em; }
-.kicker { font-family: var(--mono); font-weight: 500; font-size: 0.76rem; letter-spacing: 0.08em; color: var(--text-2); gap: 0.9rem; }
+.kicker { font-family: var(--mono); font-weight: 400; font-size: 0.76rem; letter-spacing: 0.08em; color: var(--text-2); gap: 0.9rem; }
 .kicker::before { display: none; }
 .kicker .idx { color: var(--mint); }
 .kicker .idx::after { content: ''; display: inline-block; vertical-align: middle; width: 2.2rem; height: 1px; margin-left: 0.9rem; background: var(--line-2); }
@@ -503,7 +505,7 @@ h1 .accent, h2 .accent { font-size: 1.08em; line-height: 0.9; }
 .site-nav a { font-size: 0.9rem; color: var(--muted); }
 .site-nav a:hover { background: transparent; color: var(--text); }
 .lang { font-family: var(--mono); font-size: 0.74rem; border-radius: 999px; padding: 0.42rem 0.7rem; }
-.brand { font-family: var(--display); font-weight: 600; letter-spacing: -0.035em; }
+.brand { font-family: var(--font); font-weight: 700; letter-spacing: -0.035em; }
 
 /* Buttons: Pillenform, Pfeil wandert */
 .btn { border-radius: 999px; font-weight: 600; padding: 0.75rem 1.35rem; }
@@ -551,8 +553,8 @@ h1 .accent, h2 .accent { font-size: 1.08em; line-height: 0.9; }
 }
 
 /* PDCA */
-.phase-num { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; letter-spacing: 0.06em; -webkit-text-stroke: 0; color: var(--mint); }
-.cycle { font-family: var(--mono); font-weight: 500; letter-spacing: 0.08em; background: transparent; color: var(--text-2); border: 1px solid var(--line-2); border-radius: 999px; padding: 0.2rem 0.6rem; font-size: 0.68rem; }
+.phase-num { font-family: var(--mono); font-weight: 400; font-size: 0.9rem; letter-spacing: 0.06em; -webkit-text-stroke: 0; color: var(--mint); }
+.cycle { font-family: var(--mono); font-weight: 400; letter-spacing: 0.08em; background: transparent; color: var(--text-2); border: 1px solid var(--line-2); border-radius: 999px; padding: 0.2rem 0.6rem; font-size: 0.68rem; }
 .phase-title { font-size: clamp(2.2rem, 1.5rem + 3vw, 4.2rem); line-height: 0.98; margin-top: 1rem; }
 .result-chip { border-style: solid; border-radius: 999px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.02em; padding: 0.45rem 0.85rem; }
 .result-chip b { color: var(--mint); font-weight: 500; }
@@ -560,13 +562,13 @@ h1 .accent, h2 .accent { font-size: 1.08em; line-height: 0.9; }
 /* Stand */
 .gauge-num { font-family: var(--display); font-weight: 500; }
 .fw-row span { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em; }
-.fw-row b { font-family: var(--mono); font-weight: 500; font-size: 0.85rem; }
+.fw-row b { font-family: var(--mono); font-weight: 400; font-size: 0.85rem; }
 
 /* Funktionen: Fenster-Rahmen, ruhige Karten */
 .card { background: rgb(255 255 255 / 0.025); border-color: rgb(255 255 255 / 0.07); border-radius: 22px; }
 .card:hover { border-color: rgb(255 255 255 / 0.18); transform: none; }
 .card .txt { padding: 1.7rem 1.8rem 1.4rem; }
-.card .lbl { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--mint); }
+.card .lbl { font-family: var(--mono); font-weight: 400; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--mint); }
 .card h3 { font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.85rem); margin-top: 0.7rem; }
 .card picture { margin: auto 1.4rem 0; border: 1px solid rgb(255 255 255 / 0.1); border-bottom: 0; border-radius: 12px 12px 0 0; overflow: hidden; position: relative; padding-top: 26px; background: #0c1324; transition: transform 0.8s var(--ease-expo); }
 .card picture::before { content: ''; position: absolute; left: 12px; top: 10px; width: 7px; height: 7px; border-radius: 50%; background: rgb(255 255 255 / 0.18); box-shadow: 12px 0 0 rgb(255 255 255 / 0.18), 24px 0 0 rgb(255 255 255 / 0.18); }
@@ -576,14 +578,14 @@ h1 .accent, h2 .accent { font-size: 1.08em; line-height: 0.9; }
 /* Fristen: lesbarer */
 .timer { background: transparent; border-color: rgb(255 255 255 / 0.08); border-radius: 14px; }
 .timer b { font-family: var(--display); font-weight: 500; }
-.milestone time { font-family: var(--mono); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.02em; }
+.milestone time { font-family: var(--mono); font-weight: 400; font-size: 0.8rem; letter-spacing: 0.02em; }
 .milestone h3 { font-size: 1.12rem; }
 .milestone p { font-size: 0.95rem; color: var(--text-2); }
 html.has3d .milestone:not(.is-active) { opacity: 0.62; }
 
 /* Regelwerke */
 .tower-btn b { font-family: var(--display); font-weight: 500; }
-.tower-btn small, .tower-btn span { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.02em; }
+.tower-btn small, .tower-btn span { font-family: var(--mono); font-weight: 400; font-size: 0.7rem; letter-spacing: 0.02em; }
 
 /* Quick-Check */
 .qc-card { background: rgb(9 15 30 / 0.88); border-color: rgb(255 255 255 / 0.09); border-radius: 26px; }
@@ -627,7 +629,7 @@ html.has3d .milestone:not(.is-active) { opacity: 0.62; }
 .final p { margin-top: 2rem; }
 .final .cta-row { margin-top: 2.6rem; }
 .site-footer { background: var(--ink); overflow: hidden; padding-bottom: 0; }
-.foot-mark { display: block; margin-top: 3rem; font-family: var(--display); font-weight: 600; font-size: clamp(4rem, 1rem + 19vw, 21rem); line-height: 0.74; letter-spacing: -0.07em; color: transparent; -webkit-text-stroke: 1px rgb(255 255 255 / 0.14); white-space: nowrap; user-select: none; text-align: center; translate: 0 0.12em; }
+.foot-mark { display: block; margin-top: 3rem; font-family: var(--display); font-weight: 500; font-size: clamp(4rem, 1rem + 19vw, 21rem); line-height: 0.74; letter-spacing: -0.07em; color: transparent; -webkit-text-stroke: 1px rgb(255 255 255 / 0.14); white-space: nowrap; user-select: none; text-align: center; translate: 0 0.12em; }
 .foot-mark span { -webkit-text-stroke: 1px rgb(43 182 115 / 0.4); }
 
 @media (max-width: 820px) {
@@ -684,24 +686,24 @@ body:has(.anfrage[open]) { overflow: hidden; }
 .hero-h1 .w { display: inline-block; overflow: clip; vertical-align: top; padding-bottom: 0.1em; margin-bottom: -0.1em; }
 .hero-h1 .w > span { display: inline-block; }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-h1 .w > span { animation: wordin 1.3s var(--ease-expo) both; }
-  .hero-h1 > span:first-child .w:nth-child(1) > span { animation-delay: 0.05s; }
-  .hero-h1 > span:first-child .w:nth-child(2) > span { animation-delay: 0.11s; }
-  .hero-h1 > span:first-child .w:nth-child(3) > span { animation-delay: 0.17s; }
-  .hero-h1 > span:first-child .w:nth-child(4) > span { animation-delay: 0.23s; }
-  .hero-h1 > span:first-child .w:nth-child(5) > span { animation-delay: 0.29s; }
-  .hero-h1 .accent .w:nth-child(1) > span { animation-delay: 0.38s; }
-  .hero-h1 .accent .w:nth-child(2) > span { animation-delay: 0.45s; }
-  .hero-h1 .accent .w:nth-child(3) > span { animation-delay: 0.52s; }
-  .hero-h1 .accent .w:nth-child(4) > span { animation-delay: 0.59s; }
+  .hero-h1 .w > span { animation: wordin 1s var(--ease-expo) both; }
+  .hero-h1 > span:first-child .w:nth-child(1) > span { animation-delay: 0s; }
+  .hero-h1 > span:first-child .w:nth-child(2) > span { animation-delay: 0.04s; }
+  .hero-h1 > span:first-child .w:nth-child(3) > span { animation-delay: 0.08s; }
+  .hero-h1 > span:first-child .w:nth-child(4) > span { animation-delay: 0.12s; }
+  .hero-h1 > span:first-child .w:nth-child(5) > span { animation-delay: 0.16s; }
+  .hero-h1 .accent .w:nth-child(1) > span { animation-delay: 0.2s; }
+  .hero-h1 .accent .w:nth-child(2) > span { animation-delay: 0.24s; }
+  .hero-h1 .accent .w:nth-child(3) > span { animation-delay: 0.28s; }
+  .hero-h1 .accent .w:nth-child(4) > span { animation-delay: 0.32s; }
   .hero .lead, .hero .cta-row, .hero .stats, .hero-meta { animation: fadeup 1.2s var(--ease-expo) both; }
   .hero-meta { animation-delay: 0s; }
-  .hero .lead { animation-delay: 0.55s; }
-  .hero .cta-row { animation-delay: 0.68s; }
-  .hero .stats { animation-delay: 0.8s; }
+  .hero .lead { animation-delay: 0.2s; }
+  .hero .cta-row { animation-delay: 0.28s; }
+  .hero .stats { animation-delay: 0.36s; }
 }
 @keyframes wordin { from { transform: translateY(108%); } to { transform: none; } }
-@keyframes fadeup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes fadeup { from { transform: translateY(12px); } to { transform: none; } }
 /* Lesbarkeit ohne Kasten: weicher dunkler Hof hinter dem Text, keine Kante */
 @media (min-width: 821px) {
   .panel { isolation: isolate; text-shadow: 0 1px 22px rgb(7 12 24 / 0.85); }
@@ -714,3 +716,5 @@ body:has(.anfrage[open]) { overflow: hidden; }
   .world::after { background: linear-gradient(0deg, rgb(7 12 24 / 0.9) 0%, rgb(7 12 24 / 0.55) 55%, rgb(7 12 24 / 0.35) 100%); }
   .hero-inner { text-shadow: 0 1px 18px rgb(7 12 24 / 0.9); }
 }
+/* Mono nur in einem Schnitt (400): kein künstliches Fett */
+.kicker, .lang, .result-chip, .result-chip b, .fw-row b, .milestone time, .tower-btn span, .tower-btn small, .card .lbl, .hero-meta, .stats span, .af-field label, .qc-ref, .qc-top, .qc-top b, .phase-num, .cycle, .wp .meta { font-weight: 400; }
