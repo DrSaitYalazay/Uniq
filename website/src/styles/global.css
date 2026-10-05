@@ -1826,64 +1826,81 @@ h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
 @media (max-width: 820px) { .lbl3d.lbl-seg { padding: 0.3rem 0.65rem 0.3rem 0.3rem; } .lbl3d.lbl-seg b { width: 1.45rem; height: 1.45rem; font-size: 0.78rem; } .lbl3d.lbl-seg span { font-size: 0.8rem; } }
 
 
-/* v7 · Sechs Schritte fließen wie die Fristen: links die Zeitleiste (bleibt stehen), rechts ziehen die Schritte vorbei */
-.steps { position: relative; }
-.steps-flow { display: grid; gap: 2rem; padding-top: calc(var(--header-h) + 3rem); padding-bottom: 30svh; }
-.steps-nav .h2 { font-size: clamp(2rem, 1.2rem + 2.2vw, 3.3rem); }
-.steps-intro { color: var(--text-2); margin-top: 1rem; max-width: 34rem; }
-.steps-nav .phase-list { border-top: 0; margin-top: 1.6rem; }
-.ph { position: relative; border-bottom: 0; }
-.ph-head { padding: 0.5rem 0.2rem; }
-.ph-n { position: relative; z-index: 1; transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.4s; }
-.ph:not(:last-child)::before, .ph:not(:last-child)::after { content: ""; position: absolute; left: calc(0.2rem + 1.05rem - 1px); top: calc(0.5rem + 2.1rem + 4px); bottom: calc(-0.5rem + 4px); width: 2px; border-radius: 2px; pointer-events: none; }
-.ph:not(:last-child)::before { background: rgb(255 255 255 / 0.1); }
-.ph:not(:last-child)::after { background: linear-gradient(var(--green), var(--mint)); transform-origin: top; transform: scaleY(var(--f, 0)); transition: transform 0.18s linear; }
-.ph.done::after { transform: scaleY(1); }
-.ph.done .ph-n { border-color: var(--green); color: var(--mint); background: rgb(14 40 28); }
-.ph.is-active .ph-n { box-shadow: 0 0 0 5px rgb(43 182 115 / 0.16), 0 0 22px rgb(43 182 115 / 0.45); }
-.ph.is-active .ph-t { color: var(--text); }
-.srun { display: flex; align-items: center; min-height: 70svh; padding: 3svh 0; }
-.srun-in { width: 100%; max-width: 40rem; margin-left: auto; }
+/* v7 · Funktionen kreisen um den Statusring – kompakte Karten, die Bahn hält sie immer auseinander */
+.ft-car.orbit-ft { perspective: 1400px; padding-top: 1rem; }
+.ft-car.orbit-ft .ring-tilt { transform: none; }
+.ft-car.orbit-ft .ring { width: 100%; max-width: none; height: 36rem; transform: none; transform-style: preserve-3d; }
+.ft-car.orbit-ft .ring-item { inset: auto; left: calc(50% - 85px); top: calc(50% - 106px); width: 170px; height: 212px; backface-visibility: visible; -webkit-backface-visibility: visible; will-change: transform, filter; }
+.ft-car.orbit-ft .ring-item a { padding: 1rem 0.8rem 0.9rem; justify-content: center; }
+.ft-car.orbit-ft .portal { --s: 4.6rem; }
+.ft-car.orbit-ft .ring-item a > .portal { margin-bottom: 0.7rem; }
+.ft-car.orbit-ft .ring-item .ft-l { font-size: 0.64rem; }
+.ft-car.orbit-ft .ring-item b { font-size: 1rem; margin-top: 0.3rem; }
+.ft-car.orbit-ft .ring-item em { display: none; }
+.ft-car.orbit-ft .ring-item.front a { border-color: var(--c); box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--c) 60%, transparent); }
+@media (max-width: 820px) {
+  .ft-car.orbit-ft .ring-item { left: calc(50% - 50px); top: calc(50% - 64px); width: 100px; height: 128px; }
+  .ft-car.orbit-ft .ring-item a { padding: 0.6rem 0.4rem; border-radius: 60px 60px 16px 16px; }
+  .ft-car.orbit-ft .portal { --s: 2.9rem; }
+  .ft-car.orbit-ft .ring-item a > .portal { margin-bottom: 0.4rem; }
+  .ft-car.orbit-ft .ring-item .ft-l { display: none; }
+  .ft-car.orbit-ft .ring-item b { font-size: 0.74rem; line-height: 1.15; }
+}
+
+/* v8 · Sechs Schritte als Weg: Abschnitt bleibt stehen, die Ansicht fährt auf der Straße von Schritt zu Schritt */
+.steps.path { position: relative; }
+.steps.path.js { height: calc(100svh + 270svh); }
+.path-pin { position: relative; display: flex; flex-direction: column; padding: calc(var(--header-h) + 1.2rem) 0 1rem; }
+.steps.path.js .path-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.path-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem 2.5rem; flex-wrap: wrap; }
+.path-title .h2 { font-size: clamp(1.8rem, 1.1rem + 1.8vw, 2.9rem); }
+.path-chips { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.path-chips .ph { border: 0; }
+.path-chips .ph-head { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.75rem 0.3rem 0.3rem; border-radius: 999px; border: 1px solid rgb(255 255 255 / 0.12); background: rgb(7 12 24 / 0.7); color: var(--text-2); text-decoration: none; grid-template-columns: none; transition: border-color 0.25s, background-color 0.25s, color 0.25s; }
+.path-chips .ph-n { width: 1.7rem; height: 1.7rem; font-size: 0.74rem; }
+.path-chips .ph-t { font-family: var(--font); font-weight: 700; font-size: 0.86rem; letter-spacing: -0.01em; white-space: nowrap; }
+.path-chips .ph-head:hover { border-color: rgb(142 230 184 / 0.55); color: var(--text); }
+.path-chips .ph.done .ph-n { border-color: var(--green); color: var(--mint); background: rgb(14 40 28); }
+.path-chips .ph.is-active .ph-head { border-color: var(--green); background: rgb(43 182 115 / 0.14); color: var(--text); }
+.path-chips .ph.is-active .ph-n { box-shadow: 0 0 14px rgb(43 182 115 / 0.55); }
+@media (max-width: 1279px) { .path-chips .ph:not(.is-active) .ph-t { display: none; } .path-chips .ph:not(.is-active) .ph-head { padding-right: 0.3rem; } }
+.path-view { position: relative; flex: 1; min-height: 0; margin-top: 1rem; overflow-x: auto; perspective: 1500px; }
+.steps.path.js .path-view { overflow: hidden; }
+.path-track { position: relative; height: 100%; display: flex; align-items: flex-end; column-gap: clamp(1.5rem, 6vw, 6rem); width: max-content; will-change: transform; transform-style: preserve-3d; }
+.path-road { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.rd-base { fill: none; stroke: rgb(120 150 210 / 0.22); stroke-width: 6; stroke-linecap: round; }
+.rd-fill { fill: none; stroke: var(--green); stroke-width: 6; stroke-linecap: round; filter: drop-shadow(0 0 8px rgb(43 182 115 / 0.8)); }
+.rd-node { fill: rgb(9 15 30); stroke: rgb(120 150 210 / 0.5); stroke-width: 3; transition: fill 0.3s, stroke 0.3s; }
+.rd-node.on { fill: var(--green); stroke: var(--mint); }
+.rd-dot { fill: #eafff4; filter: drop-shadow(0 0 10px var(--mint)) drop-shadow(0 0 22px var(--green)); }
+.pstop { position: relative; flex: none; width: min(40rem, 58vw); height: 100%; display: flex; align-items: flex-end; padding-bottom: 58px; }
+.pstop-in { width: 100%; transform-origin: 50% 100%; will-change: transform, filter; }
 .stage-card { display: block; color: inherit; text-decoration: none; }
 .stage-card .viz { transition: border-color 0.25s, box-shadow 0.4s; }
 .stage-card:hover .viz { border-color: rgb(142 230 184 / 0.5); }
-.srun.is-active .stage-card .viz { box-shadow: 0 30px 80px -30px rgb(43 182 115 / 0.45); }
-.srun-txt { margin-top: 1rem; padding: 1.1rem 1.3rem 1.2rem; border-radius: 18px; background: rgb(7 12 24 / 0.82); border: 1px solid rgb(255 255 255 / 0.07); color: var(--text-2); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.srun-txt .ph-topics { margin-top: 0.8rem; }
-@media (min-width: 1024px) {
-  .steps-flow { grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5.5rem); align-items: start; }
-  .steps-nav { position: sticky; top: calc(var(--header-h) + 2rem); }
-  .steps-nav.has-active .steps-intro { display: none; }
-  .steps-run { padding-top: 22svh; }
-  .srun { min-height: 80svh; }
-}
-@media (min-width: 1024px) and (max-height: 820px) {
-  .steps-nav .h2 { font-size: clamp(1.8rem, 1.1rem + 1.6vw, 2.5rem); }
-  .steps-nav.has-active .kicker { display: none; }
-  .ph-head { padding: 0.35rem 0.2rem; }
-  .ph:not(:last-child)::before, .ph:not(:last-child)::after { top: calc(0.35rem + 2.1rem + 4px); bottom: calc(-0.35rem + 4px); }
-}
-@media (max-width: 1023px) {
-  .steps-nav { background: rgb(7 12 24 / 0.86); border: 1px solid rgb(255 255 255 / 0.07); border-radius: 20px; padding: 1.4rem 1.2rem; }
-  .srun { min-height: 0; padding: 1.2rem 0; }
-  .srun-in { max-width: 46rem; margin: 0 auto; }
-}
-/* Ankunft wie auf einer Achterbahn: von unten herein, oben in die Tiefe hinaus – rückwärts genauso */
-@media (prefers-reduced-motion: no-preference) {
-  @supports ((animation-timeline: view()) and (animation-range: 0% 100%)) {
-    .srun-in { animation: srun-in linear both, srun-out linear both; animation-timeline: view(), view(); animation-range: entry 0% cover 42%, exit 0% exit 100%; transform-origin: 50% 50%; will-change: transform, opacity; }
-  }
-}
-@keyframes srun-in { from { opacity: 0; transform: perspective(1200px) translateY(14vh) rotateX(14deg) scale(0.86); } to { opacity: 1; transform: none; } }
-@keyframes srun-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: perspective(1200px) translateY(-6vh) scale(1.12); filter: blur(4px); } }
-
-/* v7 · Funktionen kreisen um den Statusring */
-.ft-car.orbit-ft { perspective: 1400px; padding-top: 1rem; }
-.ft-car.orbit-ft .ring-tilt { transform: none; }
-.ft-car.orbit-ft .ring { width: 100%; max-width: none; height: 38rem; transform: none; transform-style: preserve-3d; }
-.ft-car.orbit-ft .ring-item { inset: auto; left: calc(50% - 105px); top: calc(50% - 165px); width: 210px; height: 304px; backface-visibility: visible; -webkit-backface-visibility: visible; will-change: transform, opacity; }
-.ft-car.orbit-ft .ring-item.front a { border-color: var(--c); box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--c) 60%, transparent); }
+.pstop.is-active .stage-card .viz { border-color: rgb(142 230 184 / 0.45); box-shadow: 0 30px 90px -30px rgb(43 182 115 / 0.5); }
+.pstop-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; flex-wrap: wrap; margin-top: 0.8rem; }
+.pstop-foot .ph-topics { margin: 0; }
+.pstop-foot .ph-more { margin-top: 0; }
 @media (max-width: 820px) {
-  .ft-car.orbit-ft .ring { height: 27rem; }
-  .ft-car.orbit-ft .ring-item { left: calc(50% - 90px); top: calc(50% - 120px); width: 180px; height: 260px; }
+  .path-pin { padding-top: calc(var(--header-h) + 0.8rem); }
+  .path-title .kicker { display: none; }
+  .path-title .h2 { font-size: 1.55rem; }
+  .path-head { gap: 0.8rem; }
+  .pstop { width: 84vw; padding-bottom: 52px; }
+  .path-track { column-gap: 1.2rem; }
+  .pstop-foot .ph-topics { display: none; }
+}
+/* Sprungmarken je Schritt (Tastatur, Links): dort steht die Fahrt genau auf dem Schritt */
+.path-mark { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+.path-mark.m0 { top: 3.3svh; } .path-mark.m1 { top: 51svh; } .path-mark.m2 { top: 98.6svh; }
+.path-mark.m3 { top: 146.2svh; } .path-mark.m4 { top: 193.8svh; } .path-mark.m5 { top: 241.4svh; }
+.steps.path:not(.js) .path-mark { display: none; }
+@media (max-width: 820px) {
+  .path-chips { flex-wrap: nowrap; gap: 0.25rem; }
+  .path-chips .ph-n { width: 1.55rem; height: 1.55rem; font-size: 0.7rem; }
+  .path-chips .ph-t { font-size: 0.8rem; }
+  /* Grafik auf dem Handy gekürzt, damit die Karte lesbar groß bleibt */
+  .pstop .viz-b { max-height: 30svh; overflow: hidden; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  .pstop .viz-note { display: none; }
 }
