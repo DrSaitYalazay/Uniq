@@ -7,6 +7,7 @@ import Lenis from 'lenis';
 import { bus, state } from './state';
 import { initFx, initCarousel, initViz, initImgIn, initMirror } from './fx';
 import { initAnfrage } from './anfrage';
+import { initFilm } from './film';
 import { initPath } from './steps';
 import { initPress } from './press';
 
@@ -261,6 +262,7 @@ if (isHome) {
   addEventListener('load', measure);
 }
 initAnfrage();
+initFilm();
 initFx();
 initCarousel();
 initViz();
