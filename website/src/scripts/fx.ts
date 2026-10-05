@@ -6,7 +6,7 @@
  * Ohne JS oder bei reduzierter Bewegung bleibt alles sofort sichtbar.
  * DOM wird nur mit createElement/Textknoten gebaut (Trusted Types, CSP).
  */
-import { state } from './state';
+import { state, dimFilter } from './state';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || new URLSearchParams(location.search).has('reduced');
 
 function wrapWords(el: HTMLElement) {
@@ -246,7 +246,7 @@ function setupFtOrbit(car: HTMLElement) {
       const s = smin + (1 - smin) * (d + 1) / 2;
       it.style.transform = `translate(${(ox + c * rx).toFixed(1)}px, ${(d * ry).toFixed(1)}px) rotateY(${(-c * 24).toFixed(2)}deg) scale(${s.toFixed(3)})`;
       it.style.zIndex = String(Math.round((d + 1) * 50));
-      it.style.filter = `brightness(${(0.45 + 0.55 * (d + 1) / 2).toFixed(2)})`; // hinten dunkler, aber deckend
+      it.style.filter = dimFilter(0.45 + 0.55 * (d + 1) / 2); // hinten zurückgenommen, aber deckend
       if (d > best) { best = d; bk = i; }
     });
     if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); list.forEach((li, i) => li.classList.toggle('on', i === bk)); }

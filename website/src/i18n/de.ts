@@ -49,6 +49,7 @@ export default {
     demo: 'Demo anfragen',
     langSwitch: 'English',
     langSwitchLabel: 'Switch to English',
+    themeLabel: 'Helle oder dunkle Darstellung',
     menu: 'Menü',
     close: 'Menü schließen',
   },

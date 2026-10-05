@@ -64,6 +64,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
     <meta name="color-scheme" content="dark" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script src="/theme.js" is:inline></script>
     <script src="/vt.js" is:inline></script>
     <link rel="preload" href="/fonts/inter-display-800.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
@@ -81,7 +82,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
     <meta name="twitter:card" content="summary_large_image" />
     {jsonld.map((j) => <script type="application/ld+json" is:inline set:html={JSON.stringify(j)} />)}
   </head>
-  <body>
+  <body class={home ? 'is-home' : 'is-sub'}>
     <a class="skip" href="#inhalt">{t.skip}</a>
 
     <div class="world" aria-hidden="true">
@@ -100,6 +101,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
         {t.nav.items.map((i) => <a href={`${navBase}${i.href}`} aria-current={i.href === navCur ? 'location' : undefined}>{i.label}</a>)}
       </nav>
       <div class="header-actions">
+        <button class="theme-tg" type="button" data-theme-toggle aria-pressed="false" aria-label={t.nav.themeLabel} title={t.nav.themeLabel}><Icon name="sun" class="i-sun" /><Icon name="moon" class="i-moon" /></button>
         <a class="lang" href={altPath} hreflang={altLang} lang={altLang} data-lang-switch aria-label={t.nav.langSwitchLabel}>{altLang.toUpperCase()}</a>
         <a class="btn btn-ghost btn-sm" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
         <a class="btn btn-primary btn-sm" href={loginHref(lang)} data-magnetic><Icon name="login" />{t.nav.login}</a>

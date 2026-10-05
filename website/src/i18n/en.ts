@@ -50,6 +50,7 @@ const en: typeof de = {
     demo: 'Request a demo',
     langSwitch: 'Deutsch',
     langSwitchLabel: 'Zur deutschen Seite wechseln',
+    themeLabel: 'Light or dark display',
     menu: 'Menu',
     close: 'Close menu',
   },

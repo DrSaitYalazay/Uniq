@@ -8,6 +8,7 @@ import { bus, state } from './state';
 import { initFx, initCarousel, initViz, initImgIn, initMirror } from './fx';
 import { initAnfrage } from './anfrage';
 import { initFilm } from './film';
+import { initTheme } from './theme';
 import { initPath } from './steps';
 import { initPress } from './press';
 
@@ -261,6 +262,7 @@ if (isHome) {
   addEventListener('resize', measure, { passive: true });
   addEventListener('load', measure);
 }
+initTheme();
 initAnfrage();
 initFilm();
 initFx();

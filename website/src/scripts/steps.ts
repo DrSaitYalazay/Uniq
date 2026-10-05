@@ -4,6 +4,7 @@
  * dadurch läuft die Fahrt synchron mit der Kamera um den Ring und rückwärts exakt gleich.
  * An jedem Schritt wird die Fahrt langsamer, hält aber nie an.
  */
+import { dimFilter } from './state';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initPath(): (u: number) => void {
@@ -66,7 +67,7 @@ export function initPath(): (u: number) => void {
       const dd = i - p, ad = Math.min(1.4, Math.abs(dd));
       const rot = reduced ? 0 : -Math.max(-1.2, Math.min(1.2, dd)) * 22;
       el.style.transform = `rotateY(${rot.toFixed(2)}deg) scale(${((1 - ad * 0.15) * fit).toFixed(3)})`;
-      el.style.filter = `brightness(${(1 - ad * 0.4).toFixed(2)})`;
+      el.style.filter = dimFilter(1 - ad * 0.4);
     });
     const x = x0() + p * (S + G);
     clip.setAttribute('width', x.toFixed(1));
