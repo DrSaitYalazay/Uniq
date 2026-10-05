@@ -186,12 +186,38 @@ function setupFtOrbit(car: HTMLElement) {
   const step = (Math.PI * 2) / n;
   const speed = (9 * Math.PI) / 180;
   let angle = Math.PI / 2, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0, front = -1;
-  let W = 0, H = 0;
-  const measure = () => { W = ring.clientWidth; H = ring.clientHeight; };
+  // Bahn so bemessen, dass sich keine zwei Karten in irgendeiner Drehlage berühren
+  const SMIN_WIDE = 0.58, SMIN_NARROW = 0.8, GAP = 10;
+  const worstGap = (rx: number, ry: number, w: number, h: number, smin: number) => {
+    let worst = 1e9;
+    const xs = new Array(n), ys = new Array(n), ss = new Array(n);
+    for (let t = 0; t < 360 / n; t += 1) {
+      const a0 = (t * Math.PI) / 180;
+      for (let i = 0; i < n; i++) { const th = a0 + i * step, d = Math.sin(th); xs[i] = rx * Math.cos(th); ys[i] = ry * d; ss[i] = smin + (1 - smin) * (d + 1) / 2; }
+      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+        const sep = Math.max(Math.abs(xs[i] - xs[j]) - (ss[i] + ss[j]) * w / 2, Math.abs(ys[i] - ys[j]) - (ss[i] + ss[j]) * h / 2);
+        if (sep < worst) worst = sep;
+      }
+    }
+    return worst;
+  };
+  let W = 0, cw = 0, ch = 0, solvedA = -1, sol = { rx: 200, ry: 120, smin: SMIN_WIDE };
+  const measure = () => { W = ring.clientWidth; cw = items[0].offsetWidth; ch = items[0].offsetHeight; solvedA = -1; };
   measure();
   addEventListener('resize', measure);
-  // weich nachgeführte Bahn (Ring der Szene oder eigene Ellipse)
-  let ox = 0, rx = 0, ry = 0, init = false;
+  const solve = (A: number, narrow: boolean) => {
+    if (Math.abs(A - solvedA) < 3) return sol;
+    solvedA = A;
+    const smin = narrow ? SMIN_NARROW : SMIN_WIDE;
+    const sMid = smin + (1 - smin) / 2; // Größe ganz links und rechts
+    const rx = Math.max(cw, Math.min(narrow ? 999 : 520, A - (sMid * cw) / 2));
+    let ry = Math.round(ch * 0.3);
+    while (ry < 460 && worstGap(rx, ry, cw, ch, smin) < GAP) ry += 4;
+    sol = { rx, ry, smin };
+    ring.style.height = `${Math.round(2 * ry + ch + 30)}px`;
+    return sol;
+  };
+  let ox = 0, init = false;
   const frame = (now: number) => {
     const dt = Math.min(0.1, (now - last) / 1000 || 0);
     last = now;
@@ -200,36 +226,33 @@ function setupFtOrbit(car: HTMLElement) {
       if (Math.abs(target - angle) < 0.002) { angle = target; target = null; hold = now + 1800; }
     } else if (!paused && now > hold) angle += speed * dt;
     const narrow = W < 700;
-    let tx = 0, trx = Math.min(W * (narrow ? 0.34 : 0.4), 560), tr = trx * (narrow ? 0.62 : 0.3);
+    const half = Math.min(W, innerWidth) / 2 - (narrow ? 10 : 48);
+    let tx = 0;
     const R = state.ring;
     if (R && R.rx > 40 && document.documentElement.classList.contains('has3d') && !narrow) {
-      // Bahn knapp außerhalb des Rings, Mitte auf der Ringmitte; Karten bleiben ganz im Bild
+      // Mitte der Bahn auf der Ringmitte, aber nur so weit, dass die Bahn breit genug bleibt
       const box = ring.getBoundingClientRect();
-      const side = (items[0]?.offsetWidth || 210) * 0.78 / 2;
-      const avail = innerWidth / 2 - side - 56;
-      tx = R.cx - (box.left + W / 2);
-      trx = R.rx * 1.18;
-      if (Math.abs(tx) + trx > avail) trx = Math.max(R.rx, avail - Math.abs(tx));
-      if (Math.abs(tx) + trx > avail) tx = Math.sign(tx) * Math.max(0, avail - trx);
-      tr = Math.max(trx * 0.25, Math.min(175, R.ry * 1.18));
+      tx = Math.max(-half * 0.22, Math.min(half * 0.22, R.cx - (box.left + W / 2)));
     }
-    if (!init) { ox = tx; rx = trx; ry = tr; init = true; }
-    const k = Math.min(1, dt * 3);
-    ox += (tx - ox) * k; rx += (trx - rx) * k; ry += (tr - ry) * k;
+    if (!init) { ox = tx; init = true; }
+    ox += (tx - ox) * Math.min(1, dt * 3);
+    const { rx, ry, smin } = solve(half - Math.abs(tx), narrow);
     if (nav) nav.style.transform = `translateX(${ox.toFixed(1)}px)`;
     let best = -2, bk = 0;
     items.forEach((it, i) => {
       const th = angle + i * step;
       const c = Math.cos(th), d = Math.sin(th); // d = 1: vorn
-      const s = (narrow ? 0.5 : 0.56) + (narrow ? 0.5 : 0.44) * (d + 1) / 2;
-      it.style.transform = `translate(${(ox + c * rx).toFixed(1)}px, ${(d * ry).toFixed(1)}px) rotateY(${(-c * 28 * (0.4 + 0.6 * (d + 1) / 2)).toFixed(2)}deg) scale(${s.toFixed(3)})`;
+      const s = smin + (1 - smin) * (d + 1) / 2;
+      it.style.transform = `translate(${(ox + c * rx).toFixed(1)}px, ${(d * ry).toFixed(1)}px) rotateY(${(-c * 24).toFixed(2)}deg) scale(${s.toFixed(3)})`;
       it.style.zIndex = String(Math.round((d + 1) * 50));
-      it.style.filter = `brightness(${(0.42 + 0.58 * (d + 1) / 2).toFixed(2)})`; // hinten dunkler, aber deckend
+      it.style.filter = `brightness(${(0.45 + 0.55 * (d + 1) / 2).toFixed(2)})`; // hinten dunkler, aber deckend
       if (d > best) { best = d; bk = i; }
     });
     if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); }
     raf = visible ? requestAnimationFrame(frame) : 0;
   };
+  last = performance.now();
+  frame(last); // Karten sofort auf die Bahn setzen (nie gestapelt)
   whenVisible(car, (v) => { visible = v; if (v && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } });
   const bringFront = (i: number) => {
     let t = Math.PI / 2 - i * step;

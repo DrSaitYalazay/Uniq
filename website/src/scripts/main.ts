@@ -7,6 +7,7 @@ import Lenis from 'lenis';
 import { bus, state } from './state';
 import { initFx, initCarousel, initViz, initImgIn, initMirror } from './fx';
 import { initAnfrage } from './anfrage';
+import { initPath } from './steps';
 
 const root = document.documentElement;
 const params = new URLSearchParams(location.search);
@@ -29,7 +30,6 @@ if (!reduced && !params.has('still')) {
 // ── Stationen: Scrollposition → Weltparameter u ───────────────────────────
 type Mark = { y: number; u: number };
 let marks: Mark[] = [];
-let runs: { y0: number; h: number }[] = [];
 let sections: { el: HTMLElement; id: string; y0: number; y1: number; dim: number }[] = [];
 const dimEls = Array.from(document.querySelectorAll<HTMLElement>('[data-dim], [data-dim-m]'));
 
@@ -44,16 +44,7 @@ function measure() {
     marks.push({ y: y0, u: parseFloat(el.dataset.u0!) }, { y: y1, u: parseFloat(el.dataset.u1!) });
     sections.push({ el, id: el.id, y0: top, y1: top + el.offsetHeight, dim: parseFloat(el.dataset.dim || '0') });
   });
-  // Zwischenhalte der Kamera: Wert uc genau dann, wenn das Element mittig im Bild steht
-  runs = [];
-  document.querySelectorAll<HTMLElement>('[data-uc]').forEach((el) => {
-    const top = el.getBoundingClientRect().top + scrollY;
-    marks.push({ y: top + el.offsetHeight / 2 - vh / 2, u: parseFloat(el.dataset.uc!) });
-    runs.push({ y0: top, h: Math.max(1, el.offsetHeight) });
-  });
   marks.sort((a, b) => a.y - b.y);
-  // Reihenfolge der Werte muss mit der Lage übereinstimmen (sonst fährt die Kamera rückwärts)
-  for (let i = 1; i < marks.length; i++) if (marks[i].u < marks[i - 1].u) marks[i].u = marks[i - 1].u;
 }
 
 function uAt(y: number) {
@@ -229,26 +220,7 @@ if (!reduced && matchMedia('(pointer: fine)').matches) {
 const dimEl = document.querySelector<HTMLElement>('.world .dim');
 const msEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ms]'));
 let lastMs = -1;
-const phEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ph]'));
-const stepsEl = document.querySelector<HTMLElement>('[data-steps]');
-const stageEls = Array.from(document.querySelectorAll<HTMLElement>('[data-stage]'));
-let lastPh = -2, lastF = -1;
-
-/** Wechsel des aktiven Schritts: Zeitleiste links, Grafik der Karte rechts startet. */
-function switchStep(ph: number) {
-  phEls.forEach((el) => {
-    const i = Number(el.dataset.ph);
-    el.classList.toggle('is-active', i === ph);
-    el.classList.toggle('done', i < ph);
-    if (i !== ph) el.style.removeProperty('--f');
-  });
-  stepsEl?.classList.toggle('has-active', ph >= 0);
-  stageEls.forEach((el) => {
-    const on = Number(el.dataset.stage) === ph;
-    el.classList.toggle('is-active', on);
-    if (on) el.querySelector('[data-viz]')?.classList.add('on');
-  });
-}
+const pathUpdate = initPath();
 
 function tick(time: number) {
   lenis?.raf(time);
@@ -268,15 +240,7 @@ function tick(time: number) {
     setActive(id);
     // aktiver Meilenstein
     const ms = Math.round(Math.min(6, Math.max(0, (state.u - 13.3) / (14.9 - 13.3) * 6)));
-    // aktiver Schritt: die Karte, die gerade die Bildschirmmitte kreuzt
-    let ph = -1, f = 0;
-    for (let i = 0; i < runs.length; i++) if (mid >= runs[i].y0) { ph = i; f = Math.min(1, (mid - runs[i].y0) / runs[i].h); }
-    if (ph >= 0 && ph === runs.length - 1 && mid > runs[ph].y0 + runs[ph].h + innerHeight * 0.3) ph = runs.length; // alle erledigt
-    if (ph !== lastPh) { switchStep(ph); lastPh = ph; lastF = -1; }
-    if (ph >= 0) {
-      const fr = Math.round(f * 100) / 100;
-      if (fr !== lastF) { lastF = fr; phEls[ph]?.style.setProperty('--f', String(fr)); }
-    }
+    pathUpdate(state.u);
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;
       msEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ms) === ms));
