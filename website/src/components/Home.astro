@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { SITE_URL, LOGIN_URL, loginHref, demoHref, CONTACT_EMAIL, type Lang } from '../config';
+import { SITE_URL, LOGIN_URL, loginHref, demoHref, CONTACT_EMAIL, FILM, type Lang } from '../config';
 import de from '../i18n/de';
 import en from '../i18n/en';
 import qcData from '../data/quickcheck.json';
@@ -116,6 +116,7 @@ const clientData = {
         <div class="cta-row">
           <a class="btn btn-primary" href="#quick-check" data-magnetic>{t.hero.ctaCheck}<Icon name="arrow" /></a>
           <a class="btn btn-ghost" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
+          <button type="button" class="btn btn-film" data-film data-magnetic><span class="pl"><Icon name="play" /></span>{t.film.open}<small>{FILM[lang].dur}</small></button>
         </div>
         <p class="cta-note">{t.hero.ctaNote}</p>
         <ul class="hero-fw" aria-label={t.regelwerke.kicker}>
