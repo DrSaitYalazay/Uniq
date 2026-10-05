@@ -22,10 +22,10 @@ const other = lang === 'de' ? 'en' : 'de';
 const path = featureHref(lang, index);
 const altPath = featureHref(other, index);
 const L = lang === 'de'
-  ? { of: 'Funktion {i} von 6', why: 'Worum es geht', can: 'Was Sie damit tun', gain: 'Was Sie davon haben', steps: 'Gehört zu diesen Schritten', step: 'Schritt', refs: 'Bezug zu den Regelwerken', prev: 'Vorherige Funktion', next: 'Nächste Funktion', all: 'Alle Funktionen', ring: 'Die sechs Funktionen', note: 'Bildschirmfoto aus einem Demo-Mandanten mit erfundenen Daten.', ctaH: 'Sehen Sie sich das mit Ihren eigenen Fragen an.', ctaT: 'In einer halben Stunde zeigen wir Ihnen, wie diese Funktion in Ihrem Alltag aussieht. Oder Sie prüfen vorher im Quick-Check, wo Sie stehen.', refsNote: 'Die Bezüge zeigen, wo die Anforderungen herkommen. Sie ersetzen keine rechtliche Prüfung.' }
-  : { of: 'Feature {i} of 6', why: 'What it is about', can: 'What you do with it', gain: 'What you get out of it', steps: 'Part of these steps', step: 'Step', refs: 'Where the requirements come from', prev: 'Previous feature', next: 'Next feature', all: 'All features', ring: 'The six features', note: 'Screenshot from a demo tenant with made-up data.', ctaH: 'See it with your own questions.', ctaT: 'In half an hour we show you what this feature looks like in your day-to-day work. Or check first where you stand with the quick check.', refsNote: 'The references show where the requirements come from. They do not replace a legal assessment.' };
-const vizKind = ['dashboard', 'incident', 'supplier', 'policies', 'ai', 'evidence'][index];
-const ph = photos[(['leader', 'manWindow', 'relaxed', 'ciso', 'womanWindow', 'consultant'] as const)[index]];
+  ? { of: 'Werkzeug {i} von {n}', why: 'Worum es geht', can: 'Was Sie damit tun', gain: 'Was Sie davon haben', steps: 'Gehört zu diesen Schritten', step: 'Schritt', refs: 'Bezug zu den Regelwerken', prev: 'Vorheriges Werkzeug', next: 'Nächstes Werkzeug', all: 'Alle Werkzeuge', ring: 'Die fünf Werkzeuge', note: 'Bildschirmfoto aus einem Demo-Mandanten mit erfundenen Daten.', ctaH: 'Sehen Sie sich das mit Ihren eigenen Fragen an.', ctaT: 'In einer halben Stunde zeigen wir Ihnen, wie diese Funktion in Ihrem Alltag aussieht. Oder Sie prüfen vorher im Quick-Check, wo Sie stehen.', refsNote: 'Die Bezüge zeigen, wo die Anforderungen herkommen.' }
+  : { of: 'Tool {i} of {n}', why: 'What it is about', can: 'What you do with it', gain: 'What you get out of it', steps: 'Part of these steps', step: 'Step', refs: 'Where the requirements come from', prev: 'Previous tool', next: 'Next tool', all: 'All tools', ring: 'The five tools', note: 'Screenshot from a demo tenant with made-up data.', ctaH: 'See it with your own questions.', ctaT: 'In half an hour we show you what this feature looks like in your day-to-day work. Or check first where you stand with the quick check.', refsNote: 'The references show where the requirements come from.' };
+const vizKind = f.img;
+const ph = photos[({ dashboard: 'leader', incident: 'manWindow', supplier: 'relaxed', policies: 'ciso', ai: 'womanWindow' } as const)[f.img as 'dashboard'] ?? 'consultant'];
 const shot = (n: string) => `/img/shots/${lang}-${n}`;
 const prev = (index + list.length - 1) % list.length;
 const next = (index + 1) % list.length;
@@ -33,8 +33,9 @@ const next = (index + 1) % list.length;
 // Ring aus sechs Bogensegmenten (SVG), wie bei den Schritten
 const R = 46, C = 60, GAP = 7;
 const arc = (k: number) => {
-  const a0 = ((k * 60 - 90 + GAP / 2) * Math.PI) / 180;
-  const a1 = (((k + 1) * 60 - 90 - GAP / 2) * Math.PI) / 180;
+  const seg = 360 / list.length;
+  const a0 = ((k * seg - 90 + GAP / 2) * Math.PI) / 180;
+  const a1 = (((k + 1) * seg - 90 - GAP / 2) * Math.PI) / 180;
   const p = (a: number) => `${(C + R * Math.cos(a)).toFixed(2)} ${(C + R * Math.sin(a)).toFixed(2)}`;
   return `M ${p(a0)} A ${R} ${R} 0 0 1 ${p(a1)}`;
 };
@@ -51,21 +52,21 @@ const jsonld = [{
     </picture>
   </Fragment>
 
-  <article class={`sp fp ft-${index}`}>
+  <article class={`sp fp ft-${f.img}`}>
     <header class="wrap sp-head">
       <nav class="sp-ring" aria-label={L.ring}>
         <svg viewBox="0 0 120 120" role="img" aria-label={L.ring}>
           {list.map((x, k) => (
             <a href={featureHref(lang, k)} aria-label={x.label} aria-current={k === index ? 'page' : undefined}>
               <title>{x.label}</title>
-              <path class={`seg ft-${k}${k === index ? ' on' : ''}`} d={arc(k)} />
+              <path class={`seg ft-${x.img}${k === index ? ' on' : ''}`} d={arc(k)} />
             </a>
           ))}
         </svg>
         <span class="sp-ring-c fp-c">{f.label}</span>
       </nav>
       <div>
-        <p class="kicker">{L.of.replace('{i}', String(index + 1))} · {f.label}</p>
+        <p class="kicker">{L.of.replace('{i}', String(index + 1)).replace('{n}', String(list.length))} · {f.label}</p>
         <h1>{f.title} <span class="accent">{f.sub}</span></h1>
         <p class="lead">{f.lead}</p>
       </div>
