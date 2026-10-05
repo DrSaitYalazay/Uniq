@@ -1852,3 +1852,4 @@ h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
 @media (max-width: 820px) { .tp-two, .tph-step { grid-template-columns: 1fr; } }
 /* Einflug-Animationen dürfen keine waagrechte Scrollbreite erzeugen */
 .trust, .team, .final, .features, .steps, .fwp, .sp { overflow-x: clip; }
+.honest .hon-tl .hn { font-family: var(--font); font-size: 0.78rem; font-variant-numeric: tabular-nums; letter-spacing: 0; }
