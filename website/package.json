@@ -5,10 +5,10 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/version-assets.mjs",
     "preview": "astro preview",
     "check": "node scripts/check-dist.mjs",
-    "build:check": "astro build && node scripts/check-dist.mjs"
+    "build:check": "astro build && node scripts/version-assets.mjs && node scripts/check-dist.mjs"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
