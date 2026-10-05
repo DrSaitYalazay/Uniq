@@ -116,6 +116,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
                 ? <a href={l.href} rel="noopener noreferrer">{l.label}</a>
                 : <a href={l.href}>{l.label}</a>}</li>
             ))}
+            <li><a href={lang === 'de' ? '/de/wissen/' : '/en/knowledge/'}>{lang === 'de' ? 'Wissen' : 'Knowledge'}</a></li>
             <li><a href={altPath} hreflang={altLang} lang={altLang}>{t.nav.langSwitch}</a></li>
           </ul>
         </nav>
@@ -124,7 +125,7 @@ const privacyHref = lang === 'de' ? '/de/datenschutz/' : '/en/privacy/';
 
     <a class="fab-top" href="#inhalt" data-to-top data-fab-top aria-label={t.footer.top}><Icon name="arrow" class="up" /></a>
 
-    <dialog class="anfrage" id="anfrage" aria-labelledby="af-title" data-af-dialog>
+    <dialog class="anfrage" id="anfrage" aria-labelledby="af-title" data-af-dialog data-lenis-prevent>
       <div class="anfrage-in">
         <button type="button" class="x" data-af-close aria-label={a.close}><Icon name="x" /></button>
         <div data-af-form-wrap>

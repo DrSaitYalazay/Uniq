@@ -2,11 +2,14 @@ import { SITE_URL } from '../config';
 import { steps, stepHref } from '../data/steps';
 import { features, featureHref } from '../data/features';
 import { fwOrder, fwHref } from '../data/frameworks';
+import { topicOrder, topicHref, topicHub } from '../data/topics';
 const pairs: [string, string][] = [
   ['/de/', '/en/'],
   ...steps.de.map((_, i): [string, string] => [stepHref('de', i), stepHref('en', i)]),
   ...features.de.map((_, i): [string, string] => [featureHref('de', i), featureHref('en', i)]),
   ...fwOrder.map((f): [string, string] => [fwHref('de', f), fwHref('en', f)]),
+  [topicHub('de'), topicHub('en')],
+  ...topicOrder.map((k): [string, string] => [topicHref('de', k), topicHref('en', k)]),
   ['/de/whitepaper/', '/en/white-paper/'],
   ['/de/broschuere/', '/en/brochure/'],
   ['/de/datenschutz/', '/en/privacy/'],

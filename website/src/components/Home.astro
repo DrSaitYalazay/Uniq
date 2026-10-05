@@ -10,6 +10,7 @@ import { features, featureHref } from '../data/features';
 import Viz from './Viz.astro';
 import Portal from './Portal.astro';
 import { fwHref, type Fw } from '../data/frameworks';
+import { topicsForStep, topicHref } from '../data/topics';
 import { photos, photoSrc } from '../data/photos';
 import { docInfo } from '../data/docs';
 
@@ -226,6 +227,7 @@ const clientData = {
               <div class="ph-body">
                 <p>{p.text}</p>
                 <p class="ph-res">{t.pdca.resultLabel}: <b>{p.result}</b></p>
+                <ul class="ph-topics">{topicsForStep(lang, i).map((x) => <li><a href={topicHref(lang, x.key)}>{x.name}</a></li>)}</ul>
                 <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
                 <div class="ph-viz"><Viz kind={p.img} lang={lang} /></div>
               </div>

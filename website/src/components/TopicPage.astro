@@ -1,0 +1,128 @@
+---
+/**
+ * Wissensseite zu einem Baustein der sechs Schritte (z. B. Risikoanalyse, Erklärung zur Anwendbarkeit).
+ * Aufbau: Worum es geht (mit Grafik) → So gehen Sie vor → Fehler und Nachweise → So hilft UniqSuite → Bezüge → FAQ.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import Portal from './Portal.astro';
+import Viz from './Viz.astro';
+import { demoHref, SITE_URL, type Lang } from '../config';
+import { topics, topicHref, topicHub, topicOrder, type TopicKey } from '../data/topics';
+import { steps, stepHref } from '../data/steps';
+import de from '../i18n/de';
+import en from '../i18n/en';
+
+interface Props { lang: Lang; k: TopicKey }
+const { lang, k } = Astro.props;
+const t = lang === 'de' ? de : en;
+const list = topics[lang];
+const tp = list.find((x) => x.key === k)!;
+const other = lang === 'de' ? 'en' : 'de';
+const path = topicHref(lang, k);
+const altPath = topicHref(other, k);
+const st = steps[lang][tp.step];
+const vizKind = ['scope', 'inventory', 'gap', 'risk', 'plan', 'audit'][tp.step];
+const L = lang === 'de'
+  ? { step: 'Schritt', hub: 'Alle Themen', what: 'Worum es geht', how: tp.key === 'measures' ? 'Die zehn Bereiche' : 'So gehen Sie vor', bad: 'Typische Fehler', good: 'Was ein Prüfer sehen will', help: 'So hilft UniqSuite', toStep: 'Zum Schritt', refs: 'Bezüge', faq: 'Häufige Fragen', more: 'Weitere Themen', ctaH: 'Sehen Sie, wie das in UniqSuite aussieht.', ctaT: 'In einer halben Stunde zeigen wir Ihnen den Ablauf mit Ihren eigenen Fragen.', note: 'Stand Oktober 2026. Diese Seite gibt einen Überblick und ersetzt keine Beratung im Einzelfall.', home: 'Startseite', know: 'Wissen' }
+  : { step: 'Step', hub: 'All topics', what: 'What it is about', how: tp.key === 'measures' ? 'The ten areas' : 'How to go about it', bad: 'Common mistakes', good: 'What an auditor wants to see', help: 'How UniqSuite helps', toStep: 'Go to step', refs: 'References', faq: 'Frequently asked questions', more: 'More topics', ctaH: 'See what this looks like in UniqSuite.', ctaT: 'In half an hour we walk you through it with your own questions.', note: 'As of October 2026. This page gives an overview and does not replace advice on your specific case.', home: 'Home', know: 'Knowledge' };
+// verwandte Themen: zuerst derselbe Schritt, dann die Nachbarn
+const idx = topicOrder.indexOf(k);
+const related = [...list.filter((x) => x.step === tp.step && x.key !== k), ...[idx + 1, idx - 1, idx + 2].map((i) => list.find((x) => x.key === topicOrder[(i + topicOrder.length) % topicOrder.length])!).filter((x) => x.step !== tp.step)].slice(0, 3);
+const url = (p: string) => new URL(p, SITE_URL).href;
+const jsonld = [
+  { '@context': 'https://schema.org', '@type': 'WebPage', name: tp.title, description: tp.lead, inLanguage: lang, url: url(path), isPartOf: { '@type': 'WebSite', name: 'UniqSuite', url: url(`/${lang}/`) }, about: { '@type': 'DefinedTerm', name: tp.name } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: L.home, item: url(`/${lang}/`) },
+    { '@type': 'ListItem', position: 2, name: L.know, item: url(topicHub(lang)) },
+    { '@type': 'ListItem', position: 3, name: tp.name, item: url(path) },
+  ] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: tp.faq.map((x) => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })) },
+];
+---
+<Base lang={lang} path={path} altPath={altPath} title={`${tp.title}: ${tp.sub.replace(/\.$/, '')} – UniqSuite`} description={tp.lead} jsonld={jsonld}>
+  <Fragment slot="world">
+    <picture>
+      <source media="(max-width: 820px)" srcset="/img/still/pdca-m.webp" type="image/webp" width="720" height="1280" />
+      <img class="poster sub" src="/img/still/pdca-d.webp" width="1600" height="900" alt="" decoding="async" />
+    </picture>
+  </Fragment>
+
+  <article class={`sp fwp tpp stp-${tp.step}`}>
+    <nav class="wrap fwp-nav" aria-label={L.hub}>
+      <a href={stepHref(lang, tp.step)}><i></i>{L.step} {tp.step + 1} · {st.title}</a>
+      <a href={topicHub(lang)}><Icon name="layers" />{L.hub}</a>
+    </nav>
+
+    <header class="wrap fwp-head">
+      <div>
+        <p class="kicker">{L.step} {tp.step + 1} · {st.title}</p>
+        <h1>{tp.title} <span class="accent">{tp.sub}</span></h1>
+        <p class="lead">{tp.lead}</p>
+      </div>
+      <Portal size="lg" glyph={tp.glyph} />
+    </header>
+
+    <section class="wrap sp-block sp-intro" aria-labelledby="tp-what">
+      <div class="sp-body">
+        <h2 id="tp-what" class="sp-h">{L.what}</h2>
+        <p>{tp.what}</p>
+      </div>
+      <Viz kind={vizKind} lang={lang} kicker={`${L.step} ${tp.step + 1}`} title={st.title} />
+    </section>
+
+    <section class="wrap sp-block" aria-labelledby="tp-how">
+      <h2 id="tp-how" class="sp-h">{L.how}</h2>
+      <ol class={`fp-can fwp-what tp-how${tp.how.length > 6 ? ' tp-many' : ''}`}>{tp.how.map((x, i) => <li><span>{String(i + 1).padStart(2, '0')}</span><p>{x}</p></li>)}</ol>
+    </section>
+
+    <section class="wrap sp-block tp-two">
+      <div class="tp-box tp-bad">
+        <h2 class="sp-h">{L.bad}</h2>
+        <ul>{tp.mistakes.map((x) => <li><Icon name="x" /><span>{x}</span></li>)}</ul>
+      </div>
+      <div class="tp-box tp-good">
+        <h2 class="sp-h">{L.good}</h2>
+        <ul>{tp.evidence.map((x) => <li><Icon name="check" /><span>{x}</span></li>)}</ul>
+      </div>
+    </section>
+
+    <section class="wrap sp-block fwp-help" aria-labelledby="tp-help">
+      <Portal glyph={tp.glyph} />
+      <div>
+        <h2 id="tp-help" class="sp-h">{L.help}</h2>
+        <p>{tp.help}</p>
+        <p class="tp-steplink"><a href={stepHref(lang, tp.step)}>{L.toStep} {tp.step + 1}: {st.title}<Icon name="arrow" /></a></p>
+      </div>
+    </section>
+
+    <section class="wrap sp-block" aria-labelledby="tp-refs">
+      <h2 id="tp-refs" class="sp-h">{L.refs}</h2>
+      <ul class="sp-refs-grid">{tp.refs.map((x) => <li>{x}</li>)}</ul>
+    </section>
+
+    <section class="wrap sp-block" aria-labelledby="tp-faq">
+      <h2 id="tp-faq" class="sp-h">{L.faq}</h2>
+      <div class="fwp-faq">
+        {tp.faq.map((x, i) => <details open={i === 0}><summary>{x.q}<Icon name="down" /></summary><p>{x.a}</p></details>)}
+      </div>
+    </section>
+
+    <nav class="wrap sp-block" aria-labelledby="tp-more">
+      <h2 id="tp-more" class="sp-h">{L.more}</h2>
+      <ul class="fwp-more">
+        {related.map((r) => <li class={`stp-${r.step}`}><a href={topicHref(lang, r.key)}><Portal glyph={r.glyph} /><b class="tp-name">{r.name}</b><span>{r.sub}</span></a></li>)}
+      </ul>
+    </nav>
+
+    <section class="wrap sp-cta">
+      <h2>{L.ctaH}</h2>
+      <p>{L.ctaT}</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={demoHref(lang)} data-anfrage>{t.nav.demo}<Icon name="arrow" /></a>
+      </div>
+    </section>
+
+    <footer class="wrap fwp-src"><p>{L.note}</p></footer>
+  </article>
+</Base>
