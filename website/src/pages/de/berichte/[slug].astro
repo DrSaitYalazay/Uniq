@@ -1,0 +1,9 @@
+---
+import ReportPage from '../../../components/ReportPage.astro';
+import { reports, reportSlug } from '../../../data/reports';
+export function getStaticPaths() {
+  return reports.de.map((r) => ({ params: { slug: reportSlug('de', r.key) }, props: { k: r.key } }));
+}
+const { k } = Astro.props;
+---
+<ReportPage lang="de" k={k} />
