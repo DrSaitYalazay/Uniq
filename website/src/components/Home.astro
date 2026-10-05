@@ -195,9 +195,9 @@ const clientData = {
         <button type="button" class="fl-step up" data-car="-1" aria-label={lang === 'de' ? 'Vorherige Funktion' : 'Previous feature'}><Icon name="arrow" /></button>
         <ol>
           {features[lang].map((f, i) => (
-            <li class={`fl-i ft-${i}`} data-fl={i}>
+            <li class={`fl-i ft-${f.img}`} data-fl={i}>
               <a href={featureHref(lang, i)}>
-                <Portal glyph={['dashboard', 'incident', 'supplier', 'policies', 'ai', 'evidence'][i]} />
+                <Portal glyph={f.img} />
                 <span class="fl-t"><small>{f.label}</small><b>{f.title}</b></span>
                 <Icon name="arrow" />
               </a>
@@ -209,9 +209,9 @@ const clientData = {
       <div class="ring-tilt">
         <ul class="ring ring-ft">
           {features[lang].map((f, i) => (
-            <li class={`ring-item ft-${i}`}>
+            <li class={`ring-item ft-${f.img}`}>
               <a href={featureHref(lang, i)}>
-                <Portal glyph={['dashboard', 'incident', 'supplier', 'policies', 'ai', 'evidence'][i]} />
+                <Portal glyph={f.img} />
                 <span class="ft-l">{f.label}</span>
                 <b>{f.title}</b>
                 <em>{t.features.more}<Icon name="arrow" /></em>
@@ -228,7 +228,7 @@ const clientData = {
   </section>
 
   <!-- Berichte: die Seiten kommen beim Scrollen aus einem leuchtenden Druckschlitz und legen sich in eine Reihe -->
-  <section id="berichte" class="reports-sec" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
+  <section id="berichte" class="reports-sec" data-u0="5.93" data-u1="5.93" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
     <div class="rp-pin">
       <div class="wrap rp-headrow">
         <div>

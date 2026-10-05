@@ -40,6 +40,7 @@ const en: typeof de = {
     items: [
       { href: '#regelwerke', label: 'Frameworks' },
       { href: '#funktionen', label: 'Features' },
+      { href: '#berichte', label: 'Reports' },
       { href: '#pdca', label: 'How it works' },
       { href: '#fristen', label: 'Deadlines' },
       { href: '#quick-check', label: 'Quick check' },
@@ -58,6 +59,7 @@ const en: typeof de = {
       wolke: 'Start',
       regelwerke: 'Frameworks',
       funktionen: 'Features',
+      berichte: 'Reports',
       pdca: 'Six steps',
       fristen: 'Deadlines',
       'quick-check': 'Quick check',
@@ -133,7 +135,7 @@ const en: typeof de = {
     ],
   },
   features: {
-    kicker: 'What else is inside',
+    kicker: 'Five tools',
     h2a: 'Everything in one place,',
     h2b: 'even when things get serious.',
     items: [
