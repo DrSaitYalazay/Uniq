@@ -55,7 +55,7 @@ export async function init(canvas: HTMLCanvasElement) {
   const R = buildRing(tier >= 3 ? 3 : 2, lang, segImgs);
   scene.add(R.group);
 
-  const msFw = ['nis2', 'nis2', 'aiact', 'cra', 'aiact', 'cra', 'aiact'];
+  const msFw = ['nis2', 'nis2', 'aiact', 'cra', 'aiact', 'aiact', 'cra', 'aiact'];
   const D = buildDeadlines(msFw);
   scene.add(D.floor, D.road, D.sparks);
   D.timers.forEach((t) => scene.add(t.group));
