@@ -236,7 +236,7 @@ export async function init(canvas: HTMLCanvasElement) {
   const mouse = new THREE.Vector2(9, 9);
   const ndc = new THREE.Vector2();
   let pointerX = -1, pointerY = -1, overUi = true, pointerDirty = false;
-  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .path-head, .pstop-in, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
+  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .path-head, .pstop-in, .reports-sec, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
   addEventListener('pointermove', (e) => {
     pointerX = e.clientX; pointerY = e.clientY; overUi = isUi(e.target); pointerDirty = true;
     ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
