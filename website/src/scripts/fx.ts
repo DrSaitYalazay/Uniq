@@ -218,7 +218,7 @@ function setupBelt(belt: HTMLElement) {
 /**
  * Regelwerke als Planeten auf einer geneigten Umlaufbahn (gleiches Tempo wie der
  * Quick-Check-Ring). Der vorderste Planet bestimmt die Karte daneben. Zeiger auf
- * einem Planeten hält an, Klick dreht ihn nach vorn.
+ * einem Planeten hält an, Klick öffnet die Seite des Regelwerks.
  */
 function setupOrbit(box: HTMLElement) {
   const stage = box.querySelector<HTMLElement>('.orbit-stage');
@@ -268,10 +268,9 @@ function setupOrbit(box: HTMLElement) {
     while (t - base < -Math.PI) t += Math.PI * 2;
     target = t;
   };
-  planets.forEach((p, k) => {
+  planets.forEach((p) => {
     p.addEventListener('pointerenter', () => { paused = true; });
     p.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 800; });
-    p.addEventListener('click', () => bringFront(k));
   });
   // Rückkehr auf die Seite (Zurück-Taste, Cache): sofort weiterdrehen
   addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
