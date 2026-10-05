@@ -38,9 +38,9 @@ export default {
     label: 'Hauptnavigation',
     items: [
       { href: '#regelwerke', label: 'Regelwerke' },
+      { href: '#pdca', label: 'So funktioniert’s' },
       { href: '#funktionen', label: 'Funktionen' },
       { href: '#berichte', label: 'Berichte' },
-      { href: '#pdca', label: 'So funktioniert’s' },
       { href: '#fristen', label: 'Fristen' },
       { href: '#quick-check', label: 'Quick-Check' },
       { href: '#downloads', label: 'Downloads' },
@@ -57,9 +57,9 @@ export default {
     items: {
       wolke: 'Start',
       regelwerke: 'Regelwerke',
+      pdca: 'Sechs Schritte',
       funktionen: 'Funktionen',
       berichte: 'Berichte',
-      pdca: 'Sechs Schritte',
       fristen: 'Fristen',
       'quick-check': 'Quick-Check',
     },

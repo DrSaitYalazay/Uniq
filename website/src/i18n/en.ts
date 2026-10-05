@@ -39,9 +39,9 @@ const en: typeof de = {
     label: 'Main navigation',
     items: [
       { href: '#regelwerke', label: 'Frameworks' },
+      { href: '#pdca', label: 'How it works' },
       { href: '#funktionen', label: 'Features' },
       { href: '#berichte', label: 'Reports' },
-      { href: '#pdca', label: 'How it works' },
       { href: '#fristen', label: 'Deadlines' },
       { href: '#quick-check', label: 'Quick check' },
       { href: '#downloads', label: 'Downloads' },
@@ -58,9 +58,9 @@ const en: typeof de = {
     items: {
       wolke: 'Start',
       regelwerke: 'Frameworks',
+      pdca: 'Six steps',
       funktionen: 'Features',
       berichte: 'Reports',
-      pdca: 'Six steps',
       fristen: 'Deadlines',
       'quick-check': 'Quick check',
     },
