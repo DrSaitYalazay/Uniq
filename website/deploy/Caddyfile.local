@@ -12,7 +12,20 @@ import security-headers.caddy
 	header -Strict-Transport-Security
 	@hashed path /_assets/*
 	header @hashed Cache-Control "public, max-age=31536000, immutable"
-	@static path /fonts/* /img/* /docs/* /favicon.svg /og/*
+	# Bilder, PDFs, OG-Bilder: Der Build hängt ?v=<Inhalts-Hash> an (scripts/version-assets.mjs).
+	# Versionierte Adressen ändern sich mit dem Inhalt und dürfen ewig gecacht werden;
+	# unversionierte werden bei jedem Aufruf nachgeprüft (ETag, meist 304), damit nie Altes stehen bleibt.
+	@versioned {
+		path /img/* /docs/* /og/*
+		query v=*
+	}
+	header @versioned Cache-Control "public, max-age=31536000, immutable"
+	@revalidate {
+		path /img/* /docs/* /og/*
+		not query v=*
+	}
+	header @revalidate Cache-Control "no-cache"
+	@static path /fonts/* /favicon.svg
 	header @static Cache-Control "public, max-age=604800"
 	redir / /de/ 301
 	# lokaler Test der Demo-Anfrage gegen eine lokal laufende API

@@ -33,6 +33,14 @@ rm -f uniqsuite-site.tgz
 
 # 4) Container starten bzw. aktualisieren (Dateien sind eingebunden, kein Neubau nötig)
 docker compose up -d --remove-orphans
+#    Caddyfile und security-headers.caddy sind als EINZELDATEIEN eingebunden. tar ersetzt sie
+#    (neue Datei, neuer Inode), der laufende Container sähe weiter die alte Fassung.
+#    Weicht die Fassung im Container ab, wird er neu erstellt; sonst bleibt er unberührt.
+if ! docker compose exec -T www cat /etc/caddy/Caddyfile < /dev/null | cmp -s - Caddyfile \
+   || ! docker compose exec -T www cat /etc/caddy/security-headers.caddy < /dev/null | cmp -s - security-headers.caddy; then
+  echo "Website-Caddy: geänderte Konfiguration, Container wird neu erstellt"
+  docker compose up -d --force-recreate www
+fi
 
 # 5) Edge-Block in der Caddyfile von ClaudeCWS sicherstellen und wirksam machen.
 #    Dauerhaft steht der Block im ClaudeCWS-Repository; fehlt er auf dem Server, wird er angehängt.
@@ -79,6 +87,9 @@ for i in $(seq 1 24); do
 done
 echo "--- Antwort-Header ---"
 curl -sSI --max-time 10 "https://$HOST/de/" | grep -iE "^(HTTP|content-security|strict-transport|x-frame|referrer|permissions|cross-origin|server)" || true
+echo "--- Cache-Control Bild (ohne / mit Version) ---"
+curl -sSI --max-time 10 "https://$HOST/img/grain.webp" | grep -i "^cache-control" || true
+curl -sSI --max-time 10 "https://$HOST/img/grain.webp?v=check" | grep -i "^cache-control" || true
 if [ "$HEALTH" != ok ]; then
   # Diagnose: ohne sie bleibt unsichtbar, ob der Block geladen ist, der Container antwortet
   # oder die Zertifikatsausstellung (ACME) scheitert.
