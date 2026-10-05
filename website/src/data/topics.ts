@@ -51,6 +51,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Darf der Geltungsbereich nur einen Teil des Unternehmens umfassen?', a: 'Bei ISO 27001 ja, wenn die Grenzen klar beschrieben und begründet sind. Die gesetzlichen Pflichten aus NIS2 hängen davon aber nicht ab.' },
       { q: 'Wann wird der Geltungsbereich überprüft?', a: 'Bei jeder wesentlichen Änderung, etwa neuen Standorten, Diensten oder Dienstleistern, und spätestens in der Managementbewertung.' },
+      { q: 'Was gilt für ausgelagerte Prozesse?', a: 'Sie bleiben in Ihrer Verantwortung. ISO 27001 verlangt in Abschnitt 8.1, extern bereitgestellte Prozesse, Produkte und Dienstleistungen zu steuern, soweit sie für das ISMS relevant sind. Beschreiben Sie deshalb die Schnittstelle zum Dienstleister im Geltungsbereich.' },
+      { q: 'Warum ist der Geltungsbereich für die Risikoanalyse wichtig?', a: 'Risikoanalyse, Erklärung zur Anwendbarkeit und interne Audits beziehen sich auf den festgelegten Rahmen. Was außerhalb liegt, wird weder bewertet noch geprüft.' },
+      { q: 'Braucht ein KI-Managementsystem nach ISO 42001 einen eigenen Geltungsbereich?', a: 'Ja. ISO/IEC 42001 verlangt in Abschnitt 4.3 ebenfalls, den Geltungsbereich zu bestimmen. Er kann sich mit dem ISMS überschneiden, wird aber eigens festgelegt und dokumentiert.' },
     ],
   },
   {
@@ -71,6 +74,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Was tun, wenn wir die Registrierung verpasst haben?', a: 'Holen Sie sie unverzüglich nach. Die Pflichten gelten unabhängig davon seit dem 6. Dezember 2025.' },
       { q: 'Ist die Einstufung endgültig?', a: 'Nein. Ändern sich Tätigkeiten oder Größe, kann sich die Einordnung ändern. Prüfen Sie sie regelmäßig.' },
+      { q: 'Ab welcher Größe ist ein Unternehmen betroffen?', a: 'Als wichtige Einrichtung in einem Sektor der Anlagen 1 oder 2 in der Regel ab 50 Beschäftigten oder mit Jahresumsatz und Jahresbilanzsumme von jeweils über 10 Mio. Euro. Besonders wichtig sind Einrichtungen der Anlage 1 ab 250 Beschäftigten oder mit über 50 Mio. Euro Umsatz und zugleich über 43 Mio. Euro Bilanzsumme (§ 28 BSIG).' },
+      { q: 'Bis wann muss die Registrierung erfolgen?', a: 'Spätestens drei Monate, nachdem Sie erstmals oder erneut als besonders wichtige oder wichtige Einrichtung gelten (§ 33 Abs. 1 BSIG).' },
+      { q: 'Welche Bußgelder drohen?', a: 'Bei Verstößen etwa gegen die Pflichten zu Risikomanagement oder Meldungen bis zu 10 Mio. Euro für besonders wichtige und bis zu 7 Mio. Euro für wichtige Einrichtungen. Bei mehr als 500 Mio. Euro Gesamtumsatz sind bis zu 2 % beziehungsweise 1,4 % des Gesamtumsatzes möglich (§ 65 BSIG).' },
     ],
   },
   {
@@ -91,6 +97,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wie detailliert muss das Inventar sein?', a: 'So detailliert, dass Sie Risiken je Dienst bewerten können. Für den Anfang reichen die wichtigsten Dienste und alles, worauf sie angewiesen sind.' },
       { q: 'Gehören Cloud-Dienste hinein?', a: 'Ja. Ein SaaS-Dienst, in dem Ihre Daten liegen, ist ein Wert wie jeder Server – mit Dienstleister und Vertrag.' },
+      { q: 'Müssen Informationen klassifiziert werden?', a: 'Ja. Anhang A 5.12 verlangt, Informationen nach Vertraulichkeit, Integrität, Verfügbarkeit und den Anforderungen interessierter Parteien zu klassifizieren. Die Klasse gehört als Merkmal ins Inventar.' },
+      { q: 'Was passiert mit Werten, wenn jemand das Unternehmen verlässt?', a: 'Sie werden zurückgegeben. Das verlangt Anhang A 5.11 bei Beendigung oder Änderung von Beschäftigung, Vertrag oder Vereinbarung. Das Inventar zeigt, was zurückzufordern ist.' },
+      { q: 'Brauchen wir dafür ein spezielles Werkzeug?', a: 'Nein, die Norm schreibt keines vor. Für den Anfang genügt eine gepflegte Tabelle, solange Eigentümer, Abhängigkeiten und Änderungen nachvollziehbar sind.' },
     ],
   },
   {
@@ -111,6 +120,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Reicht das ISO-Zertifikat eines Lieferanten?', a: 'Es ist ein guter Nachweis, wenn sein Geltungsbereich die Leistung umfasst, die Sie beziehen. Prüfen Sie den Scope des Zertifikats.' },
       { q: 'Müssen wir alle Lieferanten prüfen?', a: 'Abgestuft nach Kritikalität: kritische gründlich, unkritische mit wenig Aufwand.' },
+      { q: 'Was gehört in den Vertrag?', a: 'Mindestens Sicherheitsanforderungen, die Pflicht zur unverzüglichen Meldung von Vorfällen, ein Prüfrecht oder der Zugang zu Auditberichten und Regeln für Unterauftragnehmer. Die Durchführungsverordnung (EU) 2024/2690 nennt diese Punkte ausdrücklich für die dort erfassten digitalen Dienste.' },
+      { q: 'Gilt NIS2 auch für unsere Lieferanten?', a: 'Unmittelbar nur, wenn sie selbst betroffen sind. Ihre Anforderungen erreichen sie trotzdem: über Ihre Verträge und Ihre Bewertung nach § 30 Abs. 2 Nr. 4 BSIG.' },
+      { q: 'Wie oft prüfen wir kritische Lieferanten?', a: 'Regelmäßig und bei Änderungen der Leistung. ISO 27001 verlangt in Anhang A 5.22, Lieferantenleistungen zu überwachen, zu überprüfen und Änderungen zu steuern.' },
     ],
   },
   {
@@ -131,6 +143,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wie lange dauert eine Gap-Analyse?', a: 'Das hängt von Größe und Vorarbeit ab. Gut vorbereitet schaffen Sie einen ersten vollständigen Durchgang in wenigen Arbeitstagen.' },
       { q: 'Wer beantwortet die Fragen?', a: 'Die Fachleute, die es wissen: IT, Personal, Einkauf, Gebäude. Die Informationssicherheit koordiniert und prüft die Begründungen.' },
+      { q: 'Ist eine Gap-Analyse Pflicht?', a: 'Weder ISO 27001 noch das BSIG schreiben sie ausdrücklich vor. Sie ist aber der schnellste Weg zu wissen, wo Sie stehen und womit Sie anfangen.' },
+      { q: 'Was unterscheidet sie vom internen Audit?', a: 'Die Gap-Analyse ist eine Bestandsaufnahme, oft als Selbsteinschätzung. Das interne Audit prüft objektiv und anhand von Nachweisen, ob die Anforderungen wirksam erfüllt sind.' },
+      { q: 'Brauchen die Antworten Nachweise?', a: 'Eine Begründung immer, einen Nachweis möglichst auch. Verweisen Sie auf das Dokument oder die Einstellung, die den Stand belegt – das spart Zeit im späteren Audit.' },
     ],
   },
   {
@@ -157,6 +172,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Gibt es verbindliche technische Vorgaben?', a: 'Für bestimmte digitale Dienste ja, in der Durchführungsverordnung (EU) 2024/2690. Für alle anderen gilt: geeignet, verhältnismäßig und wirksam, gemessen an Ihrem Risiko.' },
       { q: 'Deckt ISO 27001 alle zehn ab?', a: 'Inhaltlich weitgehend. Die Zuordnung ist eine fachliche Einschätzung, keine amtliche Konkordanz.' },
+      { q: 'Welche Meldefristen gelten bei einem erheblichen Sicherheitsvorfall?', a: 'Eine frühe Erstmeldung spätestens nach 24 Stunden, eine Meldung spätestens nach 72 Stunden, jeweils ab Kenntnis des Vorfalls, und eine Abschlussmeldung spätestens einen Monat nach der Meldung (§ 32 Abs. 1 BSIG).' },
+      { q: 'Wann ist ein Sicherheitsvorfall erheblich?', a: 'Wenn er schwerwiegende Betriebsstörungen der Dienste oder finanzielle Verluste für Ihre Einrichtung verursacht oder verursachen kann. Oder wenn er andere durch erhebliche materielle oder immaterielle Schäden beeinträchtigt oder beeinträchtigen kann (§ 2 Nr. 11 BSIG).' },
+      { q: 'Müssen wir die Umsetzung gegenüber dem BSI nachweisen?', a: 'Dokumentieren müssen alle Einrichtungen (§ 30 Abs. 1 BSIG). Betreiber kritischer Anlagen weisen die Umsetzung alle drei Jahre durch Audits, Prüfungen oder Zertifizierungen nach (§ 39 BSIG). Bei anderen Einrichtungen kann das BSI Prüfungen anordnen (§§ 61 und 62 BSIG).' },
     ],
   },
   {
@@ -177,6 +195,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Welche Methode ist die richtige?', a: 'Die Norm schreibt keine vor. Wichtig ist, dass sie dokumentiert ist und reproduzierbare Ergebnisse liefert. Eine einfache Matrix aus Wahrscheinlichkeit und Auswirkung reicht oft.' },
       { q: 'Wie oft wird die Analyse wiederholt?', a: 'In geplanten Abständen, in der Praxis meist jährlich, und immer bei wesentlichen Änderungen.' },
+      { q: 'Wer ist Risikoeigentümer?', a: 'Die Person oder Stelle mit der Verantwortung und der Befugnis, ein Risiko zu steuern. In der Regel ist das eine Führungskraft im Fachbereich, die über Mittel entscheiden kann.' },
+      { q: 'Müssen wir Risiken je Asset bewerten?', a: 'Nein. Seit der Ausgabe 2013 verlangt ISO 27001 keinen assetbasierten Ansatz mehr, auch Szenarien je Dienst oder Prozess sind möglich. Das Inventar hilft trotzdem, nichts zu übersehen.' },
+      { q: 'Können wir die Methode des BSI nutzen?', a: 'Ja. Der BSI-Standard 200-3 beschreibt eine Risikoanalyse auf der Basis von IT-Grundschutz. Entscheidend ist, dass Ihre Methode die Anforderungen aus Abschnitt 6.1.2 erfüllt, etwa festgelegte Kriterien für die Risikoakzeptanz.' },
     ],
   },
   {
@@ -197,6 +218,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Dürfen wir ein hohes Risiko akzeptieren?', a: 'Ja, wenn es bewusst, begründet und mit Zustimmung der zuständigen Leitung geschieht. Unter NIS2 müssen Ihre Maßnahmen insgesamt trotzdem angemessen sein.' },
       { q: 'Was heißt Risikoübertragung?', a: 'Zum Beispiel eine Versicherung oder die Auslagerung an einen Dienstleister. Die Verantwortung für die Informationssicherheit bleibt bei Ihnen.' },
+      { q: 'Dürfen wir Maßnahmen wählen, die nicht in Anhang A stehen?', a: 'Ja. Nach den Anmerkungen zu Abschnitt 6.1.3 ist Anhang A nicht abschließend, zusätzliche Maßnahmen können aufgenommen werden. Der Abgleich mit Anhang A soll nur verhindern, dass etwas Notwendiges fehlt.' },
+      { q: 'Wie hängt der Plan mit der Erklärung zur Anwendbarkeit zusammen?', a: 'Die Maßnahmen aus dem Behandlungsplan erscheinen in der SoA mit Begründung und Umsetzungsstand. Ändert sich der Plan, ziehen Sie die SoA nach.' },
+      { q: 'Dürfen die Kosten eine Rolle spielen?', a: 'Ja. § 30 Abs. 1 BSIG nennt die Umsetzungskosten ausdrücklich als Kriterium der Verhältnismäßigkeit, neben Risikoexposition, Größe sowie Wahrscheinlichkeit und Schwere von Vorfällen. Halten Sie die Abwägung schriftlich fest.' },
     ],
   },
   {
@@ -217,6 +241,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wie viele Maßnahmen dürfen wir ausschließen?', a: 'Es gibt keine Quote. Jeder Ausschluss braucht eine nachvollziehbare Begründung, etwa weil es keine eigene Softwareentwicklung gibt.' },
       { q: 'Braucht NIS2 eine SoA?', a: 'Das Gesetz verlangt sie nicht ausdrücklich. Als Nachweis, welche Maßnahmen Sie warum umsetzen, ist sie aber sehr nützlich.' },
+      { q: 'Gilt eine SoA nach der Ausgabe 2013 noch?', a: 'Nein. Die Übergangsfrist auf ISO/IEC 27001:2022 endete am 31. Oktober 2025, Zertifikate nach der Ausgabe 2013 sind seitdem abgelaufen oder zurückgezogen. Die SoA muss sich auf die 93 Maßnahmen der Ausgabe 2022 beziehen.' },
+      { q: 'Darf eine Maßnahme anwendbar, aber noch nicht umgesetzt sein?', a: 'Ja. Die SoA hält genau diesen Umsetzungsstand fest. Der Risikobehandlungsplan zeigt dann, wer die Maßnahme bis wann umsetzt.' },
+      { q: 'Gehören Maßnahmen außerhalb von Anhang A in die SoA?', a: 'Ja, wenn sie zur Risikobehandlung notwendig sind. Abschnitt 6.1.3 d) verlangt die notwendigen Maßnahmen, nicht nur die aus Anhang A.' },
     ],
   },
   {
@@ -237,6 +264,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wie viele Richtlinien brauchen wir?', a: 'So viele, wie Ihre Risiken und Maßnahmen verlangen. Lieber wenige, die gelebt werden, als ein Ordner, den niemand liest.' },
       { q: 'Wer gibt die Leitlinie frei?', a: 'Die oberste Leitung. Unter NIS2 passt das zu ihrer Pflicht, die Maßnahmen umzusetzen und zu überwachen.' },
+      { q: 'Wie oft werden Leitlinie und Richtlinien überprüft?', a: 'ISO 27001 verlangt geplante Abstände und eine Überprüfung bei wesentlichen Änderungen. Für die in der Durchführungsverordnung (EU) 2024/2690 erfassten digitalen Dienste gilt: Die Leitungsorgane überprüfen das Sicherheitskonzept mindestens jährlich und nach erheblichen Vorfällen.' },
+      { q: 'Müssen Kunden oder Behörden die Leitlinie einsehen können?', a: 'ISO 27001 verlangt in Abschnitt 5.2, sie interessierten Parteien zur Verfügung zu stellen, soweit angemessen. Sie entscheiden, wer sie in welcher Form erhält.' },
+      { q: 'Müssen alle Beschäftigten jede Richtlinie kennen?', a: 'Die Leitlinie ja: Nach Abschnitt 7.3 müssen alle, die unter Ihrer Weisung arbeiten, sie kennen. Themenspezifische Richtlinien müssen die Personen kennen, für die sie gelten.' },
     ],
   },
   {
@@ -257,6 +287,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wer darf intern auditieren?', a: 'Jemand, der objektiv und unparteiisch ist, also nicht die eigene Arbeit prüft. Das können Beschäftigte aus anderen Bereichen oder externe Auditoren sein.' },
       { q: 'Wie oft wird auditiert?', a: 'In geplanten Abständen. Üblich ist, alle Bereiche innerhalb eines Zertifizierungszyklus abzudecken und wichtige Bereiche jährlich.' },
+      { q: 'Muss vor der Zertifizierung schon intern auditiert worden sein?', a: 'Ja. In Stufe 1 der Zertifizierung prüft die Zertifizierungsstelle, ob interne Audits und Managementbewertung geplant und durchgeführt wurden. Erst dann gilt das System als bereit für Stufe 2.' },
+      { q: 'Was ist eine Nichtkonformität?', a: 'Die Nichterfüllung einer Anforderung. Nach Abschnitt 10.2 reagieren Sie darauf, beheben die Folgen und prüfen, wie die Ursache beseitigt wird, damit sie nicht wieder auftritt.' },
+      { q: 'Brauchen interne Auditoren ein Zertifikat?', a: 'Die Norm verlangt keines. Sie müssen nach Abschnitt 7.2 kompetent sein, etwa durch Ausbildung oder Erfahrung, und objektiv prüfen.' },
     ],
   },
   {
@@ -277,6 +310,9 @@ const de: Topic[] = [
     faq: [
       { q: 'Wie oft findet sie statt?', a: 'In geplanten Abständen, in der Praxis mindestens einmal im Jahr.' },
       { q: 'Reicht ein Monatsbericht?', a: 'Er erleichtert die Überwachung, ersetzt aber nicht die förmliche Bewertung mit Entscheidungen.' },
+      { q: 'Haftet die Geschäftsleitung?', a: 'Ja. Verletzt sie ihre Pflicht, die Maßnahmen umzusetzen und zu überwachen, haftet sie der Einrichtung für schuldhaft verursachte Schäden nach Gesellschaftsrecht (§ 38 Abs. 2 BSIG). Ein Protokoll der Managementbewertung kann belegen, dass sie überwacht hat.' },
+      { q: 'Muss die Geschäftsleitung geschult werden?', a: 'Ja. Nach § 38 Abs. 3 BSIG muss sie regelmäßig an Schulungen teilnehmen, um Risiken und Risikomanagementpraktiken erkennen und bewerten zu können.' },
+      { q: 'Muss alles in einer Sitzung besprochen werden?', a: 'Nein, die Norm schreibt kein Format vor. Wichtig ist, dass alle geforderten Eingaben im Zyklus behandelt und die Ergebnisse dokumentiert sind.' },
     ],
   },
 ];
@@ -300,6 +336,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Can the scope cover only part of the company?', a: 'For ISO 27001, yes, if the boundaries are clearly described and justified. The legal obligations under NIS2 do not depend on it, though.' },
       { q: 'When is the scope reviewed?', a: 'With every significant change, such as new sites, services or providers, and at the latest in the management review.' },
+      { q: 'What about outsourced processes?', a: 'They remain your responsibility. ISO 27001 clause 8.1 requires externally provided processes, products and services that are relevant to the ISMS to be controlled. Describe the interface with the provider in the scope.' },
+      { q: 'Why does the scope matter for the risk assessment?', a: 'The risk assessment, the Statement of Applicability and internal audits all refer to the defined scope. Anything outside it is neither assessed nor audited.' },
+      { q: 'Does an AI management system under ISO 42001 need its own scope?', a: 'Yes. ISO/IEC 42001 clause 4.3 also requires you to determine the scope. It may overlap with the ISMS, but it is determined and documented separately.' },
     ],
   },
   {
@@ -320,6 +359,9 @@ const en: Topic[] = [
     faq: [
       { q: 'What if we missed the registration?', a: 'Register without delay. The obligations have applied regardless since 6 December 2025.' },
       { q: 'Is the classification final?', a: 'No. If your activities or size change, the classification can change too. Review it regularly.' },
+      { q: 'From what size is a company in scope?', a: 'As an important entity in a sector of Annex 1 or 2, generally from 50 employees, or with annual turnover and balance sheet total each above €10 million. Annex 1 entities with at least 250 employees, or turnover above €50 million and a balance sheet total above €43 million, are essential entities (Section 28 BSIG).' },
+      { q: 'What is the deadline for registration?', a: 'No later than three months after you first, or again, qualify as an essential or important entity (Section 33(1) BSIG).' },
+      { q: 'What fines apply?', a: 'For breaches of, for example, the risk management or reporting obligations: up to €10 million for essential entities and up to €7 million for important entities. With total turnover above €500 million, up to 2% or 1.4% of total turnover respectively (Section 65 BSIG).' },
     ],
   },
   {
@@ -340,6 +382,9 @@ const en: Topic[] = [
     faq: [
       { q: 'How detailed must the inventory be?', a: 'Detailed enough to assess risks per service. To start, the most important services and everything they depend on are enough.' },
       { q: 'Do cloud services belong in it?', a: 'Yes. A SaaS service holding your data is an asset like any server – with a provider and a contract.' },
+      { q: 'Does information have to be classified?', a: 'Yes. Annex A 5.12 requires information to be classified according to confidentiality, integrity, availability and relevant interested party requirements. The classification belongs in the inventory as an attribute.' },
+      { q: 'What happens to assets when someone leaves?', a: 'They are returned. Annex A 5.11 requires this upon change or termination of employment, contract or agreement. The inventory shows what has to be returned.' },
+      { q: 'Do we need a special tool?', a: 'No, the standard does not prescribe one. To start, a well-maintained spreadsheet is enough, as long as owners, dependencies and changes are traceable.' },
     ],
   },
   {
@@ -360,6 +405,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Is a supplier’s ISO certificate enough?', a: 'It is good evidence if its scope covers the service you buy. Check the scope of the certificate.' },
       { q: 'Do we have to review every supplier?', a: 'Graded by criticality: critical ones thoroughly, non-critical ones with little effort.' },
+      { q: 'What belongs in the contract?', a: 'At least security requirements, a duty to report incidents without undue delay, a right to audit or access to audit reports, and rules for subcontractors. Implementing Regulation (EU) 2024/2690 lists these points explicitly for the digital services it covers.' },
+      { q: 'Does NIS2 apply to our suppliers too?', a: 'Directly only if they are in scope themselves. Your requirements reach them anyway: through your contracts and your assessment under Section 30(2) No. 4 BSIG.' },
+      { q: 'How often do we review critical suppliers?', a: 'Regularly and whenever the service changes. ISO 27001 Annex A 5.22 requires supplier services to be monitored, reviewed and changes to be managed.' },
     ],
   },
   {
@@ -380,6 +428,9 @@ const en: Topic[] = [
     faq: [
       { q: 'How long does a gap analysis take?', a: 'It depends on size and prior work. Well prepared, you can complete a first full pass in a few working days.' },
       { q: 'Who answers the questions?', a: 'The people who know: IT, HR, purchasing, facilities. Information security coordinates and reviews the justifications.' },
+      { q: 'Is a gap analysis mandatory?', a: 'Neither ISO 27001 nor the BSIG explicitly requires one. It is, however, the quickest way to see where you stand and where to start.' },
+      { q: 'How does it differ from an internal audit?', a: 'A gap analysis is a stocktake, often a self-assessment. An internal audit checks objectively and against evidence whether the requirements are effectively met.' },
+      { q: 'Do the answers need evidence?', a: 'Always a justification, and evidence where possible. Refer to the document or setting that proves the status – it saves time in the later audit.' },
     ],
   },
   {
@@ -406,6 +457,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Are there binding technical requirements?', a: 'For certain digital services, yes, in Implementing Regulation (EU) 2024/2690. For everyone else: appropriate, proportionate and effective, measured against your risk.' },
       { q: 'Does ISO 27001 cover all ten?', a: 'Largely, in substance. The mapping is a professional assessment, not an official concordance.' },
+      { q: 'Which reporting deadlines apply to a significant incident?', a: 'An early warning within 24 hours and an incident notification within 72 hours, each from becoming aware of the incident, and a final report no later than one month after the notification (Section 32(1) BSIG).' },
+      { q: 'When is an incident significant?', a: 'When it has caused or can cause severe operational disruption of the services or financial loss for your entity. Or when it has affected or can affect others by causing considerable material or non-material damage (Section 2 No. 11 BSIG).' },
+      { q: 'Do we have to prove implementation to the BSI?', a: 'All entities must document compliance (Section 30(1) BSIG). Operators of critical facilities prove implementation every three years through audits, inspections or certifications (Section 39 BSIG). For other entities, the BSI can order audits (Sections 61 and 62 BSIG).' },
     ],
   },
   {
@@ -426,6 +480,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Which method is the right one?', a: 'The standard does not prescribe one. What matters is that it is documented and gives reproducible results. A simple likelihood-impact matrix is often enough.' },
       { q: 'How often is the assessment repeated?', a: 'At planned intervals, in practice usually once a year, and always after significant changes.' },
+      { q: 'Who is a risk owner?', a: 'The person or entity with the accountability and authority to manage a risk. This is usually a manager in the business area who can decide on resources.' },
+      { q: 'Do we have to assess risks per asset?', a: 'No. Since the 2013 edition, ISO 27001 no longer requires an asset-based approach; scenarios per service or process are also possible. The inventory still helps you not to miss anything.' },
+      { q: 'Can we use the BSI method?', a: 'Yes. BSI Standard 200-3 describes a risk analysis based on IT-Grundschutz. What matters is that your method meets the requirements of clause 6.1.2, such as defined risk acceptance criteria.' },
     ],
   },
   {
@@ -446,6 +503,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Can we accept a high risk?', a: 'Yes, if it is done consciously, with a justification and the agreement of the responsible management. Under NIS2 your measures must still be appropriate overall.' },
       { q: 'What does risk transfer mean?', a: 'For example insurance or outsourcing to a provider. Accountability for information security stays with you.' },
+      { q: 'Can we choose controls that are not in Annex A?', a: 'Yes. According to the notes to clause 6.1.3, Annex A is not exhaustive and additional controls can be included. The comparison with Annex A is only there to make sure nothing necessary is missing.' },
+      { q: 'How does the plan relate to the Statement of Applicability?', a: 'The controls from the treatment plan appear in the SoA with justification and implementation status. When the plan changes, update the SoA.' },
+      { q: 'May costs play a role?', a: 'Yes. Section 30(1) BSIG explicitly names the cost of implementation as a criterion of proportionality, alongside risk exposure, size and the likelihood and severity of incidents. Record the trade-off in writing.' },
     ],
   },
   {
@@ -466,6 +526,9 @@ const en: Topic[] = [
     faq: [
       { q: 'How many controls can we exclude?', a: 'There is no quota. Every exclusion needs a traceable justification, for example because there is no in-house software development.' },
       { q: 'Does NIS2 require an SoA?', a: 'The law does not require one explicitly. As evidence of which measures you implement and why, it is very useful.' },
+      { q: 'Is an SoA based on the 2013 edition still valid?', a: 'No. The transition period to ISO/IEC 27001:2022 ended on 31 October 2025, and certificates based on the 2013 edition have since expired or been withdrawn. The SoA must refer to the 93 controls of the 2022 edition.' },
+      { q: 'Can a control be applicable but not yet implemented?', a: 'Yes. The SoA records exactly this implementation status. The risk treatment plan then shows who implements the control and by when.' },
+      { q: 'Do controls outside Annex A belong in the SoA?', a: 'Yes, if they are necessary for risk treatment. Clause 6.1.3 d) requires the necessary controls, not only those from Annex A.' },
     ],
   },
   {
@@ -486,6 +549,9 @@ const en: Topic[] = [
     faq: [
       { q: 'How many policies do we need?', a: 'As many as your risks and measures call for. A few that people follow beat a folder nobody reads.' },
       { q: 'Who approves the policy?', a: 'Top management. Under NIS2 this fits its duty to implement and oversee the measures.' },
+      { q: 'How often are the policies reviewed?', a: 'ISO 27001 requires planned intervals and a review when significant changes occur. For the digital services covered by Implementing Regulation (EU) 2024/2690, the management bodies review the security policy at least annually and after significant incidents.' },
+      { q: 'Must customers or authorities be able to see the policy?', a: 'ISO 27001 clause 5.2 requires it to be available to interested parties, as appropriate. You decide who receives it and in what form.' },
+      { q: 'Must all staff know every policy?', a: 'The information security policy, yes: under clause 7.3 everyone doing work under your control must be aware of it. Topic-specific policies must be known by the people they apply to.' },
     ],
   },
   {
@@ -506,6 +572,9 @@ const en: Topic[] = [
     faq: [
       { q: 'Who may audit internally?', a: 'Someone objective and impartial, who does not audit their own work. That can be staff from other areas or external auditors.' },
       { q: 'How often do we audit?', a: 'At planned intervals. It is common to cover all areas within a certification cycle and important areas every year.' },
+      { q: 'Must an internal audit take place before certification?', a: 'Yes. In stage 1 of certification, the certification body checks whether internal audits and the management review have been planned and performed. Only then is the system considered ready for stage 2.' },
+      { q: 'What is a nonconformity?', a: 'The non-fulfilment of a requirement. Under clause 10.2 you react to it, deal with the consequences and evaluate how to eliminate the cause so that it does not recur.' },
+      { q: 'Do internal auditors need a certificate?', a: 'The standard does not require one. Under clause 7.2 they must be competent, for example through training or experience, and audit objectively.' },
     ],
   },
   {
@@ -526,6 +595,9 @@ const en: Topic[] = [
     faq: [
       { q: 'How often does it take place?', a: 'At planned intervals, in practice at least once a year.' },
       { q: 'Is a monthly report enough?', a: 'It makes oversight easier but does not replace the formal review with decisions.' },
+      { q: 'Is management liable?', a: 'Yes. If management breaches its duty to implement and oversee the measures, it is liable to the entity for culpably caused damage under company law (Section 38(2) BSIG). Minutes of the management review can show that oversight took place.' },
+      { q: 'Does management have to be trained?', a: 'Yes. Under Section 38(3) BSIG it must take part in training regularly, so that it can identify and assess risks and risk management practices.' },
+      { q: 'Does everything have to be covered in one meeting?', a: 'No, the standard does not prescribe a format. What matters is that all required inputs are covered within the cycle and the results are documented.' },
     ],
   },
 ];

@@ -40,7 +40,7 @@ export const reportsUi = {
     kicker: 'Berichte',
     h2a: 'Sechs Berichte,',
     h2b: 'auf Knopfdruck.',
-    intro: 'Gap-Analyse, Erklärung zur Anwendbarkeit, Risikoanalyse, Umsetzung, Audit und Vorstandsbericht entstehen aus den Daten, die Sie in UniqSuite ohnehin pflegen. Mit Ihrem Firmennamen und Logo, je nach Bericht als PDF, Word oder Excel.',
+    intro: 'Gap-Analyse, Erklärung zur Anwendbarkeit, Risikoanalyse, Umsetzung, Audit und Vorstandsbericht entstehen aus den Daten, die Sie in UniqSuite ohnehin pflegen. Mit Ihrem Firmennamen, im PDF auch mit Logo, je nach Bericht als PDF, Word oder Excel.',
     hint: 'Klicken Sie auf einen Bericht und sehen Sie, was drinsteht.',
     open: 'Bericht ansehen',
     all: 'Alle Berichte',
@@ -51,7 +51,7 @@ export const reportsUi = {
     kicker: 'Reports',
     h2a: 'Six reports,',
     h2b: 'at the push of a button.',
-    intro: 'Gap analysis, Statement of Applicability, risk analysis, implementation, audit and board report are built from the data you already keep in UniqSuite. With your company name and logo, as PDF, Word or Excel depending on the report.',
+    intro: 'Gap analysis, Statement of Applicability, risk analysis, implementation, audit and board report are built from the data you already keep in UniqSuite. With your company name, in the PDF also with your logo, as PDF, Word or Excel depending on the report.',
     hint: 'Click a report to see what is inside.',
     open: 'View report',
     all: 'All reports',
@@ -69,7 +69,7 @@ export const reports: Record<Lang, Report[]> = {
       lead: 'Der Gap-Analyse-Bericht zeigt, wie weit Ihr Unternehmen die Anforderungen von NIS2, ISO/IEC 27001, AI Act, ISO/IEC 42001 und Cyber Resilience Act erfüllt. Mit kritischen Lücken, einer Rangfolge und einem Zeitplan für die nächsten Schritte.',
       what: 'Sie wählen beim Erstellen, welche Regelwerke in den Bericht gehören, wer ihn verantwortet und welche Vertraulichkeitsstufe er trägt. Der Bericht beginnt mit einer gemeinsamen Zusammenfassung über alle Regelwerke und widmet danach jedem Regelwerk ein eigenes Kapitel. Wo eine Kontrolle mehrere Regelwerke abdeckt, steht im Bericht, aus welcher Anforderung sie übernommen wurde.',
       chapters: [
-        { h: 'Deckblatt', t: 'Firmenname und Logo, Verfasser, Datum und Vertraulichkeitsstufe (öffentlich, intern, vertraulich, streng vertraulich).' },
+        { h: 'Deckblatt', t: 'Firmenname (im PDF mit Logo), Verfasser, Datum und Vertraulichkeitsstufe (öffentlich, intern, vertraulich, streng vertraulich).' },
         { h: 'Zusammenfassung', t: 'Regelwerke im Umfang, Kontrollen gesamt, Gesamt-Compliance und kritische MUSS-Lücken. Dazu das Compliance-Profil als Netzdiagramm, die Statusverteilung und eine Tabelle je Regelwerk.' },
         { h: 'Kritikalität', t: 'Kritische Dienste, hochkritische Assets und Single Points of Failure aus Ihrem Inventar, damit die Lücken im richtigen Licht stehen.' },
         { h: 'Management-Zusammenfassung', t: 'Der Stand in ganzen Sätzen, nach festen Regeln aus Ihren Antworten erzeugt.' },
@@ -82,8 +82,10 @@ export const reports: Record<Lang, Report[]> = {
       extra: { h: 'In Excel weiterarbeiten', t: 'Die Excel-Fassung enthält je Regelwerk ein Tabellenblatt mit allen Anforderungen: Bereich, Status, Reifegrad, Verankerung, Empfehlung, Herkunft und Notiz. Mit Filter, bereit für die eigene Auswertung.' },
       faq: [
         { q: 'Kann ein Bericht mehrere Regelwerke enthalten?', a: 'Ja. Sie wählen die Regelwerke beim Erstellen aus. Der Bericht enthält eine gemeinsame Zusammenfassung und für jedes Regelwerk ein eigenes Kapitel.' },
-        { q: 'In welchen Formaten gibt es den Gap-Analyse-Bericht?', a: 'Als PDF, als Word-Dokument und als Excel-Datei. Alle drei tragen Ihren Firmennamen und Ihr Logo.' },
-        { q: 'Woher kommen die Empfehlungen im Bericht?', a: 'Zu jeder Anforderung ist im Katalog eine Empfehlung hinterlegt. Die Zusammenfassung in Worten entsteht nach festen Regeln aus Ihren Antworten, sodass zwei gleiche Stände zum gleichen Text führen.' },
+        { q: 'In welchen Formaten gibt es den Gap-Analyse-Bericht?', a: 'Als PDF, als Word-Dokument und als Excel-Datei. Alle drei tragen Ihren Firmennamen, das PDF zeigt zusätzlich Ihr Logo auf dem Deckblatt.' },
+        { q: 'Woher kommen die Empfehlungen im Bericht?', a: 'Jede Anforderung ist einem Themenfeld zugeordnet, etwa Risikomanagement oder Lieferantensicherheit, und zu jedem Themenfeld ist eine Empfehlung hinterlegt. Die Zusammenfassung in Worten entsteht nach festen Regeln aus Ihren Antworten, sodass zwei gleiche Stände zum gleichen Text führen.' },
+        { q: 'In welcher Sprache entsteht der Bericht?', a: 'In der Sprache, in der Sie UniqSuite gerade nutzen: Deutsch oder Englisch. Für die andere Sprache stellen Sie die Oberfläche um und erzeugen den Bericht neu.' },
+        { q: 'Welche Daten fließen in den Bericht ein?', a: 'Ihre Antworten aus der Gap-Analyse, also derselbe Stand, den Sie am Bildschirm sehen. Dazu Dienste, Assets und Abhängigkeiten aus Ihrem Inventar, nach deren Kritikalität die Rangfolge gewichtet wird.' },
       ],
     },
     {
@@ -105,8 +107,10 @@ export const reports: Record<Lang, Report[]> = {
       extra: { h: 'Versionen freigeben', t: 'In UniqSuite geben Sie Stände der SoA als Version frei. Jede Version hält fest, wer freigegeben hat, wann und mit welchem Stand jeder Maßnahme.' },
       faq: [
         { q: 'Für welches Regelwerk wird die SoA erstellt?', a: 'Für Ihr führendes Regelwerk. Bei ISO/IEC 27001 als Erklärung zur Anwendbarkeit nach Abschnitt 6.1.3 d), bei NIS2, AI Act, ISO/IEC 42001 oder Cyber Resilience Act als Kontrollkatalog in derselben Form.' },
-        { q: 'Was passiert, wenn eine Begründung fehlt?', a: 'Die SoA markiert die Maßnahme in Rot mit dem Hinweis „Begründung fehlt – vor Freigabe ergänzen“. So sehen Sie vor dem Audit, wo noch etwas zu tun ist.' },
+        { q: 'Was passiert, wenn eine Begründung fehlt?', a: 'Stufen Sie eine Maßnahme als nicht anwendbar ein, ohne sie zu begründen, markiert die SoA das in Rot: „Begründung fehlt – vor Freigabe ergänzen“. So sehen Sie vor dem Audit, wo noch etwas zu tun ist.' },
         { q: 'Kann ich die SoA nachbearbeiten?', a: 'Ja. Neben dem PDF gibt es eine Word-Datei und eine Excel-Datei mit allen Maßnahmen, Begründungen, Verantwortlichen und Rechtsgrundlagen.' },
+        { q: 'Wann kann ich eine Version der SoA freigeben?', a: 'Sobald jede als nicht anwendbar eingestufte Maßnahme eine Begründung hat. Die Version erhält eine fortlaufende Nummer und hält Datum, freigebende Person und eine optionale Notiz fest.' },
+        { q: 'Woraus setzt sich die SoA zusammen?', a: 'Den Umsetzungsstand liefert Ihre Gap-Analyse, Verantwortliche und Fristen kommen aus der Risikobehandlung. Die Anwendbarkeit schlägt UniqSuite aus Ihren Antworten vor, Ihre eigene Entscheidung und Begründung haben Vorrang.' },
       ],
     },
     {
@@ -116,7 +120,7 @@ export const reports: Record<Lang, Report[]> = {
       lead: 'Der Risikoanalyse-Bericht zeigt Ihre Risiken in einer Risikomatrix, die zehn wichtigsten im Detail und die nächsten Schritte mit Verantwortlichen und Terminen. Die Risiken gehen direkt aus Ihrer Gap-Analyse hervor.',
       what: 'Offene Anforderungen aus der Gap-Analyse werden zu Risiken, bewertet nach Eintrittswahrscheinlichkeit und Auswirkung. Der Bericht ordnet sie in die Risikomatrix ein, zeigt die Grenze Ihres Risikoappetits und erklärt für die wichtigsten Risiken, warum sie kritisch sind und was sofort zu tun ist. Wo Sie Restrisiken berechnet haben, steht neben dem inhärenten Risiko auch das Restrisiko.',
       chapters: [
-        { h: 'Deckblatt', t: 'Firmenname und Logo, Verfasser, Datum, Vertraulichkeitsstufe und Zahl der Risiken.' },
+        { h: 'Deckblatt', t: 'Firmenname (im PDF mit Logo), Verfasser, Datum, Vertraulichkeitsstufe und Zahl der Risiken.' },
         { h: 'Zusammenfassung', t: 'Risiken gesamt, kritisch, hoch, mittel und niedrig, der durchschnittliche Score und der Stand in Worten.' },
         { h: 'Risikomatrix', t: 'Heatmap aus Eintrittswahrscheinlichkeit und Auswirkung, mit der Zahl der Risiken je Feld und der Grenze des Risikoappetits als gestrichelte Linie.' },
         { h: 'Top-10-Risiken', t: 'Stufe, Score, Geltungsbereich, betroffener Dienst, inhärent und residual, warum kritisch, Auswirkung aufs Geschäft und Sofortmaßnahme.' },
@@ -129,6 +133,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Woher kommen die Risiken im Bericht?', a: 'Aus Ihrer Gap-Analyse. Offene Anforderungen werden zu Risiken und nach Eintrittswahrscheinlichkeit und Auswirkung bewertet. So passen Gap-Analyse und Risikoanalyse immer zusammen.' },
         { q: 'Zeigt der Bericht auch Restrisiken?', a: 'Ja, sobald Sie Restrisiken berechnet haben. Die Top-10-Risiken zeigen dann das inhärente und das residuale Risiko nebeneinander.' },
         { q: 'Wie groß ist die Risikomatrix?', a: 'Standardmäßig 5 × 5. Die Matrix im Bericht folgt der Einstellung in UniqSuite.' },
+        { q: 'Kann ich eigene Risiken ergänzen?', a: 'Ja. Sie übernehmen typische Risiken aus dem Katalog oder formulieren eigene. Sie stehen im Bericht neben den Risiken aus der Gap-Analyse.' },
+        { q: 'Kann ich die Bewertung eines Risikos ändern?', a: 'Ja. Sie passen Eintrittswahrscheinlichkeit und Auswirkung je Risiko an und geben dazu eine Begründung an. Der Bericht übernimmt die angepassten Werte.' },
       ],
     },
     {
@@ -147,11 +153,13 @@ export const reports: Record<Lang, Report[]> = {
         { h: 'Maßnahmentabelle', t: 'ID, Kontrolle, Priorität, Verantwortlich, fällig, Status und Risiko.' },
       ],
       uses: ['Fortschritt im Projekt-Jour-fixe zeigen', 'Überfällige Maßnahmen früh erkennen', 'Nachweise vor dem Audit vervollständigen', 'Der Leitung die Umsetzung belegen'],
-      extra: { h: 'Roadmap-Bericht dazu', t: 'Für die Planung erzeugt UniqSuite den Roadmap-Bericht „Jetzt / Nächste / Später“ mit Phasenübersicht, Bündeln, Ressourcen je Verantwortlichem und Maßnahmenregister, als PDF, Word oder CSV.' },
+      extra: { h: 'Roadmap-Bericht dazu', t: 'Für die Planung erzeugt UniqSuite den Roadmap-Bericht „Jetzt / Nächste / Später“ mit Phasenübersicht, Bündeln, Ressourcen je Verantwortlichem und Maßnahmenregister, als PDF, Word oder Excel.' },
       faq: [
         { q: 'Was bedeutet „fertig ohne Nachweis“?', a: 'Maßnahmen, die als erledigt markiert sind, für die aber noch kein Nachweis hinterlegt ist. Der Bericht zeigt sie, damit Sie sie vor dem Audit schließen.' },
         { q: 'Warum zählt der Bericht doppelt?', a: 'Eine Aufgabe kann mehrere Kontrollen erfüllen und eine Kontrolle mehrere Aufgaben brauchen. Beide Sichten zusammen geben ein ehrliches Bild.' },
         { q: 'In welchen Formaten gibt es den Umsetzungsbericht?', a: 'Als PDF, Word und Excel. Die Excel-Datei enthält Kennzahlen und alle Maßnahmen mit Filter.' },
+        { q: 'Woraus entsteht der Umsetzungsbericht?', a: 'Aus den anwendbaren Kontrollen Ihrer Erklärung zur Anwendbarkeit, aus der Risikobehandlung und aus der Reifegrad-Baseline. Jede Kontrolle wird zu einer Maßnahme mit Status, Verantwortlichem, Fälligkeit und Priorität.' },
+        { q: 'Wann gilt eine Maßnahme als überfällig?', a: 'Wenn ihr Fälligkeitsdatum verstrichen ist und die Kontrolle noch nicht als umgesetzt gilt. Die Kennzahlen weisen diese Maßnahmen gesondert aus.' },
       ],
     },
     {
@@ -175,6 +183,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Wer entscheidet, ob ein Befund Major oder Minor ist?', a: 'UniqSuite schlägt eine Bewertung vor, der Auditor entscheidet. Die Skala ist im Bericht erklärt.' },
         { q: 'Welche Audits lassen sich abbilden?', a: 'Interne und externe Audits, Lieferantenaudits und Zertifizierungsaudits.' },
         { q: 'Kann der Bericht unterschrieben werden?', a: 'Ja. Der Bericht endet mit Unterschriftenzeilen für den Auditor und für die Leitung oder den Auftraggeber.' },
+        { q: 'Woher kommen die Befunde?', a: 'Aus Ihrer Gap-Analyse. Auf Knopfdruck lädt UniqSuite die nicht oder teilweise umgesetzten Anforderungen der Regelwerke, die zum Audit gehören.' },
+        { q: 'Wie hängen Audit und Umsetzung zusammen?', a: 'Korrekturmaßnahmen aus einem Befund übergeben Sie mit Verantwortlichem und Frist an die Umsetzung. Ist die Maßnahme dort erledigt, gilt auch der Befund als erledigt.' },
       ],
     },
     {
@@ -196,6 +206,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Für wen ist der Vorstandsbericht gedacht?', a: 'Für Geschäftsführung, Vorstand und Aufsichtsrat. Er zeigt auf einer Seite, wo das Unternehmen steht und was zu entscheiden ist.' },
         { q: 'Wie oft sollte er erstellt werden?', a: 'So oft Sie ihn brauchen. Er entsteht auf Knopfdruck aus dem aktuellen Stand, etwa vor jeder Sitzung der Geschäftsleitung.' },
         { q: 'In welchem Format gibt es den Vorstandsbericht?', a: 'Als PDF, mit Ihrem Firmennamen und Logo.' },
+        { q: 'Wie entsteht die Kennzahl von 0 bis 100?', a: 'Umgesetzte Anforderungen zählen voll, teilweise umgesetzte zur Hälfte, bezogen auf alle anwendbaren Anforderungen. Dokumentierte Umsetzung fließt mit ein. Dashboard und Gap-Analyse-Bericht rechnen genauso.' },
+        { q: 'Was bedeutet die Ampel?', a: 'Ab 80 steht sie auf Grün („gut aufgestellt“), ab 50 auf Gelb („auf gutem Weg“), darunter auf Rot („erhöhter Handlungsbedarf“).' },
       ],
     },
   ],
@@ -207,7 +219,7 @@ export const reports: Record<Lang, Report[]> = {
       lead: 'The gap analysis report shows how far your organisation meets the requirements of NIS2, ISO/IEC 27001, the AI Act, ISO/IEC 42001 and the Cyber Resilience Act. With critical gaps, a ranking and a timeline for the next steps.',
       what: 'When you create the report, you choose which frameworks it covers, who prepared it and its confidentiality level. It opens with a joint summary across all frameworks and then gives each framework its own chapter. Where one control covers several frameworks, the report shows which requirement it was carried over from.',
       chapters: [
-        { h: 'Cover page', t: 'Company name and logo, author, date and confidentiality level (public, internal, confidential, strictly confidential).' },
+        { h: 'Cover page', t: 'Company name (with logo in the PDF), author, date and confidentiality level (public, internal, confidential, strictly confidential).' },
         { h: 'Executive summary', t: 'Frameworks in scope, total controls, overall compliance and critical MUST gaps. Plus the compliance profile as a radar chart, the status distribution and a table per framework.' },
         { h: 'Criticality', t: 'Critical services, highly critical assets and single points of failure from your inventory, so the gaps are seen in context.' },
         { h: 'Management narrative', t: 'Your status in plain sentences, generated from your answers by fixed rules.' },
@@ -220,8 +232,10 @@ export const reports: Record<Lang, Report[]> = {
       extra: { h: 'Keep working in Excel', t: 'The Excel version has one sheet per framework with every requirement: area, status, maturity, legal anchor, recommendation, origin and note. Filter-ready for your own analysis.' },
       faq: [
         { q: 'Can one report cover several frameworks?', a: 'Yes. You choose the frameworks when you create the report. It contains a joint summary and a separate chapter for each framework.' },
-        { q: 'Which formats does the gap analysis report come in?', a: 'PDF, Word and Excel. All three carry your company name and logo.' },
-        { q: 'Where do the recommendations come from?', a: 'Every requirement in the catalogue has a recommendation. The written summary is generated from your answers by fixed rules, so the same status always produces the same text.' },
+        { q: 'Which formats does the gap analysis report come in?', a: 'PDF, Word and Excel. All three carry your company name; the PDF also shows your logo on the cover page.' },
+        { q: 'Where do the recommendations come from?', a: 'Every requirement is assigned to a topic area, such as risk management or supplier security, and each topic area has a recommendation. The written summary is generated from your answers by fixed rules, so the same status always produces the same text.' },
+        { q: 'Which language is the report in?', a: 'The language you are currently using UniqSuite in: German or English. For the other language, switch the interface and create the report again.' },
+        { q: 'Which data goes into the report?', a: 'Your answers from the gap analysis, the same status you see on screen. Plus services, assets and dependencies from your inventory, whose criticality weights the ranking.' },
       ],
     },
     {
@@ -243,8 +257,10 @@ export const reports: Record<Lang, Report[]> = {
       extra: { h: 'Approve versions', t: 'In UniqSuite you approve states of the SoA as versions. Each version records who approved it, when, and the status of every control.' },
       faq: [
         { q: 'Which framework is the SoA created for?', a: 'For your lead framework. For ISO/IEC 27001 as the Statement of Applicability under clause 6.1.3 d); for NIS2, the AI Act, ISO/IEC 42001 or the Cyber Resilience Act as the control catalogue in the same form.' },
-        { q: 'What happens if a justification is missing?', a: 'The SoA marks the control in red with “Justification missing – add before approval”. You see before the audit where work is left.' },
+        { q: 'What happens if a justification is missing?', a: 'If you mark a control as not applicable without a justification, the SoA flags it in red: “Justification missing – add before approval”. You see before the audit where work is left.' },
         { q: 'Can I edit the SoA afterwards?', a: 'Yes. Besides the PDF there is a Word file and an Excel file with every control, justification, owner and legal basis.' },
+        { q: 'When can I approve a version of the SoA?', a: 'As soon as every control marked as not applicable has a justification. The version gets a sequential number and records the date, the approver and an optional note.' },
+        { q: 'What is the SoA built from?', a: 'The implementation status comes from your gap analysis; owners and due dates come from risk treatment. UniqSuite suggests applicability from your answers, and your own decision and justification take precedence.' },
       ],
     },
     {
@@ -254,7 +270,7 @@ export const reports: Record<Lang, Report[]> = {
       lead: 'The risk analysis report shows your risks in a risk matrix, the ten most important in detail and the next steps with owners and dates. The risks come straight from your gap analysis.',
       what: 'Open requirements from the gap analysis become risks, rated by likelihood and impact. The report places them in the risk matrix, shows the boundary of your risk appetite and explains for the most important risks why they are critical and what to do now. Where you have calculated residual risk, it appears next to the inherent risk.',
       chapters: [
-        { h: 'Cover page', t: 'Company name and logo, author, date, confidentiality level and number of risks.' },
+        { h: 'Cover page', t: 'Company name (with logo in the PDF), author, date, confidentiality level and number of risks.' },
         { h: 'Executive summary', t: 'Total risks, critical, high, medium and low, the average score and the status in words.' },
         { h: 'Risk matrix', t: 'Heatmap of likelihood and impact, with the number of risks per cell and your risk appetite boundary as a dashed line.' },
         { h: 'Top 10 risks', t: 'Level, score, scope, affected service, inherent and residual, why critical, business impact and immediate action.' },
@@ -267,6 +283,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Where do the risks in the report come from?', a: 'From your gap analysis. Open requirements become risks and are rated by likelihood and impact, so gap analysis and risk analysis always match.' },
         { q: 'Does the report show residual risk?', a: 'Yes, once you have calculated residual risk. The top 10 risks then show inherent and residual risk side by side.' },
         { q: 'How large is the risk matrix?', a: '5 × 5 by default. The matrix in the report follows the setting in UniqSuite.' },
+        { q: 'Can I add my own risks?', a: 'Yes. You can adopt typical risks from the catalogue or write your own. They appear in the report alongside the risks from the gap analysis.' },
+        { q: 'Can I change how a risk is rated?', a: 'Yes. You can adjust likelihood and impact for each risk and give a reason. The report uses the adjusted values.' },
       ],
     },
     {
@@ -285,11 +303,13 @@ export const reports: Record<Lang, Report[]> = {
         { h: 'Measures table', t: 'ID, control, priority, owner, due date, status and risk.' },
       ],
       uses: ['Show progress in the project meeting', 'Spot overdue measures early', 'Complete evidence before the audit', 'Show management how implementation is going'],
-      extra: { h: 'Roadmap report alongside', t: 'For planning, UniqSuite creates the roadmap report “Now / Next / Later” with phase overview, bundles, resources per owner and a register of measures, as PDF, Word or CSV.' },
+      extra: { h: 'Roadmap report alongside', t: 'For planning, UniqSuite creates the roadmap report “Now / Next / Later” with phase overview, bundles, resources per owner and a register of measures, as PDF, Word or Excel.' },
       faq: [
         { q: 'What does “done without evidence” mean?', a: 'Measures marked as done that have no evidence attached yet. The report lists them so you can close them before the audit.' },
         { q: 'Why does the report count twice?', a: 'One task can fulfil several controls, and one control can need several tasks. Together, both views give an honest picture.' },
         { q: 'Which formats does the implementation report come in?', a: 'PDF, Word and Excel. The Excel file contains key figures and every measure, ready to filter.' },
+        { q: 'What is the implementation report built from?', a: 'From the applicable controls in your Statement of Applicability, from risk treatment and from the maturity baseline. Each control becomes a measure with status, owner, due date and priority.' },
+        { q: 'When is a measure overdue?', a: 'When its due date has passed and the control is not yet implemented. The key figures show these measures separately.' },
       ],
     },
     {
@@ -313,6 +333,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Who decides whether a finding is major or minor?', a: 'UniqSuite suggests a rating; the auditor decides. The scale is explained in the report.' },
         { q: 'Which audits can I record?', a: 'Internal and external audits, supplier audits and certification audits.' },
         { q: 'Can the report be signed?', a: 'Yes. The report ends with signature lines for the auditor and for management or the client.' },
+        { q: 'Where do the findings come from?', a: 'From your gap analysis. At the push of a button, UniqSuite loads the requirements that are not or only partly implemented in the frameworks within the audit scope.' },
+        { q: 'How does the audit connect to implementation?', a: 'You hand corrective actions from a finding over to implementation, with owner and deadline. Once the action is done there, the finding is closed as well.' },
       ],
     },
     {
@@ -334,6 +356,8 @@ export const reports: Record<Lang, Report[]> = {
         { q: 'Who is the board report for?', a: 'For managing directors, the board and the supervisory board. On one page it shows where the organisation stands and what needs deciding.' },
         { q: 'How often should it be created?', a: 'As often as you need it. It is created at the push of a button from the current status, for example before every management meeting.' },
         { q: 'Which format does the board report come in?', a: 'PDF, with your company name and logo.' },
+        { q: 'How is the score from 0 to 100 calculated?', a: 'Implemented requirements count in full and partly implemented ones count half, measured against all applicable requirements. Documented implementation is included. The dashboard and the gap analysis report use the same calculation.' },
+        { q: 'What does the traffic light mean?', a: 'From 80 it shows green (“on track”), from 50 amber (“making progress”), below that red (“needs attention”).' },
       ],
     },
   ],
