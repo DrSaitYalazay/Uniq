@@ -8,6 +8,7 @@ import { bus, state } from './state';
 import { initFx, initCarousel, initViz, initImgIn, initMirror } from './fx';
 import { initAnfrage } from './anfrage';
 import { initPath } from './steps';
+import { initPress } from './press';
 
 const root = document.documentElement;
 const params = new URLSearchParams(location.search);
@@ -221,6 +222,7 @@ const dimEl = document.querySelector<HTMLElement>('.world .dim');
 const msEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ms]'));
 let lastMs = -1;
 const pathUpdate = initPath();
+const pressUpdate = initPress();
 
 function tick(time: number) {
   lenis?.raf(time);
@@ -241,6 +243,7 @@ function tick(time: number) {
     // aktiver Meilenstein
     const ms = Math.round(Math.min(6, Math.max(0, (state.u - 13.3) / (14.9 - 13.3) * 6)));
     pathUpdate(state.u);
+    pressUpdate();
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;
       msEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ms) === ms));
