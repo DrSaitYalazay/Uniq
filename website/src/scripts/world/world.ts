@@ -194,6 +194,19 @@ export async function init(canvas: HTMLCanvasElement) {
   const countEl = document.querySelector<HTMLElement>('[data-l="ring"] [data-count]');
   const tip = document.querySelector<HTMLElement>('.tip');
   const v = new THREE.Vector3();
+  let halfW = new WeakMap<HTMLElement, number>();
+  let heroRight = -1;
+  const textRight = () => {
+    if (heroRight < 0) {
+      // Layout-Maße ohne Transform (der Hero-Text animiert beim Laden)
+      const h = document.querySelector<HTMLElement>('.hero-inner .lead') ?? document.querySelector<HTMLElement>('.hero-inner');
+      let r = innerWidth * 0.5;
+      if (h) { let x = 0; for (let e: HTMLElement | null = h; e; e = e.offsetParent as HTMLElement | null) x += e.offsetLeft; r = x + h.offsetWidth; }
+      heroRight = r;
+    }
+    return heroRight;
+  };
+  addEventListener("resize", () => { halfW = new WeakMap(); heroRight = -1; }, { passive: true });
   const place = (name: string, pos: THREE.Vector3, op: number) => {
     const el = lbl.get(name);
     if (!el) return;
@@ -205,7 +218,17 @@ export async function init(canvas: HTMLCanvasElement) {
     const y = (-v.y * 0.5 + 0.5) * innerHeight;
     // Desktop: die linke Spalte gehört dem Text, dort keine Beschriftungen der Szene
     if (!portrait && name.startsWith('seg-') && x < innerWidth * 0.5) { el.style.opacity = '0'; return; }
-    el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+    let px = x;
+    if (name.startsWith('seg-')) {
+      // Etikett ganz im Bild halten (rechter und linker Rand)
+      let half = halfW.get(el);
+      if (!half) { half = el.offsetWidth / 2; if (half) halfW.set(el, half); }
+      // rechts Platz für die Abschnittspunkte lassen
+      px = Math.max(half + 12, Math.min(innerWidth - half - (portrait ? 12 : 64), x));
+      // nicht unter den Hero-Text schieben
+      if (!portrait && px - half < textRight() + 12) { el.style.opacity = '0'; return; }
+    }
+    el.style.transform = `translate3d(${px.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     el.style.opacity = op.toFixed(3);
   };
 
@@ -515,7 +538,7 @@ export async function init(canvas: HTMLCanvasElement) {
     R.segments.forEach((s, k) => {
       const w = new THREE.Vector3(Math.cos(s.angle) * 6.1, Math.sin(s.angle) * 6.1, 0);
       w.applyMatrix4(R.group.matrixWorld);
-      place(`seg-${k}`, w, band(5.7, 5.8, 5.855, 5.87, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
+      place(`seg-${k}`, w, band(5.7, 5.78, 5.863, 5.885, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
       segLbl[k]?.classList.toggle('on', (u >= 5.97 && k === active) || k === hoverSeg);
     });
     D.timers.forEach((t, i) => place(`timer-${i}`, t.center, band(12.4, 12.9, 14.3, 14.75, u)));
