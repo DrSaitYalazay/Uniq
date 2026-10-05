@@ -43,3 +43,9 @@ export const state = {
     return ((state as any)._d ??= JSON.parse(el.textContent || '{}'));
   },
 };
+
+/** Zurücknehmen hinterer Karten: dunkel abdunkeln, hell aufhellen (deckend bleibt beides). */
+export const dimFilter = (k: number) =>
+  document.documentElement.dataset.theme === 'light'
+    ? `brightness(${(1 + (1 - k) * 0.9).toFixed(2)}) saturate(${(0.4 + 0.6 * k).toFixed(2)})`
+    : `brightness(${k.toFixed(2)})`;
