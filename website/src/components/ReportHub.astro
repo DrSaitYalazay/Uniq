@@ -1,0 +1,52 @@
+---
+/** Übersicht der Berichte (/de/berichte/, /en/reports/). */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import ReportSheet from './ReportSheet.astro';
+import { SITE_URL, type Lang } from '../config';
+import { reports, reportsUi, reportHref, reportHub, reportOrder, formatLabel } from '../data/reports';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const other = lang === 'de' ? 'en' : 'de';
+const ui = reportsUi[lang];
+const list = reports[lang];
+const title = lang === 'de' ? 'Berichte: Gap-Analyse, SoA, Risikoanalyse, Audit – UniqSuite' : 'Reports: gap analysis, SoA, risk analysis, audit – UniqSuite';
+const url = (p: string) => new URL(p, SITE_URL).href;
+const jsonld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${ui.h2a} ${ui.h2b}`, description: ui.intro, inLanguage: lang, url: url(reportHub(lang)), mainEntity: { '@type': 'ItemList', itemListElement: reportOrder.map((k, i) => ({ '@type': 'ListItem', position: i + 1, name: list.find((x) => x.key === k)!.title, url: url(reportHref(lang, k)) })) } }];
+---
+<Base lang={lang} path={reportHub(lang)} altPath={reportHub(other)} title={title} description={ui.intro} jsonld={jsonld}>
+  <Fragment slot="world">
+    <picture>
+      <source media="(max-width: 820px)" srcset="/img/still/pdca-m.webp" type="image/webp" width="720" height="1280" />
+      <img class="poster sub" src="/img/still/pdca-d.webp" width="1600" height="900" alt="" decoding="async" />
+    </picture>
+  </Fragment>
+  <article class="sp fwp rph">
+    <header class="wrap fwp-head">
+      <div>
+        <p class="kicker">{ui.kicker}</p>
+        <h1>{ui.h2a} <span class="accent">{ui.h2b}</span></h1>
+        <p class="lead">{ui.intro}</p>
+      </div>
+    </header>
+    <section class="wrap sp-block">
+      <ul class="rp-more rp-hub">
+        {reportOrder.map((k) => {
+          const r = list.find((x) => x.key === k)!;
+          return (
+            <li>
+              <a href={reportHref(lang, k)}>
+                <span class="rp-mini"><ReportSheet k={k} lang={lang} /></span>
+                <b>{r.title}</b>
+                <span>{r.sub}</span>
+                <small class="rp-f">{r.formats.map((f) => formatLabel[f]).join(' · ')}</small>
+                <em>{ui.open}<Icon name="arrow" /></em>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </article>
+</Base>

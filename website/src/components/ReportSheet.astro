@@ -1,0 +1,98 @@
+---
+/**
+ * Eine Berichtsseite im A4-Format als Grafik (keine Bildschirmfotos). Skaliert über Container-Einheiten,
+ * dieselbe Komponente dient als kleine Karte auf der Startseite und als große Ansicht auf der Berichtsseite.
+ * Werte sind Beispielwerte.
+ */
+import type { Lang } from '../config';
+import { reportsUi, reports, type RepKey } from '../data/reports';
+
+interface Props { k: RepKey; lang: Lang; variant?: 'page' | 'cover' }
+const { k, lang, variant = 'page' } = Astro.props;
+const ui = reportsUi[lang];
+const r = reports[lang].find((x) => x.key === k)!;
+const de = lang === 'de';
+const date = de ? '05.10.2026' : '5 Oct 2026';
+const fw = ['NIS2', 'ISO 27001', 'AI Act', 'ISO 42001', 'CRA'];
+const fwc = ['fw-nis2', 'fw-iso27001', 'fw-aiact', 'fw-iso42001', 'fw-cra'];
+// Risikomatrix 5×5: Anzahl je Feld (Zeile = Auswirkung von hoch nach niedrig)
+const heat = [[0, 1, 2, 1, 1], [0, 2, 3, 2, 1], [1, 3, 4, 2, 0], [2, 3, 2, 1, 0], [1, 2, 1, 0, 0]];
+const lvl = (row: number, col: number) => { const s = (5 - row) * (col + 1); return s >= 15 ? 'c' : s >= 10 ? 'h' : s >= 5 ? 'm' : 'l'; };
+---
+<div class={`rsheet rs-${k} rs-${variant}`} aria-hidden="true">
+  <div class="rs-pg">
+    <div class="rs-top"><span class="rs-logo">{ui.company.slice(0, 1)}</span><span class="rs-co">{ui.company}</span><span class="rs-date">{date}</span></div>
+    {variant === 'cover' ? (
+      <div class="rs-cover">
+        <span class="rs-badge">{r.name}</span>
+        <b class="rs-ct">{r.title}</b>
+        <span class="rs-cs">{r.sub}</span>
+        <dl class="rs-meta">
+          <div><dt>{de ? 'Unternehmen' : 'Company'}</dt><dd>{ui.company}</dd></div>
+          <div><dt>{de ? 'Erstellt am' : 'Created on'}</dt><dd>{date}</dd></div>
+          <div><dt>{de ? 'Vertraulichkeit' : 'Confidentiality'}</dt><dd>{de ? 'Vertraulich' : 'Confidential'}</dd></div>
+        </dl>
+        <span class="rs-stamp">{de ? 'VERTRAULICH' : 'CONFIDENTIAL'}</span>
+      </div>
+    ) : (
+      <div class="rs-body">
+        <b class="rs-h">{r.title}</b>
+        {k === 'gap' && (
+          <>
+            <div class="rs-kpis"><span><b>5</b>{de ? 'Regelwerke' : 'Frameworks'}</span><span><b>64 %</b>Compliance</span><span class="warn"><b>18</b>{de ? 'krit. MUSS' : 'crit. MUST'}</span></div>
+            <ul class="rs-bars">{fw.map((f, i) => <li class={fwc[i]}><span>{f}</span><i class={`w${[62, 48, 35, 41, 27][i]}`}></i><em>{[62, 48, 35, 41, 27][i]} %</em></li>)}</ul>
+            <div class="rs-time"><span class="t1">0–30</span><span class="t2">30–90</span><span class="t3">90–180</span><span class="t4">180+</span></div>
+          </>
+        )}
+        {k === 'soa' && (
+          <>
+            <div class="rs-kpis"><span><b>93</b>{de ? 'Gesamt' : 'Total'}</span><span><b>84</b>{de ? 'anwendbar' : 'applicable'}</span><span class="ok"><b>51</b>{de ? 'umgesetzt' : 'done'}</span></div>
+            <ul class="rs-table">
+              {[['5.1', 'ok'], ['5.2', 'ok'], ['5.7', 'part'], ['5.9', 'ok'], ['5.15', 'open'], ['5.23', 'part'], ['7.4', 'na'], ['8.25', 'miss']].map(([id, st]) => (
+                <li class={`st-${st}`}><span class="id">{id}</span><span class="ln"></span><span class="pill"></span><span class="ln why"></span></li>
+              ))}
+            </ul>
+          </>
+        )}
+        {k === 'risk' && (
+          <>
+            <div class="rs-heat">
+              {heat.map((row, ri) => row.map((n, ci) => <span class={`hc ${lvl(ri, ci)}${ri + ci === 4 ? ' app' : ''}`}>{n || ''}</span>))}
+            </div>
+            <div class="rs-axis"><span>{de ? 'Eintrittswahrscheinlichkeit →' : 'Likelihood →'}</span></div>
+            <ul class="rs-top10">{[1, 2, 3].map((i) => <li><b>{i}</b><span class="ln"></span><em class={['c', 'h', 'h'][i - 1]}>{[20, 16, 15][i - 1]}</em></li>)}</ul>
+          </>
+        )}
+        {k === 'impl' && (
+          <>
+            <div class="rs-ring-row"><span class="rs-ring"><b>62 %</b></span><div class="rs-kpis col"><span class="ok"><b>38</b>{de ? 'fertig' : 'done'}</span><span><b>17</b>{de ? 'laufend' : 'running'}</span><span class="warn"><b>4</b>{de ? 'überfällig' : 'overdue'}</span></div></div>
+            <ul class="rs-table">
+              {[['M-01', 'ok'], ['M-02', 'ok'], ['M-03', 'part'], ['M-04', 'open'], ['M-05', 'miss'], ['M-06', 'part']].map(([id, st]) => (
+                <li class={`st-${st}`}><span class="id">{id}</span><span class="ln"></span><span class="pill"></span></li>
+              ))}
+            </ul>
+          </>
+        )}
+        {k === 'audit' && (
+          <>
+            <div class="rs-kpis"><span class="warn"><b>2</b>Major</span><span><b>5</b>Minor</span><span class="ok"><b>4</b>OFI</span></div>
+            <ul class="rs-table">
+              {[['A.5.15', 'miss'], ['A.8.8', 'part'], ['A.5.24', 'part'], ['A.6.3', 'ok'], ['A.8.13', 'open']].map(([id, st]) => (
+                <li class={`st-${st}`}><span class="id">{id}</span><span class="ln"></span><span class="pill"></span></li>
+              ))}
+            </ul>
+            <div class="rs-sign"><span>{de ? 'Auditor' : 'Auditor'}</span><span>{de ? 'Leitung' : 'Management'}</span></div>
+          </>
+        )}
+        {k === 'board' && (
+          <>
+            <div class="rs-gauge"><b>72</b><small>/ 100</small><span class="rs-light"><i></i><i class="on"></i><i></i></span></div>
+            <ul class="rs-todo">{(de ? ['Lieferantenverträge prüfen', 'Notfallübung planen', 'MFA für Admins'] : ['Review supplier contracts', 'Plan crisis exercise', 'MFA for admins']).map((x) => <li>{x}</li>)}</ul>
+            <ul class="rs-bars">{fw.slice(0, 3).map((f, i) => <li class={fwc[i]}><span>{f}</span><i class={`w${[62, 48, 35][i]}`}></i><em>{[62, 48, 35][i]} %</em></li>)}</ul>
+          </>
+        )}
+      </div>
+    )}
+    <div class="rs-foot"><span>{ui.company} · {de ? 'Vertraulich' : 'Confidential'}</span><span>{variant === 'cover' ? '1' : '2'}</span></div>
+  </div>
+</div>

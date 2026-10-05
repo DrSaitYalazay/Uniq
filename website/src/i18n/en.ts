@@ -317,7 +317,7 @@ const en: typeof de = {
     text: 'In half an hour you see UniqSuite working on your own questions. No obligation, and you decide afterwards in your own time.',
   },
   footer: {
-    claim: 'UniqSuite supports analysis, planning and evidence. It does not replace legal advice or an independent audit or certification.',
+    claim: 'UniqSuite takes you from the first question to the audit: analysis, planning, implementation and evidence in one place.',
     legal: [
       { href: 'https://cyberwerksuite.com/impressum', label: 'Legal notice (Impressum)', external: true },
       { href: '/en/privacy/', label: 'Privacy policy', external: false },

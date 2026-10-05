@@ -316,7 +316,7 @@ export default {
     text: 'In einer halben Stunde sehen Sie UniqSuite mit Ihren eigenen Fragen. Unverbindlich, und danach entscheiden Sie in Ruhe.',
   },
   footer: {
-    claim: 'UniqSuite unterstützt bei Analyse, Planung und Nachweis. Es ersetzt weder eine Rechtsberatung noch eine unabhängige Prüfung oder Zertifizierung.',
+    claim: 'UniqSuite begleitet Sie von der ersten Frage bis zum Audit: Analyse, Planung, Umsetzung und Nachweis an einem Ort.',
     legal: [
       { href: 'https://cyberwerksuite.com/impressum', label: 'Impressum', external: true },
       { href: '/de/datenschutz/', label: 'Datenschutzerklärung', external: false },
