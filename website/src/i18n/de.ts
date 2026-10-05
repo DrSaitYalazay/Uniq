@@ -39,6 +39,7 @@ export default {
     items: [
       { href: '#regelwerke', label: 'Regelwerke' },
       { href: '#funktionen', label: 'Funktionen' },
+      { href: '#berichte', label: 'Berichte' },
       { href: '#pdca', label: 'So funktioniert’s' },
       { href: '#fristen', label: 'Fristen' },
       { href: '#quick-check', label: 'Quick-Check' },
@@ -57,6 +58,7 @@ export default {
       wolke: 'Start',
       regelwerke: 'Regelwerke',
       funktionen: 'Funktionen',
+      berichte: 'Berichte',
       pdca: 'Sechs Schritte',
       fristen: 'Fristen',
       'quick-check': 'Quick-Check',
@@ -132,7 +134,7 @@ export default {
     ],
   },
   features: {
-    kicker: 'Was sonst noch drin ist',
+    kicker: 'Fünf Werkzeuge',
     h2a: 'Alles an einem Ort,',
     h2b: 'auch wenn es ernst wird.',
     items: [
