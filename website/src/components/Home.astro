@@ -188,6 +188,22 @@ const clientData = {
       </div>
     </div>
     <div class="carousel ft-car" data-carousel>
+      <!-- links: dieselben Funktionen als Kette (Klick öffnet die Seite, Pfeile/Zeiger drehen den Kreis) -->
+      <div class="ft-list" aria-label={lang === 'de' ? 'Alle Funktionen' : 'All features'} role="group">
+        <button type="button" class="fl-step up" data-car="-1" aria-label={lang === 'de' ? 'Vorherige Funktion' : 'Previous feature'}><Icon name="arrow" /></button>
+        <ol>
+          {features[lang].map((f, i) => (
+            <li class={`fl-i ft-${i}`} data-fl={i}>
+              <a href={featureHref(lang, i)}>
+                <Portal glyph={['dashboard', 'incident', 'supplier', 'policies', 'ai', 'evidence'][i]} />
+                <span class="fl-t"><small>{f.label}</small><b>{f.title}</b></span>
+                <Icon name="arrow" />
+              </a>
+            </li>
+          ))}
+        </ol>
+        <button type="button" class="fl-step down" data-car="1" aria-label={lang === 'de' ? 'Nächste Funktion' : 'Next feature'}><Icon name="arrow" /></button>
+      </div>
       <div class="ring-tilt">
         <ul class="ring ring-ft">
           {features[lang].map((f, i) => (
