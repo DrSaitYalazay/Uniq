@@ -57,6 +57,7 @@ const en: typeof de = {
     label: 'Chapters',
     items: {
       wolke: 'Start',
+      film: 'Film',
       regelwerke: 'Frameworks',
       pdca: 'Six steps',
       berichte: 'Reports',
@@ -65,7 +66,7 @@ const en: typeof de = {
       'quick-check': 'Quick check',
     },
   },
-  film: { open: 'Watch the film', title: 'UniqSuite on film', note: 'The video is loaded from bunny.net only when you open it.', privacy: 'Privacy', close: 'Close' },
+  film: { open: 'Watch the film', kicker: 'Platform film', h2a: 'UniqSuite in', h2b: '2:25 minutes.', text: 'The promotional film introduces the platform: from the first incident to risks, controls and policies, all the way to the overall picture for management.', play: 'Play the promotional film', badge: 'Promotional film · 2:25', note: 'When you press play, the player is loaded from bunny.net.', privacy: 'Privacy', cta: 'Start the quick check' },
   hero: {
     eyebrow: 'Compliance software for NIS2, ISO 27001 and the EU AI Act',
     h1a: 'Meet laws and standards.',

@@ -56,6 +56,7 @@ export default {
     label: 'Kapitel',
     items: {
       wolke: 'Start',
+      film: 'Film',
       regelwerke: 'Regelwerke',
       pdca: 'Sechs Schritte',
       berichte: 'Berichte',
@@ -64,7 +65,7 @@ export default {
       'quick-check': 'Quick-Check',
     },
   },
-  film: { open: 'Film ansehen', title: 'UniqSuite im Film', note: 'Das Video wird erst beim Öffnen von bunny.net geladen.', privacy: 'Datenschutz', close: 'Schließen' },
+  film: { open: 'Film ansehen', kicker: 'Plattformfilm', h2a: 'UniqSuite in', h2b: '2:40 Minuten.', text: 'Der Imagefilm stellt die Plattform vor: vom ersten Vorfall über Risiken, Kontrollen und Richtlinien bis zum Gesamtbild für die Geschäftsleitung.', play: 'Imagefilm abspielen', badge: 'Imagefilm · 2:40', note: 'Beim Abspielen wird der Player von bunny.net geladen.', privacy: 'Datenschutz', cta: 'Quick-Check starten' },
   hero: {
     eyebrow: 'Compliance-Software für NIS2, ISO 27001 und den EU AI Act',
     h1a: 'Gesetze und Normen erfüllen.',
