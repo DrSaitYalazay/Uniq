@@ -125,9 +125,9 @@ export default {
     note: 'Bildschirmfotos aus einem Demo-Mandanten mit erfundenen Daten.',
     resultLabel: 'Am Ende haben Sie',
     phases: [
-      { n: '01', cycle: 'Plan', title: 'Rahmen festlegen', text: 'Branche, Größe, Paket: Drei Angaben genügen, und UniqSuite weiß, welche Regelwerke für Sie gelten. Danach tragen Sie ein, wer im Team welche Rolle hat.', result: 'den Scope-Bericht', img: 'scope' },
+      { n: '01', cycle: 'Plan', title: 'Rahmen festlegen', text: 'Branche, Größe und die Regelwerke, die Sie umsetzen wollen: Damit steht der Rahmen. Danach tragen Sie ein, wer im Team welche Rolle hat.', result: 'den Scope-Bericht', img: 'scope' },
       { n: '02', cycle: 'Plan', title: 'Inventar', text: 'Hier sammeln Sie, was geschützt werden muss: Dienste, Systeme, Daten und Dienstleister. Und wie das alles voneinander abhängt.', result: 'ein Inventar mit Abhängigkeiten', img: 'inventory' },
-      { n: '03', cycle: 'Plan', title: 'Gap-Analyse', text: 'Eine Anforderung pro Karte, die Pflichtpunkte zuerst. Sie antworten mit einem Klick. Wer „nicht anwendbar“ wählt, begründet kurz, damit es später im Audit trägt.', result: 'Ihren Umsetzungsstand je Regelwerk', img: 'gap' },
+      { n: '03', cycle: 'Plan', title: 'Gap-Analyse', text: 'Eine Anforderung pro Karte, nach Themen geordnet. Sie antworten mit einem Klick. Wer „nicht anwendbar“ wählt, begründet kurz, damit es später im Audit trägt.', result: 'Ihren Umsetzungsstand je Regelwerk', img: 'gap' },
       { n: '04', cycle: 'Plan', title: 'Risiken', text: 'Jede Lücke wird zu einem Risiko, das Sie bewerten und behandeln. Den Bericht dazu gibt es als PDF, Word oder Excel.', result: 'einen Risikobericht', img: 'risk' },
       { n: '05', cycle: 'Do', title: 'Plan und Umsetzung', text: 'Jede Maßnahme bekommt eine verantwortliche Person, eine Frist und einen Status. Was erledigt ist, erscheint sofort im Dashboard und in den Berichten.', result: 'Anwendbarkeitserklärung, Umsetzungs- und Vorstandsbericht', img: 'plan' },
       { n: '06', cycle: 'Check · Act', title: 'Audit und Verbesserung', text: 'Befunde aus internen und externen Audits landen hier, ebenso die Korrekturen. Ist alles nachgewiesen, beginnt die nächste Runde.', result: 'den Auditbericht', img: 'audit' },

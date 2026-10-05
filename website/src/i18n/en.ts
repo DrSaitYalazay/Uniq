@@ -126,9 +126,9 @@ const en: typeof de = {
     note: 'Screenshots from a demo tenant with made-up data.',
     resultLabel: 'What you end up with',
     phases: [
-      { n: '01', cycle: 'Plan', title: 'Set the scope', text: 'Sector, size, package: three answers are enough for UniqSuite to know which frameworks apply to you. Then you record who in the team has which role.', result: 'the scope report', img: 'scope' },
+      { n: '01', cycle: 'Plan', title: 'Set the scope', text: 'Sector, size and the frameworks you want to implement: that sets the scope. Then you record who in the team has which role.', result: 'the scope report', img: 'scope' },
       { n: '02', cycle: 'Plan', title: 'Inventory', text: 'This is where you collect what needs protecting: services, systems, data and suppliers. And how they all depend on each other.', result: 'an inventory with dependencies', img: 'inventory' },
-      { n: '03', cycle: 'Plan', title: 'Gap analysis', text: 'One requirement per card, mandatory points first. You answer with one click. Choosing “not applicable” needs a short reason, so it holds up in the audit later.', result: 'your implementation status per framework', img: 'gap' },
+      { n: '03', cycle: 'Plan', title: 'Gap analysis', text: 'One requirement per card, grouped by topic. You answer with one click. Choosing “not applicable” needs a short reason, so it holds up in the audit later.', result: 'your implementation status per framework', img: 'gap' },
       { n: '04', cycle: 'Plan', title: 'Risks', text: 'Every gap becomes a risk that you assess and treat. The report comes as PDF, Word or Excel.', result: 'a risk report', img: 'risk' },
       { n: '05', cycle: 'Do', title: 'Plan and implementation', text: 'Every measure gets an owner, a deadline and a status. Whatever is done shows up straight away in the dashboard and the reports.', result: 'Statement of Applicability, implementation and board report', img: 'plan' },
       { n: '06', cycle: 'Check · Act', title: 'Audit and improvement', text: 'Findings from internal and external audits land here, together with the corrective actions. Once everything is evidenced, the next round begins.', result: 'the audit report', img: 'audit' },
