@@ -4,6 +4,8 @@
  * Versand: POST /api/anfrage (gleicher Ursprung; Caddy reicht an die App weiter).
  * Keine Speicherung im Browser, kein Tracking.
  */
+import { state } from './state';
+
 const FREEMAIL = new Set([
   'gmail.com', 'googlemail.com', 'gmx.de', 'gmx.net', 'gmx.at', 'gmx.ch', 'gmx.com',
   'web.de', 't-online.de', 'freenet.de', 'arcor.de', 'online.de', 'email.de', 'mail.de',
@@ -56,10 +58,11 @@ export function initAnfrage() {
     }
     status.textContent = '';
     status.classList.remove('err');
+    state.lenis?.stop(); // Seite steht still, das Formular scrollt selbst
     zoomed(from, 'vt-in', () => { dlg.showModal(); field('company').focus(); });
   };
   const close = () => zoomed(null, 'vt-out', () => dlg.close());
-  dlg.addEventListener('close', () => opener?.focus());
+  dlg.addEventListener('close', () => { state.lenis?.start(); opener?.focus(); });
 
   document.addEventListener('click', (e) => {
     const a = (e.target as Element).closest<HTMLElement>('[data-anfrage]');
