@@ -9,6 +9,8 @@ import Viz from './Viz.astro';
 import { photos, photoSrc } from '../data/photos';
 import { demoHref, type Lang } from '../config';
 import { steps, stepHref } from '../data/steps';
+import Portal from './Portal.astro';
+import { topicsForStep, topicHref, topicHub } from '../data/topics';
 import de from '../i18n/de';
 import en from '../i18n/en';
 
@@ -85,6 +87,17 @@ const jsonld = [{
     <section class="wrap sp-block" data-rv>
       <h2 class="sp-h">{L.how}</h2>
       <ol class="sp-flow">{s.how.map((x) => <li><p>{x}</p></li>)}</ol>
+    </section>
+
+    <!-- Bausteine dieses Schritts: eigene Wissensseiten -->
+    <section class={`wrap sp-block stp-${index}`} aria-labelledby="sp-topics">
+      <div class="sp-topics-head">
+        <h2 id="sp-topics" class="sp-h">{lang === 'de' ? 'Bausteine dieses Schritts' : 'Building blocks of this step'}</h2>
+        <a class="tp-steplink-a" href={topicHub(lang)}>{lang === 'de' ? 'Alle Themen' : 'All topics'}<Icon name="arrow" /></a>
+      </div>
+      <ul class="fwp-more">
+        {topicsForStep(lang, index).map((x) => <li class={`stp-${index}`}><a href={topicHref(lang, x.key)}><Portal glyph={x.glyph} /><b class="tp-name">{x.name}</b><span>{x.sub}</span></a></li>)}
+      </ul>
     </section>
 
     <!-- Szenenbild: bewegt sich beim Scrollen leicht -->
