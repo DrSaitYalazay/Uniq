@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
-import { SITE_URL, LOGIN_URL, loginHref, demoHref, CONTACT_EMAIL, type Lang } from '../config';
+import { SITE_URL, LOGIN_URL, loginHref, demoHref, CONTACT_EMAIL, FILM, filmSrc, type Lang } from '../config';
 import de from '../i18n/de';
 import en from '../i18n/en';
 import qcData from '../data/quickcheck.json';
@@ -116,6 +116,7 @@ const clientData = {
         <div class="cta-row">
           <a class="btn btn-primary" href="#quick-check" data-magnetic>{t.hero.ctaCheck}<Icon name="arrow" /></a>
           <a class="btn btn-ghost" href={demoHref(lang)} data-anfrage data-magnetic>{t.nav.demo}</a>
+          <button type="button" class="btn btn-film" data-film data-magnetic><span class="pl"><Icon name="play" /></span>{t.film.open}<small>{FILM[lang].dur}</small></button>
         </div>
         <p class="cta-note">{t.hero.ctaNote}</p>
         <ul class="hero-fw" aria-label={t.regelwerke.kicker}>
@@ -123,6 +124,32 @@ const clientData = {
         </ul>
       </div>
     </div></div>
+  </section>
+
+  <!-- Plattformfilm: Vorschaubild vom eigenen Server; der Bunny-Player wird erst beim Klick geladen -->
+  <section id="film" class="station flow film-sec" data-u0="5.86" data-u1="5.86" data-dim="0.8" data-dim-m="0.9" aria-labelledby="h-film">
+    <div class="wrap film-grid">
+      <div class="film-copy cam">
+        <p class="kicker">{t.film.kicker}</p>
+        <h2 id="h-film" class="h2">{t.film.h2a} <span class="accent">{t.film.h2b}</span></h2>
+        <p class="lead">{t.film.text}</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#quick-check" data-magnetic>{t.film.cta}<Icon name="arrow" /></a>
+        </div>
+        <p class="film-note">{t.film.note} <a href={lang === 'de' ? '/de/datenschutz/#video' : '/en/privacy/#video'}>{t.film.privacy}</a></p>
+      </div>
+      <div class="film-stage">
+        <div class="film-card" role="button" tabindex="0" aria-label={t.film.play} data-film-card data-film-url={filmSrc(lang)} data-film-title={t.film.badge}>
+          <picture>
+            <source media="(max-width: 820px)" srcset={`/img/film-poster-${lang}-800.webp`} type="image/webp" />
+            <img src={`/img/film-poster-${lang}-1600.webp`} width="1600" height="900" alt="" loading="lazy" decoding="async" />
+          </picture>
+          <span class="film-shade"></span>
+          <span class="film-play" aria-hidden="true"><i></i><i></i><b><Icon name="play" /></b></span>
+          <span class="film-badge">{t.film.badge}</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Regelwerke: was UniqSuite abdeckt (und warum man nur einmal antwortet) -->
@@ -177,8 +204,86 @@ const clientData = {
     </div>
   </section>
 
+  <!-- Sechs Schritte als Weg: der Abschnitt bleibt stehen, beim Scrollen fährt die Ansicht auf einer leuchtenden
+       Straße von Schritt zu Schritt (wie die Zeitachse der Fristen); nach Schritt 6 geht es nach unten weiter. -->
+  <section id="pdca" class="station steps path" data-u0="5.93" data-u1="11.6" data-dim="0.35" data-dim-m="0.6" aria-labelledby="h-pdca">
+    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('pdca')}-m.webp`} width="720" height="1280" /><img src={`${still('pdca')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
+    <div class="path-pin">
+      <div class="wrap path-head">
+        <div class="path-title">
+          <p class="kicker">{t.pdca.kicker}</p>
+          <h2 id="h-pdca" class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
+        </div>
+        <ol class="path-chips" data-steps>
+          {t.pdca.phases.map((p, i) => (
+            <li class="ph" data-ph={i}><a class="ph-head" href={stepHref(lang, i)}><span class="ph-n">{p.n}</span><span class="ph-t">{p.title}</span></a></li>
+          ))}
+        </ol>
+      </div>
+      <div class="path-view">
+        <div class="path-track" data-path>
+          <svg class="path-road" aria-hidden="true" focusable="false">
+            <defs><clipPath id="road-clip"><rect class="rd-clip" x="0" y="0" width="0" height="100%" /></clipPath></defs>
+            <path class="rd-base" d="" />
+            <path class="rd-fill" d="" clip-path="url(#road-clip)" />
+            {t.pdca.phases.map((_, i) => <circle class="rd-node" data-node={i} r="7" cx="0" cy="0" />)}
+            <circle class="rd-dot" r="9" cx="0" cy="0" />
+          </svg>
+          {t.pdca.phases.map((p, i) => (
+            <article class="pstop" data-stage={i} aria-labelledby={`pstop-h-${i}`}>
+              <div class="pstop-in">
+                <h3 id={`pstop-h-${i}`} class="sr-only">{p.n} {p.title}</h3>
+                <a class="stage-card" href={stepHref(lang, i)} tabindex="-1">
+                  <Viz kind={p.img} lang={lang} big kicker={`${lang === 'de' ? 'Schritt' : 'Step'} ${i + 1} ${lang === 'de' ? 'von' : 'of'} 6 · ${p.cycle}`} title={p.title} sub={`${t.pdca.resultLabel}: ${p.result}`} />
+                </a>
+                <div class="pstop-foot">
+                  <ul class="ph-topics">{topicsForStep(lang, i).map((x) => <li><a href={topicHref(lang, x.key)}>{x.name}</a></li>)}</ul>
+                  <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+    {t.pdca.phases.map((_, i) => <span class={`path-mark m${i}`} id={`pdca-${i + 1}`}></span>)}
+  </section>
+
+  <!-- Berichte: die Seiten kommen beim Scrollen aus einem leuchtenden Druckschlitz und legen sich in eine Reihe -->
+  <section id="berichte" class="reports-sec" data-u0="11.6" data-u1="11.6" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
+    <div class="rp-pin">
+      <div class="wrap rp-headrow">
+        <div>
+          <p class="kicker">{reportsUi[lang].kicker}</p>
+          <h2 id="h-rep" class="h2">{reportsUi[lang].h2a} <span class="accent">{reportsUi[lang].h2b}</span></h2>
+        </div>
+        <div>
+          <p class="lead">{reportsUi[lang].intro}</p>
+          <p class="rp-hint">{reportsUi[lang].hint} <a href={reportHub(lang)}>{reportsUi[lang].all}<Icon name="arrow" /></a></p>
+        </div>
+      </div>
+      <div class="wrap rp-press" data-press>
+        <div class="rp-slot" aria-hidden="true"><span></span></div>
+        <ul class="rp-deck">
+          {reportOrder.map((k, i) => {
+            const r = reports[lang].find((x) => x.key === k)!;
+            return (
+              <li class="rp-card" data-sheet={i}>
+                <a href={reportHref(lang, k)}>
+                  <span class="rp-paper"><ReportSheet k={k} lang={lang} /></span>
+                  <b>{r.name}</b>
+                  <small>{r.formats.map((f) => formatLabel[f]).join(' · ')}</small>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Funktionen: laufendes Band aus Karten mit eigener Grafik; jede Karte öffnet die Funktionsseite -->
-  <section id="funktionen" class="station flow features" data-u0="5.895" data-u1="5.93" data-dim="0.78" data-dim-m="0.9" aria-labelledby="h-feat">
+  <section id="funktionen" class="station flow features" data-u0="11.6" data-u1="11.6" data-dim="0.78" data-dim-m="0.9" aria-labelledby="h-feat">
     <div class="wrap">
       <div class="rw-head cam">
         <div>
@@ -225,84 +330,6 @@ const clientData = {
         <button type="button" class="next" data-car="1" aria-label={lang === 'de' ? 'Nächste Funktion' : 'Next feature'}><Icon name="arrow" /></button>
       </div>
     </div>
-  </section>
-
-  <!-- Berichte: die Seiten kommen beim Scrollen aus einem leuchtenden Druckschlitz und legen sich in eine Reihe -->
-  <section id="berichte" class="reports-sec" data-u0="5.93" data-u1="5.93" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
-    <div class="rp-pin">
-      <div class="wrap rp-headrow">
-        <div>
-          <p class="kicker">{reportsUi[lang].kicker}</p>
-          <h2 id="h-rep" class="h2">{reportsUi[lang].h2a} <span class="accent">{reportsUi[lang].h2b}</span></h2>
-        </div>
-        <div>
-          <p class="lead">{reportsUi[lang].intro}</p>
-          <p class="rp-hint">{reportsUi[lang].hint} <a href={reportHub(lang)}>{reportsUi[lang].all}<Icon name="arrow" /></a></p>
-        </div>
-      </div>
-      <div class="wrap rp-press" data-press>
-        <div class="rp-slot" aria-hidden="true"><span></span></div>
-        <ul class="rp-deck">
-          {reportOrder.map((k, i) => {
-            const r = reports[lang].find((x) => x.key === k)!;
-            return (
-              <li class="rp-card" data-sheet={i}>
-                <a href={reportHref(lang, k)}>
-                  <span class="rp-paper"><ReportSheet k={k} lang={lang} /></span>
-                  <b>{r.name}</b>
-                  <small>{r.formats.map((f) => formatLabel[f]).join(' · ')}</small>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sechs Schritte als Weg: der Abschnitt bleibt stehen, beim Scrollen fährt die Ansicht auf einer leuchtenden
-       Straße von Schritt zu Schritt (wie die Zeitachse der Fristen); nach Schritt 6 geht es nach unten weiter. -->
-  <section id="pdca" class="station steps path" data-u0="5.93" data-u1="11.6" data-dim="0.35" data-dim-m="0.6" aria-labelledby="h-pdca">
-    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('pdca')}-m.webp`} width="720" height="1280" /><img src={`${still('pdca')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="path-pin">
-      <div class="wrap path-head">
-        <div class="path-title">
-          <p class="kicker">{t.pdca.kicker}</p>
-          <h2 id="h-pdca" class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
-        </div>
-        <ol class="path-chips" data-steps>
-          {t.pdca.phases.map((p, i) => (
-            <li class="ph" data-ph={i}><a class="ph-head" href={stepHref(lang, i)}><span class="ph-n">{p.n}</span><span class="ph-t">{p.title}</span></a></li>
-          ))}
-        </ol>
-      </div>
-      <div class="path-view">
-        <div class="path-track" data-path>
-          <svg class="path-road" aria-hidden="true" focusable="false">
-            <defs><clipPath id="road-clip"><rect class="rd-clip" x="0" y="0" width="0" height="100%" /></clipPath></defs>
-            <path class="rd-base" d="" />
-            <path class="rd-fill" d="" clip-path="url(#road-clip)" />
-            {t.pdca.phases.map((_, i) => <circle class="rd-node" data-node={i} r="7" cx="0" cy="0" />)}
-            <circle class="rd-dot" r="9" cx="0" cy="0" />
-          </svg>
-          {t.pdca.phases.map((p, i) => (
-            <article class="pstop" data-stage={i} aria-labelledby={`pstop-h-${i}`}>
-              <div class="pstop-in">
-                <h3 id={`pstop-h-${i}`} class="sr-only">{p.n} {p.title}</h3>
-                <a class="stage-card" href={stepHref(lang, i)} tabindex="-1">
-                  <Viz kind={p.img} lang={lang} big kicker={`${lang === 'de' ? 'Schritt' : 'Step'} ${i + 1} ${lang === 'de' ? 'von' : 'of'} 6 · ${p.cycle}`} title={p.title} sub={`${t.pdca.resultLabel}: ${p.result}`} />
-                </a>
-                <div class="pstop-foot">
-                  <ul class="ph-topics">{topicsForStep(lang, i).map((x) => <li><a href={topicHref(lang, x.key)}>{x.name}</a></li>)}</ul>
-                  <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </div>
-    {t.pdca.phases.map((_, i) => <span class={`path-mark m${i}`} id={`pdca-${i + 1}`}></span>)}
   </section>
 
   <!-- Fristen: Meldefristen, dann die Zeitachse kompakt; der Abschnitt endet im 1-Monats-Ring -->

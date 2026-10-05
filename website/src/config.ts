@@ -19,3 +19,11 @@ export const demoHref = (lang: Lang) =>
   `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
     lang === 'de' ? 'UniqSuite – Demo vereinbaren' : 'UniqSuite – book a demo',
   )}`;
+
+/** Werbespot auf Bunny Stream (Bibliothek 760752). Geladen wird der Player erst nach Klick. */
+export const FILM_HOST = 'https://player.mediadelivery.net';
+export const FILM = {
+  de: { id: '8c83cc58-c915-47b8-b414-b854e7300329', dur: '2:40' },
+  en: { id: '7542f680-323d-42ab-85eb-0422ec717900', dur: '2:25' },
+} as const;
+export const filmSrc = (lang: Lang) => `${FILM_HOST}/embed/760752/${FILM[lang].id}?autoplay=true&preload=true&responsive=true&rememberPosition=false`;
