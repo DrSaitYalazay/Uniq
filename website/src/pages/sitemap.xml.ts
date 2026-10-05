@@ -3,6 +3,7 @@ import { steps, stepHref } from '../data/steps';
 import { features, featureHref } from '../data/features';
 import { fwOrder, fwHref } from '../data/frameworks';
 import { topicOrder, topicHref, topicHub } from '../data/topics';
+import { reportOrder, reportHref, reportHub } from '../data/reports';
 const pairs: [string, string][] = [
   ['/de/', '/en/'],
   ...steps.de.map((_, i): [string, string] => [stepHref('de', i), stepHref('en', i)]),
@@ -10,6 +11,8 @@ const pairs: [string, string][] = [
   ...fwOrder.map((f): [string, string] => [fwHref('de', f), fwHref('en', f)]),
   [topicHub('de'), topicHub('en')],
   ...topicOrder.map((k): [string, string] => [topicHref('de', k), topicHref('en', k)]),
+  [reportHub('de'), reportHub('en')],
+  ...reportOrder.map((k): [string, string] => [reportHref('de', k), reportHref('en', k)]),
   ['/de/whitepaper/', '/en/white-paper/'],
   ['/de/broschuere/', '/en/brochure/'],
   ['/de/datenschutz/', '/en/privacy/'],
