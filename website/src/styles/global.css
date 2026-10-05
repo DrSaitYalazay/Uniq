@@ -382,7 +382,6 @@ html.has3d .milestone:not(.is-active) { opacity: 0.45; }
 .foot nav ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; justify-items: end; }
 .foot a { color: var(--text-2); text-decoration: none; }
 .foot a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
-.foot .tm { margin-top: 2rem; font-size: 0.8rem; }
 
 /* Rechtstexte */
 .legal { position: relative; z-index: 1; padding: calc(var(--header-h) + 8svh) 0 10svh; }
