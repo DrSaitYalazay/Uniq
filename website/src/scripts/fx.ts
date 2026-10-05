@@ -295,3 +295,18 @@ export function initImgIn() {
   for (const el of imgs) { if (vis(el)) continue; el.classList.add('zo'); io.observe(el); }
   document.documentElement.classList.add('img-zo');
 }
+
+/** Vertrauen: Karten schwingen beim ersten Erscheinen wie Spiegeltüren auf (versetzt). */
+export function initMirror() {
+  const list = document.querySelector<HTMLElement>('[data-mirror]');
+  if (!list || !('IntersectionObserver' in window) || reduced) return;
+  const items = Array.from(list.children) as HTMLElement[];
+  const r = list.getBoundingClientRect();
+  if (r.top < innerHeight && r.bottom > 0) return; // schon sichtbar (z. B. nach Neuladen): ruhig lassen
+  document.documentElement.classList.add('mirror-js');
+  const io = new IntersectionObserver((es) => {
+    const shown = es.filter((e) => e.isIntersecting).map((e) => e.target as HTMLElement);
+    shown.forEach((el, k) => { el.style.setProperty('--d', `${(k * 0.14).toFixed(2)}s`); el.classList.add('in'); io.unobserve(el); });
+  }, { threshold: 0.25 });
+  items.forEach((el) => io.observe(el));
+}

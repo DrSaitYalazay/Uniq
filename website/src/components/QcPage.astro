@@ -16,6 +16,7 @@ const t = lang === 'de' ? de : en;
 const f = qcData.frameworks.find((x) => x.id === fw)!;
 const other = lang === 'de' ? 'en' : 'de';
 const clientData = { lang, login: loginHref(lang), demo: demoHref(lang), qc: t.qc, pdf: t.pdfText, fwNames: t.frameworks, data: qcData, autostart: fw };
+import { fwHref, type Fw } from '../data/frameworks';
 ---
 <Base lang={lang} path={`/${lang}/quick-check/${fw}/`} altPath={`/${other}/quick-check/${fw}/`} title={`${t.qc.pageTitle}: ${f.name[lang]} – UniqSuite`} description={t.qc.intro} noindex>
   <Fragment slot="world">
@@ -29,6 +30,7 @@ const clientData = { lang, login: loginHref(lang), demo: demoHref(lang), qc: t.q
       <p class="kicker"><a href={`/${lang}/#quick-check`} class="back"><Icon name="arrow" />{t.qc.pageBack}</a></p>
       <h1 id="h-qc" class="h2">{t.qc.pageTitle}: <span class="accent">{f.name[lang]}</span></h1>
       <p class="lead">{t.qc.intro}</p>
+      <p class="qc-fwlink"><a href={fwHref(lang, fw as Fw)}>{lang === 'de' ? `Was ${f.name[lang]} verlangt und für wen es gilt` : `What ${f.name[lang]} requires and who it applies to`}<Icon name="arrow" /></a></p>
       <p class="privacy"><Icon name="eye" />{t.qc.privacy}</p>
       <div class="qc-card" data-qc data-autostart={fw} aria-live="polite">
         <h2 class="res-h" data-qc-focus tabindex="-1">{f.name[lang]}</h2>

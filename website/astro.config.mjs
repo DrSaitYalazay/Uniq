@@ -18,6 +18,8 @@ export default defineConfig({
   },
   devToolbar: { enabled: false },
   vite: {
-    build: { assetsInlineLimit: 0, chunkSizeWarningLimit: 900 },
+    // esbuild statt lightningcss: lightningcss zieht animation-timeline in die animation-Kurzform,
+    // die Browser dort nicht annehmen – alle scrollgesteuerten Animationen fielen sonst aus.
+    build: { assetsInlineLimit: 0, chunkSizeWarningLimit: 900, cssMinify: 'esbuild' },
   },
 });
