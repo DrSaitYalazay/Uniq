@@ -183,6 +183,7 @@ function setupFtOrbit(car: HTMLElement) {
   if (n < 2) return;
   car.classList.add('orbit-ft');
   const nav = car.querySelector<HTMLElement>('.carousel-nav');
+  const list = Array.from(car.querySelectorAll<HTMLElement>('[data-fl]'));
   const step = (Math.PI * 2) / n;
   const speed = (9 * Math.PI) / 180;
   let angle = Math.PI / 2, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0, front = -1;
@@ -248,7 +249,7 @@ function setupFtOrbit(car: HTMLElement) {
       it.style.filter = `brightness(${(0.45 + 0.55 * (d + 1) / 2).toFixed(2)})`; // hinten dunkler, aber deckend
       if (d > best) { best = d; bk = i; }
     });
-    if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); }
+    if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); list.forEach((li, i) => li.classList.toggle('on', i === bk)); }
     raf = visible ? requestAnimationFrame(frame) : 0;
   };
   last = performance.now();
@@ -266,6 +267,21 @@ function setupFtOrbit(car: HTMLElement) {
     it.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 600; });
     it.addEventListener('focusin', (e) => { if ((e.target as Element).matches(':focus-visible')) { paused = true; bringFront(i); } });
     it.addEventListener('focusout', () => { paused = false; });
+  });
+  // Liste links: Zeiger oder Tastatur auf einem Eintrag dreht dessen Karte nach vorn; Pfeil hoch/runter wandert in der Liste
+  list.forEach((li, i) => {
+    const a = li.querySelector<HTMLAnchorElement>('a');
+    li.addEventListener('pointerenter', () => { paused = true; bringFront(i); });
+    li.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 1200; });
+    a?.addEventListener('focus', () => { paused = true; bringFront(i); });
+    a?.addEventListener('blur', () => { paused = false; });
+    a?.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      e.preventDefault();
+      e.stopPropagation();
+      const j = (i + (e.key === 'ArrowDown' ? 1 : -1) + n) % n;
+      list[j].querySelector<HTMLAnchorElement>('a')?.focus();
+    });
   });
   addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
   car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {

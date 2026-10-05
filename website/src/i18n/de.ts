@@ -322,7 +322,6 @@ export default {
       { href: '/de/datenschutz/', label: 'Datenschutzerklärung', external: false },
       { href: '/de/barrierefreiheit/', label: 'Barrierefreiheitserklärung', external: false },
     ],
-    trademark: 'ISO und IEC sind Marken ihrer jeweiligen Inhaber.',
     nav: 'Rechtliches',
     top: 'Nach oben',
     home: 'Zur Startseite',

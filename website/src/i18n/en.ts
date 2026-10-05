@@ -323,7 +323,6 @@ const en: typeof de = {
       { href: '/en/privacy/', label: 'Privacy policy', external: false },
       { href: '/en/accessibility/', label: 'Accessibility statement', external: false },
     ],
-    trademark: 'ISO and IEC are trademarks of their respective owners.',
     nav: 'Legal',
     top: 'Back to top',
     home: 'Home page',
