@@ -50,37 +50,39 @@
             "en": "Section 38(1), (2) BSIG"
           },
           "q": {
-            "de": "Verletzt Ihre Geschäftsleitung ihre NIS2-Pflichten, haftet sie der Einrichtung für den Schaden – persönlich. Könnten Sie heute einen datierten Beschluss vorlegen, mit dem sie die Maßnahmen nach § 30 freigegeben hat, und Protokolle, die zeigen, dass sie deren Umsetzung überwacht?",
-            "en": "If your management breaches its NIS2 duties, it is liable to the organisation for the damage – personally. Could you produce today a dated resolution in which it approved the measures under Section 30, and minutes showing that it oversees their implementation?"
+            "de": "Verletzt Ihre Geschäftsleitung ihre NIS2-Pflichten, haftet sie der Einrichtung für den Schaden – persönlich. Könnten Sie heute die geltenden Risikomanagementmaßnahmen vorlegen, mit einer datierten Genehmigung der Geschäftsleitung, aus der hervorgeht, welche Fassung sie genehmigt hat?",
+            "en": "If your management breaches its NIS2 duties, it is liable to the organisation for the damage – personally. Could you produce today the risk-management measures in force, with a dated management approval that shows which version it approved?"
           },
           "why": {
-            "de": "§ 38 BSIG verpflichtet die Geschäftsleitung, die Maßnahmen umzusetzen und zu überwachen. Bei schuldhafter Pflichtverletzung haftet sie nach Gesellschaftsrecht. Ohne Beschluss und Protokolle lässt sich die Überwachung nicht belegen.",
-            "en": "Section 38 BSIG obliges management to implement and oversee the measures. If it culpably breaches this duty, it is liable under company law. Without a resolution and minutes, oversight cannot be proven."
+            "de": "§ 38 BSIG verpflichtet die Geschäftsleitung, die Maßnahmen umzusetzen und ihre Umsetzung zu überwachen. Nur eine datierte Genehmigung zeigt, welche Maßnahmen gelten, und unterscheidet sie von einem Entwurf.",
+            "en": "Section 38 BSIG obliges management to implement the measures and oversee their implementation. Only a dated approval shows which measures are in force and distinguishes them from a draft."
           },
           "rec": {
-            "de": "Lassen Sie Maßnahmenplan und Leitlinie förmlich beschließen und setzen Sie Informationssicherheit als festen Tagesordnungspunkt mindestens quartalsweise an.",
-            "en": "Have the action plan and policy formally adopted, and make information security a standing agenda item at least once a quarter."
-          }
+            "de": "Lassen Sie die aktuelle Fassung förmlich genehmigen, etwa per Beschluss, und kennzeichnen Sie die genehmigte Version.",
+            "en": "Have the current version formally approved, for example by resolution, and mark the approved version."
+          },
+          "ctrl": "C22.1"
         },
         {
           "id": "nis2-02",
           "weight": 1,
           "ref": {
-            "de": "§§ 28, 33 BSIG",
-            "en": "Sections 28, 33 BSIG"
+            "de": "§ 33 BSIG",
+            "en": "Section 33 BSIG"
           },
           "q": {
-            "de": "Ist Ihre Einrichtung beim BSI registriert, und begründet eine datierte, schriftliche Prüfung, warum Sie als wichtige oder besonders wichtige Einrichtung gelten?",
-            "en": "Is your organisation registered with the BSI, and does a dated, written assessment explain why you count as an important or an essential entity?"
+            "de": "Können Sie heute den Nachweis vorlegen, wann Ihre Einrichtung ihre Registrierungsangaben – Name, Anschrift, Kontaktdaten, IP-Adressbereiche, Sektor – an das BSI übermittelt hat?",
+            "en": "Could you produce today the record of when your organisation sent its registration details – name, address, contact details, IP address ranges, sector – to the BSI?"
           },
           "why": {
-            "de": "Die Registrierungsfrist lief im März 2026 ab. Von der Einstufung hängen Aufsicht und Bußgeldrahmen ab.",
-            "en": "The registration deadline passed in March 2026. Supervision and the level of fines depend on the classification."
+            "de": "Die Registrierung ist eine fristgebundene Pflicht; die Frist lief im März 2026 ab. Belegt wird sie durch den Übermittlungsnachweis.",
+            "en": "Registration is a duty with a deadline, which passed in March 2026. It is proven by the submission record."
           },
           "rec": {
-            "de": "Dokumentieren Sie die Betroffenheitsprüfung mit Sektor, Größe und Begründung und holen Sie eine fehlende Registrierung unverzüglich nach.",
-            "en": "Document the applicability check with sector, size and reasons, and complete any missing registration without delay."
-          }
+            "de": "Gleichen Sie die Angaben mit Ihren Stammdaten ab, ergänzen Sie fehlende Felder und bewahren Sie Portalverlauf und Empfangsbestätigung auf.",
+            "en": "Check the details against your master data, complete missing fields and keep the portal history and acknowledgement."
+          },
+          "ctrl": "C14.2"
         },
         {
           "id": "nis2-03",
@@ -90,17 +92,18 @@
             "en": "Section 30(2) no. 1 BSIG"
           },
           "q": {
-            "de": "Hat in Ihrer Risikoanalyse jedes Risiko einen Verantwortlichen und eine beschlossene Behandlung, und hat die Geschäftsleitung die verbleibenden Risiken schriftlich akzeptiert?",
-            "en": "In your risk analysis, does every risk have an owner and an agreed treatment, and has management accepted the remaining risks in writing?"
+            "de": "Hat die Geschäftsleitung – oder ein von ihr befugter Risikoverantwortlicher, der ihr berichtet – die nach der Behandlung verbleibenden Restrisiken bewertet und nachweislich akzeptiert?",
+            "en": "Has management – or a risk owner it has authorised who reports back to it – evaluated and demonstrably accepted the residual risks remaining after treatment?"
           },
           "why": {
-            "de": "Eine Liste von Risiken ist noch keine Risikoanalyse. Erst Verantwortliche, Behandlung und Akzeptanz machen daraus eine Entscheidungsgrundlage.",
-            "en": "A list of risks is not yet a risk analysis. Owners, treatment and acceptance turn it into a basis for decisions."
+            "de": "Ohne ausdrückliche Akzeptanz bleibt offen, wer das verbleibende Risiko trägt.",
+            "en": "Without explicit acceptance, it is unclear who carries the remaining risk."
           },
           "rec": {
-            "de": "Ordnen Sie jedem Risiko einen Verantwortlichen und eine Maßnahme zu und legen Sie die Restrisiken der Geschäftsleitung zur Annahme vor.",
-            "en": "Give every risk an owner and a measure, and put the residual risks to management for acceptance."
-          }
+            "de": "Legen Sie die Restrisiken der Geschäftsleitung zur Annahme vor und dokumentieren Sie bei Delegation den Bericht an sie.",
+            "en": "Put residual risks to management for acceptance and, where delegated, record the report back to it."
+          },
+          "ctrl": "C30.3"
         },
         {
           "id": "nis2-04",
@@ -110,17 +113,18 @@
             "en": "Section 30(2) no. 3 BSIG"
           },
           "q": {
-            "de": "Haben Sie in den letzten zwölf Monaten ein geschäftskritisches System vollständig aus einem vom Netz getrennten Backup wiederhergestellt und die Dauer gemessen?",
-            "en": "In the last twelve months, have you fully restored a business-critical system from an offline backup and measured how long it took?"
+            "de": "Können Sie das datierte Protokoll Ihres letzten Wiederherstellungstests vorlegen – mit dem wiederhergestellten Datenstand im Vergleich zum Wiederherstellungspunktziel (RPO) und der gemessenen Dauer?",
+            "en": "Could you produce the dated record of your last restore test – showing the restored data state against the recovery point objective (RPO) and the time it took?"
           },
           "why": {
-            "de": "Angreifer verschlüsseln gezielt auch die Backups. Ob ein Wiederanlauf klappt und wie lange er dauert, zeigt nur der Test.",
-            "en": "Attackers deliberately encrypt the backups too. Only a test shows whether a restart works and how long it takes."
+            "de": "Ein erfolgreicher Sicherungsauftrag belegt noch keine erfolgreiche Wiederherstellung.",
+            "en": "A successful backup job does not prove a successful restore."
           },
           "rec": {
-            "de": "Halten Sie mindestens eine Backup-Kopie offline oder unveränderbar vor und testen Sie die Wiederherstellung kritischer Systeme jährlich mit Zeitmessung.",
-            "en": "Keep at least one backup copy offline or immutable, and test the restore of critical systems every year, timing how long it takes."
-          }
+            "de": "Stellen Sie in geplanten, risikogerechten Abständen Daten und Systeme wieder her, prüfen Sie sie gegen das RPO und dokumentieren Sie Dauer, Fehler und Korrekturen.",
+            "en": "Restore data and systems at planned, risk-based intervals, check them against the RPO, and record duration, errors and fixes."
+          },
+          "ctrl": "C33.1"
         },
         {
           "id": "nis2-05",
@@ -130,17 +134,18 @@
             "en": "Section 30(2) no. 4 BSIG"
           },
           "q": {
-            "de": "Ist in den Verträgen mit Ihren kritischen IT-Dienstleistern festgelegt, innerhalb welcher Frist sie Ihnen einen Sicherheitsvorfall melden müssen?",
-            "en": "Do the contracts with your critical IT service providers set a deadline within which they must report a security incident to you?"
+            "de": "Verpflichten die unterzeichneten Verträge Ihre kritischen IT-Dienstleister, Sie ohne unangemessene Verzögerung über Sicherheitsvorfälle zu benachrichtigen – und regeln sie Ansprechpersonen und die Zuständigkeit für Schwachstellen?",
+            "en": "Do the signed contracts oblige your critical IT providers to notify you of security incidents without undue delay – and do they set contacts and responsibility for vulnerabilities?"
           },
           "why": {
-            "de": "Beginnt der Vorfall beim Dienstleister, trifft er Sie, lange bevor Sie davon erfahren. Ohne vertragliche Meldefrist entscheidet der Dienstleister, wann Ihre 24 Stunden beginnen.",
-            "en": "If the incident starts at the provider, it hits you long before you hear about it. Without a contractual reporting deadline, the provider decides when your 24 hours start."
+            "de": "Beginnt der Vorfall beim Dienstleister, erfahren Sie davon nur, wenn der Vertrag ihn zur Meldung verpflichtet. Ohne diese Pflicht entscheidet er, wann Ihre 24 Stunden beginnen.",
+            "en": "If the incident starts at the provider, you only hear about it if the contract obliges them to tell you. Without that duty, the provider decides when your 24 hours start."
           },
           "rec": {
-            "de": "Ergänzen Sie die Verträge kritischer Dienstleister um Meldefristen, Ansprechpartner und Mitwirkungspflichten bei Vorfällen.",
-            "en": "Add reporting deadlines, contacts and duties to cooperate during incidents to the contracts of critical providers."
-          }
+            "de": "Ergänzen Sie Sicherheitsklauseln und SLAs um Benachrichtigungspflicht, Ansprechpersonen und Eskalation bei Schwachstellen.",
+            "en": "Add a notification duty, contacts and vulnerability escalation to security clauses and SLAs."
+          },
+          "ctrl": "C52.1"
         },
         {
           "id": "nis2-06",
@@ -150,17 +155,18 @@
             "en": "Section 30(2) no. 5 BSIG"
           },
           "q": {
-            "de": "Können Sie heute auf Knopfdruck sagen, wie viele kritische Schwachstellen in Ihren Systemen länger offen sind als Ihre festgelegte Patch-Frist?",
-            "en": "Could you say today, at the push of a button, how many critical vulnerabilities in your systems have been open longer than your defined patch deadline?"
+            "de": "Hat heute jede offene Schwachstelle, die behoben werden muss, eine verantwortliche Person und einen risikobasierten Zieltermin – und können Sie für die zuletzt behobenen zeigen, ob der Termin gehalten wurde?",
+            "en": "Does every open vulnerability that needs fixing have, as of today, an owner and a risk-based target date – and can you show for the most recently fixed ones whether the date was met?"
           },
           "why": {
-            "de": "Eine Patch-Frist auf dem Papier schützt nicht. Wirksam wird sie erst, wenn Überschreitungen sichtbar sind.",
-            "en": "A patch deadline on paper protects nothing. It only works once overruns are visible."
+            "de": "Ein Zieltermin wirkt nur, wenn die verstrichene Zeit dagegen gemessen wird.",
+            "en": "A target date only works when elapsed time is measured against it."
           },
           "rec": {
-            "de": "Führen Sie regelmäßige Schwachstellenscans ein und berichten Sie überfällige kritische Schwachstellen monatlich.",
-            "en": "Introduce regular vulnerability scans and report overdue critical vulnerabilities every month."
-          }
+            "de": "Weisen Sie jeder Behebung Verantwortliche und Zieltermin zu, setzen Sie sie über das Änderungsverfahren um und erfassen Sie Ergebnis und Verzögerungen.",
+            "en": "Give each fix an owner and a target date, implement it through change management, and record the outcome and any delays."
+          },
+          "ctrl": "D04-28"
         },
         {
           "id": "nis2-07",
@@ -170,17 +176,18 @@
             "en": "Section 30(2) no. 6 BSIG"
           },
           "q": {
-            "de": "Berichten Sie der Geschäftsleitung mindestens quartalsweise Kennzahlen zur Wirksamkeit Ihrer Sicherheitsmaßnahmen?",
-            "en": "Do you report metrics on the effectiveness of your security measures to management at least once a quarter?"
+            "de": "Können Sie Ihre zuletzt abgeschlossene Bewertung der Wirksamkeit Ihrer Sicherheitsmaßnahmen vorlegen – datiert, mit den Ergebnissen und einer dokumentierten Auswertung, ob die Maßnahmen tatsächlich wirken?",
+            "en": "Could you produce your most recently completed assessment of the effectiveness of your security measures – dated, with the results and a documented evaluation of whether they actually work?"
           },
           "why": {
-            "de": "Das Gesetz verlangt Verfahren, mit denen Sie die Wirksamkeit bewerten. Ohne Kennzahlen bleibt das eine Behauptung.",
-            "en": "The law requires procedures for assessing effectiveness. Without metrics, it remains a claim."
+            "de": "Das Gesetz verlangt Verfahren zur Bewertung der Wirksamkeit. Eine Testaufzeichnung ohne Auswertung belegt nicht, dass die Maßnahmen funktionieren.",
+            "en": "The law requires procedures for assessing effectiveness. A test record without evaluation does not show that the measures work."
           },
           "rec": {
-            "de": "Legen Sie fünf bis acht Kennzahlen fest, etwa Patch-Quote, MFA-Abdeckung und Wiederanlaufzeit, und berichten Sie sie regelmäßig.",
-            "en": "Define five to eight metrics, such as patch rate, MFA coverage and recovery time, and report them regularly."
-          }
+            "de": "Führen Sie die geplanten Wirksamkeitsbewertungen durch und prüfen Sie die Ergebnisse gegen die beabsichtigte Schutzwirkung.",
+            "en": "Carry out the planned assessments and check the results against the intended protective effect."
+          },
+          "ctrl": "C37.2"
         },
         {
           "id": "nis2-08",
@@ -190,17 +197,18 @@
             "en": "Section 38(3) BSIG"
           },
           "q": {
-            "de": "Hat jedes Mitglied der Geschäftsleitung in den letzten zwölf Monaten persönlich an einer Schulung zu Cyberrisiken teilgenommen, mit Teilnahmenachweis?",
-            "en": "In the last twelve months, has every member of management personally attended training on cyber risks, with a record of attendance?"
+            "de": "Können Sie für jedes Mitglied der Geschäftsleitung einen persönlichen Nachweis über die abgeschlossene Schulung zu Cyberrisiken vorlegen – ohne Lücke?",
+            "en": "For every member of management, could you produce a personal record of completed training on cyber risks – with no gaps?"
           },
           "why": {
-            "de": "Die Schulungspflicht trifft die Leitung selbst und lässt sich nicht delegieren.",
-            "en": "The training duty falls on management itself and cannot be delegated."
+            "de": "Die Schulungspflicht trifft jedes Mitglied der Leitung selbst. Die Schulung der Sicherheitsverantwortlichen ersetzt sie nicht.",
+            "en": "The training duty falls on every member of management personally. Training the security officer does not replace it."
           },
           "rec": {
-            "de": "Planen Sie eine jährliche Leitungsschulung und bewahren Sie die Nachweise je Person auf.",
-            "en": "Schedule annual management training and keep the records for each person."
-          }
+            "de": "Gleichen Sie die Leitungsmitglieder mit den individuellen Abschlussnachweisen ab und schließen Sie offene Fälle.",
+            "en": "Match the members of management against individual completion records and close any gaps."
+          },
+          "ctrl": "C25.1"
         },
         {
           "id": "nis2-09",
@@ -210,17 +218,18 @@
             "en": "Section 30(2) no. 9 BSIG"
           },
           "q": {
-            "de": "Wurden alle Administrator-, Dienst- und Dienstleisterkonten in den letzten sechs Monaten überprüft und nicht mehr benötigte Konten gelöscht?",
-            "en": "In the last six months, have all administrator, service and provider accounts been reviewed and accounts no longer needed been removed?"
+            "de": "Liegt eine datierte Überprüfung aller privilegierten Konten aus Ihrem letzten geplanten Prüfzyklus vor – mit Entscheidung je Konto und nachweislich entzogenen Rechten, die nicht mehr gebraucht werden?",
+            "en": "Is there a dated review of all privileged accounts from your last planned cycle – with a decision per account and evidence that rights no longer needed were removed?"
           },
           "why": {
-            "de": "Vergessene Konten mit weitreichenden Rechten fallen niemandem auf – bis ein Angreifer sie nutzt.",
-            "en": "Forgotten accounts with wide-ranging rights go unnoticed – until an attacker uses them."
+            "de": "Vergessene privilegierte Rechte fallen erst auf, wenn ein Angreifer sie nutzt.",
+            "en": "Forgotten privileged rights only stand out when an attacker uses them."
           },
           "rec": {
-            "de": "Erstellen Sie eine Liste aller privilegierten Konten mit Verantwortlichen und prüfen Sie sie halbjährlich.",
-            "en": "List all privileged accounts with their owners and review them every six months."
-          }
+            "de": "Prüfen Sie in geplanten Abständen und nach organisatorischen Änderungen, ob Administratoren ihre Rechte noch brauchen, und setzen Sie Entzüge um.",
+            "en": "At planned intervals and after organisational changes, check whether administrators still need their rights, and remove those they do not."
+          },
+          "ctrl": "C43.1"
         },
         {
           "id": "nis2-10",
@@ -230,17 +239,18 @@
             "en": "Section 30(2) no. 10 BSIG"
           },
           "q": {
-            "de": "Ist die Mehr-Faktor-Anmeldung lückenlos aktiv, auch für Fernwartungszugänge von Dienstleistern und für Notfall-Administratorkonten?",
-            "en": "Is multi-factor authentication active without gaps, including remote maintenance access for providers and emergency administrator accounts?"
+            "de": "Haben Sie an den tatsächlichen Anmeldewegen getestet, dass für privilegierte Zugänge und Fernzugriffe – etwa die Fernwartung – die Mehr-Faktor-Anmeldung erzwungen wird?",
+            "en": "Have you tested on the actual login paths that multi-factor authentication is enforced for privileged and remote access, such as remote maintenance?"
           },
           "why": {
-            "de": "Die Ausnahmen sind das Problem: Ein einziger Zugang ohne zweiten Faktor genügt.",
-            "en": "The exceptions are the problem: a single account without a second factor is enough."
+            "de": "Eine Richtlinie allein belegt nicht, dass die Anmeldewege sie durchsetzen. Ein einziger Zugang ohne zweiten Faktor genügt.",
+            "en": "A policy alone does not show that login paths enforce it. A single account without a second factor is enough."
           },
           "rec": {
-            "de": "Erfassen Sie alle Ausnahmen von der Mehr-Faktor-Anmeldung, begründen Sie verbleibende schriftlich und schließen Sie den Rest.",
-            "en": "Record every exception to multi-factor authentication, justify the remaining ones in writing and close the rest."
-          }
+            "de": "Richten Sie die Authentifizierung am Zugriffsrisiko aus, erzwingen Sie die Mehr-Faktor-Anmeldung, wo angemessen, und testen Sie sie mit Testzugängen.",
+            "en": "Align authentication with access risk, enforce multi-factor authentication where appropriate, and test it with test accounts."
+          },
+          "ctrl": "C41.1"
         },
         {
           "id": "nis2-11",
@@ -260,7 +270,8 @@
           "rec": {
             "de": "Legen Sie einen unabhängigen Notfallkanal mit Kontaktliste auf Papier fest und testen Sie ihn bei der nächsten Übung.",
             "en": "Set up an independent emergency channel with a paper contact list and test it in your next exercise."
-          }
+          },
+          "ctrl": "C41.3"
         },
         {
           "id": "nis2-12",
@@ -270,17 +281,18 @@
             "en": "Section 30(2) no. 2 BSIG"
           },
           "q": {
-            "de": "Haben Sie in den letzten zwölf Monaten einen Sicherheitsvorfall mit Geschäftsleitung und IT durchgespielt und die Erkenntnisse umgesetzt?",
-            "en": "In the last twelve months, have you rehearsed a security incident with management and IT, and acted on the lessons learned?"
+            "de": "Können Sie das Protokoll Ihrer letzten Übung zur Reaktion auf Sicherheitsvorfälle vorlegen – mit Datum, Szenario, Teilnehmenden, Übergaben und den festgestellten Fehlern?",
+            "en": "Could you produce the record of your last incident response exercise – with date, scenario, participants, hand-overs and the errors found?"
           },
           "why": {
-            "de": "Ein Ablauf, der nie geübt wurde, scheitert an Kleinigkeiten: fehlende Telefonnummern, unklare Entscheidungen, keine Vertretung.",
-            "en": "A process that has never been rehearsed fails on details: missing phone numbers, unclear decisions, no deputy."
+            "de": "Ein nie geübter Ablauf scheitert an Übergaben, die niemand kennt.",
+            "en": "An unrehearsed process fails on hand-overs nobody knows about."
           },
           "rec": {
-            "de": "Führen Sie jährlich eine Planspielübung durch und verfolgen Sie die Verbesserungen bis zum Abschluss.",
-            "en": "Run a tabletop exercise every year and track the improvements until they are done."
-          }
+            "de": "Testen Sie Verfahren und Rollen in geplanten Übungen mit plausiblen Szenarien und dokumentieren Sie Ergebnisse und Fehler.",
+            "en": "Test procedures and roles in planned exercises with plausible scenarios, and record results and errors."
+          },
+          "ctrl": "D02-18"
         },
         {
           "id": "nis2-13",
@@ -290,17 +302,18 @@
             "en": "Section 32(1) BSIG"
           },
           "q": {
-            "de": "Freitag, 23 Uhr: Ransomware verschlüsselt Ihre Server. Steht fest, wer bis Samstag 23 Uhr die frühe Erstmeldung an die Meldestelle von BSI und BBK abgibt, wer innerhalb von 72 Stunden die Meldung nachreicht – und liegen Zugang und Vorlage bereit?",
-            "en": "Friday, 11 pm: ransomware encrypts your servers. Is it settled who files the early warning with the BSI and BBK reporting office by 11 pm on Saturday, who files the notification within 72 hours – and are access and template ready?"
+            "de": "Freitag, 23 Uhr: Ransomware verschlüsselt Ihre Server. Bis Samstag 23 Uhr muss die frühe Erstmeldung beim BSI sein. Ist schriftlich festgelegt, wer entscheidet, ob gemeldet wird, wer meldet und wer vertritt – auch am Wochenende?",
+            "en": "Friday, 11 pm: ransomware encrypts your servers. The early warning must reach the BSI by 11 pm on Saturday. Is it set down in writing who decides whether to report, who submits the report and who deputises – weekends included?"
           },
           "why": {
-            "de": "Die Fristen laufen ab Kenntnis des Vorfalls, auch am Wochenende: 24 Stunden für die frühe Erstmeldung, 72 Stunden für die Meldung. Die Abschlussmeldung folgt spätestens einen Monat nach der Meldung.",
-            "en": "The deadlines run from the moment you become aware of the incident, weekends included: 24 hours for the early warning, 72 hours for the notification. The final report follows no later than one month after the notification."
+            "de": "Die Fristen laufen ab Kenntnis des Vorfalls: 24 Stunden für die frühe Erstmeldung, 72 Stunden für die Meldung. Wer erst im Ernstfall klärt, wer entscheidet, verliert diese Zeit.",
+            "en": "The deadlines run from awareness: 24 hours for the early warning, 72 hours for the notification. Settling who decides only when it happens wastes that time."
           },
           "rec": {
-            "de": "Benennen Sie Meldeverantwortliche mit Vertretung, richten Sie den Zugang zum Meldeportal ein und legen Sie eine Meldevorlage bereit.",
-            "en": "Name the people responsible for reporting, with deputies, set up access to the reporting portal and prepare a reporting template."
-          }
+            "de": "Legen Sie Entscheidungsbefugnis, Stellvertretung und Eskalation fest und messen Sie in Übungen die Zeit bis zur Entscheidung.",
+            "en": "Set decision authority, deputies and escalation, and time the decision in exercises."
+          },
+          "ctrl": "C54.2"
         }
       ]
     },
@@ -321,141 +334,148 @@
           "id": "iso27001-01",
           "weight": 1.5,
           "ref": {
-            "de": "ISO/IEC 27001 A.8.13, A.5.30",
-            "en": "ISO/IEC 27001 A.8.13, A.5.30"
+            "de": "ISO/IEC 27001 Kap. 9.1; A.5.30",
+            "en": "ISO/IEC 27001 clause 9.1; A.5.30"
           },
           "q": {
-            "de": "Heute Nacht verschlüsselt Ransomware Ihre Server. Haben Sie in den letzten zwölf Monaten ein geschäftskritisches System vollständig aus einem vom Netz getrennten Backup wiederhergestellt – und wissen Sie, wie viele Tage Sie ohne es arbeiten könnten?",
-            "en": "Tonight, ransomware encrypts your servers. In the last twelve months, have you fully restored a business-critical system from an offline backup – and do you know how many days you could operate without it?"
+            "de": "Heute Nacht verschlüsselt Ransomware Ihre Server. Können Sie für Ihre letzten Wiederherstellungen – echte Ausfälle und Tests getrennt – die gemessene Zeit bis zur geprüften Wiederherstellung vorlegen und mit dem Wiederherstellungszeitziel (RTO) vergleichen?",
+            "en": "Tonight, ransomware encrypts your servers. For your most recent recoveries – real outages and tests kept apart – could you produce the measured time to verified recovery and compare it with the recovery time objective (RTO)?"
           },
           "why": {
-            "de": "Ein Backup, dessen Wiederherstellung nie geprobt wurde, ist eine Hoffnung. Die Norm verlangt getestete Sicherungen und eine IKT-Bereitschaft, die zu Ihren Wiederanlaufzielen passt.",
-            "en": "A backup whose restore has never been rehearsed is a hope. The standard requires tested backups and ICT readiness that matches your recovery objectives."
+            "de": "Ob ein Dienst rechtzeitig zurückkommt, zeigt nur die gemessene Wiederherstellungszeit im Vergleich zum RTO.",
+            "en": "Only measured recovery time against the RTO shows whether a service comes back in time."
           },
           "rec": {
-            "de": "Legen Sie für kritische Systeme Wiederanlaufziele fest, halten Sie eine Kopie offline vor und testen Sie die Wiederherstellung jährlich mit Zeitmessung.",
-            "en": "Set recovery objectives for critical systems, keep one copy offline and test the restore every year, timing how long it takes."
-          }
+            "de": "Messen Sie nach einheitlichen Start- und Endregeln, untersuchen Sie jede Überschreitung des RTO und halten Sie Übungs- und Echtwerte getrennt.",
+            "en": "Measure with consistent start and end rules, investigate every RTO overrun and keep exercise and real figures apart."
+          },
+          "ctrl": "REC-METRIC"
         },
         {
           "id": "iso27001-02",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 Kap. 6.2, 9.1",
-            "en": "ISO/IEC 27001 clauses 6.2, 9.1"
+            "de": "ISO/IEC 27001 Kap. 6.2",
+            "en": "ISO/IEC 27001 clause 6.2"
           },
           "q": {
-            "de": "Hat jedes Informationssicherheitsziel einen Zielwert, einen Verantwortlichen und einen Termin, und wird der Zielerreichungsgrad gemessen?",
-            "en": "Does every information security objective have a target value, an owner and a deadline, and is progress measured?"
+            "de": "Gibt es für jedes Informationssicherheitsziel einen Umsetzungsplan mit Maßnahmen, Ressourcen, verantwortlicher Person, Fertigstellungstermin und festgelegter Bewertung der Ergebnisse?",
+            "en": "For every information security objective, is there a delivery plan with actions, resources, an owner, a completion date and a defined way of evaluating results?"
           },
           "why": {
-            "de": "Allgemeine Ziele wie „mehr Sicherheit“ fallen im Audit regelmäßig durch. Ziele müssen messbar sein.",
-            "en": "General objectives such as “more security” regularly fail the audit. Objectives must be measurable."
+            "de": "Ziele ohne Plan, Termin und Bewertung bleiben Absichtserklärungen.",
+            "en": "Objectives without a plan, date and evaluation remain intentions."
           },
           "rec": {
-            "de": "Formulieren Sie drei bis fünf messbare Ziele mit Kennzahl und berichten Sie den Stand in der Managementbewertung.",
-            "en": "Set three to five measurable objectives with a metric each, and report progress in the management review."
-          }
+            "de": "Verknüpfen Sie jedes Ziel mit Maßnahmen, Ressourcen, Verantwortlichen, Terminen und Ergebnisbewertung.",
+            "en": "Link each objective to actions, resources, owners, dates and evaluation."
+          },
+          "ctrl": "ISO-OBJECTIVE-PLANS"
         },
         {
           "id": "iso27001-03",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 Kap. 6.1.3 f), 8.3",
-            "en": "ISO/IEC 27001 clauses 6.1.3 f), 8.3"
+            "de": "ISO/IEC 27001 Kap. 6.1.3 f)",
+            "en": "ISO/IEC 27001 clause 6.1.3 f)"
           },
           "q": {
-            "de": "Haben die Risikoeigentümer den Behandlungsplan und die verbleibenden Risiken schriftlich akzeptiert?",
-            "en": "Have the risk owners accepted the treatment plan and the residual risks in writing?"
+            "de": "Gibt es für jedes Restrisiko eine dokumentierte Entscheidung, die das Risiko, die Annahmen der Behandlung und den Risikoeigentümer nennt, der es akzeptiert hat?",
+            "en": "For every residual risk, is there a documented decision naming the risk, the treatment assumptions and the risk owner who accepted it?"
           },
           "why": {
-            "de": "Ohne Freigabe durch die Risikoeigentümer ist die Risikobehandlung nach der Norm nicht abgeschlossen.",
-            "en": "Without approval by the risk owners, risk treatment under the standard is not complete."
+            "de": "Eine allgemeine Freigabe durch die Leitung ersetzt nicht die Akzeptanz durch den jeweiligen Risikoeigentümer.",
+            "en": "A general management approval does not replace acceptance by the individual risk owner."
           },
           "rec": {
-            "de": "Legen Sie den Risikoeigentümern Behandlungsplan und Restrisiken zur Freigabe vor und bewahren Sie die Freigabe auf.",
-            "en": "Put the treatment plan and residual risks to the risk owners for approval, and keep the approval on file."
-          }
+            "de": "Holen Sie die Akzeptanz je Restrisiko beim zuständigen Risikoeigentümer ein und bewahren Sie sie auf.",
+            "en": "Get acceptance for each residual risk from its owner and keep it on file."
+          },
+          "ctrl": "ISO-RESIDUAL-ACCEPTANCE"
         },
         {
           "id": "iso27001-04",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 A.5.9, A.5.23",
-            "en": "ISO/IEC 27001 A.5.9, A.5.23"
+            "de": "ISO/IEC 27001 A.5.9",
+            "en": "ISO/IEC 27001 A.5.9"
           },
           "q": {
-            "de": "Enthält Ihr Inventar auch alle Cloud- und SaaS-Dienste, die Fachabteilungen selbst gebucht haben, jeweils mit Verantwortlichem?",
-            "en": "Does your inventory also include every cloud and SaaS service that business units have signed up for themselves, each with an owner?"
+            "de": "Erfasst Ihr Inventar alle Dienste mit den Systemen, auf die sie sich stützen – einschließlich Cloud- und ausgelagerter Abhängigkeiten –, und haben Sie es zuletzt stichprobenartig mit dem tatsächlichen Betrieb abgeglichen?",
+            "en": "Does your inventory record every service with the systems it relies on – including cloud and outsourced dependencies – and have you recently sample-checked it against actual operations?"
           },
           "why": {
-            "de": "Was nicht im Inventar steht, wird weder bewertet noch geschützt. Selbst gebuchte Dienste tauchen in keiner IT-Liste auf.",
-            "en": "What is not in the inventory is neither assessed nor protected. Self-booked services appear on no IT list."
+            "de": "Was nicht im Inventar steht, wird weder bewertet noch geschützt. Ein Inventar, das nur eigene Hardware kennt, übersieht die Cloud.",
+            "en": "What is not in the inventory is neither assessed nor protected. An inventory that only knows your own hardware misses the cloud."
           },
           "rec": {
-            "de": "Gleichen Sie das Inventar mit Kreditkartenabrechnungen und Single-Sign-On-Protokollen ab und tragen Sie gefundene Dienste nach.",
-            "en": "Cross-check the inventory against card statements and single sign-on logs, and add the services you find."
-          }
+            "de": "Führen Sie Dienste und unterstützende Systeme samt Cloud- und ausgelagerter Abhängigkeiten und erfassen Sie Änderungen nachvollziehbar.",
+            "en": "Record services and supporting systems including cloud and outsourced dependencies, and log changes."
+          },
+          "ctrl": "C42.1"
         },
         {
           "id": "iso27001-05",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 A.5.18, A.8.2",
-            "en": "ISO/IEC 27001 A.5.18, A.8.2"
+            "de": "ISO/IEC 27001 A.8.2",
+            "en": "ISO/IEC 27001 A.8.2"
           },
           "q": {
-            "de": "Wurden alle privilegierten Konten – Administratoren, Dienstkonten, Zugänge von Dienstleistern – in den letzten sechs Monaten überprüft und ist das Ergebnis dokumentiert?",
-            "en": "In the last six months, have all privileged accounts – administrators, service accounts, provider access – been reviewed, with the outcome documented?"
+            "de": "Hat jeder ausnahmsweise vergebene Administratorzugang – etwa für Notfälle – einen genehmigten Umfang und ein Ablaufdatum, und ist die Genehmigung mit den Zugriffsaufzeichnungen verknüpft?",
+            "en": "Does every exceptional administrator access – for emergencies, say – have an authorised scope and an expiry date, and is the approval linked to the access records?"
           },
           "why": {
-            "de": "Wer privilegierte Rechte erbeutet, kontrolliert das Netz. Ohne dokumentierte Überprüfung fehlt im Audit der Nachweis.",
-            "en": "Whoever captures privileged rights controls the network. Without a documented review, the audit evidence is missing."
+            "de": "Ausnahmezugänge ohne Ablaufdatum werden zu Dauerzugängen, die niemand mehr prüft.",
+            "en": "Exceptional access without an expiry date turns into permanent access nobody reviews."
           },
           "rec": {
-            "de": "Führen Sie eine halbjährliche Rezertifizierung privilegierter Konten durch die Verantwortlichen ein.",
-            "en": "Introduce a six-monthly recertification of privileged accounts by their owners."
-          }
+            "de": "Legen Sie für Ausnahmezugänge Genehmigungsweg, Umfang und Ablauf fest und verknüpfen Sie jeden Fall mit den Zugriffsaufzeichnungen.",
+            "en": "Define the approval route, scope and expiry for exceptional access, and link each case to the access records."
+          },
+          "ctrl": "ISO-EMERGENCY-AUTHORISATION"
         },
         {
           "id": "iso27001-06",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 A.5.22",
-            "en": "ISO/IEC 27001 A.5.22"
+            "de": "ISO/IEC 27001 Kap. 8.1; A.5.22",
+            "en": "ISO/IEC 27001 clause 8.1; A.5.22"
           },
           "q": {
-            "de": "Liegt für jeden kritischen Dienstleister eine dokumentierte Überprüfung aus den letzten zwölf Monaten vor, mit Ergebnis und daraus abgeleiteten Maßnahmen?",
-            "en": "For every critical supplier, is there a documented review from the last twelve months, with its outcome and the actions that followed?"
+            "de": "Liegt für jeden kritischen Lieferanten eine datierte Überprüfung seiner Sicherheitsleistung aus Ihrem letzten geplanten Prüfzyklus vor – mit SLA- und Sicherheitsberichten, Vorfällen und nachverfolgten Korrekturmaßnahmen?",
+            "en": "For every critical supplier, is there a dated review of its security performance from your last planned cycle – with SLA and security reports, incidents and tracked corrective actions?"
           },
           "why": {
-            "de": "Ein Vertrag regelt Pflichten. Ob der Dienstleister sie einhält, zeigt erst die Überwachung.",
-            "en": "A contract sets out duties. Only monitoring shows whether the supplier meets them."
+            "de": "Ein aktuelles Zertifikat sagt nichts darüber, wie der Lieferant in Ihrem Vertrag tatsächlich leistet.",
+            "en": "A current certificate says nothing about how the supplier actually performs under your contract."
           },
           "rec": {
-            "de": "Legen Sie für kritische Dienstleister einen jährlichen Überprüfungstermin mit festen Nachweisen fest.",
-            "en": "Set an annual review date with fixed evidence for each critical supplier."
-          }
+            "de": "Überprüfen Sie Lieferanten in risikogerechten Abständen und nach Änderungen oder Vorfällen und verfolgen Sie Korrekturen nach.",
+            "en": "Review suppliers at risk-based intervals and after changes or incidents, and track the fixes."
+          },
+          "ctrl": "C53.2"
         },
         {
           "id": "iso27001-07",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 A.8.15, A.8.16",
-            "en": "ISO/IEC 27001 A.8.15, A.8.16"
+            "de": "ISO/IEC 27001 A.8.15",
+            "en": "ISO/IEC 27001 A.8.15"
           },
           "q": {
-            "de": "Meldet sich nachts jemand mit einem Administratorkonto an: Würde das bemerkt, und von wem?",
-            "en": "If someone logs in with an administrator account at night, would anyone notice – and who?"
+            "de": "Meldet sich nachts jemand mit einem Administratorkonto an: Wird das mit Konto, Zeit, System und Aktion protokolliert – und können Sie die datierte letzte Auswertung dieser Protokolle vorlegen?",
+            "en": "If someone logs in with an administrator account at night, is it logged with account, time, system and action – and could you produce the dated last review of these logs?"
           },
           "why": {
-            "de": "Protokolle, die niemand auswertet, erkennen keinen Angriff. Die Norm verlangt die Überwachung auf ungewöhnliches Verhalten.",
-            "en": "Logs that nobody reviews detect no attack. The standard requires monitoring for anomalous behaviour."
+            "de": "Protokolle, die niemand auswertet, erkennen keinen Missbrauch.",
+            "en": "Logs nobody reviews detect no misuse."
           },
           "rec": {
-            "de": "Richten Sie Alarme für kritische Ereignisse ein und legen Sie fest, wer sie wann bearbeitet.",
-            "en": "Set up alerts for critical events and decide who handles them, and when."
-          }
+            "de": "Erfassen Sie privilegierte Aktionen vollständig, werten Sie sie regelmäßig aus und dokumentieren Sie Untersuchung und Folgemaßnahmen.",
+            "en": "Log privileged actions fully, review them regularly, and record investigation and follow-up."
+          },
+          "ctrl": "LOG-PRIV"
         },
         {
           "id": "iso27001-08",
@@ -465,57 +485,60 @@
             "en": "ISO/IEC 27001 A.8.8"
           },
           "q": {
-            "de": "Wissen Sie, wie viele kritische Schwachstellen in Ihren Systemen gerade länger offen sind als Ihre festgelegte Frist?",
-            "en": "Do you know how many critical vulnerabilities in your systems have currently been open longer than your defined deadline?"
+            "de": "Ist jede Entscheidung, eine bekannte Schwachstelle nicht zu beheben, begründet, einer verantwortlichen Person zugeordnet und – wo nötig – als Restrisiko akzeptiert?",
+            "en": "Is every decision not to fix a known vulnerability justified, assigned to an accountable owner and – where required – accepted as a residual risk?"
           },
           "why": {
-            "de": "Schwachstellenmanagement wirkt nur, wenn Überschreitungen sichtbar sind und jemand reagiert.",
-            "en": "Vulnerability management only works when overruns are visible and someone acts on them."
+            "de": "Nicht behobene Schwachstellen ohne Begründung sind im Audit eine offene Flanke und im Ernstfall ein Einfallstor.",
+            "en": "Unfixed vulnerabilities without a justification are an open flank in the audit and a way in when it matters."
           },
           "rec": {
-            "de": "Scannen Sie regelmäßig, legen Sie Fristen nach Kritikalität fest und berichten Sie Überschreitungen monatlich.",
-            "en": "Scan regularly, set deadlines by criticality and report overruns every month."
-          }
+            "de": "Dokumentieren Sie jede Nicht-Behebung mit Begründung, Verantwortlichem und Risikoakzeptanz.",
+            "en": "Record every decision not to fix with its reasons, owner and risk acceptance."
+          },
+          "ctrl": "D04-30"
         },
         {
           "id": "iso27001-09",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 A.5.24–A.5.27",
-            "en": "ISO/IEC 27001 A.5.24–A.5.27"
+            "de": "ISO/IEC 27001 A.5.27",
+            "en": "ISO/IEC 27001 A.5.27"
           },
           "q": {
-            "de": "Haben Sie Ihren Ablauf für Sicherheitsvorfälle in den letzten zwölf Monaten geübt und die Erkenntnisse dokumentiert und umgesetzt?",
-            "en": "In the last twelve months, have you rehearsed your security incident process, and documented and acted on the lessons learned?"
+            "de": "Hat jede vereinbarte Verbesserung aus Ihren letzten Vorfallsnachbereitungen und Übungen eine verantwortliche Person und einen Zieltermin – und belegt ein Nachweis, dass die Änderung wirkt?",
+            "en": "Does every improvement agreed in your recent incident reviews and exercises have an owner and a target date – and does evidence show the change works?"
           },
           "why": {
-            "de": "Die Norm verlangt, aus Vorfällen zu lernen. Ohne Übung oder echten Vorfall gibt es nichts, woraus man lernen könnte.",
-            "en": "The standard requires learning from incidents. Without an exercise or a real incident, there is nothing to learn from."
+            "de": "Nicht umgesetzte Erkenntnisse führen beim nächsten Vorfall zum selben Fehler.",
+            "en": "Lessons not acted on cause the same failure next time."
           },
           "rec": {
-            "de": "Führen Sie jährlich eine Planspielübung durch und verfolgen Sie die Verbesserungen als Maßnahmen.",
-            "en": "Run a tabletop exercise every year and track the improvements as actions."
-          }
+            "de": "Führen Sie ein Maßnahmenregister mit Verknüpfung zu Nachbereitungen und Übungen und schließen Sie Einträge erst nach Wirksamkeitsnachweis.",
+            "en": "Keep an action register linked to reviews and exercises, and close items only on evidence of effectiveness."
+          },
+          "ctrl": "D02-11"
         },
         {
           "id": "iso27001-10",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 27001 Kap. 9.2, 9.3",
-            "en": "ISO/IEC 27001 clauses 9.2, 9.3"
+            "de": "ISO/IEC 27001 Kap. 9.2",
+            "en": "ISO/IEC 27001 clause 9.2"
           },
           "q": {
-            "de": "Hat in den letzten zwölf Monaten ein unabhängiger Auditor den gesamten Geltungsbereich intern geprüft, und liegt ein Protokoll der Managementbewertung vor?",
-            "en": "In the last twelve months, has an independent internal auditor covered the whole scope, and are there minutes of the management review?"
+            "de": "Können Sie für jedes im Auditprogramm geplante interne Audit den datierten Bericht mit den geprüften Nachweisen und Schlussfolgerungen vorlegen?",
+            "en": "For every internal audit planned in your audit programme, could you produce the dated report with the evidence examined and the conclusions?"
           },
           "why": {
-            "de": "Ohne unabhängiges internes Audit und Managementbewertung wird kein Zertifizierungsaudit bestanden.",
-            "en": "Without an independent internal audit and a management review, no certification audit is passed."
+            "de": "Erst durchgeführte Audits zeigen, ob das Managementsystem konform ist und wirkt. Ohne internes Audit wird kein Zertifizierungsaudit bestanden.",
+            "en": "Only audits actually carried out show whether the management system conforms and works. Without an internal audit, no certification audit is passed."
           },
           "rec": {
-            "de": "Planen Sie das Auditprogramm für zwölf Monate, sichern Sie die Unabhängigkeit der Auditoren und protokollieren Sie die Managementbewertung.",
-            "en": "Plan the audit programme for twelve months, make sure auditors are independent and minute the management review."
-          }
+            "de": "Führen Sie die geplanten Audits durch und verknüpfen Sie Berichte, Nachweise und Schlussfolgerungen mit dem Programm.",
+            "en": "Carry out the planned audits and link reports, evidence and conclusions to the programme."
+          },
+          "ctrl": "ISO-AUDIT-EXECUTION"
         },
         {
           "id": "iso27001-11",
@@ -525,37 +548,39 @@
             "en": "ISO/IEC 27001 clause 10.2"
           },
           "q": {
-            "de": "Wird jede Abweichung aus Audits mit Ursache, Korrekturmaßnahme und Wirksamkeitsprüfung bis zum Abschluss verfolgt?",
-            "en": "Is every nonconformity from audits tracked to closure with its root cause, corrective action and effectiveness check?"
+            "de": "Ist für jede abgeschlossene Korrekturmaßnahme dokumentiert, nach welchem Kriterium ihre Wirksamkeit geprüft wurde und mit welchem Ergebnis – nicht nur ein geschlossenes Ticket?",
+            "en": "For every closed corrective action, is it recorded against which criterion its effectiveness was checked and with what result – not just a closed ticket?"
           },
           "why": {
-            "de": "Auditoren prüfen, ob Abweichungen an der Ursache behoben wurden. Offene Altlasten fallen sofort auf.",
-            "en": "Auditors check whether nonconformities were fixed at the root cause. Old open items stand out at once."
+            "de": "Ein erledigtes Ticket zeigt nicht, dass die Ursache beseitigt ist.",
+            "en": "A closed ticket does not show that the cause is gone."
           },
           "rec": {
-            "de": "Führen Sie ein Maßnahmenregister mit Ursache, Termin, Verantwortlichem und Wirksamkeitsprüfung.",
-            "en": "Keep an action register with root cause, deadline, owner and effectiveness check."
-          }
+            "de": "Legen Sie an der Ursache ausgerichtete Wirksamkeitskriterien fest und nehmen Sie unwirksame Maßnahmen wieder auf.",
+            "en": "Set cause-based effectiveness criteria and reopen actions that did not work."
+          },
+          "ctrl": "ISO-NC-EFFECTIVENESS"
         },
         {
           "id": "iso27001-12",
           "weight": 1.5,
           "ref": {
-            "de": "ISO/IEC 27001 Kap. 6.1.3 d); Anhang A",
-            "en": "ISO/IEC 27001 clause 6.1.3 d); Annex A"
+            "de": "ISO/IEC 27001 Kap. 6.1.3 d)",
+            "en": "ISO/IEC 27001 clause 6.1.3 d)"
           },
           "q": {
-            "de": "Morgen früh steht ein Auditor in der Tür. Können Sie für jede der 93 Maßnahmen aus Anhang A zeigen, ob sie gilt, warum – und wo der Nachweis liegt?",
-            "en": "Tomorrow morning an auditor is at the door. Could you show for each of the 93 Annex A controls whether it applies, why – and where the evidence is?"
+            "de": "Morgen früh steht ein Auditor in der Tür. Fände er in Ihrer Erklärung zur Anwendbarkeit für jede ausgeschlossene Maßnahme aus Anhang A eine Begründung, die sich auf Geltungsbereich, Risiken und Pflichten stützt?",
+            "en": "Tomorrow morning an auditor is at the door. Would they find in your Statement of Applicability, for every excluded Annex A control, a justification based on scope, risks and obligations?"
           },
           "why": {
-            "de": "Die Erklärung zur Anwendbarkeit ist das Herzstück jedes Audits. Fehlt für eine Maßnahme die Begründung oder der Nachweis, ist das eine Abweichung.",
-            "en": "The Statement of Applicability is the core of every audit. A control without a justification or evidence is a nonconformity."
+            "de": "Ein Ausschluss ohne tragfähige Begründung ist eine Abweichung. „Noch nicht umgesetzt“ ist kein Grund für „nicht anwendbar“.",
+            "en": "An exclusion without a sound justification is a nonconformity. “Not yet implemented” is no reason for “not applicable”."
           },
           "rec": {
-            "de": "Begründen Sie jede Aufnahme und jeden Ausschluss und verknüpfen Sie jede Maßnahme mit ihrem Nachweis.",
-            "en": "Justify every inclusion and exclusion, and link every control to its evidence."
-          }
+            "de": "Begründen Sie jeden Ausschluss mit Geltungsbereich, Risikoanalyse und geltenden Pflichten.",
+            "en": "Justify every exclusion with reference to scope, risk assessment and applicable obligations."
+          },
+          "ctrl": "ISO-SOA-EXCLUSIONS"
         }
       ]
     },
@@ -576,21 +601,22 @@
           "id": "aiact-01",
           "weight": 1.5,
           "ref": {
-            "de": "Art. 4, Art. 26 KI-VO",
-            "en": "Art. 4, Art. 26 AI Act"
+            "de": "Art. 3 Nr. 3, 4, Art. 25 KI-VO",
+            "en": "Art. 3(3), (4), Art. 25 AI Act"
           },
           "q": {
-            "de": "Könnten Sie heute eine vollständige Liste aller KI-Werkzeuge vorlegen, die Ihre Beschäftigten nutzen – auch private Chatbot-Konten und die KI-Funktionen in Office-, CRM- oder Personalsoftware?",
-            "en": "Could you produce today a complete list of every AI tool your staff use – including private chatbot accounts and the AI features built into office, CRM or HR software?"
+            "de": "Von Ihrer Rolle hängt ab, welche Pflichten des AI Act Sie treffen. Könnten Sie heute für jedes KI-System, das Sie anbieten oder nutzen, schriftlich zeigen, ob Sie Anbieter, Betreiber oder beides sind – auch, ob es unter Ihrem Namen oder Ihrer Marke läuft?",
+            "en": "Your role decides which AI Act obligations apply to you. Could you show in writing today, for every AI system you supply or use, whether you are its provider, deployer or both – including whether it runs under your name or trademark?"
           },
           "why": {
-            "de": "Pflichten aus der KI-Verordnung knüpfen an jedes eingesetzte System an. Was Sie nicht kennen, können Sie weder einstufen noch absichern – und viele KI-Funktionen kommen heute mit Software-Updates ins Haus.",
-            "en": "AI Act obligations attach to every system in use. What you do not know about, you can neither classify nor secure – and many AI features now arrive with software updates."
+            "de": "Ohne Rollenzuordnung je System lässt sich keine Pflicht sicher erfüllen. Wer ein System unter eigenem Namen anbietet, kann zum Anbieter werden.",
+            "en": "Without a role per system, no obligation can be met reliably. Offering a system under your own name can make you its provider."
           },
           "rec": {
-            "de": "Erheben Sie den KI-Einsatz per Umfrage und Netzwerkauswertung, führen Sie ein KI-Register und prüfen Sie es bei jedem Software-Update.",
-            "en": "Survey AI use and analyse network traffic, keep an AI register and review it with every software update."
-          }
+            "de": "Erfassen Sie jedes KI-System mit Rolle und Begründung und prüfen Sie dabei die Verwendung von Name oder Marke.",
+            "en": "Record every AI system with its role and reasons, checking any use of your name or trademark."
+          },
+          "ctrl": "AIACT-T-01"
         },
         {
           "id": "aiact-02",
@@ -600,17 +626,18 @@
             "en": "Art. 4 AI Act"
           },
           "q": {
-            "de": "Können Sie für jede Person, die beruflich KI nutzt, belegen, welche Schulung oder Unterweisung zur KI-Kompetenz sie erhalten hat?",
-            "en": "For every person who uses AI at work, could you show what AI literacy training or instruction they received?"
+            "de": "Können Sie heute die Maßnahmen vorlegen, mit denen Sie die KI-Kompetenz Ihrer Beschäftigten fördern – datiert und abgestimmt auf Vorkenntnisse, Einsatzkontext und betroffene Personen?",
+            "en": "Could you produce today the measures through which you support your staff’s AI literacy – dated and tailored to prior knowledge, context of use and the persons affected?"
           },
           "why": {
-            "de": "Art. 4 verpflichtet Anbieter und Betreiber, Maßnahmen zu ergreifen, die die KI-Kompetenz ihres Personals fördern. Im Streitfall zählt, was belegt ist.",
-            "en": "Art. 4 obliges providers and deployers to take measures that support their staff’s AI literacy. In a dispute, what counts is what you can prove."
+            "de": "Art. 4 verlangt Maßnahmen zur Förderung der KI-Kompetenz; ein bestimmtes Niveau muss nicht garantiert werden. Im Streitfall zählt, was belegt ist.",
+            "en": "Art. 4 requires measures to support AI literacy; no particular level has to be guaranteed. In a dispute, what counts is what you can prove."
           },
           "rec": {
-            "de": "Legen Sie Schulungsinhalte je Rolle fest und dokumentieren Sie Teilnahme und Datum je Person.",
-            "en": "Define training content per role and record attendance and date for each person."
-          }
+            "de": "Legen Sie Maßnahmen je Rolle und Einsatzkontext fest und dokumentieren Sie, wann sie umgesetzt wurden.",
+            "en": "Define measures per role and context of use, and record when they were carried out."
+          },
+          "ctrl": "AIACT-E-01"
         },
         {
           "id": "aiact-03",
@@ -620,157 +647,165 @@
             "en": "Art. 25(1) AI Act"
           },
           "q": {
-            "de": "Haben Sie geprüft, ob Sie selbst zum Anbieter werden, weil Sie ein Hochrisiko-KI-System unter eigenem Namen anbieten, wesentlich verändern oder für einen Hochrisiko-Zweck umwidmen?",
-            "en": "Have you checked whether you become a provider yourself because you offer a high-risk AI system under your own name, substantially modify it or repurpose it for a high-risk use?"
+            "de": "Wird bei jeder wesentlichen Änderung eines KI-Systems oder seines Zwecks die Einstufung neu vorgenommen und geprüft, ob Sie dadurch selbst zum Anbieter werden – mit datiertem Ergebnis?",
+            "en": "When an AI system or its purpose is substantially changed, is it re-classified and checked whether you thereby become its provider – with a dated result?"
           },
           "why": {
-            "de": "Wer zum Anbieter wird, übernimmt dessen Pflichten – von der Konformitätsbewertung bis zur technischen Dokumentation.",
-            "en": "Whoever becomes a provider takes on the provider’s obligations – from conformity assessment to technical documentation."
+            "de": "Wer durch eine Änderung zum Anbieter wird, übernimmt dessen Pflichten – bis zur Konformitätsbewertung.",
+            "en": "Whoever becomes the provider through a change takes on the provider’s obligations – up to conformity assessment."
           },
           "rec": {
-            "de": "Prüfen Sie jede Anpassung, Umbenennung oder Zweckänderung von KI-Systemen vor der Einführung auf einen Rollenwechsel.",
-            "en": "Check every adaptation, rebranding or change of purpose of an AI system for a change of role before it goes live."
-          }
+            "de": "Verknüpfen Sie Ihr Änderungsverfahren mit Neueinstufung und Rollenprüfung.",
+            "en": "Tie your change management to re-classification and a role check."
+          },
+          "ctrl": "AIACT-A-02.5"
         },
         {
           "id": "aiact-04",
           "weight": 1,
           "ref": {
-            "de": "Art. 6, Anhang III Nr. 4 KI-VO",
-            "en": "Art. 6, Annex III point 4 AI Act"
+            "de": "Art. 6, Anhang III KI-VO",
+            "en": "Art. 6, Annex III AI Act"
           },
           "q": {
-            "de": "Haben Sie schriftlich begründet, ob Ihre KI-Werkzeuge in Bewerberauswahl, Leistungsbewertung oder Aufgabenzuteilung Hochrisiko-Systeme sind?",
-            "en": "Have you documented in writing whether your AI tools for recruitment, performance evaluation or task allocation are high-risk systems?"
+            "de": "Liegt für jedes eingesetzte KI-System eine schriftliche, datierte Entscheidung über seine Risikoklasse vor – auch für Werkzeuge in Bewerberauswahl und Leistungsbewertung?",
+            "en": "For every AI system in use, is there a written, dated decision on its risk class – including tools for recruitment and performance evaluation?"
           },
           "why": {
-            "de": "KI im Personalbereich ist ausdrücklich in Anhang III genannt. Für Hochrisiko-Systeme nach Anhang III gelten die Pflichten ab dem 2. Dezember 2027.",
-            "en": "AI in HR is listed explicitly in Annex III. For Annex III high-risk systems, the obligations apply from 2 December 2027."
+            "de": "Von der Einstufung hängen alle weiteren Pflichten ab. Für Hochrisiko-Systeme nach Anhang III gelten sie ab dem 2. Dezember 2027.",
+            "en": "All further obligations depend on the classification. For Annex III high-risk systems they apply from 2 December 2027."
           },
           "rec": {
-            "de": "Prüfen Sie jedes KI-Werkzeug im Personalbereich gegen Anhang III und dokumentieren Sie Ergebnis und Begründung.",
-            "en": "Check every AI tool used in HR against Annex III and document the outcome and reasons."
-          }
+            "de": "Dokumentieren Sie je System Risikoklasse, Begründung und Entscheidungsdatum.",
+            "en": "Record each system’s risk class, reasons and decision date."
+          },
+          "ctrl": "AIACT-A-02.1"
         },
         {
           "id": "aiact-05",
           "weight": 1,
           "ref": {
-            "de": "Art. 50 KI-VO",
-            "en": "Art. 50 AI Act"
+            "de": "Art. 50 Abs. 4 KI-VO",
+            "en": "Art. 50(4) AI Act"
           },
           "q": {
-            "de": "Kennzeichnen Sie Deepfakes und KI-Texte, die Sie zu Themen von öffentlichem Interesse veröffentlichen – und weist Ihr Chatbot Nutzer darauf hin, dass sie mit KI sprechen?",
-            "en": "Do you label deepfakes and AI-generated text you publish on matters of public interest, and does your chatbot tell users they are talking to an AI?"
+            "de": "Legen Sie bei Deepfakes und bei KI-Texten, die Sie zu Themen von öffentlichem Interesse veröffentlichen, offen, dass sie künstlich erzeugt sind – und können Sie das für Ihre letzten Veröffentlichungen zeigen?",
+            "en": "Do you disclose that deepfakes and AI-generated text you publish on matters of public interest are artificially generated – and can you show this for your latest publications?"
           },
           "why": {
-            "de": "Die Transparenzpflichten gelten für Anbieter und Betreiber und treffen damit auch Marketing, Presse und Kundenservice.",
-            "en": "The transparency obligations apply to providers and deployers, and so also reach marketing, press and customer service."
+            "de": "Die Pflicht gilt seit dem 2. August 2026 für Betreiber und trifft Marketing, Presse und Kommunikation.",
+            "en": "The duty has applied to deployers since 2 August 2026 and reaches marketing, press and communications."
           },
           "rec": {
-            "de": "Legen Sie Kennzeichnungsregeln für Veröffentlichungen fest und ergänzen Sie Chatbots um einen klaren Hinweis.",
-            "en": "Set labelling rules for publications and add a clear notice to chatbots."
-          }
+            "de": "Prüfen Sie jede Veröffentlichung mit KI-Anteil vor der Freigabe auf Kennzeichnung und dokumentieren Sie, wann die redaktionelle Ausnahme greift.",
+            "en": "Check every AI-assisted publication for disclosure before release, and record when the editorial exception applies."
+          },
+          "ctrl": "AIACT-T-26"
         },
         {
           "id": "aiact-06",
           "weight": 1,
           "ref": {
-            "de": "Art. 5 Abs. 1 Buchst. f, Art. 32 DSGVO",
-            "en": "Art. 5(1)(f), Art. 32 GDPR"
+            "de": "Art. 19 Abs. 1, Art. 26 Abs. 6 KI-VO",
+            "en": "Art. 19(1), Art. 26(6) AI Act"
           },
           "q": {
-            "de": "Ist technisch verhindert – nicht nur verboten –, dass Kundendaten oder Geschäftsgeheimnisse in öffentliche KI-Dienste gelangen?",
-            "en": "Is it technically prevented – not just prohibited – that customer data or trade secrets end up in public AI services?"
+            "de": "Ist für die automatisch erzeugten Protokolle Ihrer Hochrisiko-KI-Systeme eine Aufbewahrung von mindestens sechs Monaten schriftlich festgelegt – und reichen die vorhandenen Protokolle heute so weit zurück?",
+            "en": "Is a retention period of at least six months set in writing for the logs your high-risk AI systems generate automatically – and do the logs you hold today go back that far?"
           },
           "why": {
-            "de": "Ein Verbot allein hält niemanden ab, der unter Zeitdruck eine Zusammenfassung braucht.",
-            "en": "A ban alone does not stop someone under time pressure who needs a summary."
+            "de": "Ohne Protokolle lässt sich ein Fehlverhalten des Systems nachträglich weder aufklären noch belegen.",
+            "en": "Without logs, misbehaviour can neither be investigated nor proven afterwards."
           },
           "rec": {
-            "de": "Stellen Sie einen freigegebenen KI-Dienst bereit und sperren oder überwachen Sie den Zugang zu öffentlichen Diensten.",
-            "en": "Provide an approved AI service and block or monitor access to public services."
-          }
+            "de": "Legen Sie die Frist zweckangemessen fest – mindestens sechs Monate, soweit Datenschutzrecht nichts anderes vorsieht.",
+            "en": "Set the period to suit the purpose – at least six months, unless data protection law says otherwise."
+          },
+          "ctrl": "AIACT-A-06.3"
         },
         {
           "id": "aiact-07",
           "weight": 1,
           "ref": {
-            "de": "Art. 14, Art. 26 Abs. 2 KI-VO",
-            "en": "Art. 14, Art. 26(2) AI Act"
+            "de": "Art. 26 Abs. 2 KI-VO",
+            "en": "Art. 26(2) AI Act"
           },
           "q": {
-            "de": "Ist für jede KI-gestützte Entscheidung über Menschen eine Person benannt, die das Ergebnis prüft und es tatsächlich überstimmen darf?",
-            "en": "For every AI-supported decision about people, is someone named who reviews the outcome and is actually allowed to overrule it?"
+            "de": "Ist für jedes Hochrisiko-KI-System, das Sie einsetzen, die menschliche Aufsicht namentlich benannten Personen zugewiesen und diese Aufgabe in ihrer Stellenbeschreibung festgehalten?",
+            "en": "For every high-risk AI system you use, is human oversight assigned to named persons and the task set down in their job descriptions?"
           },
           "why": {
-            "de": "Menschliche Aufsicht verlangt Kompetenz, Befugnis und Zeit. Ein bloßes Abnicken genügt nicht.",
-            "en": "Human oversight requires competence, authority and time. Merely nodding the result through is not enough."
+            "de": "Art. 26 Abs. 2 verlangt, die Aufsicht kompetenten und befugten Personen zu übertragen. Die Stellenbeschreibung macht das prüfbar.",
+            "en": "Art. 26(2) requires oversight by competent, empowered persons. The job description makes this verifiable."
           },
           "rec": {
-            "de": "Benennen Sie je System eine prüfende Person mit Befugnis und dokumentieren Sie Überstimmungen.",
-            "en": "Name a reviewer with authority for each system and record overrides."
-          }
+            "de": "Benennen Sie je System die Aufsichtspersonen und verankern Sie Aufgabe und Befugnis in der Stellenbeschreibung.",
+            "en": "Name the oversight persons for each system and anchor their task and authority in the job description."
+          },
+          "ctrl": "AIACT-A-08.6"
         },
         {
           "id": "aiact-08",
           "weight": 1,
           "ref": {
-            "de": "Art. 28 DSGVO; ISO/IEC 42001 A.10.3",
-            "en": "Art. 28 GDPR; ISO/IEC 42001 A.10.3"
+            "de": "Art. 50 Abs. 5 KI-VO",
+            "en": "Art. 50(5) AI Act"
           },
           "q": {
-            "de": "Ist mit jedem KI-Anbieter vertraglich geregelt, ob er Ihre Eingaben für das Training seiner Modelle verwenden darf?",
-            "en": "Is it set out in a contract with each AI provider whether they may use your inputs to train their models?"
+            "de": "Erscheint der KI-Hinweis – etwa im Chatbot oder bei KI-erzeugten Inhalten – klar erkennbar spätestens bei der ersten Interaktion, und können Sie zeigen, wo er heute erscheint?",
+            "en": "Does the AI notice – in a chatbot or with AI-generated content, say – appear clearly at the first interaction at the latest, and can you show where it appears today?"
           },
           "why": {
-            "de": "Manche Standardbedingungen erlauben die Nutzung von Eingaben. Dann verlassen Ihre Daten die Kontrolle.",
-            "en": "Some standard terms allow inputs to be used. Then your data leaves your control."
+            "de": "Ein Hinweis, der erst danach oder versteckt erscheint, erfüllt die Transparenzpflicht nicht.",
+            "en": "A notice shown only afterwards, or hidden, does not meet the transparency obligation."
           },
           "rec": {
-            "de": "Prüfen Sie die Bedingungen jedes KI-Dienstes und schließen Sie die Trainingsnutzung vertraglich aus, wo nötig.",
-            "en": "Review the terms of every AI service and exclude training use by contract where needed."
-          }
+            "de": "Prüfen Sie jeden KI-Kontaktpunkt darauf, dass der Hinweis spätestens bei der ersten Interaktion klar erkennbar ist.",
+            "en": "Check every AI touchpoint so the notice is clearly visible at the first interaction."
+          },
+          "ctrl": "AIACT-T-35"
         },
         {
           "id": "aiact-09",
           "weight": 1,
           "ref": {
-            "de": "§ 87 Abs. 1 Nr. 6, § 90 BetrVG; Art. 26 Abs. 7 KI-VO",
-            "en": "Sections 87(1) no. 6, 90 BetrVG; Art. 26(7) AI Act"
+            "de": "Art. 26 Abs. 7 KI-VO; § 87 Abs. 1 Nr. 6 BetrVG",
+            "en": "Art. 26(7) AI Act; Section 87(1) no. 6 BetrVG"
           },
           "q": {
-            "de": "Haben Sie den Betriebsrat – oder, falls keiner besteht, die Beschäftigten – schriftlich informiert, bevor Sie KI-Werkzeuge eingeführt haben, die ihre Arbeit betreffen?",
-            "en": "Did you inform the works council – or, where there is none, the staff – in writing before introducing AI tools that affect their work?"
+            "de": "Bevor Sie ein Hochrisiko-KI-System am Arbeitsplatz einsetzen: Haben Sie Arbeitnehmervertretung und betroffene Beschäftigte nachweislich und mit Datum informiert?",
+            "en": "Before using a high-risk AI system at the workplace, have you informed workers’ representatives and affected staff, demonstrably and with a date?"
           },
           "why": {
-            "de": "KI, die Verhalten oder Leistung erfassen kann, ist mitbestimmungspflichtig. Ohne Einigung droht der Stopp des Werkzeugs.",
-            "en": "AI that can capture behaviour or performance is subject to co-determination. Without agreement, the tool may have to be stopped."
+            "de": "Die Information ist vor dem Einsatz Pflicht. In Deutschland kommt die Mitbestimmung des Betriebsrats hinzu.",
+            "en": "Informing them is required before use. In Germany, the works council’s co-determination applies as well."
           },
           "rec": {
-            "de": "Beziehen Sie den Betriebsrat vor der Einführung ein und schließen Sie eine Rahmenvereinbarung für KI-Werkzeuge.",
-            "en": "Involve the works council before introduction and agree a framework for AI tools."
-          }
+            "de": "Informieren Sie Betriebsrat und Beschäftigte vor dem Einsatz schriftlich und schließen Sie, wo nötig, eine Betriebsvereinbarung.",
+            "en": "Inform the works council and staff in writing before use and, where needed, conclude a works agreement."
+          },
+          "ctrl": "AIACT-E-08"
         },
         {
           "id": "aiact-10",
           "weight": 1,
           "ref": {
-            "de": "Art. 26 Abs. 5, Art. 73 KI-VO",
-            "en": "Art. 26(5), Art. 73 AI Act"
+            "de": "Art. 14 Abs. 4 Buchst. e KI-VO",
+            "en": "Art. 14(4)(e) AI Act"
           },
           "q": {
-            "de": "Gibt eine KI Kunden falsche Auskünfte: Ist festgelegt, wer das meldet, wer das System sofort abschalten darf und wie der Vorfall aufgearbeitet wird?",
-            "en": "If an AI gives customers wrong information, is it settled who reports it, who may switch the system off at once and how the incident is followed up?"
+            "de": "Können die Personen, die ein KI-System beaufsichtigen, es jederzeit unterbrechen oder anhalten – etwa über eine Stopptaste –, und können Sie zeigen, wie das umgesetzt ist?",
+            "en": "Can the persons overseeing an AI system interrupt or stop it at any time – with a stop button, for example – and can you show how this is built in?"
           },
           "why": {
-            "de": "Betreiber müssen den Betrieb überwachen und bei Risiken reagieren. Im Ernstfall zählt, dass jemand entscheiden darf.",
-            "en": "Deployers must monitor operation and act on risks. When it matters, someone must be allowed to decide."
+            "de": "Im Ernstfall zählt, dass jemand das System sofort anhalten kann.",
+            "en": "When it matters, someone must be able to stop the system at once."
           },
           "rec": {
-            "de": "Legen Sie Meldeweg, Abschaltbefugnis und Nachbereitung für jedes KI-System fest.",
-            "en": "Set the reporting path, shutdown authority and follow-up for each AI system."
-          }
+            "de": "Sehen Sie eine Unterbrechungs- oder Stoppfunktion vor und machen Sie sie den Aufsichtspersonen bekannt.",
+            "en": "Provide an interrupt or stop function and make it known to the oversight persons."
+          },
+          "ctrl": "AIACT-A-08.5"
         },
         {
           "id": "aiact-11",
@@ -790,7 +825,8 @@
           "rec": {
             "de": "Prüfen Sie jedes KI-System gegen Art. 5 und dokumentieren Sie Ergebnis, Datum und prüfende Person.",
             "en": "Check every AI system against Art. 5 and record the outcome, date and reviewer."
-          }
+          },
+          "ctrl": "AIACT-A-01.5"
         }
       ]
     },
@@ -815,37 +851,39 @@
             "en": "ISO/IEC 42001 clause 4.3; A.4.2"
           },
           "q": {
-            "de": "Morgen fragt ein Auditor nach Ihrem KI-Register. Steht darin auch die KI, die per Update in Office, CRM, Personal- und Ticketsystem gekommen ist – jeweils mit Verantwortlichem?",
-            "en": "Tomorrow an auditor asks for your AI register. Does it list the AI that arrived by update in your office, CRM, HR and ticketing software – each with an owner?"
+            "de": "Morgen fragt ein Auditor nach Ihrem KI-Register. Spüren Sie nicht erfasste KI auf – über Beschaffung, SaaS-Verträge und Netzwerkdaten – und können Sie den letzten Fund zeigen?",
+            "en": "Tomorrow an auditor asks for your AI register. Do you track down AI that is not yet recorded – through procurement, SaaS contracts and network data – and can you show the last find?"
           },
           "why": {
-            "de": "Der Geltungsbereich des Managementsystems ist nur so vollständig wie Ihr Register. Eingebettete KI wird dabei leicht übersehen.",
-            "en": "The management system’s scope is only as complete as your register. Embedded AI is easily overlooked."
+            "de": "Der Geltungsbereich ist nur so vollständig wie Ihr Register. Schatten-KI fällt durch jede Liste.",
+            "en": "Scope is only as complete as your register. Shadow AI slips through every list."
           },
           "rec": {
-            "de": "Gehen Sie Ihre Softwareliste durch, erfassen Sie eingebettete KI-Funktionen und benennen Sie Verantwortliche.",
-            "en": "Go through your software list, record embedded AI features and name owners."
-          }
+            "de": "Werten Sie Beschaffung, SaaS-Verträge und Netzwerkdaten regelmäßig auf KI aus und tragen Sie Funde ins Inventar ein.",
+            "en": "Regularly check procurement, SaaS contracts and network data for AI, and add what you find to the inventory."
+          },
+          "ctrl": "ISO42001-G-05"
         },
         {
           "id": "iso42001-02",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 42001 Kap. 5.2; A.2.2",
-            "en": "ISO/IEC 42001 clause 5.2; A.2.2"
+            "de": "ISO/IEC 42001 Kap. 5.2; A.9.2",
+            "en": "ISO/IEC 42001 clause 5.2; A.9.2"
           },
           "q": {
-            "de": "Legt Ihre KI-Leitlinie fest, welche KI-Einsätze ausgeschlossen sind und wer Ausnahmen genehmigt?",
-            "en": "Does your AI policy state which uses of AI are ruled out and who approves exceptions?"
+            "de": "Gibt es eine verabschiedete Richtlinie zur KI-Nutzung, und können Sie belegen, wann sie allen betroffenen Beschäftigten bekannt gemacht wurde?",
+            "en": "Is there an adopted AI use policy, and can you show when it was communicated to all staff concerned?"
           },
           "why": {
-            "de": "Eine Leitlinie ohne Grenzen hilft im Alltag nicht. Beschäftigte brauchen klare Ausschlüsse und eine Stelle für Ausnahmen.",
-            "en": "A policy without limits does not help in practice. Staff need clear exclusions and someone to approve exceptions."
+            "de": "Eine Richtlinie, die niemand kennt, lenkt keine Nutzung.",
+            "en": "A policy nobody knows steers no use."
           },
           "rec": {
-            "de": "Ergänzen Sie die Leitlinie um ausgeschlossene Einsätze und ein Genehmigungsverfahren.",
-            "en": "Add excluded uses and an approval procedure to the policy."
-          }
+            "de": "Verabschieden Sie die Nutzungsrichtlinie und dokumentieren Sie die Bekanntgabe je Zielgruppe.",
+            "en": "Adopt the policy and record its communication to each audience."
+          },
+          "ctrl": "ISO42001-C-07.2"
         },
         {
           "id": "iso42001-03",
@@ -865,7 +903,8 @@
           "rec": {
             "de": "Beschließen Sie Risikokriterien mit Schwellenwerten und wenden Sie sie auf jedes KI-System an.",
             "en": "Adopt risk criteria with thresholds and apply them to every AI system."
-          }
+          },
+          "ctrl": "ISO42001-R-01"
         },
         {
           "id": "iso42001-04",
@@ -875,57 +914,60 @@
             "en": "ISO/IEC 42001 clause 6.2"
           },
           "q": {
-            "de": "Gibt es messbare KI-Ziele mit Verantwortlichem und Termin, deren Erreichung Sie verfolgen?",
-            "en": "Are there measurable AI objectives with an owner and deadline, and do you track whether they are met?"
+            "de": "Können Sie heute die messbaren Ziele Ihrer KI-Governance vorlegen, jeweils mit der Kennzahl, an der die Erreichung gemessen wird?",
+            "en": "Could you produce today the measurable objectives of your AI governance, each with the metric used to measure achievement?"
           },
           "why": {
             "de": "Die Norm verlangt messbare Ziele. Ohne sie lässt sich weder Fortschritt noch Wirksamkeit zeigen.",
             "en": "The standard requires measurable objectives. Without them, neither progress nor effectiveness can be shown."
           },
           "rec": {
-            "de": "Legen Sie drei bis fünf messbare KI-Ziele fest und berichten Sie den Stand in der Managementbewertung.",
-            "en": "Set three to five measurable AI objectives and report progress in the management review."
-          }
+            "de": "Legen Sie messbare Ziele fest, soweit praktikabel, und verknüpfen Sie jedes mit einer Kennzahl.",
+            "en": "Set measurable objectives where practicable and link each to a metric."
+          },
+          "ctrl": "ISO42001-C-03.1"
         },
         {
           "id": "iso42001-05",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 42001 A.7.3–A.7.5",
-            "en": "ISO/IEC 42001 A.7.3–A.7.5"
+            "de": "ISO/IEC 42001 A.7.3",
+            "en": "ISO/IEC 42001 A.7.3"
           },
           "q": {
-            "de": "Können Sie für jedes KI-System belegen, woher die Trainings- und Eingabedaten stammen und ob Sie sie dafür verwenden dürfen?",
-            "en": "For every AI system, could you show where the training and input data come from and whether you may use them for this purpose?"
+            "de": "Ist für jeden Datensatz Ihrer KI-Systeme dokumentiert, woher er stammt, welche Datenkategorien er enthält und auf welcher Grundlage Sie personenbezogene Daten und geschützte Inhalte nutzen dürfen?",
+            "en": "For every dataset of your AI systems, is it documented where it comes from, which data categories it contains and on what basis you may use personal data and protected content?"
           },
           "why": {
             "de": "Herkunft und Nutzungsrecht der Daten sind die erste Frage jeder Prüfung und jeder Beschwerde.",
-            "en": "Data provenance and the right to use the data are the first question in every review and every complaint."
+            "en": "Provenance and the right to use the data are the first question in every review and every complaint."
           },
           "rec": {
-            "de": "Dokumentieren Sie je Datensatz Quelle, Rechtsgrundlage und Qualitätsprüfung.",
-            "en": "Record the source, legal basis and quality check for each dataset."
-          }
+            "de": "Dokumentieren Sie je Datensatz Kategorien, Quellen, Rechte und Rechtmäßigkeit der Erhebung.",
+            "en": "Record categories, sources, rights and lawfulness of collection for each dataset."
+          },
+          "ctrl": "ISO42001-D-02"
         },
         {
           "id": "iso42001-06",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 42001 A.6.2.4, A.6.2.5",
-            "en": "ISO/IEC 42001 A.6.2.4, A.6.2.5"
+            "de": "ISO/IEC 42001 Kap. 8.1; A.6.2.5",
+            "en": "ISO/IEC 42001 clause 8.1; A.6.2.5"
           },
           "q": {
-            "de": "Wird jedes KI-System vor der Inbetriebnahme gegen festgelegte Abnahmekriterien getestet – und nach jedem Modellwechsel erneut?",
-            "en": "Is every AI system tested against defined acceptance criteria before going live – and again after every model change?"
+            "de": "Löst jede Änderung an Modell, Daten, Prompts oder Konfiguration vor dem Release eine neue Risikobewertung, eine erneute Validierung und eine Freigabe mit Rückfallplan aus – und können Sie das für die letzte Änderung belegen?",
+            "en": "Does every change to model, data, prompts or configuration trigger a new risk assessment, re-validation and sign-off with a rollback plan before release – and can you show this for the latest change?"
           },
           "why": {
-            "de": "Anbieter tauschen Modelle oft ohne Ankündigung. Dann ändern sich Ergebnisse, ohne dass es jemand merkt.",
-            "en": "Providers often swap models without notice. Results then change without anyone noticing."
+            "de": "Nach einem Modellwechsel ändern sich Ergebnisse unbemerkt, wenn die Änderung keine neue Prüfung auslöst.",
+            "en": "After a model change, results shift unnoticed unless the change triggers a new check."
           },
           "rec": {
-            "de": "Legen Sie Abnahmekriterien und Testfälle je System fest und wiederholen Sie die Prüfung bei jedem Modellwechsel.",
-            "en": "Define acceptance criteria and test cases for each system, and repeat the check after every model change."
-          }
+            "de": "Machen Sie Neubewertung, Validierung und Freigabe mit Rückfallplan zur Bedingung jedes Releases.",
+            "en": "Make reassessment, re-validation and sign-off with a rollback plan a condition of every release."
+          },
+          "ctrl": "ISO42001-S-03"
         },
         {
           "id": "iso42001-07",
@@ -945,7 +987,8 @@
           "rec": {
             "de": "Überwachen Sie Kennzahlen oder Stichproben je System und legen Sie Schwellen fest, die eine Prüfung auslösen.",
             "en": "Monitor metrics or samples for each system and set thresholds that trigger a review."
-          }
+          },
+          "ctrl": "ISO42001-A.10.2"
         },
         {
           "id": "iso42001-08",
@@ -955,17 +998,18 @@
             "en": "ISO/IEC 42001 A.10.3"
           },
           "q": {
-            "de": "Haben Sie Ihre KI-Lieferanten zu Trainingsdaten, Modellwechseln und Haftung bewertet, bevor Sie sie beauftragt haben?",
-            "en": "Did you assess your AI suppliers on training data, model changes and liability before engaging them?"
+            "de": "Haben Sie jedes eingekaufte KI-Modell vor der Einführung bewertet – Rechtmäßigkeit der Trainingsdaten, Fähigkeiten, Einschränkungen, Lizenz- und Nutzungsbedingungen – mit datiertem Ergebnis?",
+            "en": "Did you assess every bought-in AI model before adoption – lawfulness of training data, capabilities, restrictions, licence and usage terms – with a dated result?"
           },
           "why": {
             "de": "Viele KI-Systeme werden eingekauft. Damit liegt ein großer Teil des Risikos beim Lieferanten.",
             "en": "Many AI systems are bought in. A large part of the risk therefore sits with the supplier."
           },
           "rec": {
-            "de": "Führen Sie einen Fragenkatalog für KI-Lieferanten ein und verankern Sie die Ergebnisse im Vertrag.",
-            "en": "Introduce a questionnaire for AI suppliers and build the results into the contract."
-          }
+            "de": "Bewerten Sie vor jeder Einführung Trainingsdaten, Fähigkeiten, Einschränkungen und Bedingungen und bewahren Sie das Ergebnis auf.",
+            "en": "Assess training data, capabilities, restrictions and terms before each adoption, and keep the result."
+          },
+          "ctrl": "ISO42001-S-29"
         },
         {
           "id": "iso42001-09",
@@ -975,17 +1019,18 @@
             "en": "ISO/IEC 42001 A.6.2.8"
           },
           "q": {
-            "de": "Werden Ein- und Ausgaben Ihrer KI-Systeme so protokolliert, dass Sie eine einzelne Entscheidung im Nachhinein nachvollziehen können?",
-            "en": "Are the inputs and outputs of your AI systems logged so that you can trace a single decision afterwards?"
+            "de": "Zeichnen Ihre KI-Systeme Ereignisprotokolle auf – und könnten Sie für ein ausgewähltes System die Protokolle eines bestimmten Tages heute vorlegen?",
+            "en": "Do your AI systems record event logs – and could you produce today the logs of a chosen day for a selected system?"
           },
           "why": {
-            "de": "Bei einer Beschwerde müssen Sie zeigen können, wie ein Ergebnis zustande kam.",
-            "en": "When there is a complaint, you have to be able to show how a result came about."
+            "de": "Bei einer Beschwerde müssen Sie zeigen können, was das System getan hat.",
+            "en": "When there is a complaint, you must be able to show what the system did."
           },
           "rec": {
-            "de": "Legen Sie je System fest, was protokolliert wird, wie lange und wer darauf zugreifen darf.",
-            "en": "Decide for each system what is logged, for how long and who may access it."
-          }
+            "de": "Aktivieren Sie die Ereignisprotokollierung je System und prüfen Sie stichprobenartig, dass sie vorhanden ist.",
+            "en": "Enable event logging for each system and spot-check that the logs exist."
+          },
+          "ctrl": "ISO42001-A.6.2.8"
         },
         {
           "id": "iso42001-10",
@@ -995,57 +1040,60 @@
             "en": "ISO/IEC 42001 A.3.3"
           },
           "q": {
-            "de": "Gibt es einen Weg, auf dem Beschäftigte Bedenken zu einem KI-System melden können, auch vertraulich – und wurde er schon genutzt?",
-            "en": "Is there a way for staff to raise concerns about an AI system, including confidentially – and has it been used yet?"
+            "de": "Gibt es einen vertraulichen Meldeweg für Bedenken zu KI-Systemen, der von Eingang bis Antwort funktioniert – und sind seine Ergebnisse in Ihre letzte Managementbewertung eingeflossen?",
+            "en": "Is there a confidential channel for concerns about AI systems that works from intake to response – and did its results feed into your last management review?"
           },
           "why": {
-            "de": "Probleme sehen zuerst die, die täglich mit dem System arbeiten. Ein Meldeweg, den niemand kennt, bleibt leer.",
-            "en": "The people who work with the system every day see problems first. A channel nobody knows about stays empty."
+            "de": "Probleme sehen zuerst die, die täglich mit dem System arbeiten.",
+            "en": "The people who work with the system every day see problems first."
           },
           "rec": {
-            "de": "Richten Sie einen vertraulichen Meldeweg ein und machen Sie ihn in Schulungen bekannt.",
-            "en": "Set up a confidential channel and make it known in training."
-          }
+            "de": "Richten Sie den Meldeweg mit festgelegter Bearbeitung ein und berichten Sie die Ergebnisse in der Managementbewertung.",
+            "en": "Set up the channel with defined handling and report its results in the management review."
+          },
+          "ctrl": "ISO42001-G-09"
         },
         {
           "id": "iso42001-11",
           "weight": 1,
           "ref": {
-            "de": "ISO/IEC 42001 Kap. 9.2, 9.3",
-            "en": "ISO/IEC 42001 clauses 9.2, 9.3"
+            "de": "ISO/IEC 42001 Kap. 9.3",
+            "en": "ISO/IEC 42001 clause 9.3"
           },
           "q": {
-            "de": "Wurde Ihr KI-Managementsystem in den letzten zwölf Monaten intern auditiert und von der Leitung bewertet?",
-            "en": "In the last twelve months, has your AI management system been internally audited and reviewed by management?"
+            "de": "Hat in den letzten zwölf Monaten eine Managementbewertung stattgefunden, in der die KI-Governance als fester Tagesordnungspunkt bewertet wurde – und liegt das Protokoll vor?",
+            "en": "In the last twelve months, has a management review taken place with AI governance as a standing agenda item – and are there minutes?"
           },
           "why": {
-            "de": "Ohne internes Audit und Managementbewertung ist keine Zertifizierung möglich.",
-            "en": "Without an internal audit and a management review, certification is not possible."
+            "de": "Ohne Managementbewertung ist keine Zertifizierung möglich.",
+            "en": "Without a management review, certification is not possible."
           },
           "rec": {
-            "de": "Planen Sie das erste interne Audit und die Managementbewertung mit festem Termin.",
-            "en": "Schedule the first internal audit and the management review with fixed dates."
-          }
+            "de": "Planen Sie die Managementbewertung mindestens jährlich mit KI-Governance als festem Tagesordnungspunkt.",
+            "en": "Schedule the management review at least once a year with AI governance as a standing item."
+          },
+          "ctrl": "ISO42001-C-03.3"
         },
         {
           "id": "iso42001-12",
           "weight": 1.5,
           "ref": {
-            "de": "ISO/IEC 42001 Kap. 6.1.4; A.5.2–A.5.5",
-            "en": "ISO/IEC 42001 clause 6.1.4; A.5.2–A.5.5"
+            "de": "ISO/IEC 42001 Kap. 8.4; A.5.2–A.5.5",
+            "en": "ISO/IEC 42001 clause 8.4; A.5.2–A.5.5"
           },
           "q": {
-            "de": "Morgen lehnt Ihre KI einen Kunden oder Bewerber zu Unrecht ab. Liegt für dieses System eine dokumentierte Folgenabschätzung vor – und wissen Sie, wer es noch am selben Tag abschaltet?",
-            "en": "Tomorrow your AI wrongly rejects a customer or applicant. Is there a documented impact assessment for this system – and do you know who switches it off the same day?"
+            "de": "Morgen lehnt Ihre KI einen Kunden oder Bewerber zu Unrecht ab. Liegt für dieses System eine dokumentierte Folgenabschätzung vor, die die Auswirkungen auf einzelne Personen, auf Gruppen und auf die Gesellschaft betrachtet?",
+            "en": "Tomorrow your AI wrongly rejects a customer or applicant. Is there a documented impact assessment for this system that considers the consequences for individuals, groups and society?"
           },
           "why": {
             "de": "Die Norm verlangt, die Folgen von KI-Systemen für Betroffene vorab zu bewerten. Fehlt die Abschätzung, fehlt im Ernstfall jede Grundlage für die Antwort.",
             "en": "The standard requires you to assess the consequences of AI systems for those affected in advance. Without that assessment, you have no basis for your response when it matters."
           },
           "rec": {
-            "de": "Führen Sie für jedes System mit Wirkung auf Menschen eine Folgenabschätzung durch und legen Sie Verantwortliche und Abschaltweg fest.",
-            "en": "Carry out an impact assessment for every system that affects people, and set owners and a shutdown path."
-          }
+            "de": "Führen Sie für jedes KI-System eine Folgenabschätzung durch und dokumentieren Sie sie.",
+            "en": "Carry out and document an impact assessment for every AI system."
+          },
+          "ctrl": "ISO42001-8.3"
         }
       ]
     },
@@ -1066,8 +1114,8 @@
           "id": "cra-01",
           "weight": 1.5,
           "ref": {
-            "de": "Art. 14 Abs. 1, 2 Buchst. a, Art. 71 CRA",
-            "en": "Art. 14(1), (2)(a), Art. 71 CRA"
+            "de": "Art. 14 Abs. 1, 2 Buchst. a, Art. 69 Abs. 3, Art. 71 CRA",
+            "en": "Art. 14(1), (2)(a), Art. 69(3), Art. 71 CRA"
           },
           "q": {
             "de": "Heute Nacht wird eine aktiv ausgenutzte Schwachstelle in Ihrem Produkt bekannt. Könnten Sie innerhalb von 24 Stunden eine Frühwarnung an CSIRT und ENISA abgeben – auch für Produkte, die längst verkauft sind? Das ist seit 11. September 2026 Pflicht.",
@@ -1080,27 +1128,29 @@
           "rec": {
             "de": "Benennen Sie Meldeverantwortliche mit Vertretung, richten Sie den Zugang zur Meldeplattform ein und üben Sie den Ablauf.",
             "en": "Name the people responsible for reporting, with deputies, set up access to the reporting platform and rehearse the process."
-          }
+          },
+          "ctrl": "CRA-24.1"
         },
         {
           "id": "cra-02",
           "weight": 1,
           "ref": {
-            "de": "Art. 2, Art. 3 Nr. 1, 2 CRA",
-            "en": "Art. 2, Art. 3(1), (2) CRA"
+            "de": "Art. 31, Anhang VII CRA",
+            "en": "Art. 31, Annex VII CRA"
           },
           "q": {
-            "de": "Haben Sie für jedes Produkt – samt Firmware, App und zugehöriger Cloud-Funktion – schriftlich geprüft, ob es unter den CRA fällt?",
-            "en": "For every product – including firmware, app and associated cloud function – have you checked in writing whether it falls under the CRA?"
+            "de": "Liegt für jedes Produkt mit digitalen Elementen die technische Dokumentation nach Anhang VII vor – und wann wurde sie zuletzt aktualisiert?",
+            "en": "For every product with digital elements, does the technical documentation under Annex VII exist – and when was it last updated?"
           },
           "why": {
-            "de": "Zum Produkt gehören auch Lösungen zur Datenfernverarbeitung, ohne die es Funktionen nicht ausführen kann. Diese werden oft übersehen.",
-            "en": "The product also includes remote data processing solutions without which it cannot perform its functions. These are often overlooked."
+            "de": "Ohne technische Dokumentation keine Konformitätsbewertung und keine CE-Kennzeichnung.",
+            "en": "Without technical documentation there is no conformity assessment and no CE marking."
           },
           "rec": {
-            "de": "Erstellen Sie eine Produktliste mit Einstufung und Begründung und halten Sie sie bei neuen Produkten aktuell.",
-            "en": "Draw up a product list with classification and reasons, and keep it current as new products come out."
-          }
+            "de": "Erstellen Sie die Dokumentation je Produkt und halten Sie sie über den Unterstützungszeitraum aktuell.",
+            "en": "Draw it up for each product and keep it current throughout the support period."
+          },
+          "ctrl": "CRA-23.1"
         },
         {
           "id": "cra-03",
@@ -1120,7 +1170,8 @@
           "rec": {
             "de": "Gleichen Sie jedes Produkt mit den Anhängen III und IV ab und dokumentieren Sie das Ergebnis.",
             "en": "Check every product against Annexes III and IV and document the outcome."
-          }
+          },
+          "ctrl": "CRA-25.1"
         },
         {
           "id": "cra-04",
@@ -1130,17 +1181,18 @@
             "en": "Art. 13(2), (3) CRA"
           },
           "q": {
-            "de": "Gibt es für jedes Produkt eine dokumentierte Bewertung der Cybersicherheitsrisiken, die bei jedem größeren Release aktualisiert wird?",
-            "en": "Is there a documented cybersecurity risk assessment for every product that is updated with every major release?"
+            "de": "Hält die Risikobewertung jedes Produkts für jede Anforderung aus Anhang I Teil I Nr. 2 fest, ob und wie sie umgesetzt ist – und haben Sie sie nach der zuletzt bekannt gewordenen Schwachstelle aktualisiert?",
+            "en": "Does each product’s risk assessment state, for every requirement in Annex I Part I(2), whether and how it is met – and did you update it after the most recently discovered vulnerability?"
           },
           "why": {
             "de": "Die Risikobewertung ist Teil der technischen Dokumentation und muss während des Unterstützungszeitraums aktuell bleiben.",
             "en": "The risk assessment is part of the technical documentation and must stay current throughout the support period."
           },
           "rec": {
-            "de": "Verknüpfen Sie die Risikobewertung mit Ihrem Release-Prozess, sodass kein Release ohne Aktualisierung freigegeben wird.",
-            "en": "Tie the risk assessment to your release process so that no release is approved without an update."
-          }
+            "de": "Führen Sie die Bewertung je Anforderung aus Anhang I und aktualisieren Sie sie bei neuen Schwachstellen.",
+            "en": "Keep the assessment per Annex I requirement and update it when new vulnerabilities become known."
+          },
+          "ctrl": "CRA-26.2"
         },
         {
           "id": "cra-05",
@@ -1150,17 +1202,18 @@
             "en": "Annex I Part II(1) CRA"
           },
           "q": {
-            "de": "Erzeugen Sie bei jedem Release automatisch eine maschinenlesbare Software-Stückliste (SBOM)?",
-            "en": "Do you automatically generate a machine-readable software bill of materials (SBOM) with every release?"
+            "de": "Wird die Software-Stückliste (SBOM) bei jeder Änderung von Komponenten aktualisiert – und stimmt die SBOM Ihres letzten Releases mit den tatsächlich ausgelieferten Komponenten überein?",
+            "en": "Is the software bill of materials (SBOM) updated with every component change – and does the SBOM of your last release match the components actually shipped?"
           },
           "why": {
-            "de": "Der CRA verlangt eine SBOM in einem gängigen, maschinenlesbaren Format. Eine einmal erstellte Liste veraltet mit dem nächsten Update.",
-            "en": "The CRA requires an SBOM in a commonly used, machine-readable format. A list produced once goes stale with the next update."
+            "de": "Eine einmal erstellte Stückliste veraltet mit dem nächsten Update.",
+            "en": "A list produced once goes stale with the next update."
           },
           "rec": {
-            "de": "Binden Sie die SBOM-Erzeugung in Ihre Build-Pipeline ein und archivieren Sie sie je Version.",
-            "en": "Build SBOM generation into your build pipeline and archive it for each version."
-          }
+            "de": "Koppeln Sie die Aktualisierung der SBOM an jede Komponentenänderung.",
+            "en": "Tie SBOM updates to every component change."
+          },
+          "ctrl": "CRA-14.2"
         },
         {
           "id": "cra-06",
@@ -1180,7 +1233,8 @@
           "rec": {
             "de": "Richten Sie einen eigenen Auslieferungsweg für Sicherheitsupdates ein.",
             "en": "Set up a separate delivery path for security updates."
-          }
+          },
+          "ctrl": "CRA-32.2"
         },
         {
           "id": "cra-07",
@@ -1200,7 +1254,8 @@
           "rec": {
             "de": "Legen Sie den Unterstützungszeitraum je Produkt fest und nehmen Sie das Enddatum in Produktseite und Unterlagen auf.",
             "en": "Set the support period for each product and add the end date to the product page and documentation."
-          }
+          },
+          "ctrl": "CRA-27.1"
         },
         {
           "id": "cra-08",
@@ -1210,17 +1265,18 @@
             "en": "Annex I Part II(5), (6) CRA"
           },
           "q": {
-            "de": "Gibt es eine veröffentlichte Kontaktadresse für Schwachstellenmeldungen und eine Richtlinie zur koordinierten Offenlegung, nach der Sie tatsächlich arbeiten?",
-            "en": "Is there a published contact address for vulnerability reports and a coordinated disclosure policy that you actually follow?"
+            "de": "Werden eingehende Schwachstellenmeldungen nachverfolgt und erhalten die Meldenden eine Rückmeldung – und können Sie das für die zuletzt eingegangene Meldung zeigen?",
+            "en": "Are incoming vulnerability reports tracked and do reporters receive feedback – and can you show this for the most recent report?"
           },
           "why": {
-            "de": "Eine Richtlinie zur koordinierten Offenlegung ist Pflicht. Meldungen, die ins Leere laufen, landen später in der Öffentlichkeit.",
-            "en": "A coordinated vulnerability disclosure policy is mandatory. Reports that go nowhere end up in public later."
+            "de": "Meldungen, die ins Leere laufen, landen später in der Öffentlichkeit.",
+            "en": "Reports that go nowhere end up in public later."
           },
           "rec": {
-            "de": "Veröffentlichen Sie Kontaktadresse und Richtlinie und legen Sie interne Bearbeitungsfristen fest.",
-            "en": "Publish the contact address and policy, and set internal handling deadlines."
-          }
+            "de": "Erfassen Sie jede Meldung mit Status und bestätigen Sie den Meldenden den Eingang.",
+            "en": "Log every report with its status and acknowledge receipt to the reporter."
+          },
+          "ctrl": "CRA-19.2"
         },
         {
           "id": "cra-09",
@@ -1230,17 +1286,18 @@
             "en": "Art. 13(5) CRA"
           },
           "q": {
-            "de": "Prüfen Sie Open-Source- und Fremdkomponenten vor dem Einbau auf Schwachstellen und dokumentieren Sie das Ergebnis?",
-            "en": "Do you check open-source and third-party components for vulnerabilities before building them in, and document the outcome?"
+            "de": "Gibt es für jede eingebundene Fremdkomponente, auch Open Source, eine dokumentierte Sorgfaltsprüfung zu Sicherheitsniveau, Wartungsstatus, bekannten Schwachstellen, Lizenz und Vertrauenswürdigkeit der Quelle?",
+            "en": "For every third-party component you integrate, open source included, is there a documented due-diligence check of security level, maintenance status, known vulnerabilities, licence and trustworthiness of the source?"
           },
           "why": {
             "de": "Hersteller müssen bei fremden Komponenten die gebotene Sorgfalt walten lassen und sie belegen können.",
             "en": "Manufacturers must exercise due diligence on third-party components and be able to prove it."
           },
           "rec": {
-            "de": "Führen Sie eine Komponentenprüfung mit Schwachstellen-Scan im Entwicklungsprozess ein und archivieren Sie die Ergebnisse.",
-            "en": "Build component checks with vulnerability scanning into development and archive the results."
-          }
+            "de": "Prüfen Sie Komponenten vor dem Einbau nach festen Kriterien und archivieren Sie das Ergebnis.",
+            "en": "Check components against fixed criteria before integration and archive the result."
+          },
+          "ctrl": "CRA-30.1"
         },
         {
           "id": "cra-10",
@@ -1260,7 +1317,8 @@
           "rec": {
             "de": "Machen Sie einen Schwachstellen-Scan zur Freigabebedingung jedes Releases und bewahren Sie das Protokoll auf.",
             "en": "Make a vulnerability scan a release gate and keep the log."
-          }
+          },
+          "ctrl": "CRA-01.1"
         },
         {
           "id": "cra-11",
@@ -1270,17 +1328,18 @@
             "en": "Art. 32, Art. 64(2), Art. 71 CRA"
           },
           "q": {
-            "de": "Ab 11. Dezember 2027 braucht jedes Produkt mit digitalen Elementen, das Sie dann in Verkehr bringen, eine CRA-konforme CE-Kennzeichnung. Steht für jedes Produkt fest, ob die interne Kontrolle genügt oder eine benannte Stelle prüfen muss – und ist diese angefragt? Verstöße: bis 15 Mio. € oder 2,5 % des weltweiten Jahresumsatzes.",
-            "en": "From 11 December 2027, every product with digital elements you then place on the market needs CRA-compliant CE marking. Is it settled for each product whether internal control is enough or a notified body must assess it – and has one been approached? Infringements: up to €15 million or 2.5% of worldwide annual turnover."
+            "de": "Ab 11. Dezember 2027 braucht jedes Produkt mit digitalen Elementen, das Sie dann in Verkehr bringen, eine CRA-konforme CE-Kennzeichnung. Ist für jedes Produkt der passende Konformitätsweg gewählt und schriftlich begründet? Verstöße: bis 15 Mio. € oder 2,5 % des weltweiten Jahresumsatzes.",
+            "en": "From 11 December 2027, every product with digital elements you then place on the market needs CRA-compliant CE marking. Has the matching conformity route been chosen for each product and justified in writing? Infringements: up to €15 million or 2.5% of worldwide annual turnover."
           },
           "why": {
             "de": "Ohne festgelegten Konformitätsweg gibt es keine CE-Kennzeichnung und keinen Marktzugang. Benannte Stellen brauchen Vorlauf.",
             "en": "Without a defined conformity route there is no CE marking and no market access. Notified bodies need lead time."
           },
           "rec": {
-            "de": "Legen Sie das Verfahren je Produkt fest und fragen Sie eine benannte Stelle frühzeitig an, wo sie nötig ist.",
-            "en": "Settle the procedure for each product and approach a notified body early where one is needed."
-          }
+            "de": "Legen Sie das Verfahren je Produkt fest, begründen Sie es und planen Sie Vorlauf ein, wo eine benannte Stelle nötig ist.",
+            "en": "Settle and justify the procedure for each product, and plan lead time where a notified body is needed."
+          },
+          "ctrl": "CRA-25.2"
         }
       ]
     }

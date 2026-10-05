@@ -28,8 +28,8 @@ export const features: Record<'de' | 'en', Feature[]> = {
       title: 'Ihr Stand auf einer Seite',
       sub: 'Für die Geschäftsleitung gemacht.',
       short: 'Sicherheitslage, Handlungsbedarf und Fristen auf einen Blick.',
-      lead: 'Die Geschäftsleitung trägt die Verantwortung für die Informationssicherheit. Das Management Dashboard zeigt ihr in wenigen Sekunden, wo das Unternehmen steht und was als Nächstes zu tun ist.',
-      why: 'In vielen Häusern erfährt die Leitung vom Stand der Sicherheit über Folien, die jemand einmal im Quartal zusammenstellt. Bis sie vorgelegt werden, sind sie veraltet. Wer überwachen soll, braucht einen Stand, der sich mit jeder erledigten Maßnahme selbst aktualisiert.',
+      lead: 'Die Geschäftsleitung trägt die Verantwortung für die Informationssicherheit. Das Management Dashboard zeigt ihr in wenigen Sekunden, wo die Organisation steht und was als Nächstes zu tun ist.',
+      why: 'Folien, die jemand einmal im Quartal zusammenstellt, sind bei der Vorlage schon veraltet. Wer überwachen soll, braucht einen Stand, der sich mit jeder erledigten Maßnahme selbst aktualisiert.',
       can: [
         'Die Sicherheitslage als einen Wert mit Ampel und Verlauf sehen, dazu den Stand je Regelwerk.',
         'Handlungsbedarf und überfällige Fristen sofort erkennen und mit einem Klick dorthin springen.',
@@ -62,12 +62,12 @@ export const features: Record<'de' | 'en', Feature[]> = {
         'Jede Richtlinie als Word oder PDF ausgeben, auf Wunsch mit Begründung, Anwendbarkeit und Quellen.',
       ],
       gain: [
-        'Sie sehen den Umsetzungsgrad je Kategorie und je Regelwerk.',
-        'Prüfer finden die freigegebenen Fassungen mit Version an einer Stelle.',
+        'Sie sehen den Umsetzungsgrad je Kategorie und filtern Ihre Richtlinien nach Regelwerk.',
+        'Prüfer finden jede Richtlinie mit Version, Genehmigung und Prüftermin an einer Stelle.',
       ],
       refs: [
         'ISO/IEC 27001, Abschnitt 5.2 und Anhang A 5.1: Informationssicherheitspolitik und Richtlinien',
-        'BSIG § 30 Abs. 2 Nr. 1: Konzepte zur Risikoanalyse und Sicherheit für Informationssysteme',
+        'BSIG § 30 Abs. 2 Nr. 1: Konzepte zur Risikoanalyse und zur Sicherheit in der Informationstechnik',
       ],
       steps: [2, 4],
     },
@@ -82,13 +82,13 @@ export const features: Record<'de' | 'en', Feature[]> = {
       why: 'Im Ernstfall hat niemand Zeit, Gesetzestexte zu lesen. Nach dem BSIG ist eine frühe Erstmeldung binnen 24 Stunden fällig, die Meldung mit erster Bewertung binnen 72 Stunden und die Abschlussmeldung einen Monat danach. Wer zusätzlich unter den Cyber Resilience Act oder den AI Act fällt, hat weitere Meldewege.',
       can: [
         'Einen Vorfall einmal erfassen: Schwere, Status und die Zeitpunkte von Eintritt, Erkennung, Eindämmung und Behebung.',
-        'Mit wenigen Fragen klären, welche Meldepflichten greifen. Was noch unbekannt ist, zählt vorsichtshalber als ja.',
+        'Mit wenigen Fragen klären, welche Meldepflichten greifen. Was noch unbekannt ist, zählt vorsichtshalber als Ja.',
         'Die Fristen-Timer mit Ampel im Blick behalten, bei NIS2 etwa 24 Stunden, 72 Stunden und einen Monat.',
         'Im Meldestellen-Verzeichnis sehen, an wen die Meldung geht, zum Beispiel an das Meldeportal des BSI.',
-        'Vorfallbericht und Registerbericht als PDF erzeugen, mit den Pflichtinhalten nach NIS2 Art. 23.',
+        'Vorfallbericht und Registerbericht als PDF erzeugen, mit den Pflichtinhalten nach Art. 23 der NIS2-Richtlinie, die § 32 BSIG übernimmt.',
       ],
       gain: [
-        'Keine verpasste Meldung, weil jemand die Frist falsch berechnet hat.',
+        'Die Fristen-Timer laufen ab dem Zeitpunkt, an dem Sie vom Vorfall wissen. Niemand muss sie von Hand ausrechnen.',
         'Ein vollständiges Register mit Kennzahlen wie der Zeit bis zur Erkennung und Behebung, falls die Aufsicht nachfragt.',
       ],
       refs: [
@@ -107,8 +107,8 @@ export const features: Record<'de' | 'en', Feature[]> = {
       title: 'Lieferanten unter Kontrolle',
       sub: 'Register, Prüffragen, Risikowert.',
       short: 'Kritikalität, Kontrollen, Zertifikate und Prüftermine je Lieferant.',
-      lead: 'Viele Angriffe kommen über Dienstleister. Deshalb verlangen NIS2 und ISO 27001, dass Sie Ihre Lieferanten kennen und ihre Sicherheit regelmäßig bewerten. Der Supply Chain Controller hält alles dazu an einer Stelle.',
-      why: 'Lieferantenbewertungen landen oft in einer Tabelle, die nach dem ersten Durchgang niemand mehr anfasst. Dann weiß man im Audit nicht mehr, wann ein wichtiger Dienstleister zuletzt geprüft wurde und mit welchem Ergebnis.',
+      lead: 'Dienstleister haben oft Zugriff auf Ihre Systeme und Daten. Deshalb verlangen NIS2 und ISO 27001, dass Sie Ihre Lieferanten kennen und ihre Sicherheit regelmäßig bewerten. Der Supply Chain Controller hält alles dazu an einer Stelle.',
+      why: 'Eine Lieferantenbewertung in einer Tabelle veraltet schnell. Dann weiß man im Audit nicht mehr, wann ein wichtiger Dienstleister zuletzt geprüft wurde und mit welchem Ergebnis.',
       can: [
         'Jeden Lieferanten mit Leistung, Kritikalität und Art des Datenzugriffs erfassen.',
         'Bis zu elf Prüffragen nach ISO/IEC 27001, NIS2 und DSGVO beantworten. Kritische Kontrollen sind markiert.',
@@ -116,7 +116,7 @@ export const features: Record<'de' | 'en', Feature[]> = {
         'Einen Risikowert von 0 bis 100 berechnen lassen und den nächsten Prüftermin im Blick behalten.',
       ],
       gain: [
-        'Sie wissen jederzeit, welcher Lieferant als nächstes geprüft werden muss.',
+        'Sie wissen jederzeit, welcher Lieferant als Nächstes geprüft werden muss.',
         'Das Risiko Ihrer Lieferkette steht gesammelt in einer Übersicht.',
       ],
       refs: [
@@ -133,8 +133,8 @@ export const features: Record<'de' | 'en', Feature[]> = {
       title: 'Jede KI erfasst und eingestuft',
       sub: 'Register, Risikoklasse, Pflichtdokumente.',
       short: 'KI-Systeme registrieren, nach dem AI Act einstufen, Unterlagen erzeugen.',
-      lead: 'Der EU AI Act gilt unabhängig von NIS2. Die AI Registry hält fest, welche KI Sie wo einsetzen, stuft sie ein und zeigt, welche Unterlagen noch fehlen.',
-      why: 'Die ersten Pflichten des AI Act gelten bereits, etwa die KI-Kompetenz der Beschäftigten und die Verbote bestimmter Praktiken. Weitere folgen. Ohne Überblick über die eingesetzten Systeme lässt sich weder die Einstufung noch die passende Dokumentation klären.',
+      lead: 'Der EU AI Act regelt, wie Sie KI anbieten und einsetzen. Die AI Registry hält fest, welche KI Sie wo einsetzen, stuft sie ein und zeigt, welche Unterlagen noch fehlen.',
+      why: 'Die ersten Pflichten des AI Act gelten bereits, etwa die Verbote bestimmter Praktiken und Maßnahmen zur KI-Kompetenz der Beschäftigten. Weitere folgen. Ohne Überblick über die eingesetzten Systeme lässt sich weder die Einstufung noch die passende Dokumentation klären.',
       can: [
         'KI-Systeme mit Zweck, Rolle, Verantwortlichen, Version, Lebenszyklus und Freigabe registrieren.',
         'Die Risikoklasse ergibt sich aus Ihren Angaben zu Anhang III, den verbotenen Praktiken nach Art. 5 und den Transparenzpflichten nach Art. 50.',
@@ -146,7 +146,7 @@ export const features: Record<'de' | 'en', Feature[]> = {
         'Klare nächste Schritte statt allgemeiner Unsicherheit.',
       ],
       refs: [
-        'AI Act Art. 4: KI-Kompetenz',
+        'AI Act Art. 4: Maßnahmen zur Förderung der KI-Kompetenz',
         'AI Act Art. 5: verbotene Praktiken',
         'AI Act Art. 6 und Anhang III: Einstufung als Hochrisiko-KI',
         'AI Act Art. 50: Transparenzpflichten',
@@ -164,9 +164,9 @@ export const features: Record<'de' | 'en', Feature[]> = {
       sub: 'Made for management.',
       short: 'Security posture, action needed and deadlines at a glance.',
       lead: 'Management is accountable for information security. The Management Dashboard shows them in seconds where the organisation stands and what to do next.',
-      why: 'In many organisations, management learns about the security status from slides someone puts together once a quarter. By the time they are presented, they are out of date. Anyone who has to oversee needs a status that updates itself with every measure completed.',
+      why: 'Slides someone puts together once a quarter are already out of date when they are presented. Anyone with a duty to oversee needs a status that updates itself with every measure completed.',
       can: [
-        'See your security posture as one score with traffic light and trend, plus the status per framework.',
+        'See your security posture as one score with traffic lights and trend, plus the status per framework.',
         'Spot action needed and overdue deadlines straight away and jump there in one click.',
         'Switch between overview and detail and filter by framework.',
         'Create the board report as PDF and open the other reports directly.',
@@ -197,12 +197,12 @@ export const features: Record<'de' | 'en', Feature[]> = {
         'Export each policy as Word or PDF, optionally with rationale, applicability and sources.',
       ],
       gain: [
-        'You see the implementation level per category and per framework.',
-        'Auditors find the approved versions in one place.',
+        'You see the implementation level per category and can filter your policies by framework.',
+        'Auditors find every policy with its version, approval and review date in one place.',
       ],
       refs: [
         'ISO/IEC 27001, clause 5.2 and Annex A 5.1: information security policy and topic-specific policies',
-        'BSIG section 30(2) no. 1: policies on risk analysis and information system security',
+        'BSIG section 30(2) no. 1: concepts for risk analysis and IT security',
       ],
       steps: [2, 4],
     },
@@ -217,13 +217,13 @@ export const features: Record<'de' | 'en', Feature[]> = {
       why: 'In an emergency nobody has time to read legislation. Under the German BSI Act, an early warning is due within 24 hours, the notification with an initial assessment within 72 hours and the final report one month later. If the Cyber Resilience Act or the AI Act also applies to you, there are further reporting channels.',
       can: [
         'Record an incident once: severity, status and the times of occurrence, detection, containment and resolution.',
-        'Find out with a few questions which reporting duties apply. Anything still unknown counts as yes, to be safe.',
-        'Keep the deadline timers with traffic light in view, for NIS2 for example 24 hours, 72 hours and one month.',
+        'Find out with a few questions which reporting duties apply. Anything still unknown counts as ‘yes’, to be safe.',
+        'Keep the deadline timers with traffic lights in view, for NIS2 for example 24 hours, 72 hours and one month.',
         'See in the directory of reporting authorities where the report goes, for example the BSI reporting portal.',
-        'Create the incident report and the register report as PDF, with the mandatory content under NIS2 Art. 23.',
+        'Create the incident report and the register report as PDF, with the mandatory content under Art. 23 NIS2, which Section 32 BSIG adopts.',
       ],
       gain: [
-        'No missed report because someone miscalculated a deadline.',
+        'The deadline timers start the moment you know about the incident. Nobody has to work them out by hand.',
         'A complete register with figures such as time to detect and time to resolve, in case the authority asks.',
       ],
       refs: [
@@ -242,8 +242,8 @@ export const features: Record<'de' | 'en', Feature[]> = {
       title: 'Suppliers under control',
       sub: 'Register, review questions, risk score.',
       short: 'Criticality, controls, certificates and review dates per supplier.',
-      lead: 'Many attacks come in through service providers. That is why NIS2 and ISO 27001 require you to know your suppliers and assess their security regularly. The Supply Chain Controller keeps all of it in one place.',
-      why: 'Supplier assessments often end up in a spreadsheet nobody touches after the first round. Then, in the audit, nobody knows when an important provider was last reviewed and with what result.',
+      lead: 'Service providers often have access to your systems and data. That is why NIS2 and ISO 27001 require you to know your suppliers and assess their security regularly. The Supply Chain Controller keeps all of it in one place.',
+      why: 'A supplier assessment kept in a spreadsheet goes stale quickly. Then, in the audit, nobody knows when an important provider was last reviewed and with what result.',
       can: [
         'Record each supplier with service, criticality and type of data access.',
         'Answer up to eleven review questions based on ISO/IEC 27001, NIS2 and the GDPR. Critical controls are marked.',
@@ -268,8 +268,8 @@ export const features: Record<'de' | 'en', Feature[]> = {
       title: 'Every AI recorded and classified',
       sub: 'Register, risk class, mandatory documents.',
       short: 'Register AI systems, classify them under the AI Act, create the documents.',
-      lead: 'The EU AI Act applies independently of NIS2. The AI Registry records which AI you use where, classifies it and shows which documents are still missing.',
-      why: 'The first obligations of the AI Act already apply, such as AI literacy of staff and the bans on certain practices. More will follow. Without an overview of the systems in use, neither the classification nor the right documentation can be settled.',
+      lead: 'The EU AI Act sets the rules for providing and using AI. The AI Registry records which AI you use where, classifies it and shows which documents are still missing.',
+      why: 'The first obligations of the AI Act already apply, such as the bans on certain practices and measures to support AI literacy among staff. More will follow. Without an overview of the systems in use, neither the classification nor the right documentation can be settled.',
       can: [
         'Register AI systems with purpose, role, owner, version, lifecycle stage and approval.',
         'The risk class follows from your answers on Annex III, the prohibited practices under Art. 5 and the transparency duties under Art. 50.',
@@ -281,7 +281,7 @@ export const features: Record<'de' | 'en', Feature[]> = {
         'Clear next steps instead of general uncertainty.',
       ],
       refs: [
-        'AI Act Art. 4: AI literacy',
+        'AI Act Art. 4: measures to support AI literacy',
         'AI Act Art. 5: prohibited practices',
         'AI Act Art. 6 and Annex III: classification as high-risk AI',
         'AI Act Art. 50: transparency obligations',
