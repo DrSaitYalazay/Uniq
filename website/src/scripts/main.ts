@@ -222,7 +222,35 @@ let lastMs = -1;
 const phEls = Array.from(document.querySelectorAll<HTMLElement>('[data-ph]'));
 const stepsEl = document.querySelector<HTMLElement>('[data-steps]');
 const stageEls = Array.from(document.querySelectorAll<HTMLElement>('[data-stage]'));
-let lastPh = -2;
+let lastPh = -2, lastF = -1;
+
+/** Wechsel des aktiven Schritts: Karte kommt aus der Scroll-Richtung, die alte geht in die Gegenrichtung. */
+function switchStep(ph: number, prev: number) {
+  const down = ph > prev;
+  stepsEl?.classList.toggle('dir-up', !down);
+  phEls.forEach((el) => {
+    const i = Number(el.dataset.ph);
+    el.classList.toggle('is-active', i === ph);
+    el.classList.toggle('done', i < ph);
+    if (i !== ph) el.style.removeProperty('--f');
+  });
+  stepsEl?.classList.toggle('has-active', ph >= 0);
+  const cur = Math.max(0, ph), old = Math.max(0, prev);
+  stageEls.forEach((el) => {
+    const i = Number(el.dataset.stage);
+    if (i === cur && i !== old && prev > -2) {
+      // Startlage ohne Übergang setzen, dann einblenden
+      el.classList.remove('to-up', 'to-down');
+      el.classList.add(down ? 'from-down' : 'from-up');
+      void el.offsetWidth;
+      el.classList.remove('from-down', 'from-up');
+    }
+    if (i === old && i !== cur) { el.classList.remove('to-up', 'to-down'); el.classList.add(down ? 'to-up' : 'to-down'); }
+    const on = i === cur;
+    el.classList.toggle('is-active', on);
+    el.querySelector('[data-viz]')?.classList.toggle('on', on);
+  });
+}
 
 function tick(time: number) {
   lenis?.raf(time);
@@ -244,15 +272,11 @@ function tick(time: number) {
     const ms = Math.round(Math.min(6, Math.max(0, (state.u - 13.3) / (14.9 - 13.3) * 6)));
     // aktiver Schritt in der Liste „Sechs Schritte“ (folgt der Kamera)
     const ph = state.u < 5.97 ? -1 : Math.round(Math.min(5, Math.max(0, state.u - 6)));
-    if (ph !== lastPh) {
-      lastPh = ph;
-      phEls.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.ph) === ph));
-      stepsEl?.classList.toggle('has-active', ph >= 0);
-      stageEls.forEach((el) => {
-        const on = Number(el.dataset.stage) === Math.max(0, ph);
-        el.classList.toggle('is-active', on);
-        el.querySelector('[data-viz]')?.classList.toggle('on', on);
-      });
+    if (ph !== lastPh) { switchStep(ph, lastPh); lastPh = ph; lastF = -1; }
+    // Fortschritt innerhalb des Schritts: Linie zum nächsten Schritt füllt sich mit jedem Scrollen
+    if (ph >= 0) {
+      const f = Math.round(Math.min(1, Math.max(0, state.u - 6 - ph + 0.5)) * 100) / 100;
+      if (f !== lastF) { lastF = f; phEls[ph]?.style.setProperty('--f', String(f)); }
     }
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;
