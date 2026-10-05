@@ -57,15 +57,15 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
       <div class="vz-scope">
         <ul class="vz-in">
           <li><span>{L('Branche', 'Sector')}</span><b>{L('Energie', 'Energy')}</b></li>
-          <li><span>{L('Größe', 'Size')}</span><b>{L('480 Beschäftigte', '480 staff')}</b></li>
-          <li><span>{L('KI im Einsatz', 'AI in use')}</span><b>{L('Ja', 'Yes')}</b></li>
+          <li><span>{L('Beschäftigte', 'Employees')}</span><b>480</b></li>
+          <li><span>{L('Jahresumsatz', 'Annual turnover')}</span><b>{L('95 Mio. €', '€95m')}</b></li>
         </ul>
         <svg class="vz-arrow" viewBox="0 0 40 120" aria-hidden="true"><path class="ln" d="M4 20 C 24 20, 16 60, 36 60 M4 60 H36 M4 100 C 24 100, 16 60, 36 60" /></svg>
         <ul class="vz-out">
-          <li class="fw-nis2 yes"><i></i><b>NIS2</b><span>{L('betroffen: wichtige Einrichtung', 'in scope: important entity')}</span></li>
-          <li class="fw-iso27001 yes"><i></i><b>ISO 27001</b><span>{L('als Rahmen empfohlen', 'recommended framework')}</span></li>
-          <li class="fw-aiact yes"><i></i><b>AI Act</b><span>{L('Pflichten als Betreiber', 'duties as deployer')}</span></li>
-          <li class="fw-cra no"><i></i><b>CRA</b><span>{L('nicht betroffen', 'not in scope')}</span></li>
+          <li class="fw-nis2 yes"><i></i><b>NIS2</b><span>{L('gewählt', 'selected')}</span></li>
+          <li class="fw-iso27001 yes"><i></i><b>ISO 27001</b><span>{L('gewählt', 'selected')}</span></li>
+          <li class="fw-aiact yes"><i></i><b>AI Act</b><span>{L('gewählt', 'selected')}</span></li>
+          <li class="fw-cra no"><i></i><b>CRA</b><span>{L('nicht gewählt', 'not selected')}</span></li>
         </ul>
       </div>
     )}
@@ -116,8 +116,8 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
           {before.map(([x, y], i) => { const a = cell(x, y), b = cell(after[i][0], after[i][1]); return <path class="mv" d={`M ${a.cx} ${a.cy} L ${b.cx} ${b.cy}`} />; })}
           {before.map(([x, y]) => { const a = cell(x, y); return <circle class="p0" cx={a.cx} cy={a.cy} r="5" />; })}
           {after.map(([x, y]) => { const a = cell(x, y); return <circle class="p1" cx={a.cx} cy={a.cy} r="5" />; })}
-          <text class="ax" x="108" y="184">{L('Auswirkung →', 'Impact →')}</text>
-          <text class="ax" x="8" y="96" transform="rotate(-90 8 96)">{L('Wahrscheinlichkeit →', 'Likelihood →')}</text>
+          <text class="ax" x="108" y="184">{L('Eintrittswahrscheinlichkeit →', 'Likelihood →')}</text>
+          <text class="ax" x="8" y="96" transform="rotate(-90 8 96)">{L('Auswirkung →', 'Impact →')}</text>
         </svg>
         <ul class="vz-keys"><li class="p0"><i></i>{L('vor der Behandlung', 'before treatment')}</li><li class="p1"><i></i>{L('danach', 'after')}</li></ul>
       </div>
@@ -132,7 +132,7 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
         </div>
         <ul class="vz-tasks">
           <li><b>{L('MFA für alle Admin-Konten', 'MFA for all admin accounts')}</b><span class="who">IT</span><span class="st ok">{L('erledigt', 'done')}</span></li>
-          <li><b>{L('Notfallhandbuch aktualisieren', 'Update the emergency manual')}</b><span class="who">ISB</span><span class="st run">{L('in Arbeit', 'in progress')}</span></li>
+          <li><b>{L('Notfallhandbuch aktualisieren', 'Update the emergency manual')}</b><span class="who">{L('ISB', 'CISO')}</span><span class="st run">{L('in Arbeit', 'in progress')}</span></li>
           <li><b>{L('Lieferanten-Prüfung Cloud', 'Review cloud supplier')}</b><span class="who">{L('Einkauf', 'Purchasing')}</span><span class="st late">{L('überfällig', 'overdue')}</span></li>
         </ul>
         <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="50" height="8" rx="4" /></svg>
@@ -148,7 +148,7 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
           <text x="50" y="49" class="n">11</text><text x="50" y="62" class="l">{L('Befunde', 'findings')}</text>
         </svg>
         <div>
-          <ul class="vz-keys col"><li class="d0"><i></i>{L('Abweichung (schwer)', 'Major nonconformity')} <b>1</b></li><li class="d1"><i></i>{L('Abweichung (leicht)', 'Minor nonconformity')} <b>4</b></li><li class="d2"><i></i>{L('Hinweis', 'Observation')} <b>6</b></li></ul>
+          <ul class="vz-keys col"><li class="d0"><i></i>{L('Major', 'Major')} <b>1</b></li><li class="d1"><i></i>{L('Minor', 'Minor')} <b>4</b></li><li class="d2"><i></i>{L('Beobachtung (OFI)', 'Observation (OFI)')} <b>6</b></li></ul>
           <p class="vz-cap">{L('Korrekturen abgeschlossen', 'Corrections closed')} · 9 / 11</p>
           <svg class="vz-prog" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="82" height="8" rx="4" /></svg>
         </div>
@@ -160,7 +160,7 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
         <div class="vz-kpis">
           <div><span>{L('Gesamtstand', 'Overall')}</span><b>59 %</b></div>
           <div class="late"><span>{L('Überfällig', 'Overdue')}</span><b>3</b></div>
-          <div><span>{L('Meldungen offen', 'Reports open')}</span><b>1</b></div>
+          <div><span>{L('Meldungen offen', 'Open notifications')}</span><b>1</b></div>
         </div>
         <svg class="vz-trend" viewBox="0 0 300 100" preserveAspectRatio="none" role="img" aria-label={L('Verlauf des Gesamtstands über sechs Monate', 'Overall status over six months')}>
           <path class="area" d={trendArea} />
@@ -176,7 +176,7 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
         <p class="vz-cap">{L('Phishing-Welle, Kenntnis vor 31 Stunden', 'Phishing wave, known for 31 hours')}</p>
         <ul class="vz-clock">
           <li class="ok"><span>{L('Frühe Erstmeldung', 'Early warning')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="100" height="8" rx="4" /></svg><b>24 h · {L('gesendet', 'sent')}</b></li>
-          <li class="run"><span>{L('Meldung mit Bewertung', 'Incident notification')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="43" height="8" rx="4" /></svg><b>72 h · {L('noch 41 h', '41 h left')}</b></li>
+          <li class="run"><span>{L('Meldung mit erster Bewertung', 'Notification with initial assessment')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="43" height="8" rx="4" /></svg><b>72 h · {L('noch 41 h', '41 h left')}</b></li>
           <li><span>{L('Abschlussmeldung', 'Final report')}</span><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true"><rect class="t" width="100" height="8" rx="4" /><rect class="v" width="4" height="8" rx="4" /></svg><b>{L('1 Monat', '1 month')}</b></li>
         </ul>
       </div>
@@ -194,9 +194,9 @@ const trendArea = `${trendPath} L ${tx(5).toFixed(1)} 96 L ${tx(0).toFixed(1)} 9
     {kind === 'policies' && (
       <div class="vz-pol">
         <ul class="vz-rows">
-          <li><b>{L('Informations\u00ADsicherheits\u00ADleitlinie', 'Information security policy')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
-          <li><b>{L('Zugriffskontrolle', 'Access control')}</b><span class="pill ok">{L('freigegeben', 'approved')}</span></li>
-          <li><b>{L('Umgang mit Vorfällen', 'Incident handling')}</b><span class="pill run">{L('in Prüfung', 'in review')}</span></li>
+          <li><b>{L('Informations\u00ADsicherheits\u00ADleitlinie', 'Information security policy')}</b><span class="pill ok">{L('umgesetzt', 'implemented')}</span></li>
+          <li><b>{L('Zugriffskontrolle', 'Access control')}</b><span class="pill ok">{L('umgesetzt', 'implemented')}</span></li>
+          <li><b>{L('Umgang mit Vorfällen', 'Incident handling')}</b><span class="pill run">{L('teilweise', 'partly')}</span></li>
           <li><b>{L('Einsatz von KI', 'Use of AI')}</b><span class="pill draft">{L('Entwurf', 'draft')}</span></li>
         </ul>
         <p class="vz-cap">{L('Abgedeckte Anforderungen', 'Requirements covered')} · 72 %</p>

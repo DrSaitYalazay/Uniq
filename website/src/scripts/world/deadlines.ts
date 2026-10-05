@@ -88,7 +88,7 @@ export function buildDeadlines(fws: string[]): DeadlineParts {
   const road = new THREE.Mesh(new THREE.TubeGeometry(curve, 500, 0.055, 8, false), roadMat);
 
   // Meilensteine: kleine Lichtsäulen am Straßenrand
-  const msS = [0.27, 0.36, 0.45, 0.54, 0.63, 0.72, 0.8];
+  const msS = [0.27, 0.35, 0.43, 0.51, 0.59, 0.67, 0.74, 0.81];
   const milestones = msS.map((s, i) => {
     const p = curve.getPointAt(s);
     const tan = curve.getTangentAt(s);

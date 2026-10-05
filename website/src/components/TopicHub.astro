@@ -12,7 +12,7 @@ const { lang } = Astro.props;
 const other = lang === 'de' ? 'en' : 'de';
 const L = lang === 'de'
   ? { kicker: 'Wissen', h1: 'Die Bausteine', acc: 'der sechs Schritte.', lead: 'Geltungsbereich, Inventar, Gap-Analyse, Risikoanalyse, Erklärung zur Anwendbarkeit, Audit: Hier steht, was die Begriffe bedeuten, was ISO 27001 und das BSI-Gesetz verlangen und woran ein Prüfer erkennt, dass es gelebt wird.', step: 'Schritt', open: 'Zum Schritt', title: 'Wissen: Die Bausteine der sechs Schritte – UniqSuite' }
-  : { kicker: 'Knowledge', h1: 'The building blocks', acc: 'of the six steps.', lead: 'Scope, inventory, gap analysis, risk assessment, Statement of Applicability, audit: what the terms mean, what ISO 27001 and the German BSI Act require, and how an auditor can tell it is lived.', step: 'Step', open: 'Go to step', title: 'Knowledge: the building blocks of the six steps – UniqSuite' };
+  : { kicker: 'Knowledge', h1: 'The building blocks', acc: 'of the six steps.', lead: 'Scope, inventory, gap analysis, risk assessment, Statement of Applicability, audit: what the terms mean, what ISO 27001 and the German BSI Act require, and how an auditor can tell it works in practice.', step: 'Step', open: 'Go to step', title: 'Knowledge: the building blocks of the six steps – UniqSuite' };
 const list = topics[lang];
 const url = (p: string) => new URL(p, SITE_URL).href;
 const jsonld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${L.h1} ${L.acc}`, description: L.lead, inLanguage: lang, url: url(topicHub(lang)), mainEntity: { '@type': 'ItemList', itemListElement: list.map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.title, url: url(topicHref(lang, x.key)) })) } }];

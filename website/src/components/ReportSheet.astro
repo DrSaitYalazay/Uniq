@@ -30,16 +30,15 @@ const lvl = (row: number, col: number) => { const s = (5 - row) * (col + 1); ret
         <dl class="rs-meta">
           <div><dt>{de ? 'Unternehmen' : 'Company'}</dt><dd>{ui.company}</dd></div>
           <div><dt>{de ? 'Erstellt am' : 'Created on'}</dt><dd>{date}</dd></div>
-          <div><dt>{de ? 'Vertraulichkeit' : 'Confidentiality'}</dt><dd>{de ? 'Vertraulich' : 'Confidential'}</dd></div>
+          <div><dt>{de ? 'Verfasser' : 'Author'}</dt><dd>{de ? 'Informationssicherheit' : 'Information security'}</dd></div>
         </dl>
-        <span class="rs-stamp">{de ? 'VERTRAULICH' : 'CONFIDENTIAL'}</span>
       </div>
     ) : (
       <div class="rs-body">
         <b class="rs-h">{r.title}</b>
         {k === 'gap' && (
           <>
-            <div class="rs-kpis"><span><b>5</b>{de ? 'Regelwerke' : 'Frameworks'}</span><span><b>64 %</b>Compliance</span><span class="warn"><b>18</b>{de ? 'krit. MUSS' : 'crit. MUST'}</span></div>
+            <div class="rs-kpis"><span><b>5</b>{de ? 'Regelwerke' : 'Frameworks'}</span><span><b>43 %</b>Compliance</span><span class="warn"><b>18</b>{de ? 'krit. MUSS' : 'crit. MUST'}</span></div>
             <ul class="rs-bars">{fw.map((f, i) => <li class={fwc[i]}><span>{f}</span><i class={`w${[62, 48, 35, 41, 27][i]}`}></i><em>{[62, 48, 35, 41, 27][i]} %</em></li>)}</ul>
             <div class="rs-time"><span class="t1">0–30</span><span class="t2">30–90</span><span class="t3">90–180</span><span class="t4">180+</span></div>
           </>
@@ -87,7 +86,7 @@ const lvl = (row: number, col: number) => { const s = (5 - row) * (col + 1); ret
         {k === 'board' && (
           <>
             <div class="rs-gauge"><b>72</b><small>/ 100</small><span class="rs-light"><i></i><i class="on"></i><i></i></span></div>
-            <ul class="rs-todo">{(de ? ['Lieferantenverträge prüfen', 'Notfallübung planen', 'MFA für Admins'] : ['Review supplier contracts', 'Plan crisis exercise', 'MFA for admins']).map((x) => <li>{x}</li>)}</ul>
+            <ul class="rs-todo">{(de ? ['Überfällig: Registrierung (NIS2)', '18 kritische MUSS-Anforderungen offen – NIS2', '7 kritische MUSS-Anforderungen offen – ISO 27001'] : ['Overdue: registration (NIS2)', '18 critical MUST requirements open – NIS2', '7 critical MUST requirements open – ISO 27001']).map((x) => <li>{x}</li>)}</ul>
             <ul class="rs-bars">{fw.slice(0, 3).map((f, i) => <li class={fwc[i]}><span>{f}</span><i class={`w${[62, 48, 35][i]}`}></i><em>{[62, 48, 35][i]} %</em></li>)}</ul>
           </>
         )}

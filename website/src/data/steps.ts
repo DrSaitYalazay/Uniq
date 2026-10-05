@@ -24,12 +24,12 @@ export const steps: Record<'de' | 'en', Step[]> = {
       img: 'scope',
       cycle: 'Plan',
       title: 'Rahmen festlegen',
-      sub: 'Wer Sie sind und was für Sie gilt.',
-      lead: 'Bevor es um Maßnahmen geht, muss klar sein, wofür Sie überhaupt verantwortlich sind. Dieser Schritt dauert meist weniger als eine Stunde.',
-      why: 'Viele Projekte verlieren Wochen, weil am Anfang niemand festgehalten hat, welche Standorte, Dienste und Regelwerke dazugehören. Später wird dann über Dinge diskutiert, die nie gefragt waren. Ein sauber beschriebener Rahmen spart diese Runden und ist das Erste, wonach ein Prüfer fragt.',
+      sub: 'Wer Sie sind und welche Regelwerke Sie umsetzen.',
+      lead: 'Bevor es um Maßnahmen geht, muss klar sein, wofür Sie überhaupt verantwortlich sind.',
+      why: 'Fehlt am Anfang ein klarer Rahmen, wird später über Dinge diskutiert, die nie gefragt waren. Ein sauber beschriebener Rahmen spart diese Runden und ist das Erste, wonach ein Prüfer fragt.',
       how: [
         'Sie geben Branche und Größe an und wählen das Paket, also die Regelwerke, die Sie umsetzen wollen. AI Act, ISO 42001 oder Cyber Resilience Act schalten Sie bei Bedarf dazu.',
-        'Sie beschreiben den Geltungsbereich: welche Standorte, Organisationseinheiten und Dienste dazugehören und welche nicht.',
+        'Eine kurze Vorabfrage klärt, ob Sonderpflichten für Sie gelten. Was nicht zutrifft, führt UniqSuite als „nicht anwendbar“ mit Begründung.',
         'Sie tragen die Beteiligten ein, etwa Geschäftsleitung, Informationssicherheitsbeauftragte und Fachverantwortliche, und vergeben Rollen.',
       ],
       tool: [
@@ -54,17 +54,17 @@ export const steps: Record<'de' | 'en', Step[]> = {
       why: 'Ein Risiko lässt sich nur für etwas bewerten, das man kennt. Wer weiß, dass die Lohnabrechnung an einem bestimmten Server und einem externen Dienstleister hängt, kann gezielt fragen, was passiert, wenn einer davon ausfällt. Ohne Inventar bleibt jede Risikoanalyse allgemein.',
       how: [
         'Sie legen Ihre wichtigsten Dienste an, also das, was Ihre Kunden oder Bürger tatsächlich von Ihnen bekommen.',
-        'Zu jedem Dienst erfassen Sie Systeme, Daten, Räume und Dienstleister, auf die er angewiesen ist.',
+        'Zu jedem Dienst erfassen Sie Systeme, Anwendungen, Daten und Dienstleister, auf die er angewiesen ist.',
         'Für jeden Eintrag bestimmen Sie, wie kritisch er ist und wer dafür verantwortlich ist.',
       ],
       tool: [
         'UniqSuite zeigt die Abhängigkeiten als Übersicht. Sie sehen auf einen Blick, welche Dienste an einem einzelnen System hängen.',
-        'Dienstleister, die Sie hier eintragen, stehen später im Lieferanten-Check bereit. Sie müssen nichts doppelt pflegen.',
+        'Zu jedem System halten Sie fest, welcher Dienstleister es betreibt. So sehen Sie, welche Dienste von welchem Dienstleister abhängen.',
       ],
       result: 'ein Inventar mit Abhängigkeiten und Verantwortlichen, das als Grundlage für Gap-Analyse und Risiken dient.',
       refs: [
         'ISO/IEC 27001, Anhang A 5.9: Inventar der Informationen und anderer zugehöriger Werte',
-        'BSIG § 30 Abs. 2 Nr. 9: Management von Anlagen (Assets) und Zugriffskontrolle',
+        'BSIG § 30 Abs. 2 Nr. 9: Konzepte für die Sicherheit des Personals, die Zugriffskontrolle und die Verwaltung von IKT-Systemen, -Produkten und -Prozessen',
       ],
     },
     {
@@ -82,7 +82,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
         'Wer tiefer gehen will, wechselt in die Detailansicht mit Reifegrad und Nachweisen.',
       ],
       tool: [
-        'Gilt eine Antwort für mehrere Regelwerke, zählt im Zweifel die schwächste Umsetzung. So rechnet sich niemand den Stand schön.',
+        'Gilt eine Antwort für mehrere Regelwerke, zählt immer die schwächste Umsetzung. So rechnet sich niemand den Stand schön.',
         'Der Umsetzungsstand je Regelwerk wird laufend berechnet. Sie sehen nach jeder Antwort, wo Sie stehen.',
       ],
       result: 'Ihren Umsetzungsstand je Regelwerk und eine Liste der offenen Lücken.',
@@ -109,7 +109,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
         'Die Bewertung folgt festen Regeln. Zwei Personen, die gleich antworten, kommen zum gleichen Ergebnis.',
         'Den Risikobericht erstellen Sie auf Knopfdruck als PDF, Word oder Excel.',
       ],
-      result: 'einen Risikobericht mit bewerteten Risiken und der jeweils gewählten Behandlung.',
+      result: 'einen Risikobericht mit bewerteten Risiken und Ihre Entscheidung, wie Sie jedes Risiko behandeln.',
       refs: [
         'ISO/IEC 27001, Abschnitt 6.1.2: Informationssicherheitsrisikobeurteilung',
         'ISO/IEC 27001, Abschnitt 6.1.3: Informationssicherheitsrisikobehandlung',
@@ -123,9 +123,9 @@ export const steps: Record<'de' | 'en', Step[]> = {
       title: 'Plan und Umsetzung',
       sub: 'Wer macht was bis wann.',
       lead: 'Aus den Risiken werden Aufgaben. Jede bekommt eine verantwortliche Person, eine Frist und einen Status, und genau so wird sie nachverfolgt.',
-      why: 'Die meisten Sicherheitsprojekte scheitern nicht an der Analyse. Sie scheitern daran, dass Maßnahmen in Protokollen stehen und niemand sie nachhält. Nach dem BSIG muss die Geschäftsleitung die Maßnahmen umsetzen und ihre Umsetzung überwachen. Dafür braucht sie eine Liste, die stimmt.',
+      why: 'Eine Analyse nützt wenig, wenn Maßnahmen in Protokollen stehen und niemand sie nachhält. Nach dem BSIG muss die Geschäftsleitung die Maßnahmen umsetzen und ihre Umsetzung überwachen. Dafür braucht sie eine Liste, die stimmt.',
       how: [
-        'Sie legen zu jedem Risiko eine oder mehrere Maßnahmen an, oder übernehmen die Vorschläge von UniqSuite.',
+        'Sie legen zu jedem Risiko eine oder mehrere Maßnahmen an oder übernehmen die Vorschläge von UniqSuite.',
         'Sie vergeben Zuständige, Fristen und Prioritäten.',
         'Die Verantwortlichen aktualisieren den Status selbst. Nachweise hängen sie direkt an die Maßnahme.',
       ],
@@ -171,12 +171,12 @@ export const steps: Record<'de' | 'en', Step[]> = {
       img: 'scope',
       cycle: 'Plan',
       title: 'Set the scope',
-      sub: 'Who you are and what applies to you.',
-      lead: 'Before anyone talks about measures, it has to be clear what you are actually responsible for. This step usually takes less than an hour.',
-      why: 'Many projects lose weeks because nobody wrote down at the start which sites, services and frameworks are in. Later the team argues about things nobody asked for. A clearly described scope saves those rounds, and it is the first thing an auditor asks for.',
+      sub: 'Who you are and which frameworks you implement.',
+      lead: 'Before anyone talks about measures, it has to be clear what you are actually responsible for.',
+      why: 'Without a clear scope at the start, teams later argue about things nobody asked for. A clearly described scope saves those rounds, and it is the first thing an auditor asks for.',
       how: [
         'You enter your sector and size and choose the package, meaning the frameworks you want to implement. You can add the AI Act, ISO 42001 or the Cyber Resilience Act as needed.',
-        'You describe the scope: which sites, units and services are in, and which are not.',
+        'A short preliminary question settles whether special duties apply to you. Anything that does not apply is recorded as ‘not applicable’, with a reason.',
         'You add the people involved, such as management, the information security officer and the people responsible in each area, and assign roles.',
       ],
       tool: [
@@ -201,17 +201,17 @@ export const steps: Record<'de' | 'en', Step[]> = {
       why: 'You can only assess the risk to something you know about. If you know that payroll depends on a particular server and an external provider, you can ask what happens when one of them fails. Without an inventory, every risk analysis stays vague.',
       how: [
         'You create your most important services, meaning what your customers or citizens actually get from you.',
-        'For each service you record the systems, data, rooms and suppliers it depends on.',
+        'For each service you record the systems, applications, data and suppliers it depends on.',
         'For each entry you set how critical it is and who is responsible for it.',
       ],
       tool: [
         'UniqSuite shows the dependencies as an overview. You see at a glance which services hang on a single system.',
-        'Suppliers you enter here are ready later in the supplier check. Nothing needs to be maintained twice.',
+        'For each system you record which supplier runs it, so you can see which services depend on which supplier.',
       ],
       result: 'an inventory with dependencies and owners, the basis for the gap analysis and the risks.',
       refs: [
         'ISO/IEC 27001, Annex A 5.9: inventory of information and other associated assets',
-        'BSIG section 30(2) no. 9: asset management and access control',
+        'BSIG section 30(2) no. 9: concepts for personnel security, access control and the management of ICT systems, products and processes',
       ],
     },
     {
@@ -229,7 +229,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
         'To go deeper, switch to the detail view with maturity level and evidence.',
       ],
       tool: [
-        'If one answer covers several frameworks, the weakest implementation counts in case of doubt. Nobody can talk the status up.',
+        'If one answer covers several frameworks, the weakest implementation always counts. Nobody can talk the status up.',
         'The implementation status per framework is calculated as you go. After every answer you see where you stand.',
       ],
       result: 'your implementation status per framework and a list of open gaps.',
@@ -246,7 +246,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
       title: 'Risks',
       sub: 'What could happen, and how bad it would be.',
       lead: 'Every gap becomes a risk. You assess how likely damage is and how serious it would be, and decide what to do about it.',
-      why: 'Not every gap is equally dangerous. A missing policy weighs differently from an unprotected remote access. The risk analysis makes sure you spend time and money where it makes the biggest difference, and that you can justify that decision.',
+      why: 'Not every gap is equally dangerous. A missing policy weighs differently from unprotected remote access. The risk analysis makes sure you spend time and money where it makes the biggest difference, and that you can justify that decision.',
       how: [
         'UniqSuite suggests a risk for each gap. You accept it, adjust it or add your own.',
         'You rate likelihood and impact on a fixed scale.',
@@ -256,7 +256,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
         'The assessment follows fixed rules. Two people who answer the same way reach the same result.',
         'You create the risk report at the push of a button as PDF, Word or Excel.',
       ],
-      result: 'a risk report with assessed risks and the treatment chosen for each.',
+      result: 'a risk report with assessed risks, and your decision on how to treat each one.',
       refs: [
         'ISO/IEC 27001, clause 6.1.2: information security risk assessment',
         'ISO/IEC 27001, clause 6.1.3: information security risk treatment',
@@ -270,7 +270,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
       title: 'Plan and implementation',
       sub: 'Who does what by when.',
       lead: 'Risks turn into tasks. Each one gets an owner, a deadline and a status, and that is exactly how it is followed up.',
-      why: 'Most security projects do not fail at the analysis. They fail because measures sit in meeting notes and nobody follows them up. Under the BSIG, management has to implement the measures and oversee their implementation. For that it needs a list that is accurate.',
+      why: 'An analysis helps little if measures sit in meeting notes and nobody follows them up. Under the BSIG, management has to implement the measures and oversee their implementation. For that it needs a list that is accurate.',
       how: [
         'For each risk you create one or more measures, or adopt the ones UniqSuite suggests.',
         'You assign owners, deadlines and priorities.',
