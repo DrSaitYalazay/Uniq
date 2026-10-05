@@ -43,24 +43,6 @@ const jsonld = [
     applicationCategory: 'BusinessApplication', operatingSystem: 'Web', url: LOGIN_URL,
     inLanguage: ['de', 'en'], description: t.meta.description,
   },
-  {
-    '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: lang,
-    mainEntity: (lang === 'de' ? [
-      ['Gibt es ein „NIS2-Zertifikat“?', 'Nein. Das Gesetz kennt keine allgemeine Zertifizierung. Eine ISO-27001-Zertifizierung ist ein starkes Indiz für ein funktionierendes ISMS, ersetzt aber nicht den Nachweis der gesetzlichen Pflichten.'],
-      ['Wir sind ISO-27001-zertifiziert. Sind wir fertig?', 'Nicht automatisch. Prüfen Sie Geltungsbereich, Meldewesen, Registrierung, Pflichten der Leitung und Lieferkette.'],
-      ['Wie lange dauert eine Gap-Analyse?', 'Das hängt von Größe und Vorarbeit ab. Ein erster vollständiger Durchgang ist bei guter Vorbereitung in wenigen Arbeitstagen machbar; die Vertiefung mit Nachweisen dauert länger.'],
-      ['Wir sind eine Kommune. Gilt das BSIG für uns?', 'Für die Kommunalverwaltung gelten die Regelungen Ihres Landes. Kommunale Unternehmen können dagegen unmittelbar unter das BSIG fallen.'],
-      ['Müssen wir alle Anforderungen sofort erfüllen?', 'Die Pflichten gelten seit Dezember 2025. Wer noch Lücken hat, braucht einen priorisierten, von der Leitung getragenen Plan – und muss ihn sichtbar abarbeiten.'],
-      ['Was gilt, wenn wir auch KI einsetzen?', 'Der AI Act gilt unabhängig von NIS2. KI-Kompetenz und Verbote gelten bereits; ein KI-Register ist der erste sinnvolle Schritt. ISO 42001 bietet dafür das Managementsystem.'],
-    ] : [
-      ['Is there an “NIS2 certificate”?', 'No. The law knows no general certification. ISO 27001 certification is a strong indication of a working ISMS but does not replace evidence of the statutory obligations.'],
-      ['We are ISO 27001 certified. Are we done?', 'Not automatically. Check scope, incident reporting, registration, management duties and the supply chain.'],
-      ['How long does a gap analysis take?', 'That depends on size and prior work. With good preparation, a first complete pass is feasible in a few working days; the deep dive with evidence takes longer.'],
-      ['We are a municipality. Does the BSI Act apply to us?', 'For the municipal administration, the rules of your German state apply. Municipal companies, however, may fall directly under the BSI Act.'],
-      ['Do we have to meet all requirements immediately?', 'The obligations have applied since December 2025. If you still have gaps, you need a prioritised plan backed by management – and must visibly work through it.'],
-      ['What if we also use AI?', 'The AI Act applies independently of NIS2. AI literacy and the prohibitions already apply; an AI register is the sensible first step. ISO 42001 provides the management system for it.'],
-    ]).map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
-  },
 ];
 
 // Daten für Skripte (nicht ausführbar → CSP-konform)
