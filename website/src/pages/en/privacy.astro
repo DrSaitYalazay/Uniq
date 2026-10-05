@@ -20,7 +20,7 @@ import { CONTACT_EMAIL } from '../../config';
   <p>The quick check runs entirely in your browser. Your answers, the result and any company name you enter are not transferred to us or to third parties and are not stored. The PDF report is also created locally in your browser. Closing the page deletes the information.</p>
 
   <h2>5. Demo request and contact by email</h2>
-  <p>“Book a demo” opens a form. We process the details you enter there – company or organisation, first and last name, business email address and, if given, phone number – to answer your request and arrange a demo (Art. 6(1)(b) GDPR, pre-contractual steps). The details are sent as an email to {CONTACT_EMAIL}; they remain in our server's mail queue only until sent.</p>
+  <p>“Request a demo” opens a form. We process the details you enter there – company or organisation, first and last name, business email address and, if given, phone number – to answer your request and arrange a demo (Art. 6(1)(b) GDPR, pre-contractual steps). The details are sent as an email to {CONTACT_EMAIL}; they remain in our server's mail queue only until sent.</p>
   <p>To prevent abuse, we store the email address, IP address and time of each request in order to limit repeated automated requests (Art. 6(1)(f) GDPR). These details are deleted automatically after 30 days. No CAPTCHA and no third-party service is used; we do not send you a confirmation email.</p>
   <p>If you write to us directly at {CONTACT_EMAIL}, we process your details for the same purpose.</p>
   <p class="todo">TODO: add the retention period for requests in the mailbox and the email provider.</p>
@@ -29,11 +29,12 @@ import { CONTACT_EMAIL } from '../../config';
   <p>The “Sign in” button leads to the application at uniq.cyberwerk.online, which has its own privacy policy.</p>
 
   <h2 id="video">7. Video (bunny.net)</h2>
-  <p>We embed our film using the Bunny Stream service of BunnyWay d.o.o., Dunajska cesta 165, 1000 Ljubljana, Slovenia. The player loads only when you start the film; until then no connection to bunny.net is made. The preview image is served from our own server. When you open it, your browser sends technically necessary information to bunny.net, in particular your IP address, browser identifier, date and time and the address of this page. The legal basis is your consent given by the click (Art. 6(1)(a) GDPR and Section 25(1) TDDDG); you can withdraw it at any time for the future by not opening the film again. Details are in the provider's privacy policy at <a href="https://bunny.net/privacy" rel="noopener noreferrer">bunny.net/privacy</a>.</p>
+  <p>We embed our film using the Bunny Stream service of BunnyWay d.o.o., Dunajska cesta 165, 1000 Ljubljana, Slovenia. The player loads only when you start the film; until then no connection to Bunny (player.mediadelivery.net) is made. The preview image is served from our own server. When you open it, your browser sends technically necessary information to Bunny, in particular your IP address, browser identifier, date and time and our website’s address (without the page path). The legal basis is your consent given by the click (Art. 6(1)(a) GDPR and Section 25(1) TDDDG); your consent covers each playback; without a click, no data is sent to Bunny. Details are in the provider's privacy policy at <a href="https://bunny.net/privacy" rel="noopener noreferrer">bunny.net/privacy</a>.</p>
   <p class="todo">TODO: check the data processing agreement with BunnyWay d.o.o. (Art. 28 GDPR) and note it here.</p>
 
   <h2>8. Your rights</h2>
   <p>You have the right of access, rectification, erasure, restriction of processing, data portability and objection (Art. 15–21 GDPR), and the right to lodge a complaint with a supervisory authority (Art. 77 GDPR).</p>
+  <p><strong>Right to object (Art. 21 GDPR):</strong> You may object at any time, on grounds relating to your particular situation, to processing based on Art. 6(1)(f) GDPR (sections 3 and 5). Write to {CONTACT_EMAIL}.</p>
   <p class="todo">TODO: add the competent supervisory authority.</p>
 
 </Legal>
