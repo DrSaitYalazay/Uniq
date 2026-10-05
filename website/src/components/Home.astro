@@ -177,8 +177,53 @@ const clientData = {
     </div>
   </section>
 
+  <!-- Sechs Schritte als Weg: der Abschnitt bleibt stehen, beim Scrollen fährt die Ansicht auf einer leuchtenden
+       Straße von Schritt zu Schritt (wie die Zeitachse der Fristen); nach Schritt 6 geht es nach unten weiter. -->
+  <section id="pdca" class="station steps path" data-u0="5.93" data-u1="11.6" data-dim="0.35" data-dim-m="0.6" aria-labelledby="h-pdca">
+    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('pdca')}-m.webp`} width="720" height="1280" /><img src={`${still('pdca')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
+    <div class="path-pin">
+      <div class="wrap path-head">
+        <div class="path-title">
+          <p class="kicker">{t.pdca.kicker}</p>
+          <h2 id="h-pdca" class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
+        </div>
+        <ol class="path-chips" data-steps>
+          {t.pdca.phases.map((p, i) => (
+            <li class="ph" data-ph={i}><a class="ph-head" href={stepHref(lang, i)}><span class="ph-n">{p.n}</span><span class="ph-t">{p.title}</span></a></li>
+          ))}
+        </ol>
+      </div>
+      <div class="path-view">
+        <div class="path-track" data-path>
+          <svg class="path-road" aria-hidden="true" focusable="false">
+            <defs><clipPath id="road-clip"><rect class="rd-clip" x="0" y="0" width="0" height="100%" /></clipPath></defs>
+            <path class="rd-base" d="" />
+            <path class="rd-fill" d="" clip-path="url(#road-clip)" />
+            {t.pdca.phases.map((_, i) => <circle class="rd-node" data-node={i} r="7" cx="0" cy="0" />)}
+            <circle class="rd-dot" r="9" cx="0" cy="0" />
+          </svg>
+          {t.pdca.phases.map((p, i) => (
+            <article class="pstop" data-stage={i} aria-labelledby={`pstop-h-${i}`}>
+              <div class="pstop-in">
+                <h3 id={`pstop-h-${i}`} class="sr-only">{p.n} {p.title}</h3>
+                <a class="stage-card" href={stepHref(lang, i)} tabindex="-1">
+                  <Viz kind={p.img} lang={lang} big kicker={`${lang === 'de' ? 'Schritt' : 'Step'} ${i + 1} ${lang === 'de' ? 'von' : 'of'} 6 · ${p.cycle}`} title={p.title} sub={`${t.pdca.resultLabel}: ${p.result}`} />
+                </a>
+                <div class="pstop-foot">
+                  <ul class="ph-topics">{topicsForStep(lang, i).map((x) => <li><a href={topicHref(lang, x.key)}>{x.name}</a></li>)}</ul>
+                  <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+    {t.pdca.phases.map((_, i) => <span class={`path-mark m${i}`} id={`pdca-${i + 1}`}></span>)}
+  </section>
+
   <!-- Funktionen: laufendes Band aus Karten mit eigener Grafik; jede Karte öffnet die Funktionsseite -->
-  <section id="funktionen" class="station flow features" data-u0="5.895" data-u1="5.93" data-dim="0.78" data-dim-m="0.9" aria-labelledby="h-feat">
+  <section id="funktionen" class="station flow features" data-u0="11.6" data-u1="11.6" data-dim="0.78" data-dim-m="0.9" aria-labelledby="h-feat">
     <div class="wrap">
       <div class="rw-head cam">
         <div>
@@ -228,7 +273,7 @@ const clientData = {
   </section>
 
   <!-- Berichte: die Seiten kommen beim Scrollen aus einem leuchtenden Druckschlitz und legen sich in eine Reihe -->
-  <section id="berichte" class="reports-sec" data-u0="5.93" data-u1="5.93" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
+  <section id="berichte" class="reports-sec" data-u0="11.6" data-u1="11.6" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
     <div class="rp-pin">
       <div class="wrap rp-headrow">
         <div>
@@ -258,51 +303,6 @@ const clientData = {
         </ul>
       </div>
     </div>
-  </section>
-
-  <!-- Sechs Schritte als Weg: der Abschnitt bleibt stehen, beim Scrollen fährt die Ansicht auf einer leuchtenden
-       Straße von Schritt zu Schritt (wie die Zeitachse der Fristen); nach Schritt 6 geht es nach unten weiter. -->
-  <section id="pdca" class="station steps path" data-u0="5.93" data-u1="11.6" data-dim="0.35" data-dim-m="0.6" aria-labelledby="h-pdca">
-    <picture class="still" aria-hidden="true"><source media="(max-width: 820px)" srcset={`${still('pdca')}-m.webp`} width="720" height="1280" /><img src={`${still('pdca')}-d.webp`} alt="" loading="lazy" width="1600" height="900" /></picture>
-    <div class="path-pin">
-      <div class="wrap path-head">
-        <div class="path-title">
-          <p class="kicker">{t.pdca.kicker}</p>
-          <h2 id="h-pdca" class="h2">{t.pdca.h2a} <span class="accent">{t.pdca.h2b}</span></h2>
-        </div>
-        <ol class="path-chips" data-steps>
-          {t.pdca.phases.map((p, i) => (
-            <li class="ph" data-ph={i}><a class="ph-head" href={stepHref(lang, i)}><span class="ph-n">{p.n}</span><span class="ph-t">{p.title}</span></a></li>
-          ))}
-        </ol>
-      </div>
-      <div class="path-view">
-        <div class="path-track" data-path>
-          <svg class="path-road" aria-hidden="true" focusable="false">
-            <defs><clipPath id="road-clip"><rect class="rd-clip" x="0" y="0" width="0" height="100%" /></clipPath></defs>
-            <path class="rd-base" d="" />
-            <path class="rd-fill" d="" clip-path="url(#road-clip)" />
-            {t.pdca.phases.map((_, i) => <circle class="rd-node" data-node={i} r="7" cx="0" cy="0" />)}
-            <circle class="rd-dot" r="9" cx="0" cy="0" />
-          </svg>
-          {t.pdca.phases.map((p, i) => (
-            <article class="pstop" data-stage={i} aria-labelledby={`pstop-h-${i}`}>
-              <div class="pstop-in">
-                <h3 id={`pstop-h-${i}`} class="sr-only">{p.n} {p.title}</h3>
-                <a class="stage-card" href={stepHref(lang, i)} tabindex="-1">
-                  <Viz kind={p.img} lang={lang} big kicker={`${lang === 'de' ? 'Schritt' : 'Step'} ${i + 1} ${lang === 'de' ? 'von' : 'of'} 6 · ${p.cycle}`} title={p.title} sub={`${t.pdca.resultLabel}: ${p.result}`} />
-                </a>
-                <div class="pstop-foot">
-                  <ul class="ph-topics">{topicsForStep(lang, i).map((x) => <li><a href={topicHref(lang, x.key)}>{x.name}</a></li>)}</ul>
-                  <a class="ph-more" href={stepHref(lang, i)}>{clientData.more}<Icon name="arrow" /></a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </div>
-    {t.pdca.phases.map((_, i) => <span class={`path-mark m${i}`} id={`pdca-${i + 1}`}></span>)}
   </section>
 
   <!-- Fristen: Meldefristen, dann die Zeitachse kompakt; der Abschnitt endet im 1-Monats-Ring -->
