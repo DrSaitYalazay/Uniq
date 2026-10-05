@@ -32,6 +32,8 @@ export const state = {
   u: 0,
   /** Abdunkelung der Szene (0 … 1) */
   dim: 0,
+  /** Statusring auf dem Bildschirm (nur rund um Regelwerke/Funktionen gesetzt) */
+  ring: null as null | { cx: number; cy: number; rx: number; ry: number },
   lenis: null as Lenis | null,
   scrollToEl: (_el: HTMLElement, _push?: boolean, _offset?: number) => {},
   qc: { mode: 'pick' } as QcView,
