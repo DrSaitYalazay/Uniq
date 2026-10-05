@@ -13,6 +13,8 @@ import { fwHref, type Fw } from '../data/frameworks';
 import { topicsForStep, topicHref } from '../data/topics';
 import { photos, photoSrc } from '../data/photos';
 import { docInfo } from '../data/docs';
+import ReportSheet from './ReportSheet.astro';
+import { reports, reportsUi, reportHref, reportHub, reportOrder, formatLabel } from '../data/reports';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -223,8 +225,38 @@ const clientData = {
         <button type="button" class="next" data-car="1" aria-label={lang === 'de' ? 'Nächste Funktion' : 'Next feature'}><Icon name="arrow" /></button>
       </div>
     </div>
-    <div class="wrap belt-foot">
-      <p class="reports"><Icon name="file" />{t.features.reports}</p>
+  </section>
+
+  <!-- Berichte: die Seiten kommen beim Scrollen aus einem leuchtenden Druckschlitz und legen sich in eine Reihe -->
+  <section id="berichte" class="reports-sec" data-dim="0.82" data-dim-m="0.9" aria-labelledby="h-rep">
+    <div class="rp-pin">
+      <div class="wrap rp-headrow">
+        <div>
+          <p class="kicker">{reportsUi[lang].kicker}</p>
+          <h2 id="h-rep" class="h2">{reportsUi[lang].h2a} <span class="accent">{reportsUi[lang].h2b}</span></h2>
+        </div>
+        <div>
+          <p class="lead">{reportsUi[lang].intro}</p>
+          <p class="rp-hint">{reportsUi[lang].hint} <a href={reportHub(lang)}>{reportsUi[lang].all}<Icon name="arrow" /></a></p>
+        </div>
+      </div>
+      <div class="wrap rp-press" data-press>
+        <div class="rp-slot" aria-hidden="true"><span></span></div>
+        <ul class="rp-deck">
+          {reportOrder.map((k, i) => {
+            const r = reports[lang].find((x) => x.key === k)!;
+            return (
+              <li class="rp-card" data-sheet={i}>
+                <a href={reportHref(lang, k)}>
+                  <span class="rp-paper"><ReportSheet k={k} lang={lang} /></span>
+                  <b>{r.name}</b>
+                  <small>{r.formats.map((f) => formatLabel[f]).join(' · ')}</small>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   </section>
 
