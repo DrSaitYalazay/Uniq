@@ -18,7 +18,9 @@ for (const f of files) {
   if (/<[^>]+\sstyle=/.test(h)) problems.push('style-Attribut');
   if (/<[^>]+\son[a-z]+=/.test(h)) problems.push('on*-Handler');
   if (/<style[\s>]/.test(h)) problems.push('<style>-Block');
-  if (/(src|href)="https?:\/\/(?!uniqsuite\.cyberwerk\.online|uniq\.cyberwerk\.online|cyberwerksuite\.com)/.test(h)) problems.push('externe Quelle');
+  // Externe Ressourcen (Skripte, Bilder, Stylesheets) sind verboten; Links (<a href>) auf andere Seiten nicht.
+  const ext = /^https?:\/\/(?!uniqsuite\.cyberwerk\.online|uniq\.cyberwerk\.online|cyberwerksuite\.com)/;
+  for (const m of h.matchAll(/<(script|img|source|iframe|link|video|audio)\b[^>]*?\s(?:src|srcset|href)="([^"]+)"/g)) if (ext.test(m[2])) problems.push('externe Quelle');
   if (problems.length) { bad++; console.error(`✗ ${f}: ${[...new Set(problems)].join(', ')}`); }
 }
 console.log(bad ? `${bad} Datei(en) mit Problemen` : `✓ ${files.length} HTML-Dateien CSP-konform`);
