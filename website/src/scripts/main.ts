@@ -29,6 +29,7 @@ if (!reduced && !params.has('still')) {
 // ── Stationen: Scrollposition → Weltparameter u ───────────────────────────
 type Mark = { y: number; u: number };
 let marks: Mark[] = [];
+let runs: { y0: number; h: number }[] = [];
 let sections: { el: HTMLElement; id: string; y0: number; y1: number; dim: number }[] = [];
 const dimEls = Array.from(document.querySelectorAll<HTMLElement>('[data-dim], [data-dim-m]'));
 
@@ -43,7 +44,16 @@ function measure() {
     marks.push({ y: y0, u: parseFloat(el.dataset.u0!) }, { y: y1, u: parseFloat(el.dataset.u1!) });
     sections.push({ el, id: el.id, y0: top, y1: top + el.offsetHeight, dim: parseFloat(el.dataset.dim || '0') });
   });
+  // Zwischenhalte der Kamera: Wert uc genau dann, wenn das Element mittig im Bild steht
+  runs = [];
+  document.querySelectorAll<HTMLElement>('[data-uc]').forEach((el) => {
+    const top = el.getBoundingClientRect().top + scrollY;
+    marks.push({ y: top + el.offsetHeight / 2 - vh / 2, u: parseFloat(el.dataset.uc!) });
+    runs.push({ y0: top, h: Math.max(1, el.offsetHeight) });
+  });
   marks.sort((a, b) => a.y - b.y);
+  // Reihenfolge der Werte muss mit der Lage übereinstimmen (sonst fährt die Kamera rückwärts)
+  for (let i = 1; i < marks.length; i++) if (marks[i].u < marks[i - 1].u) marks[i].u = marks[i - 1].u;
 }
 
 function uAt(y: number) {
@@ -224,10 +234,8 @@ const stepsEl = document.querySelector<HTMLElement>('[data-steps]');
 const stageEls = Array.from(document.querySelectorAll<HTMLElement>('[data-stage]'));
 let lastPh = -2, lastF = -1;
 
-/** Wechsel des aktiven Schritts: Karte kommt aus der Scroll-Richtung, die alte geht in die Gegenrichtung. */
-function switchStep(ph: number, prev: number) {
-  const down = ph > prev;
-  stepsEl?.classList.toggle('dir-up', !down);
+/** Wechsel des aktiven Schritts: Zeitleiste links, Grafik der Karte rechts startet. */
+function switchStep(ph: number) {
   phEls.forEach((el) => {
     const i = Number(el.dataset.ph);
     el.classList.toggle('is-active', i === ph);
@@ -235,20 +243,10 @@ function switchStep(ph: number, prev: number) {
     if (i !== ph) el.style.removeProperty('--f');
   });
   stepsEl?.classList.toggle('has-active', ph >= 0);
-  const cur = Math.max(0, ph), old = Math.max(0, prev);
   stageEls.forEach((el) => {
-    const i = Number(el.dataset.stage);
-    if (i === cur && i !== old && prev > -2) {
-      // Startlage ohne Übergang setzen, dann einblenden
-      el.classList.remove('to-up', 'to-down');
-      el.classList.add(down ? 'from-down' : 'from-up');
-      void el.offsetWidth;
-      el.classList.remove('from-down', 'from-up');
-    }
-    if (i === old && i !== cur) { el.classList.remove('to-up', 'to-down'); el.classList.add(down ? 'to-up' : 'to-down'); }
-    const on = i === cur;
+    const on = Number(el.dataset.stage) === ph;
     el.classList.toggle('is-active', on);
-    el.querySelector('[data-viz]')?.classList.toggle('on', on);
+    if (on) el.querySelector('[data-viz]')?.classList.add('on');
   });
 }
 
@@ -270,13 +268,14 @@ function tick(time: number) {
     setActive(id);
     // aktiver Meilenstein
     const ms = Math.round(Math.min(6, Math.max(0, (state.u - 13.3) / (14.9 - 13.3) * 6)));
-    // aktiver Schritt in der Liste „Sechs Schritte“ (folgt der Kamera)
-    const ph = state.u < 5.97 ? -1 : Math.round(Math.min(5, Math.max(0, state.u - 6)));
-    if (ph !== lastPh) { switchStep(ph, lastPh); lastPh = ph; lastF = -1; }
-    // Fortschritt innerhalb des Schritts: Linie zum nächsten Schritt füllt sich mit jedem Scrollen
+    // aktiver Schritt: die Karte, die gerade die Bildschirmmitte kreuzt
+    let ph = -1, f = 0;
+    for (let i = 0; i < runs.length; i++) if (mid >= runs[i].y0) { ph = i; f = Math.min(1, (mid - runs[i].y0) / runs[i].h); }
+    if (ph >= 0 && ph === runs.length - 1 && mid > runs[ph].y0 + runs[ph].h + innerHeight * 0.3) ph = runs.length; // alle erledigt
+    if (ph !== lastPh) { switchStep(ph); lastPh = ph; lastF = -1; }
     if (ph >= 0) {
-      const f = Math.round(Math.min(1, Math.max(0, state.u - 6 - ph + 0.5)) * 100) / 100;
-      if (f !== lastF) { lastF = f; phEls[ph]?.style.setProperty('--f', String(f)); }
+      const fr = Math.round(f * 100) / 100;
+      if (fr !== lastF) { lastF = fr; phEls[ph]?.style.setProperty('--f', String(fr)); }
     }
     if (ms !== lastMs && state.u > 14) {
       lastMs = ms;

@@ -6,6 +6,7 @@
  * Ohne JS oder bei reduzierter Bewegung bleibt alles sofort sichtbar.
  * DOM wird nur mit createElement/Textknoten gebaut (Trusted Types, CSP).
  */
+import { state } from './state';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || new URLSearchParams(location.search).has('reduced');
 
 function wrapWords(el: HTMLElement) {
@@ -121,7 +122,7 @@ export function initCarousel() {
     });
     return;
   }
-  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(setupRing);
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((c) => (c.classList.contains('ft-car') ? setupFtOrbit(c) : setupRing(c)));
   document.querySelectorAll<HTMLElement>('[data-belt]').forEach(setupBelt);
   document.querySelectorAll<HTMLElement>('[data-orbit]').forEach(setupOrbit);
 }
@@ -166,6 +167,86 @@ function setupRing(car: HTMLElement) {
   addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
   car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {
     turnTo(Math.round((target ?? angle) / step) * step - Number(b.dataset.car) * step);
+  }));
+}
+
+/**
+ * Funktionen: die Karten kreisen um den Statusring der 3D-Szene. Alle sechs bleiben sichtbar;
+ * die vorderen stehen groß und zum Betrachter, die hinteren kleiner und gedämpft. Steht die
+ * 3D-Szene zur Verfügung, übernimmt die Bahn Mitte und Breite des Rings auf dem Bildschirm.
+ */
+function setupFtOrbit(car: HTMLElement) {
+  const ring = car.querySelector<HTMLElement>('.ring');
+  if (!ring) return;
+  const items = Array.from(ring.querySelectorAll<HTMLElement>('.ring-item'));
+  const n = items.length;
+  if (n < 2) return;
+  car.classList.add('orbit-ft');
+  const nav = car.querySelector<HTMLElement>('.carousel-nav');
+  const step = (Math.PI * 2) / n;
+  const speed = (9 * Math.PI) / 180;
+  let angle = Math.PI / 2, target: number | null = null, hold = 0, paused = false, visible = false, raf = 0, last = 0, front = -1;
+  let W = 0, H = 0;
+  const measure = () => { W = ring.clientWidth; H = ring.clientHeight; };
+  measure();
+  addEventListener('resize', measure);
+  // weich nachgeführte Bahn (Ring der Szene oder eigene Ellipse)
+  let ox = 0, rx = 0, ry = 0, init = false;
+  const frame = (now: number) => {
+    const dt = Math.min(0.1, (now - last) / 1000 || 0);
+    last = now;
+    if (target !== null) {
+      angle += (target - angle) * Math.min(1, dt * 5);
+      if (Math.abs(target - angle) < 0.002) { angle = target; target = null; hold = now + 1800; }
+    } else if (!paused && now > hold) angle += speed * dt;
+    const narrow = W < 700;
+    let tx = 0, trx = Math.min(W * (narrow ? 0.34 : 0.4), 560), tr = trx * (narrow ? 0.62 : 0.3);
+    const R = state.ring;
+    if (R && R.rx > 40 && document.documentElement.classList.contains('has3d') && !narrow) {
+      // Bahn knapp außerhalb des Rings, Mitte auf der Ringmitte; Karten bleiben ganz im Bild
+      const box = ring.getBoundingClientRect();
+      const side = (items[0]?.offsetWidth || 210) * 0.78 / 2;
+      const avail = innerWidth / 2 - side - 56;
+      tx = R.cx - (box.left + W / 2);
+      trx = R.rx * 1.18;
+      if (Math.abs(tx) + trx > avail) trx = Math.max(R.rx, avail - Math.abs(tx));
+      if (Math.abs(tx) + trx > avail) tx = Math.sign(tx) * Math.max(0, avail - trx);
+      tr = Math.max(trx * 0.25, Math.min(175, R.ry * 1.18));
+    }
+    if (!init) { ox = tx; rx = trx; ry = tr; init = true; }
+    const k = Math.min(1, dt * 3);
+    ox += (tx - ox) * k; rx += (trx - rx) * k; ry += (tr - ry) * k;
+    if (nav) nav.style.transform = `translateX(${ox.toFixed(1)}px)`;
+    let best = -2, bk = 0;
+    items.forEach((it, i) => {
+      const th = angle + i * step;
+      const c = Math.cos(th), d = Math.sin(th); // d = 1: vorn
+      const s = (narrow ? 0.5 : 0.56) + (narrow ? 0.5 : 0.44) * (d + 1) / 2;
+      it.style.transform = `translate(${(ox + c * rx).toFixed(1)}px, ${(d * ry).toFixed(1)}px) rotateY(${(-c * 28 * (0.4 + 0.6 * (d + 1) / 2)).toFixed(2)}deg) scale(${s.toFixed(3)})`;
+      it.style.zIndex = String(Math.round((d + 1) * 50));
+      it.style.filter = `brightness(${(0.42 + 0.58 * (d + 1) / 2).toFixed(2)})`; // hinten dunkler, aber deckend
+      if (d > best) { best = d; bk = i; }
+    });
+    if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); }
+    raf = visible ? requestAnimationFrame(frame) : 0;
+  };
+  whenVisible(car, (v) => { visible = v; if (v && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } });
+  const bringFront = (i: number) => {
+    let t = Math.PI / 2 - i * step;
+    const base = target ?? angle;
+    while (t - base > Math.PI) t -= Math.PI * 2;
+    while (t - base < -Math.PI) t += Math.PI * 2;
+    target = t;
+  };
+  items.forEach((it, i) => {
+    it.addEventListener('pointerenter', () => { paused = true; });
+    it.addEventListener('pointerleave', () => { paused = false; hold = performance.now() + 600; });
+    it.addEventListener('focusin', (e) => { if ((e.target as Element).matches(':focus-visible')) { paused = true; bringFront(i); } });
+    it.addEventListener('focusout', () => { paused = false; });
+  });
+  addEventListener('pageshow', () => { paused = false; target = null; hold = 0; });
+  car.querySelectorAll<HTMLButtonElement>('[data-car]').forEach((b) => b.addEventListener('click', () => {
+    bringFront((front + Number(b.dataset.car) + n) % n);
   }));
 }
 
