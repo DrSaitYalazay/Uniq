@@ -28,13 +28,13 @@ export const steps: Record<'de' | 'en', Step[]> = {
       lead: 'Bevor es um Maßnahmen geht, muss klar sein, wofür Sie überhaupt verantwortlich sind. Dieser Schritt dauert meist weniger als eine Stunde.',
       why: 'Viele Projekte verlieren Wochen, weil am Anfang niemand festgehalten hat, welche Standorte, Dienste und Regelwerke dazugehören. Später wird dann über Dinge diskutiert, die nie gefragt waren. Ein sauber beschriebener Rahmen spart diese Runden und ist das Erste, wonach ein Prüfer fragt.',
       how: [
-        'Sie geben Branche, Größe und das gewünschte Paket an. Daraus leitet UniqSuite ab, welche Regelwerke für Sie in Frage kommen.',
+        'Sie geben Branche und Größe an und wählen das Paket, also die Regelwerke, die Sie umsetzen wollen. AI Act, ISO 42001 oder Cyber Resilience Act schalten Sie bei Bedarf dazu.',
         'Sie beschreiben den Geltungsbereich: welche Standorte, Organisationseinheiten und Dienste dazugehören und welche nicht.',
         'Sie tragen die Beteiligten ein, etwa Geschäftsleitung, Informationssicherheitsbeauftragte und Fachverantwortliche, und vergeben Rollen.',
       ],
       tool: [
         'Die Fragen kommen in einer festen Reihenfolge. Sie müssen nicht wissen, welcher Normabschnitt gerade gemeint ist.',
-        'Was Sie hier festlegen, steuert die folgenden Schritte. Die Gap-Analyse zeigt danach nur die Anforderungen, die für Sie gelten.',
+        'Was Sie hier festlegen, steuert die folgenden Schritte. Die Gap-Analyse zeigt danach die Anforderungen der gewählten Regelwerke.',
       ],
       result: 'einen Scope-Bericht, den Sie der Geschäftsleitung vorlegen und im Audit verwenden können.',
       refs: [
@@ -73,7 +73,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
       cycle: 'Plan',
       title: 'Gap-Analyse',
       sub: 'Was schon da ist und was fehlt.',
-      lead: 'Jetzt gehen Sie die Anforderungen durch, eine nach der anderen. Die Pflichtpunkte kommen zuerst, damit das Wichtigste nicht am Ende liegen bleibt.',
+      lead: 'Jetzt gehen Sie die Anforderungen durch, Thema für Thema. Die Übersicht zeigt die größten Lücken zuerst, damit das Wichtigste nicht am Ende liegen bleibt.',
       why: 'Die Normen sind lang und überschneiden sich. Wer sie nebeneinander abarbeitet, beantwortet dieselbe Frage drei- oder viermal. In UniqSuite sind gleiche Anforderungen zu gemeinsamen Prüfpunkten zusammengefasst. Eine Antwort zählt in jedem Regelwerk, das denselben Punkt verlangt.',
       how: [
         'Sie sehen eine Anforderung pro Karte, in verständlicher Sprache und mit dem Bezug zur Norm.',
@@ -175,13 +175,13 @@ export const steps: Record<'de' | 'en', Step[]> = {
       lead: 'Before anyone talks about measures, it has to be clear what you are actually responsible for. This step usually takes less than an hour.',
       why: 'Many projects lose weeks because nobody wrote down at the start which sites, services and frameworks are in. Later the team argues about things nobody asked for. A clearly described scope saves those rounds, and it is the first thing an auditor asks for.',
       how: [
-        'You enter your sector, size and the package you want. From this, UniqSuite works out which frameworks may apply to you.',
+        'You enter your sector and size and choose the package, meaning the frameworks you want to implement. You can add the AI Act, ISO 42001 or the Cyber Resilience Act as needed.',
         'You describe the scope: which sites, units and services are in, and which are not.',
         'You add the people involved, such as management, the information security officer and the people responsible in each area, and assign roles.',
       ],
       tool: [
         'The questions come in a fixed order. You do not need to know which clause of the standard is meant.',
-        'What you set here drives the following steps. The gap analysis then only shows the requirements that apply to you.',
+        'What you set here drives the following steps. The gap analysis then shows the requirements of the frameworks you selected.',
       ],
       result: 'a scope report you can present to management and use in the audit.',
       refs: [
@@ -220,7 +220,7 @@ export const steps: Record<'de' | 'en', Step[]> = {
       cycle: 'Plan',
       title: 'Gap analysis',
       sub: 'What is already there and what is missing.',
-      lead: 'Now you go through the requirements one at a time. Mandatory points come first, so the important things are not left until the end.',
+      lead: 'Now you go through the requirements, topic by topic. The overview shows the biggest gaps first, so the important things are not left until the end.',
       why: 'The standards are long and they overlap. Working through them side by side means answering the same question three or four times. In UniqSuite, equivalent requirements are grouped into shared control points. One answer counts in every framework that asks for the same point.',
       how: [
         'You see one requirement per card, in plain language and with its reference to the standard.',
