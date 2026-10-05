@@ -542,7 +542,7 @@ export async function init(canvas: HTMLCanvasElement) {
       segLbl[k]?.classList.toggle('on', (u >= 5.97 && k === active) || k === hoverSeg);
     });
     // Lage des Rings auf dem Bildschirm (für die Karten, die um ihn kreisen)
-    if (R.group.visible && u > 5.5 && u < 6.3) {
+    if (R.group.visible && ((u > 5.5 && u < 6.3) || (u > 11.3 && u < 11.9))) {
       let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
       for (let k = 0; k < 16; k++) {
         const a = (k / 16) * Math.PI * 2;
