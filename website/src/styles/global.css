@@ -1816,3 +1816,39 @@ h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
 .qc-fwlink { margin-top: 0.9rem; }
 .qc-fwlink a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--mint); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgb(142 230 184 / 0.4); padding-bottom: 2px; }
 .qc-fwlink svg { width: 15px; height: 15px; }
+/* v5 · Wissensseiten (Bausteine der sechs Schritte) */
+.stp-0 { --c: var(--fw-nis2); } .stp-1 { --c: var(--fw-iso27001); } .stp-2 { --c: var(--fw-aiact); }
+.stp-3 { --c: #f0616d; } .stp-4 { --c: var(--fw-iso42001); } .stp-5 { --c: var(--fw-cra); }
+.tpp .fwp-nav a svg { width: 15px; height: 15px; }
+.tpp .sp-intro .viz { --c: var(--c); }
+.tp-how { counter-reset: none; }
+.tp-how li p { margin-top: 0.6rem; color: var(--text); font-size: 1rem; line-height: 1.5; }
+.tp-many { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.tp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.tp-box { padding: clamp(1.4rem, 3vw, 2rem); border-radius: 24px; border: 1px solid rgb(255 255 255 / 0.09); background: rgb(10 16 32 / 0.88); }
+.tp-box .sp-h { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem); }
+.tp-box ul { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.85rem; }
+.tp-box li { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.6rem; color: var(--text-2); line-height: 1.5; }
+.tp-box svg { width: 18px; height: 18px; margin-top: 0.15rem; }
+.tp-bad { background: radial-gradient(120% 80% at 0% 0%, rgb(240 97 109 / 0.1), transparent 60%), rgb(10 16 32 / 0.88); }
+.tp-bad svg { color: #f0616d; }
+.tp-good { background: radial-gradient(120% 80% at 0% 0%, rgb(43 182 115 / 0.12), transparent 60%), rgb(10 16 32 / 0.88); }
+.tp-good svg { color: var(--mint); }
+.tpp .fwp-help .portal { --s: 7rem; }
+.tp-steplink { margin-top: 1rem; }
+.tp-steplink a, .tp-steplink-a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--c, var(--mint)); font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.tp-steplink svg, .tp-steplink-a svg { width: 15px; height: 15px; }
+.fwp-more .tp-name { color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+.sp-topics-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.tph-step { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; padding-top: 2rem; border-top: 1px solid rgb(255 255 255 / 0.08); }
+.tph-side { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: start; }
+.tph-n { font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 2rem + 2vw, 4rem); line-height: 0.9; color: var(--c); letter-spacing: -0.04em; }
+.tph-side .kicker { color: var(--c); }
+.tph-side .sp-h { margin: 0.4rem 0 0.8rem; }
+.tph-list { margin-top: 0; }
+.ph-topics { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.9rem 0 0; padding: 0; }
+.ph-topics a { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.82rem; font-weight: 600; color: var(--text); text-decoration: none; border: 1px solid rgb(142 230 184 / 0.35); background: rgb(43 182 115 / 0.08); transition: border-color 0.25s, background-color 0.25s; }
+.ph-topics a:hover, .ph-topics a:focus-visible { border-color: var(--mint); background: rgb(43 182 115 / 0.18); }
+@media (max-width: 820px) { .tp-two, .tph-step { grid-template-columns: 1fr; } }
+/* Einflug-Animationen dürfen keine waagrechte Scrollbreite erzeugen */
+.trust, .team, .final, .features, .steps, .fwp, .sp { overflow-x: clip; }
