@@ -155,10 +155,10 @@ export async function init(canvas: HTMLCanvasElement) {
     return 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
   };
   const pathAt = (u: number, outP: THREE.Vector3, outT: THREE.Vector3) => {
-    // an jeder PDCA-Phase kurz verweilen
+    // an jeder PDCA-Phase leicht abbremsen, aber nie anhalten (die Fahrt fließt weiter)
     if (u > 6 && u < 11) {
       const f = u - 6, k = Math.floor(f), fr = f - k;
-      u = 6 + k + sstep(0.22, 0.78, fr);
+      u = 6 + k + 0.6 * fr + 0.4 * sstep(0, 1, fr);
     }
     u = clamp(u, K[0].u, K[K.length - 1].u);
     let i = 0;
@@ -236,7 +236,7 @@ export async function init(canvas: HTMLCanvasElement) {
   const mouse = new THREE.Vector2(9, 9);
   const ndc = new THREE.Vector2();
   let pointerX = -1, pointerY = -1, overUi = true, pointerDirty = false;
-  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .steps-panel, .steps-stage, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
+  const isUi = (t: EventTarget | null) => !!(t as Element)?.closest?.('a, button, input, label, summary, dialog, .panel, .steps-nav, .srun-in, .hero-inner, .qc-shell, .carousel, .flow, .qc-card, .card, .site-header, .rail, .trust, .downloads, .final, .site-footer');
   addEventListener('pointermove', (e) => {
     pointerX = e.clientX; pointerY = e.clientY; overUi = isUi(e.target); pointerDirty = true;
     ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
@@ -541,6 +541,17 @@ export async function init(canvas: HTMLCanvasElement) {
       place(`seg-${k}`, w, band(5.7, 5.78, 5.863, 5.885, u) * (u < 5.97 || k === active || k === hoverSeg ? 1 : 0.55));
       segLbl[k]?.classList.toggle('on', (u >= 5.97 && k === active) || k === hoverSeg);
     });
+    // Lage des Rings auf dem Bildschirm (für die Karten, die um ihn kreisen)
+    if (R.group.visible && u > 5.5 && u < 6.3) {
+      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+      for (let k = 0; k < 16; k++) {
+        const a = (k / 16) * Math.PI * 2;
+        v.set(Math.cos(a) * 5.2, Math.sin(a) * 5.2, 0).applyMatrix4(R.group.matrixWorld).project(camera);
+        const sx = (v.x * 0.5 + 0.5) * innerWidth, sy = (-v.y * 0.5 + 0.5) * innerHeight;
+        x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
+      }
+      state.ring = { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, rx: (x1 - x0) / 2, ry: (y1 - y0) / 2 };
+    } else state.ring = null;
     D.timers.forEach((t, i) => place(`timer-${i}`, t.center, band(12.4, 12.9, 14.3, 14.75, u)));
     D.milestones.forEach((m, i) => {
       const dist = camera.position.distanceTo(m.pos);
