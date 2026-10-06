@@ -6,6 +6,8 @@
  */
 import { dimFilter } from './state';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Touch-Geräte: kein Filter je Bild auf den gedrehten Karten (3D + Filter flackert in mobilen Browsern)
+const touch = matchMedia('(hover: none) and (pointer: coarse)');
 
 export function initPath(): (u: number) => void {
   const sec = document.querySelector<HTMLElement>('.steps.path');
@@ -78,7 +80,7 @@ export function initPath(): (u: number) => void {
       const dd = i - p, ad = Math.min(1.4, Math.abs(dd));
       const rot = reduced ? 0 : -Math.max(-1.2, Math.min(1.2, dd)) * 22;
       el.style.transform = `rotateY(${rot.toFixed(2)}deg) scale(${((1 - ad * 0.15) * fit).toFixed(3)})`;
-      el.style.filter = dimFilter(1 - ad * 0.4);
+      el.style.filter = touch.matches ? '' : dimFilter(1 - ad * 0.4);
     });
     const x = x0() + p * (S + G);
     clip.setAttribute('width', x.toFixed(1));

@@ -384,9 +384,60 @@ function setupOrbit(box: HTMLElement) {
   const measure = () => { const w = stage.clientWidth, h = stage.clientHeight; rx = w * 0.4; ry = h * 0.34; }; // passt zu .orbit-ring (80 % × 68 %)
   measure();
   addEventListener('resize', measure);
+  // Verbindungen (im Hellen sichtbar): Grundplatte in der Farbe des vorderen Regelwerks, innere Bahnen,
+  // Speichen von UniqSuite zu jedem Planeten und eine Leitung vom vorderen Planeten zur Karte daneben
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag: string, cls = '') => { const e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); return e; };
+  const svg = mk('svg', 'ob-links') as SVGSVGElement;
+  svg.setAttribute('aria-hidden', 'true');
+  const gid = `obg${Math.random().toString(36).slice(2, 7)}`;
+  const defs = mk('defs'), grad = mk('radialGradient');
+  grad.setAttribute('id', gid);
+  [['0', '0.2'], ['0.6', '0.07'], ['1', '0']].forEach(([o, a]) => { const st = mk('stop', 'ob-stop'); st.setAttribute('offset', o); st.setAttribute('stop-opacity', a); grad.append(st); });
+  defs.append(grad);
+  const plate = mk('ellipse', 'ob-plate'); plate.setAttribute('fill', `url(#${gid})`);
+  const inner = mk('ellipse', 'ob-ring ob-in'), outer = mk('ellipse', 'ob-ring ob-out');
+  const fwCls = (p: HTMLElement) => [...p.classList].find((c) => c.startsWith('fw-')) ?? '';
+  const spokes = planets.map((p) => mk('line', `ob-spoke ${fwCls(p)}`));
+  const pulses = planets.map((p, i) => { const l = mk('line', `ob-pulse ${fwCls(p)}`); (l as SVGElement).style.animationDelay = `${(-i * 0.55).toFixed(2)}s`; return l; });
+  const wire = mk('path', 'ob-wire'), wireRun = mk('path', 'ob-wire-run'), jack = mk('circle', 'ob-jack');
+  jack.setAttribute('r', '5');
+  svg.append(defs, plate, outer, inner, ...spokes, ...pulses, wire, wireRun, jack);
+  box.prepend(svg);
+  const ballDy = planets.map((p) => { const b = p.querySelector<HTMLElement>('.ball'); return b ? b.offsetTop + b.offsetHeight / 2 - p.offsetHeight / 2 : 0; });
+  const setA = (e: Element, a: Record<string, number>) => { for (const k in a) e.setAttribute(k, a[k].toFixed(1)); };
+  const drawLinks = (angleNow: number) => {
+    if (!svg.getClientRects().length || getComputedStyle(svg).display === 'none') return;
+    const br = box.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${br.width.toFixed(0)} ${br.height.toFixed(0)}`);
+    const cx = sr.left - br.left + sr.width / 2, cy = sr.top - br.top + sr.height / 2;
+    setA(plate, { cx, cy, rx: rx * 1.12, ry: ry * 1.25 });
+    setA(inner, { cx, cy, rx: rx * 0.6, ry: ry * 0.6 });
+    setA(outer, { cx, cy, rx: rx * 1.18, ry: ry * 1.22 });
+    let fx = cx, fy = cy;
+    planets.forEach((_, k) => {
+      const th = angleNow + k * step, depth = Math.sin(th), s = 0.62 + 0.38 * (depth + 1) / 2;
+      const x = cx + Math.cos(th) * rx, y = cy + depth * ry + ballDy[k] * s;
+      setA(spokes[k], { x1: cx, y1: cy, x2: x, y2: y }); setA(pulses[k], { x1: cx, y1: cy, x2: x, y2: y });
+      const on = k === front;
+      spokes[k].classList.toggle('on', on); pulses[k].classList.toggle('on', on);
+      if (on) { fx = x; fy = y; }
+    });
+    const card = cards[front]?.getBoundingClientRect();
+    const side = card && card.left - br.left > cx + rx * 0.5; // Karte steht rechts neben der Bahn
+    svg.classList.toggle('no-wire', !side);
+    if (card && side) {
+      const ex = card.left - br.left - 2, ey = card.bottom - br.top - Math.min(40, card.height * 0.18); // unten an der Karte: die Leitung läuft unter den Planeten hindurch
+      const sag = 70; // leicht durchhängend, damit die Leitung unter den Beschriftungen der rechten Planeten bleibt
+      const d = `M${fx.toFixed(1)} ${fy.toFixed(1)} C${(fx + (ex - fx) * 0.35).toFixed(1)} ${(fy + sag).toFixed(1)} ${(ex - (ex - fx) * 0.35).toFixed(1)} ${(ey + sag).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+      wire.setAttribute('d', d); wireRun.setAttribute('d', d);
+      setA(jack, { cx: ex, cy: ey });
+    }
+  };
   const setFront = (k: number) => {
     if (k === front) return;
     front = k;
+    box.style.setProperty('--fc', getComputedStyle(planets[k]).getPropertyValue('--c').trim());
     cards.forEach((c, i) => { const on = i === k; c.classList.toggle('on', on); c.setAttribute('aria-hidden', on ? 'false' : 'true'); c.querySelector('a')?.setAttribute('tabindex', on ? '0' : '-1'); });
     planets.forEach((p, i) => p.classList.toggle('front', i === k));
   };
@@ -408,6 +459,7 @@ function setupOrbit(box: HTMLElement) {
       if (depth > best) { best = depth; bk = k; }
     });
     setFront(bk);
+    drawLinks(angle);
     raf = visible ? requestAnimationFrame(frame) : 0;
   };
   new IntersectionObserver((e) => { visible = e[0].isIntersecting; if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }, { rootMargin: '100px 0px' }).observe(box);

@@ -36,8 +36,16 @@ let marks: Mark[] = [];
 let sections: { el: HTMLElement; id: string; y0: number; y1: number; dim: number }[] = [];
 const dimEls = Array.from(document.querySelectorAll<HTMLElement>('[data-dim], [data-dim-m]'));
 
+// Feste Bezugshöhe: 100svh ändert sich nicht, wenn die Adressleiste am Telefon ein- oder ausfährt.
+// innerHeight dagegen springt dabei – die Fahrt der „Sechs Schritte“ (angeheftet mit 100svh) zitterte.
+const svhProbe = document.createElement('div');
+svhProbe.setAttribute('aria-hidden', 'true');
+svhProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100svh;visibility:hidden;pointer-events:none';
+document.body.append(svhProbe);
+const stableVh = () => svhProbe.offsetHeight || innerHeight;
+
 function measure() {
-  const vh = innerHeight;
+  const vh = stableVh();
   marks = [];
   sections = [];
   document.querySelectorAll<HTMLElement>('[data-u0]').forEach((el) => {
@@ -103,8 +111,19 @@ function setActive(id: string) {
 let lastClick = { x: 50, y: 50, t: 0 };
 document.addEventListener('click', (e) => { lastClick = { x: Math.round(e.clientX / innerWidth * 100), y: Math.round(e.clientY / innerHeight * 100), t: performance.now() }; }, true);
 
+/** Versatz so wählen, dass die erste Überschrift des Ziels nicht unter der festen Kopfzeile landet. */
+function clearHeader(el: HTMLElement, offset: number) {
+  const head = document.querySelector<HTMLElement>('.site-header');
+  const lb = el.getAttribute('aria-labelledby');
+  const h = (lb && document.getElementById(lb)) || el.querySelector<HTMLElement>('h1, h2, h3');
+  if (!head || !h) return offset;
+  const d = h.getBoundingClientRect().top - el.getBoundingClientRect().top; // Abstand Überschrift ↔ Zielanfang
+  return Math.min(offset, d - head.offsetHeight - 12);
+}
+
 /** Sprung zu einem Element: weit weg → Zoom (wie ein Seitenwechsel), nah → weiches Scrollen. */
 function scrollToEl(el: HTMLElement, push = true, offset = 0) {
+  offset = clearHeader(el, offset);
   const dist = Math.abs(el.getBoundingClientRect().top + offset);
   if (!reduced && (document as any).startViewTransition && dist > innerHeight * 1.1) {
     const c = performance.now() - lastClick.t < 1500 ? lastClick : { x: 50, y: 50 };
@@ -140,6 +159,7 @@ state.scrollToEl = scrollToEl;
  */
 function zoomJump(el: HTMLElement | null, x = 50, y = 50, push = true, topOnly = false, offset = 0) {
   const docAny = document as any;
+  if (el && !topOnly) offset = clearHeader(el, offset);
   const targetTop = el && !topOnly ? el.getBoundingClientRect().top + scrollY + offset : 0;
   if (reduced || !docAny.startViewTransition) {
     if (el && !topOnly) smoothTo(el, push, offset);
