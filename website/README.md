@@ -40,6 +40,7 @@ Test için kullanışlı URL parametreleri:
 - `?reduced`: azaltılmış hareket modu.
 - `?auto3d`: 3D sahne kullanıcı etkileşimi beklenmeden başlar.
 - `?still=4.6&w=1600&h=900`: sahnenin tek bir karesi render edilir. Durağan görseller bununla üretilir.
+  - Açık tema durağan görselleri (`*-dl.webp`, `*-ml.webp`) aynı yolla, tarayıcıda `localStorage['uq-theme']='light'` iken alınır (1600×900 ve 720×1280). Kullanılan u değerleri: hero 5.75, pdca 6.5, fristen 13.5, regelwerke 17, konvergenz 2.75, wolke 1.0, stand 4.75.
 
 ## Metin ve soruları düzenleme
 
