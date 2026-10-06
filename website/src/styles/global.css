@@ -2467,16 +2467,24 @@ html[data-theme='light'] .steps.path.js .stage-card::before { background: linear
 html[data-theme='light'] .stage-card .viz { box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--c) 55%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
 html[data-theme='light'] .pstop.is-active .stage-card .viz { border-color: color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--c) 70%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
 
-/* Funktionsliste hell: weiße Karte, Rand in der Funktionsfarbe mit Lichtsaum */
+/* Funktionsliste hell: weiße Karten, Rand in der Funktionsfarbe, nur ein Hauch Licht darunter.
+   Breitbild: die Karten verteilen sich über die Höhe des Fotos und hängen an einer senkrechten Linie. */
 html[data-theme='light'] .fl-i > a {
   background: #ffffff; color: var(--text);
-  border: 1.5px solid color-mix(in srgb, var(--c) 75%, #ffffff);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 12%, transparent), 0 0 22px -4px color-mix(in srgb, var(--c) 55%, transparent), 0 14px 28px -20px color-mix(in srgb, var(--c) 70%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--c) 70%, #ffffff);
+  box-shadow: 0 8px 14px -12px color-mix(in srgb, var(--c) 55%, transparent);
   transition: transform 0.35s var(--ease-expo), box-shadow 0.35s, border-color 0.35s;
 }
 html[data-theme='light'] .fl-i > a:is(:hover, :focus-visible), html[data-theme='light'] .fl-i.on > a {
   background: #ffffff; border-color: var(--c);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 18%, transparent), 0 0 34px -2px color-mix(in srgb, var(--c) 70%, transparent), 0 18px 34px -18px color-mix(in srgb, var(--c) 80%, transparent);
+  box-shadow: 0 10px 18px -12px color-mix(in srgb, var(--c) 75%, transparent);
+}
+@media (min-width: 1200px) {
+  html[data-theme='light'] .ft-car.orbit-ft .ft-list { align-self: stretch; margin: -1.25rem 0 -0.75rem; justify-content: center; }
+  html[data-theme='light'] .ft-car.orbit-ft .fl-step { display: none; }
+  html[data-theme='light'] .ft-list ol { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
+  html[data-theme='light'] .ft-list ol::before { top: 1.6rem; bottom: 1.6rem; width: 2px; opacity: 0.75; z-index: -1; }
+  html[data-theme='light'] .ft-car.orbit-ft :is(.ring-tilt, .carousel-nav) { margin-left: 1.5rem; }
 }
 html[data-theme='light'] .fl-t small { color: color-mix(in oklab, var(--c) 72%, #0a1226); }
 html[data-theme='light'] .fl-t b { color: #0a1226; }
