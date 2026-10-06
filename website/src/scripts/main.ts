@@ -295,15 +295,17 @@ if (want3d) {
   else {
     // Die 3D-Welt startet mit der ersten Nutzeraktion. Bis dahin zeigt das Poster
     // (aus derselben Szene gerendert) dasselbe Bild – die Seite bleibt sofort bedienbar.
+    // In der hellen Darstellung bleibt die Welt aus; sie startet beim Wechsel auf dunkel.
     let started = false;
     const go = () => {
-      if (started) return;
+      if (started || document.documentElement.dataset.theme === 'light') return;
       started = true;
       evs.forEach((ev) => removeEventListener(ev, go));
       ('requestIdleCallback' in window ? requestIdleCallback : (f: () => void) => setTimeout(f, 1))(() => start());
     };
     const evs = ['pointermove', 'pointerdown', 'wheel', 'touchstart', 'scroll', 'keydown'];
-    evs.forEach((ev) => addEventListener(ev, go, { passive: true, once: true }));
+    evs.forEach((ev) => addEventListener(ev, go, { passive: true }));
+    addEventListener('uq-theme', go);
     if (location.hash) go();
   }
 }

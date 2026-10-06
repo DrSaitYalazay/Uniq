@@ -2192,13 +2192,12 @@ html[data-theme='light'] .theme-tg .i-moon { opacity: 1; rotate: 0deg; scale: 1;
 :root { color-scheme: dark; }
 
 /* ===== Helle Darstellung =====
-   Ein Farbsystem aus wenigen Tokens (unten LT-TOKENS). Seite und 3D-Welt lesen dieselben Werte:
-   --ink-* steuern auch world/ink.ts. Farbe ist Akzent, nie Fläche. */
+   Ein Farbsystem aus wenigen Tokens (unten LT-TOKENS).
+   Farbe ist Akzent, nie Fläche. */
 /*LT-TOKENS*/
 html[data-theme='light'] {
   --ink-paper: #f7f8fa; --paper-rgb: 247 248 250; --surface: #ffffff; --surface-2: #f1f3f7; --footer: #eef1f5;
   --text: #0b1530; --text-2: #475069; --muted: #6b7489;
-  --ink-ink: #0b1530; --ink-slate: #3a4868; --ink-accent: #12875a;
   --accent-text: #0b6e47; --green: #12875a; --green-600: #0b6e47; --tint: 18 135 90;
   --btn-bg: #0b1530; --btn-bg-h: #1b2a52; --btn-fg: #ffffff;
   --fw-nis2: #12875a; --fw-iso27001: #3456b8; --fw-aiact: #6a4bbf; --fw-iso42001: #0e7c86; --fw-cra: #b26b12;
@@ -2217,9 +2216,9 @@ html[data-theme='light'] {
 }
 html[data-theme='light'] ::selection { background: rgb(var(--tint) / 0.2); }
 html[data-theme='light'] .world { background: var(--ink-paper); }
-/* Leinwand zeichnet selbst hell (world/ink.ts); Standbilder liegen als helle Fassung vor (theme.ts tauscht sie) */
-html[data-theme='light']:not(.stills-ok) .world .poster, html[data-theme='light']:not(.stills-ok) .still img { visibility: hidden; }
-html[data-theme='light'] .world .poster.sub { opacity: 0.5; filter: blur(30px); }
+/* Die 3D-Welt ist für Licht auf Nachtblau gebaut und ruht in der hellen Darstellung (world.ts).
+   Ohne sie zeigt die Seite ihre eigenen Inhalte – Fotos, Bildschirme, Karten – in Originalfarben. */
+html[data-theme='light'] .world canvas, html[data-theme='light'] .world .poster, html[data-theme='light'] .still { display: none !important; }
 html[data-theme='light'] .grain { opacity: 0; }
 html[data-theme='light'] .lbl3d { text-shadow: 0 1px 8px rgb(var(--paper-rgb) / 0.95); }
 
@@ -2256,7 +2255,7 @@ html[data-theme='light'] .team::before { background: linear-gradient(90deg, var(
 html[data-theme='light'] .team-stage::after { background: linear-gradient(90deg, rgb(var(--paper-rgb) / 0.9) 0%, rgb(var(--paper-rgb) / 0.55) 38%, rgb(var(--paper-rgb) / 0) 68%), linear-gradient(0deg, var(--ink-paper) 0%, transparent 18%, transparent 82%, var(--ink-paper) 100%); }
 html[data-theme='light'] .final::before { background: radial-gradient(70% 70% at 50% 50%, rgb(var(--paper-rgb) / 0.62), rgb(var(--paper-rgb) / 0.94)), linear-gradient(0deg, var(--ink-paper), transparent 30%, transparent 70%, var(--ink-paper)); }
 html[data-theme='light'] .photo-band { background: var(--surface-2); }
-html[data-theme='light'] .photo-band .pb-bg { filter: blur(30px) saturate(0.8) brightness(1.2); }
+html[data-theme='light'] .photo-band .pb-bg { filter: blur(30px); }
 
 /* Kleinteile: Farbe als Punkt, Ring und Schrift – nie als Leuchthof */
 html[data-theme='light'] .eyebrow b, html[data-theme='light'] .step-chips a b, html[data-theme='light'] .hero-points span { background: rgb(var(--tint) / 0.1); }
@@ -2273,27 +2272,44 @@ html[data-theme='light'] .marquee { background: var(--surface); }
 html[data-theme='light'] .ft-incident { --c: var(--band-red); }
 html[data-theme='light'] .pill i, html[data-theme='light'] .fw-choice i, html[data-theme='light'] .ring-item i,
 html[data-theme='light'] .hero-fw i, html[data-theme='light'] .fwp-nav a i { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 14%, transparent); }
-html[data-theme='light'] .fp .sp-ring .seg.on, html[data-theme='light'] .portal .pg, html[data-theme='light'] .portal .core svg { filter: none; }
-html[data-theme='light'] .tl-v::after, html[data-theme='light'] .portal .ring2 { box-shadow: none; }
-html[data-theme='light'] .portal .pn { color: color-mix(in srgb, var(--c) 55%, var(--text)); text-shadow: none; }
+html[data-theme='light'] .fp .sp-ring .seg.on { filter: none; }
+html[data-theme='light'] .tl-v::after { box-shadow: none; }
 
-/* Regelwerks-Umlaufbahn: matte Scheiben statt Glanzkugeln */
+/* Symbole und Kugeln: satte Eigenfarbe, klare Kante – kein Pastell, kein Leuchthof */
+html[data-theme='light'] .portal .pg { filter: none; }
+html[data-theme='light'] .portal .arc { background: conic-gradient(from 0turn, transparent 0turn, color-mix(in srgb, var(--c) 18%, transparent) 0.3turn, var(--c) 0.7turn, transparent 0.705turn); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); }
+html[data-theme='light'] .portal .ring2 { border: 1px solid color-mix(in srgb, var(--c) 28%, transparent); background: color-mix(in srgb, var(--c) 9%, #ffffff); box-shadow: none; }
+html[data-theme='light'] .portal .dots { display: none; }
+html[data-theme='light'] .portal .core svg { filter: none; stroke-width: 1.9; }
+html[data-theme='light'] .portal .pn { color: var(--text); text-shadow: none; }
+
 html[data-theme='light'] .orbit-ring { border-color: var(--line-2); box-shadow: none; background: none; }
 html[data-theme='light'] .orbit-sun { background: var(--surface); border-color: var(--line-2); box-shadow: 0 1px 2px rgb(11 21 48 / 0.05), 0 12px 28px -16px rgb(11 21 48 / 0.3); }
 html[data-theme='light'] .orbit-sun b { color: var(--text); }
 html[data-theme='light'] .orbit-sun b span { color: var(--accent-text); }
 html[data-theme='light'] .planet .ball {
-  background: radial-gradient(circle at 36% 30%, color-mix(in srgb, var(--c) 10%, #ffffff) 0%, color-mix(in srgb, var(--c) 26%, #ffffff) 100%);
-  border: 1px solid color-mix(in srgb, var(--c) 40%, #ffffff);
-  box-shadow: 0 10px 22px -16px rgb(11 21 48 / 0.45);
+  background: radial-gradient(circle at 34% 28%, color-mix(in srgb, var(--c) 62%, #ffffff) 0%, var(--c) 48%, color-mix(in srgb, var(--c) 78%, #0b1530) 100%);
+  border: 0; box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--c) 70%, #0b1530);
 }
 html[data-theme='light'] .planet:hover .ball, html[data-theme='light'] .planet.front .ball {
-  background: radial-gradient(circle at 36% 30%, color-mix(in srgb, var(--c) 78%, #ffffff) 0%, var(--c) 100%);
-  border-color: var(--c);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 12%, transparent), 0 12px 24px -14px rgb(11 21 48 / 0.5);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 16%, transparent), 0 14px 26px -12px color-mix(in srgb, var(--c) 80%, #0b1530);
 }
 html[data-theme='light'] .planet b { background: var(--surface); color: var(--text); border-color: var(--line-2); }
-html[data-theme='light'] .planet.front b { border-color: var(--c); color: color-mix(in srgb, var(--c) 55%, var(--text)); }
-html[data-theme='light'] .world .poster.sub { display: none; }
-html[data-theme='light'] .portal .dots { filter: brightness(0.3); }
-html[data-theme='light'] .team-scene { filter: saturate(0.95); }
+html[data-theme='light'] .planet.front b { border-color: var(--c); color: color-mix(in srgb, var(--c) 60%, var(--text)); }
+
+/* Kopfbereich hell: Text links, echter Bildschirm rechts (Originalfarben) */
+.hero-lt { display: none; }
+html[data-theme='light'] .hero-lt { display: block; margin: 0; }
+html[data-theme='light'] .hero-lt .frame { background: #ffffff; border: 1px solid var(--line); box-shadow: 0 1px 2px rgb(11 21 48 / 0.05), 0 40px 80px -40px rgb(11 21 48 / 0.35); }
+html[data-theme='light'] .hero-lt .frame::before { content: ''; position: absolute; left: 14px; top: 11px; width: 7px; height: 7px; border-radius: 50%; background: rgb(11 21 48 / 0.14); box-shadow: 12px 0 0 rgb(11 21 48 / 0.14), 24px 0 0 rgb(11 21 48 / 0.14); }
+html[data-theme='light'] .hero-lt img { display: block; width: 100%; height: auto; }
+@media (min-width: 1101px) {
+  html[data-theme='light'] .hero-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(2rem, 4vw, 4.5rem); align-items: center; }
+}
+@media (max-width: 1100px) {
+  html[data-theme='light'] .hero-step { align-items: center; min-height: 0; padding-bottom: 6svh; }
+  html[data-theme='light'] .hero-inner { background: none; border: 0; padding: 0; -webkit-backdrop-filter: none; backdrop-filter: none; max-width: 42rem; }
+  html[data-theme='light'] .hero-lt { margin-top: 2.4rem; max-width: 46rem; }
+}
+html[data-theme='light'] .team-scene { filter: none; }
+html[data-theme='light'] .rw-conv-bg { display: none; }
