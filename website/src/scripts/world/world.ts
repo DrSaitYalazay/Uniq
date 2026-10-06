@@ -10,6 +10,7 @@ import { buildParticles } from './particles';
 import { buildRing } from './ring';
 import { buildDeadlines, FLOOR_Y } from './deadlines';
 import { buildSkyline, TOWER_MAX } from './skyline';
+import { InkEffect, inkPalette } from './ink';
 
 type V3 = [number, number, number];
 interface Key { u: number; p: V3; t: V3 }
@@ -29,7 +30,8 @@ export async function init(canvas: HTMLCanvasElement) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: tier === 1, alpha: false, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: stillU !== null });
   renderer.setClearColor(NAVY, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  const dprCap = () => (tier >= 3 ? 2 : tier === 2 ? 1.5 : 1.25);
+  // Helle Darstellung: feine Linien auf Papier brauchen volle Auflösung (Leuchten verdeckt im Dunkeln die Kanten)
+  const dprCap = () => (root.dataset.theme === 'light' ? (tier >= 2 ? 2 : 1.75) : tier >= 3 ? 2 : tier === 2 ? 1.5 : 1.25);
   renderer.setPixelRatio(Math.min(devicePixelRatio, dprCap()));
 
   const scene = new THREE.Scene();
@@ -107,23 +109,34 @@ export async function init(canvas: HTMLCanvasElement) {
   }
 
   // ── Nachbearbeitung (adaptiv) ───────────────────────────────────────────
+  // Helle Darstellung: dieselbe Szene, über InkEffect als Tinte auf Papier gezeichnet
+  const isLight = () => root.dataset.theme === 'light';
   let composer: EffectComposer | null = null;
   const setupComposer = () => {
     composer?.dispose();
     composer = null;
-    if (tier <= 1) {
+    const light = isLight();
+    nebula.visible = !light;
+    if (tier <= 1 && !light) {
       renderer.toneMapping = THREE.NeutralToneMapping;
       return;
     }
     renderer.toneMapping = THREE.NoToneMapping;
-    composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: tier >= 3 ? 4 : 0 });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, dprCap()));
+    composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: light ? (tier >= 2 ? 4 : 2) : tier >= 3 ? 4 : 0 });
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
-    const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
     const tone = new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL });
-    composer.addPass(new EffectPass(camera, bloom, vignette, tone));
+    if (light) {
+      // kein Bloom: Leuchthöfe würden auf Papier zu Unschärfe
+      composer.addPass(new EffectPass(camera, tone, new InkEffect(NAVY, inkPalette())));
+    } else {
+      const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
+      const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
+      composer.addPass(new EffectPass(camera, bloom, vignette, tone));
+    }
   };
   setupComposer();
+  addEventListener('uq-theme', () => { setupComposer(); resize(); });
 
   // ── Kamera-Schlüsselpunkte ──────────────────────────────────────────────
   const K: Key[] = [
