@@ -28,7 +28,18 @@ export function initPath(): (u: number) => void {
   const x0 = () => pad + S / 2;
   const yAt = (x: number) => roadY + A * Math.sin((Math.PI * (x - x0())) / (S + G));
 
+  // Alle Karten gleich hoch; die große Schrittzahl neben jeder Karte richtet sich nach dieser Höhe
+  const vizs = inners.map((el) => el.querySelector<HTMLElement>('.stage-card .viz')).filter((v): v is HTMLElement => !!v);
+  const equalize = () => {
+    vizs.forEach((v) => (v.style.minHeight = ''));
+    const h = Math.max(...vizs.map((v) => v.offsetHeight));
+    if (!(h > 0)) return;
+    vizs.forEach((v) => (v.style.minHeight = `${h}px`));
+    track.style.setProperty('--ph-h', `${h}px`);
+  };
+
   const layout = () => {
+    equalize();
     const vw = view.clientWidth;
     S = stops[0].offsetWidth;
     G = parseFloat(getComputedStyle(track).columnGap) || 0;
