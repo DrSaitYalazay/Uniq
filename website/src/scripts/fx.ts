@@ -218,6 +218,22 @@ function setupFtOrbit(car: HTMLElement) {
     ring.style.height = `${Math.round(2 * ry + ch + 30)}px`;
     return sol;
   };
+  // Verbindungen: Bahn, Speichen zur Mitte und laufende Lichtpunkte – die Werkzeuge hängen an einer Plattform
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag: string, cls: string) => { const e = document.createElementNS(NS, tag); e.setAttribute('class', cls); return e; };
+  const links = mk('svg', 'ft-links') as SVGSVGElement;
+  links.setAttribute('aria-hidden', 'true');
+  const orbitGlow = mk('ellipse', 'ft-orbit-glow'), orbitLine = mk('ellipse', 'ft-orbit');
+  links.append(orbitGlow, orbitLine);
+  const ftCls = (it: HTMLElement) => [...it.classList].find((c) => c.startsWith('ft-')) ?? '';
+  const spokes = items.map((it) => { const l = mk('line', `ft-spoke ${ftCls(it)}`); links.append(l); return l; });
+  const pulses = items.map((it, i) => { const l = mk('line', `ft-pulse ${ftCls(it)}`); l.style.animationDelay = `${(-i * 0.47).toFixed(2)}s`; links.append(l); return l; });
+  const hub = mk('g', 'ft-hub');
+  hub.append(mk('circle', 'ft-hub-halo'), mk('circle', 'ft-hub-disc'));
+  const hubT = mk('text', 'ft-hub-t'); hubT.textContent = 'U'; hub.append(hubT);
+  links.append(hub);
+  car.prepend(links);
+  const setA = (e: Element, a: Record<string, number>) => { for (const k in a) e.setAttribute(k, a[k].toFixed(1)); };
   let ox = 0, init = false;
   const frame = (now: number) => {
     const dt = Math.min(0.1, (now - last) / 1000 || 0);
@@ -248,6 +264,18 @@ function setupFtOrbit(car: HTMLElement) {
       it.style.zIndex = String(Math.round((d + 1) * 50));
       it.style.filter = dimFilter(0.45 + 0.55 * (d + 1) / 2); // hinten zurückgenommen, aber deckend
       if (d > best) { best = d; bk = i; }
+    });
+    // Verbindungen in Koordinaten des Karussells (Kartenmitten liegen in der Ebene z = 0, also ohne Perspektivversatz)
+    const cr = car.getBoundingClientRect(), rr = ring.getBoundingClientRect();
+    const cx = rr.left - cr.left + rr.width / 2 + ox, cy = rr.top - cr.top + rr.height / 2;
+    links.setAttribute('viewBox', `0 0 ${cr.width.toFixed(0)} ${cr.height.toFixed(0)}`);
+    setA(orbitLine, { cx, cy, rx, ry }); setA(orbitGlow, { cx, cy, rx, ry });
+    hub.setAttribute('transform', `translate(${cx.toFixed(1)} ${cy.toFixed(1)})`);
+    items.forEach((_, i) => {
+      const th = angle + i * step;
+      const x = cx + Math.cos(th) * rx, y = cy + Math.sin(th) * ry;
+      setA(spokes[i], { x1: cx, y1: cy, x2: x, y2: y }); setA(pulses[i], { x1: cx, y1: cy, x2: x, y2: y });
+      spokes[i].classList.toggle('on', i === bk); pulses[i].classList.toggle('on', i === bk);
     });
     if (bk !== front) { front = bk; items.forEach((it, i) => it.classList.toggle('front', i === bk)); list.forEach((li, i) => li.classList.toggle('on', i === bk)); }
     raf = visible ? requestAnimationFrame(frame) : 0;
