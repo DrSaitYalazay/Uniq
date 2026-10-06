@@ -243,7 +243,9 @@ function setupFtOrbit(car: HTMLElement) {
       if (Math.abs(target - angle) < 0.002) { angle = target; target = null; hold = now + 1800; }
     } else if (!paused && now > hold) angle += speed * dt;
     const narrow = W < 700;
-    const half = Math.min(W, innerWidth) / 2 - (narrow ? 10 : 48);
+    // Helles Breitbild: die Bahn liegt auf dem Foto – rundum Luft lassen, damit keine Karte über den Bildrand ragt
+    const onPhoto = !narrow && document.documentElement.dataset.theme === 'light' && innerWidth >= 1200;
+    const half = Math.min(W, innerWidth) / 2 - (narrow ? 10 : onPhoto ? 76 : 48);
     let tx = 0;
     const R = state.ring;
     if (R && R.rx > 40 && document.documentElement.classList.contains('has3d') && !narrow) {
