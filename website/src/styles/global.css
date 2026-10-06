@@ -2436,3 +2436,12 @@ html[data-theme='light'] #fristen .panel.panel-wide::before, html[data-theme='li
   html[data-theme='light'] .ddl-lt { padding-bottom: 4.4rem; }
   .ddl-road { bottom: 4.4rem; } .ddl-start { bottom: calc(4.4rem - 8px); }
 }
+
+/* Abschnittsleiste: nur die Punkte fangen den Zeiger; Beschriftungen erst, wenn die Leiste berührt wird.
+   So liegt nie eine unsichtbare Fläche über Inhalten (z. B. der Vollbild-Taste des Films). */
+.rail, .rail ol, .rail li, .rail a { pointer-events: none; }
+.rail a i { pointer-events: auto; position: relative; }
+.rail a i::after { content: ''; position: absolute; inset: -10px; }
+.rail:hover a, .rail:focus-within a { pointer-events: auto; }
+html.film-on .rail { opacity: 0; pointer-events: none; }
+html.film-on .rail * { pointer-events: none; }
