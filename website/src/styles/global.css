@@ -2220,7 +2220,7 @@ html[data-theme='light'] .grain { opacity: 0; }
 
 /* Inseln: Gegenstände behalten ihre dunklen Eigenfarben */
 html[data-theme='light'] :is(.viz, .card, .rw, .rw-conv, .honest, .team-card, .team-facts li, .trust-list li, .dl-card,
-  .ring-item a, .fl-i > a, .qc-card, .qc-live, .qc-shell .privacy, .timer, .tl-v li, .rp-rel a, .tower-btn, .fw-choice, .tp-box, .fwp-faq details, .fp-can li, .fwp-facts > div,
+  .ring-item a, .fl-i > a, .qc-card, .qc-live, .qc-shell .privacy, .tl-v li, .rp-rel a, .tower-btn, .fw-choice, .tp-box, .fwp-faq details, .fp-can li, .fwp-facts > div,
   .sp-refs li, .sp-refs-grid li, .sp-flow li, .sp-result, .sp-result-band, .sp-cta, .rp-extra, [class^='stp-'] > a, .anfrage, .orbit-sun, .hero-fw a, .film-card, .frame) {
   --fg: 255 255 255; --bg0: 7 12 24; --bg1: 10 16 32; --bg2: 10 18 38; --bg3: 9 15 30; --bg4: 13 24 48; --bg5: 6 12 26; --bg6: 19 33 62; --gbg: 14 40 28;
   --sh: 0 0 0; --sha: 1;
@@ -2231,7 +2231,7 @@ html[data-theme='light'] :is(.viz, .card, .rw, .rw-conv, .honest, .team-card, .t
   color: var(--text); color-scheme: dark; text-shadow: none;
 }
 /* Inseln, die im Dunkeln nur einen Hauch Fläche haben, brauchen auf Papier einen festen Grund */
-html[data-theme='light'] :is(.honest, .team-card, .team-facts li, .trust-list li, .dl-card, .tl-v li, .rp-rel a, .ring-item a, .fl-i > a, .qc-shell .privacy, .timer, .fw-choice, .tp-box,
+html[data-theme='light'] :is(.honest, .team-card, .team-facts li, .trust-list li, .dl-card, .tl-v li, .rp-rel a, .ring-item a, .fl-i > a, .qc-shell .privacy, .fw-choice, .tp-box,
   .fwp-faq details, .fp-can li, .fwp-facts > div, .sp-refs li, .sp-refs-grid li, .sp-flow li, .sp-result, .sp-cta, [class^='stp-'] > a, .hero-fw a, .rw-conv) {
   background-color: #0e1a33;
 }
@@ -2284,13 +2284,13 @@ html[data-theme='light'] .hero-lt .frame::before { content: ''; position: absolu
 html[data-theme='light'] .rw-conv-bg { opacity: 0.4; }
 
 /* Karten mit eigener Farbe (Regelwerk, Funktion, Schritt): satt in ihrer Farbe auf Papier */
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a, .timer) {
+html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) {
   background: linear-gradient(150deg, color-mix(in oklab, var(--c) 62%, #0a1226) 0%, color-mix(in oklab, var(--c) 34%, #0a1226) 100%);
   border-color: color-mix(in oklab, var(--c) 70%, #ffffff);
 }
 html[data-theme='light'] .ring-ft .ring-item a { background: radial-gradient(110% 70% at 50% 18%, color-mix(in oklab, var(--c) 70%, #0a1226) 0%, color-mix(in oklab, var(--c) 34%, #0a1226) 100%); }
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a, .timer) :is(em, small, .k, .tp-name + span, span) { color: rgb(255 255 255 / 0.82); }
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a, .timer) :is(b, h3, strong, .tp-name) { color: #ffffff; }
+html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) :is(em, small, .k, .tp-name + span, span) { color: rgb(255 255 255 / 0.82); }
+html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) :is(b, h3, strong, .tp-name) { color: #ffffff; }
 html[data-theme='light'] :is(.dl-card, .honest, .sp-cta, .sp-result-band, .anfrage, .qc-card, .viz) .btn-ghost { background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.18); color: #f1f3f7; }
 
 /* Berichte: Papier mit leuchtendem Schatten in der Berichtsfarbe */
@@ -2343,9 +2343,9 @@ html[data-theme='light'] .ddl-lt { position: relative; display: flex; align-item
 @keyframes ddl-pulse { 0% { box-shadow: 0 0 0 0 rgb(229 72 77 / 0.45); } 100% { box-shadow: 0 0 0 16px rgb(229 72 77 / 0); } }
 @media (max-width: 1100px) {
   html[data-theme='light'] .ddl-lt { margin-top: 2rem; max-width: 40rem; min-height: 0; }
-  .ddl-ring { --sz: 6.4rem; } .ddl-ring.r1 { --sz: 7.8rem; } .ddl-ring.r2 { --sz: 9.4rem; }
-  .ddl-core small { display: none; }
+  .ddl-ring { --sz: 7.2rem; } .ddl-ring.r1 { --sz: 8.6rem; } .ddl-ring.r2 { --sz: 10.2rem; }
 }
+@media (max-width: 820px) { .ddl-core small { display: none; } }
 @media (max-width: 480px) {
   .ddl-ring { --sz: 5.2rem; } .ddl-ring.r1 { --sz: 6.2rem; } .ddl-ring.r2 { --sz: 7.4rem; }
   html[data-theme='light'] .ddl-lt { padding-left: 1.8rem; }
@@ -2371,3 +2371,56 @@ html[data-theme='light'] .tl-compact .milestone time { justify-self: start; padd
 html[data-theme='light'] :is(.fp .kicker, .fwp-head .kicker, .tp-steplink a, .tp-steplink-a, .tph-n, .tph-side .kicker) { color: color-mix(in oklab, var(--c) 64%, #0a1226); }
 html[data-theme='light'] .milestone time { color: color-mix(in oklab, var(--c) 64%, #0a1226); }
 html[data-theme='light'] :is(.sp-result, .sp-result-band, .sp-cta, .honest, .rp-extra, .viz) .kicker { color: var(--c, var(--mint)); }
+
+/* ===== Funktionen: Karten hängen an einer Plattform (beide Darstellungen) ===== */
+.ft-car { position: relative; }
+.ft-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+.ft-car.orbit-ft .ring-tilt, .ft-car.orbit-ft .carousel-nav { position: relative; z-index: 2; }
+.ft-car:not(.orbit-ft) .ft-links { display: none; }
+.ft-orbit { fill: none; stroke: rgb(var(--fg) / 0.22); stroke-width: 1.5; stroke-dasharray: 1 7; stroke-linecap: round; }
+.ft-orbit-glow { fill: rgb(43 182 115 / 0.035); stroke: rgb(43 182 115 / 0.18); stroke-width: 10; filter: blur(6px); }
+.ft-spoke { stroke: var(--c); stroke-opacity: 0.32; stroke-width: 1.4; transition: stroke-opacity 0.4s; }
+.ft-spoke.on { stroke-opacity: 0.75; stroke-width: 2; }
+.ft-pulse { stroke: var(--c); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 10 600; stroke-dashoffset: 0; opacity: 0.9; }
+.ft-pulse.on { stroke-width: 3.6; }
+@media (prefers-reduced-motion: no-preference) { .ft-pulse { animation: ft-flow 2.8s linear infinite; } }
+@media (prefers-reduced-motion: reduce) { .ft-pulse { display: none; } }
+@keyframes ft-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -610; } }
+.ft-hub { display: none; }
+html:not(.has3d) .ft-hub { display: inline; }
+.ft-hub-halo { r: 46px; fill: rgb(43 182 115 / 0.12); }
+.ft-hub-disc { r: 30px; fill: #0e1a33; stroke: #2bb673; stroke-width: 2.5; }
+.ft-hub-t { fill: #2bb673; font-family: var(--display); font-weight: 800; font-size: 26px; text-anchor: middle; dominant-baseline: central; }
+@media (prefers-reduced-motion: no-preference) { .ft-hub-halo { animation: ft-halo 2.8s ease-out infinite; transform-box: fill-box; transform-origin: center; } }
+@keyframes ft-halo { 0% { scale: 0.7; opacity: 1; } 100% { scale: 1.5; opacity: 0; } }
+html[data-theme='light'] .ft-orbit { stroke: rgb(10 18 38 / 0.28); }
+html[data-theme='light'] .ft-orbit-glow { fill: rgb(43 182 115 / 0.05); stroke: rgb(43 182 115 / 0.22); }
+html[data-theme='light'] .ft-spoke { stroke-opacity: 0.45; }
+
+/* ===== Fristen, hell: Text auf dunkler Karte; die Fristen selbst zeigen die Ringe daneben ===== */
+html[data-theme='light'] #fristen > .step:first-of-type .panel {
+  --fg: 255 255 255; --text: #f1f3f7; --text-2: #c9d0dc; --muted: #98a3b7; --green-ink: #2bb673; --mint: #8ee6b8; --accent-text: #2bb673; --line: rgb(255 255 255 / 0.1);
+  color: var(--text); color-scheme: dark;
+  background: radial-gradient(120% 90% at 0% 0%, rgb(43 182 115 / 0.22), transparent 55%), radial-gradient(90% 80% at 100% 100%, rgb(59 130 246 / 0.18), transparent 60%), #0b1530;
+  border: 1px solid rgb(255 255 255 / 0.06); border-radius: 28px; padding: clamp(2rem, 3.4vw, 3rem);
+  box-shadow: 0 1px 2px rgb(10 18 38 / 0.1), 0 40px 70px -36px rgb(10 18 38 / 0.6);
+}
+html[data-theme='light'] #fristen > .step:first-of-type .panel :is(.res-h, .timers, .fine) { display: none; }
+.ddl-cap { display: none; }
+html[data-theme='light'] .ddl-cap { display: block; position: absolute; left: 2.4rem; right: 0; bottom: 0; font-size: 0.86rem; font-weight: 600; color: var(--text-2); }
+
+/* Zeitachse direkt auf dem Grund, ohne Karte */
+html[data-theme='light'] #fristen .panel.panel-wide { background: none; border: 0; box-shadow: none; padding-left: 0; padding-right: 0; }
+html[data-theme='light'] #fristen .panel.panel-wide::before, html[data-theme='light'] #fristen .panel.panel-wide::after { display: none; }
+
+/* Funktionen hell (Breitbild): Bühne aus Foto in Originalfarben, darauf eine Milchglas-Tafel mit der Umlaufbahn */
+@media (min-width: 1200px) {
+  html[data-theme='light'] .ft-car.orbit-ft::before, html[data-theme='light'] .ft-car.orbit-ft::after { content: ''; position: absolute; grid-column: 2; grid-row: 1 / span 2; z-index: 0; pointer-events: none; }
+  html[data-theme='light'] .ft-car.orbit-ft::before { inset: -1.5rem 0 -1rem 0; border-radius: 34px; background: url('/img/people-08-1600.webp') center 35% / cover no-repeat; box-shadow: 0 40px 80px -40px rgb(10 18 38 / 0.55); }
+  html[data-theme='light'] .ft-car.orbit-ft::after { inset: calc(-1.5rem + 26px) 26px calc(-1rem + 26px) 26px; border-radius: 24px; background: rgb(255 255 255 / 0.6); -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 18px 40px -24px rgb(10 18 38 / 0.45); }
+  html[data-theme='light'] .ft-car.orbit-ft { margin-right: max(var(--gutter), calc((100vw - 1360px) / 2 + var(--gutter))); }
+}
+@media (max-width: 820px) {
+  html[data-theme='light'] .ddl-lt { padding-bottom: 4.4rem; }
+  .ddl-road { bottom: 4.4rem; } .ddl-start { bottom: calc(4.4rem - 8px); }
+}
