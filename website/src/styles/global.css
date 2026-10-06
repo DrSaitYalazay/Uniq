@@ -962,7 +962,7 @@ body:has(.anfrage[open]) { overflow: hidden; }
 /* ── Navigation auf Tablet und Handy: Abschnitte als sichtbare Reiter ─── */
 .site-nav a[aria-current='true'], .site-nav a[aria-current='location'] { color: var(--text); }
 @media (max-width: 1279px) {
-  :root { --header-h: 116px; }
+  :root { --header-h: 120px; }
   .site-header { height: auto; min-height: var(--header-h); flex-wrap: wrap; align-content: flex-start; row-gap: 0; background: rgb(var(--bg0) / 0.9); border-bottom-color: var(--line); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); }
   .site-header > .brand, .site-header .header-actions { height: 68px; }
   .site-nav { display: flex; order: 3; flex: 0 0 auto; width: calc(100% + 2 * var(--gutter)); margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 10px; gap: 0.45rem; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-padding-inline: var(--gutter); }
@@ -972,7 +972,7 @@ body:has(.anfrage[open]) { overflow: hidden; }
   .site-nav a[aria-current='true'], .site-nav a[aria-current='location'] { background: rgb(43 182 115 / 0.18); border-color: rgb(142 230 184 / 0.65); color: var(--text); }
 }
 @media (max-width: 820px) {
-  :root { --header-h: 108px; }
+  :root { --header-h: 110px; }
   .site-header > .brand, .site-header .header-actions { height: 60px; }
   .site-nav a { font-size: 0.86rem; padding: 0.45rem 0.85rem; }
 }
@@ -1644,7 +1644,7 @@ html.img-zo .zo.zo-in { scale: 1; opacity: var(--zo-o, 1); }
   }
 }
 @keyframes sd-wipe { from { clip-path: inset(0 0 100% 0); translate: 0 0.6em; } to { clip-path: inset(0 0 -0.2em 0); translate: 0 0; } }
-@keyframes sd-blur { from { opacity: 0; filter: blur(14px); letter-spacing: 0.06em; } to { opacity: 1; filter: blur(0); } }
+@keyframes sd-blur { from { opacity: 0; filter: blur(14px); } to { opacity: 1; filter: blur(0); } }
 @keyframes sd-pop { from { opacity: 0; scale: 0.7; translate: 0 30px; } 70% { scale: 1.04; } to { opacity: 1; scale: 1; translate: 0 0; } }
 @keyframes sd-swing { from { opacity: 0; transform: perspective(1100px) rotateY(-28deg) translateX(60px); } to { opacity: 1; transform: none; } }
 @keyframes sd-flip { from { opacity: 0; transform: perspective(900px) rotateX(-55deg) translateY(30px); } to { opacity: 1; transform: none; } }
@@ -2461,8 +2461,10 @@ html.film-on .rail * { pointer-events: none; }
 }
 html[data-theme='light'] .steps.path.js .stage-card::before { background: linear-gradient(180deg, color-mix(in oklab, var(--c) 90%, #0a1226) 0%, color-mix(in srgb, var(--c) 60%, transparent) 55%, color-mix(in srgb, var(--c) 10%, transparent) 100%); -webkit-background-clip: text; background-clip: text; }
 @media (min-width: 821px) { .steps.path.js .path-track { column-gap: calc(var(--ph-h, 20rem) * 0.95 + 3rem); } }
+/* Telefon: neben der Karte ist kein Platz, darüber schneidet die angeheftete Schrittleiste die Ziffer ab –
+   die Schrittnummer steht dort bereits groß in der Leiste (01–06), deshalb hier keine zweite Ziffer. */
 @media (max-width: 820px) {
-  .steps.path.js .stage-card::before { right: auto; left: 0.2rem; bottom: calc(100% + 0.3rem); font-size: 4.2rem; line-height: 0.8; }
+  .steps.path.js .stage-card::before { content: none; }
 }
 html[data-theme='light'] .stage-card .viz { box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--c) 55%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
 html[data-theme='light'] .pstop.is-active .stage-card .viz { border-color: color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--c) 70%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
@@ -2489,3 +2491,53 @@ html[data-theme='light'] .fl-i > a:is(:hover, :focus-visible), html[data-theme='
 html[data-theme='light'] .fl-t small { color: color-mix(in oklab, var(--c) 72%, #0a1226); }
 html[data-theme='light'] .fl-t b { color: #0a1226; }
 html[data-theme='light'] .fl-i a > svg { color: color-mix(in oklab, var(--c) 80%, #0a1226); }
+
+/* Regelwerke hell: die Bahn als Planetarium – Grundplatte in der Farbe des vorderen Regelwerks, innere und äußere Bahn,
+   Speichen von UniqSuite zu jedem Regelwerk, und eine Leitung vom vorderen Planeten zur Karte. Dunkel bleibt unverändert. */
+.ob-links { display: none; }
+.planet b small { display: none; }
+html[data-theme='light'] .orbit-wrap.js { position: relative; }
+html[data-theme='light'] .orbit-wrap.js .ob-links { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+html[data-theme='light'] .orbit-wrap.js :is(.orbit-cards, .carousel-nav) { position: relative; z-index: 1; }
+html[data-theme='light'] .orbit-ring { border-color: rgb(10 18 38 / 0.18); }
+.ob-stop { stop-color: var(--fc, #2bb673); transition: stop-color 0.8s ease; }
+.ob-ring { fill: none; stroke: rgb(10 18 38 / 0.16); stroke-width: 1.3; stroke-dasharray: 1 7; stroke-linecap: round; }
+.ob-out { stroke: rgb(10 18 38 / 0.1); }
+.ob-spoke { stroke: var(--c); stroke-opacity: 0.35; stroke-width: 1.3; transition: stroke-opacity 0.4s; }
+.ob-spoke.on { stroke-opacity: 0.85; stroke-width: 2; }
+.ob-pulse { stroke: var(--c); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 10 600; opacity: 0.85; }
+.ob-wire { fill: none; stroke: var(--fc, #2bb673); stroke-width: 1.6; stroke-opacity: 0.55; stroke-dasharray: 2 6; stroke-linecap: round; transition: stroke 0.8s ease; }
+.ob-wire-run { fill: none; stroke: var(--fc, #2bb673); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 14 900; opacity: 0.9; transition: stroke 0.8s ease; }
+.ob-jack { fill: #ffffff; stroke: var(--fc, #2bb673); stroke-width: 2.5; transition: stroke 0.8s ease; }
+.ob-links.no-wire :is(.ob-wire, .ob-wire-run, .ob-jack) { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .ob-pulse { animation: ft-flow 2.8s linear infinite; }
+  .ob-wire-run { animation: ob-run 3.2s linear infinite; }
+}
+@media (prefers-reduced-motion: reduce) { .ob-pulse, .ob-wire-run { display: none; } }
+@keyframes ob-run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -914; } }
+html[data-theme='light'] .orbit-sun { box-shadow: 0 0 0 10px rgb(43 182 115 / 0.08), 0 0 0 22px rgb(43 182 115 / 0.04), 0 18px 40px -12px rgb(10 18 38 / 0.45); }
+html[data-theme='light'] .planet b { display: inline-flex; align-items: baseline; gap: 0.4rem; box-shadow: 0 6px 14px -10px rgb(10 18 38 / 0.35); }
+html[data-theme='light'] .planet b small { display: inline; font-size: 0.78em; font-weight: 800; color: color-mix(in oklab, var(--c) 75%, #0a1226); }
+
+/* Telefon: Ziffern am Schrittring lesbar */
+@media (max-width: 820px) { .sp-ring text { font-size: 9.5px; } }
+
+/* Telefon-Kopfzeile: Marke und Schaltflächen in einer Zeile, darunter die Reiter – die Höhe stimmt mit --header-h überein,
+   damit Sprungziele und angeheftete Überschriften nicht unter der Kopfzeile verschwinden. */
+@media (max-width: 820px) {
+  .site-header { column-gap: 0.75rem; }
+  .site-header > .brand { flex: 0 1 auto; min-width: 0; }
+  .site-header .header-actions { flex: none; gap: 0.35rem; }
+  .header-actions .btn-primary.btn-sm { min-height: 40px; padding: 0.4rem 0.75rem; font-size: 0.88rem; gap: 0.35rem; }
+  .header-actions .btn-primary.btn-sm svg { width: 16px; height: 16px; }
+}
+@media (max-width: 352px) {
+  .header-actions .btn-primary.btn-sm { width: 40px; padding: 0; justify-content: center; font-size: 0; gap: 0; }
+}
+
+/* Fristen hell: ohne 3D-Szene braucht kein Schritt eine volle Bildschirmhöhe – keine leeren Flächen zwischen Ringen und Zeitachse */
+html[data-theme='light'] #fristen .step { min-height: 0; padding: clamp(4rem, 9vh, 6rem) 0 clamp(1.5rem, 4vh, 3rem); }
+html[data-theme='light'] #fristen .step + .step { padding-top: clamp(1.5rem, 4vh, 3rem); padding-bottom: clamp(4rem, 9vh, 6rem); }
+/* Quick-Check: Tastenhinweis nur, wo es eine Tastatur gibt */
+@media (hover: none) and (pointer: coarse) { .qc-keys { display: none; } }
