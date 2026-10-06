@@ -10,6 +10,7 @@ import { buildParticles } from './particles';
 import { buildRing } from './ring';
 import { buildDeadlines, FLOOR_Y } from './deadlines';
 import { buildSkyline, TOWER_MAX } from './skyline';
+import { InkEffect } from './ink';
 
 type V3 = [number, number, number];
 interface Key { u: number; p: V3; t: V3 }
@@ -107,23 +108,33 @@ export async function init(canvas: HTMLCanvasElement) {
   }
 
   // ── Nachbearbeitung (adaptiv) ───────────────────────────────────────────
+  // Helle Darstellung: dieselbe Szene, über InkEffect als Tinte auf Papier gezeichnet
+  const isLight = () => root.dataset.theme === 'light';
   let composer: EffectComposer | null = null;
   const setupComposer = () => {
     composer?.dispose();
     composer = null;
-    if (tier <= 1) {
+    const light = isLight();
+    nebula.visible = !light;
+    if (tier <= 1 && !light) {
       renderer.toneMapping = THREE.NeutralToneMapping;
       return;
     }
     renderer.toneMapping = THREE.NoToneMapping;
     composer = new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType, multisampling: tier >= 3 ? 4 : 0 });
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
-    const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
     const tone = new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL });
-    composer.addPass(new EffectPass(camera, bloom, vignette, tone));
+    if (light) {
+      const fx = tier <= 1 ? [tone] : [new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.4, radius: 0.5 }), tone];
+      composer.addPass(new EffectPass(camera, ...fx, new InkEffect(NAVY)));
+    } else {
+      const bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.9, luminanceSmoothing: 0.2, intensity: 0.95, radius: 0.72 });
+      const vignette = new VignetteEffect({ offset: 0.32, darkness: 0.58 });
+      composer.addPass(new EffectPass(camera, bloom, vignette, tone));
+    }
   };
   setupComposer();
+  addEventListener('uq-theme', () => { setupComposer(); resize(); });
 
   // ── Kamera-Schlüsselpunkte ──────────────────────────────────────────────
   const K: Key[] = [
