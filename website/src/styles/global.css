@@ -2220,7 +2220,7 @@ html[data-theme='light'] .grain { opacity: 0; }
 
 /* Inseln: Gegenstände behalten ihre dunklen Eigenfarben */
 html[data-theme='light'] :is(.viz, .card, .rw, .rw-conv, .honest, .team-card, .team-facts li, .trust-list li, .dl-card,
-  .ring-item a, .fl-i > a, .qc-card, .qc-live, .qc-shell .privacy, .tl-v li, .rp-rel a, .tower-btn, .fw-choice, .tp-box, .fwp-faq details, .fp-can li, .fwp-facts > div,
+  .ring-item a, .qc-card, .qc-live, .qc-shell .privacy, .tl-v li, .rp-rel a, .tower-btn, .fw-choice, .tp-box, .fwp-faq details, .fp-can li, .fwp-facts > div,
   .sp-refs li, .sp-refs-grid li, .sp-flow li, .sp-result, .sp-result-band, .sp-cta, .rp-extra, [class^='stp-'] > a, .anfrage, .orbit-sun, .hero-fw a, .film-card, .frame) {
   --fg: 255 255 255; --bg0: 7 12 24; --bg1: 10 16 32; --bg2: 10 18 38; --bg3: 9 15 30; --bg4: 13 24 48; --bg5: 6 12 26; --bg6: 19 33 62; --gbg: 14 40 28;
   --sh: 0 0 0; --sha: 1;
@@ -2231,7 +2231,7 @@ html[data-theme='light'] :is(.viz, .card, .rw, .rw-conv, .honest, .team-card, .t
   color: var(--text); color-scheme: dark; text-shadow: none;
 }
 /* Inseln, die im Dunkeln nur einen Hauch Fläche haben, brauchen auf Papier einen festen Grund */
-html[data-theme='light'] :is(.honest, .team-card, .team-facts li, .trust-list li, .dl-card, .tl-v li, .rp-rel a, .ring-item a, .fl-i > a, .qc-shell .privacy, .fw-choice, .tp-box,
+html[data-theme='light'] :is(.honest, .team-card, .team-facts li, .trust-list li, .dl-card, .tl-v li, .rp-rel a, .ring-item a, .qc-shell .privacy, .fw-choice, .tp-box,
   .fwp-faq details, .fp-can li, .fwp-facts > div, .sp-refs li, .sp-refs-grid li, .sp-flow li, .sp-result, .sp-cta, [class^='stp-'] > a, .hero-fw a, .rw-conv) {
   background-color: #0e1a33;
 }
@@ -2284,13 +2284,13 @@ html[data-theme='light'] .hero-lt .frame::before { content: ''; position: absolu
 html[data-theme='light'] .rw-conv-bg { opacity: 0.4; }
 
 /* Karten mit eigener Farbe (Regelwerk, Funktion, Schritt): satt in ihrer Farbe auf Papier */
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) {
+html[data-theme='light'] :is(.ring-item a, .rw, [class^='stp-'] > a, .hero-fw a) {
   background: linear-gradient(150deg, color-mix(in oklab, var(--c) 62%, #0a1226) 0%, color-mix(in oklab, var(--c) 34%, #0a1226) 100%);
   border-color: color-mix(in oklab, var(--c) 70%, #ffffff);
 }
 html[data-theme='light'] .ring-ft .ring-item a { background: radial-gradient(110% 70% at 50% 18%, color-mix(in oklab, var(--c) 70%, #0a1226) 0%, color-mix(in oklab, var(--c) 34%, #0a1226) 100%); }
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) :is(em, small, .k, .tp-name + span, span) { color: rgb(255 255 255 / 0.82); }
-html[data-theme='light'] :is(.ring-item a, .rw, .fl-i > a, [class^='stp-'] > a, .hero-fw a) :is(b, h3, strong, .tp-name) { color: #ffffff; }
+html[data-theme='light'] :is(.ring-item a, .rw, [class^='stp-'] > a, .hero-fw a) :is(em, small, .k, .tp-name + span, span) { color: rgb(255 255 255 / 0.82); }
+html[data-theme='light'] :is(.ring-item a, .rw, [class^='stp-'] > a, .hero-fw a) :is(b, h3, strong, .tp-name) { color: #ffffff; }
 html[data-theme='light'] :is(.dl-card, .honest, .sp-cta, .sp-result-band, .anfrage, .qc-card, .viz) .btn-ghost { background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.18); color: #f1f3f7; }
 
 /* Berichte: Papier mit leuchtendem Schatten in der Berichtsfarbe */
@@ -2466,3 +2466,18 @@ html[data-theme='light'] .steps.path.js .stage-card::before { background: linear
 }
 html[data-theme='light'] .stage-card .viz { box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--c) 55%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
 html[data-theme='light'] .pstop.is-active .stage-card .viz { border-color: color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--c) 70%, transparent), 0 2px 4px rgb(10 18 38 / 0.1); }
+
+/* Funktionsliste hell: weiße Karte, Rand in der Funktionsfarbe mit Lichtsaum */
+html[data-theme='light'] .fl-i > a {
+  background: #ffffff; color: var(--text);
+  border: 1.5px solid color-mix(in srgb, var(--c) 75%, #ffffff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 12%, transparent), 0 0 22px -4px color-mix(in srgb, var(--c) 55%, transparent), 0 14px 28px -20px color-mix(in srgb, var(--c) 70%, transparent);
+  transition: transform 0.35s var(--ease-expo), box-shadow 0.35s, border-color 0.35s;
+}
+html[data-theme='light'] .fl-i > a:is(:hover, :focus-visible), html[data-theme='light'] .fl-i.on > a {
+  background: #ffffff; border-color: var(--c);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 18%, transparent), 0 0 34px -2px color-mix(in srgb, var(--c) 70%, transparent), 0 18px 34px -18px color-mix(in srgb, var(--c) 80%, transparent);
+}
+html[data-theme='light'] .fl-t small { color: color-mix(in oklab, var(--c) 72%, #0a1226); }
+html[data-theme='light'] .fl-t b { color: #0a1226; }
+html[data-theme='light'] .fl-i a > svg { color: color-mix(in oklab, var(--c) 80%, #0a1226); }
