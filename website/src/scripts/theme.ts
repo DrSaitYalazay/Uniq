@@ -7,7 +7,7 @@ export function initTheme() {
     html.dataset.theme = light ? 'light' : 'dark';
     try { localStorage.setItem('uq-theme', light ? 'light' : 'dark'); } catch { /* privater Modus */ }
     const m = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]'); if (m) m.content = light ? 'light' : 'dark';
-    const c = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]'); if (c) c.content = light ? '#f4f6fb' : '#0a1226';
+    const c = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]'); if (c) c.content = light ? '#f4f6f8' : '#0a1226';
     sync();
     window.dispatchEvent(new CustomEvent('uq-theme', { detail: { light } }));
   };
