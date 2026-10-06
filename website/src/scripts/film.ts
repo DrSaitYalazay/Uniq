@@ -19,6 +19,9 @@ export function initFilm() {
     card.removeAttribute('role');
     card.removeAttribute('tabindex');
     card.appendChild(f);
+    // Läuft der Film, tritt die Abschnittsleiste rechts zurück (sie lag über den Player-Tasten, z. B. Vollbild)
+    const sec = card.closest('section') ?? card;
+    new IntersectionObserver(([e]) => document.documentElement.classList.toggle('film-on', e.isIntersecting), { threshold: 0.15 }).observe(sec);
   };
   card.addEventListener('click', play);
   card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
