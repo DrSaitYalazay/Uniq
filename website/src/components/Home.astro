@@ -337,7 +337,21 @@ const clientData = {
         ))}
       </div>
       <p class="fine">{t.deadlines.timersNote}</p>
-    </div></div></div>
+    </div>
+    <!-- Helle Darstellung: die Fristen-Ringe der 3D-Szene als Zeichnung auf Papier -->
+    <figure class="ddl-lt" aria-hidden="true">
+      {t.deadlines.timers.map((x, i) => (
+        <div class={`ddl-ring r${i} ${['fw-cra', 'fw-nis2', 'fw-iso27001'][i]}`}>
+          <span class="ddl-arc"></span>
+          <span class="ddl-tick"></span>
+          <span class="ddl-core"><b>{x.value}</b><small>{x.label}</small></span>
+          <span class="ddl-stem"></span>
+        </div>
+      ))}
+      <span class="ddl-road"><i></i></span>
+      <span class="ddl-start"></span>
+    </figure>
+    </div></div>
     <div class="step" id="zeitachse"><div class="wrap"><div class="panel panel-wide">
       <h3 class="res-h">{t.deadlines.timelineTitle}</h3>
       <ol class="timeline tl-compact">
