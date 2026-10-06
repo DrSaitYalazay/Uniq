@@ -6,5 +6,5 @@
   var light = t === 'light';
   html.dataset.theme = light ? 'light' : 'dark';
   var m = document.querySelector('meta[name="color-scheme"]'); if (m) m.content = light ? 'light' : 'dark';
-  var c = document.querySelector('meta[name="theme-color"]'); if (c) c.content = light ? '#f4f6fb' : '#0a1226';
+  var c = document.querySelector('meta[name="theme-color"]'); if (c) c.content = light ? '#f4f6f8' : '#0a1226';
 })();
