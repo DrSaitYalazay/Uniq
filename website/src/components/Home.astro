@@ -160,7 +160,7 @@ const clientData = {
           <div class="orbit-sun"><b>Uniq<span>Suite</span></b></div>
           {t.regelwerke.items.map((f, k) => {
             const short = t.skyline.towers.find((x) => x.fw === f.fw)?.label ?? f.name;
-            return <a class={`planet fw-${f.fw}`} data-planet={k} href={fwHref(lang, f.fw as Fw)} tabindex="-1"><span class="ball"></span><b>{short}</b></a>;
+            return <a class={`planet fw-${f.fw}`} data-planet={k} href={fwHref(lang, f.fw as Fw)} tabindex="-1"><span class="ball"></span><b>{short}<small>{f.n}</small></b></a>;
           })}
         </div>
         <ul class="rw-grid orbit-cards">
