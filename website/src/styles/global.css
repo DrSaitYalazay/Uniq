@@ -2496,9 +2496,14 @@ html[data-theme='light'] .fl-i a > svg { color: color-mix(in oklab, var(--c) 80%
    Speichen von UniqSuite zu jedem Regelwerk, und eine Leitung vom vorderen Planeten zur Karte. Dunkel bleibt unverändert. */
 .ob-links { display: none; }
 .planet b small { display: none; }
-html[data-theme='light'] .orbit-wrap.js { position: relative; }
-html[data-theme='light'] .orbit-wrap.js .ob-links { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
-html[data-theme='light'] .orbit-wrap.js :is(.orbit-cards, .carousel-nav) { position: relative; z-index: 1; }
+/* Die Leitung vom vorderen Planeten zur Karte gibt es in beiden Farbschemata; Platte, Bahnen und Speichen nur im Hellen */
+.orbit-wrap.js { position: relative; }
+.orbit-wrap.js .ob-links { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+.orbit-wrap.js :is(.orbit-cards, .carousel-nav) { position: relative; z-index: 1; }
+html:not([data-theme='light']) .ob-links :is(.ob-plate, .ob-ring, .ob-spoke, .ob-pulse) { display: none; }
+html:not([data-theme='light']) .ob-wire { stroke-opacity: 0.7; }
+html:not([data-theme='light']) .ob-wire-run { filter: drop-shadow(0 0 4px var(--fc, #2bb673)); }
+html:not([data-theme='light']) .ob-jack { fill: #0a1226; filter: drop-shadow(0 0 6px var(--fc, #2bb673)); }
 html[data-theme='light'] .orbit-ring { border-color: rgb(10 18 38 / 0.18); }
 .ob-stop { stop-color: var(--fc, #2bb673); transition: stop-color 0.8s ease; }
 .ob-ring { fill: none; stroke: rgb(10 18 38 / 0.16); stroke-width: 1.3; stroke-dasharray: 1 7; stroke-linecap: round; }
