@@ -129,7 +129,7 @@ export function init() {
       h('details', { class: 'qc-why' }, h('summary', {}, T.why), h('p', {}, q.why[lang])),
       h('div', { class: 'qc-foot' },
         i > 0 ? h('button', { type: 'button', class: 'link-btn', onclick: back }, `← ${T.back}`) : h('button', { type: 'button', class: 'link-btn', onclick: () => renderPick() }, T.cancel),
-        h('span', { class: 'small muted' }, T.keys),
+        h('span', { class: 'small muted qc-keys' }, T.keys),
       ),
     ]);
     emit();
@@ -148,7 +148,12 @@ export function init() {
     if (!cur) return;
     if (!cur.answers[cur.i]) return;
     if (cur.i < cur.fw.questions.length - 1) { cur.i++; renderQuestion(); }
-    else { results.set(cur.fw.id, cur.answers.slice()); lastFw = cur.fw; cur = null; renderResult(); }
+    else { results.set(cur.fw.id, cur.answers.slice()); lastFw = cur.fw; cur = null; renderResult(); showTop(); }
+  }
+  // Ergebnis beginnt mit dem Gesamtwert: liegt der Kartenanfang über dem Bild (Telefon), dorthin zurück
+  function showTop() {
+    const head = document.querySelector<HTMLElement>('.site-header')?.offsetHeight ?? 0;
+    if (card.getBoundingClientRect().top < head) state.scrollToEl(card, false, -(head + 16));
   }
   function back() { if (cur && cur.i > 0) { cur.i--; renderQuestion(); } }
 
