@@ -2413,12 +2413,24 @@ html[data-theme='light'] .ddl-cap { display: block; position: absolute; left: 2.
 html[data-theme='light'] #fristen .panel.panel-wide { background: none; border: 0; box-shadow: none; padding-left: 0; padding-right: 0; }
 html[data-theme='light'] #fristen .panel.panel-wide::before, html[data-theme='light'] #fristen .panel.panel-wide::after { display: none; }
 
-/* Funktionen hell (Breitbild): Bühne aus Foto in Originalfarben, darauf eine Milchglas-Tafel mit der Umlaufbahn */
+/* Funktionen hell (Breitbild): Bühne wie ein Leitstand – Foto in Originalschärfe unter nachtblauem Verlauf,
+   die Umlaufbahn leuchtet darauf wie im Dunkeln. Ein Gegenstand auf hellem Grund. */
 @media (min-width: 1200px) {
-  html[data-theme='light'] .ft-car.orbit-ft::before, html[data-theme='light'] .ft-car.orbit-ft::after { content: ''; position: absolute; grid-column: 2; grid-row: 1 / span 2; z-index: 0; pointer-events: none; }
-  html[data-theme='light'] .ft-car.orbit-ft::before { inset: -1.5rem 0 -1rem 0; border-radius: 34px; background: url('/img/people-08-1600.webp') center 35% / cover no-repeat; box-shadow: 0 40px 80px -40px rgb(10 18 38 / 0.55); }
-  html[data-theme='light'] .ft-car.orbit-ft::after { inset: calc(-1.5rem + 26px) 26px calc(-1rem + 26px) 26px; border-radius: 24px; background: rgb(255 255 255 / 0.6); -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 18px 40px -24px rgb(10 18 38 / 0.45); }
+  html[data-theme='light'] .ft-car.orbit-ft::before, html[data-theme='light'] .ft-car.orbit-ft::after { content: ''; position: absolute; grid-column: 2; grid-row: 1 / span 2; inset: -1.25rem 0 -0.75rem 1.5rem; border-radius: 32px; pointer-events: none; }
+  html[data-theme='light'] .ft-car.orbit-ft::before { z-index: 0; background: url('/img/people-08-1600.webp') center 30% / cover no-repeat; box-shadow: 0 2px 4px rgb(10 18 38 / 0.12), 0 50px 90px -40px rgb(10 18 38 / 0.7); }
+  html[data-theme='light'] .ft-car.orbit-ft::after { z-index: 0;
+    background:
+      radial-gradient(55% 60% at 50% 50%, rgb(10 18 38 / 0.9) 0%, rgb(10 18 38 / 0.78) 55%, rgb(10 18 38 / 0.5) 100%),
+      radial-gradient(70% 60% at 20% 100%, rgb(43 182 115 / 0.28), transparent 60%),
+      radial-gradient(60% 50% at 90% 0%, rgb(59 130 246 / 0.22), transparent 60%);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.12); }
   html[data-theme='light'] .ft-car.orbit-ft { margin-right: max(var(--gutter), calc((100vw - 1360px) / 2 + var(--gutter))); }
+  html[data-theme='light'] .ft-car.orbit-ft :is(.ft-links, .carousel-nav) { --fg: 255 255 255; --text: #f1f3f7; --line-2: rgb(255 255 255 / 0.18); }
+  html[data-theme='light'] .ft-car.orbit-ft .ft-orbit { stroke: rgb(255 255 255 / 0.32); }
+  html[data-theme='light'] .ft-car.orbit-ft .ft-orbit-glow { fill: rgb(43 182 115 / 0.06); stroke: rgb(43 182 115 / 0.3); }
+  html[data-theme='light'] .ft-car.orbit-ft .ft-spoke { stroke-opacity: 0.5; }
+  html[data-theme='light'] .ft-car.orbit-ft .carousel-nav button { background: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.22); color: #f1f3f7; }
+  html[data-theme='light'] .ft-car.orbit-ft .carousel-nav button:hover { background: rgb(255 255 255 / 0.16); }
 }
 @media (max-width: 820px) {
   html[data-theme='light'] .ddl-lt { padding-bottom: 4.4rem; }
