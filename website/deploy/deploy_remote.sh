@@ -42,40 +42,45 @@ if ! docker compose exec -T www cat /etc/caddy/Caddyfile < /dev/null | cmp -s - 
   docker compose up -d --force-recreate www
 fi
 
-# 5) Edge-Block in der Caddyfile von ClaudeCWS sicherstellen und wirksam machen.
-#    Dauerhaft steht der Block im ClaudeCWS-Repository; fehlt er auf dem Server, wird er angehängt.
-#    Wichtig: Die Caddyfile ist als EINZELDATEI in den Caddy-Container eingebunden. Ersetzt jemand
-#    die Datei (z. B. tar beim ClaudeCWS-Deploy: neue Datei, neuer Inode), sieht der laufende
-#    Container weiter den alten Inhalt, und "caddy reload" lädt diesen alten Inhalt.
-#    Deshalb: mit der Host-Datei prüfen (frischer Container) und den laufenden Container nur
-#    neu laden, wenn er dieselbe Datei sieht - sonst neu erstellen.
-if [ -f "$CWS/Caddyfile" ]; then
-  APPENDED=0
-  if ! grep -q "^$HOST {" "$CWS/Caddyfile"; then
-    cp "$CWS/Caddyfile" "$CWS/Caddyfile.vor-uniqsuite-www"
-    {
-      printf '\n# >>> uniqsuite-www BEGIN (%s) >>>\n' "$HOST"
-      printf '# Quelle: Uniq-Repository website/deploy/edge-block.caddy - eingefügt von website/deploy/deploy_remote.sh\n'
-      cat edge-block.caddy
-      printf '# <<< uniqsuite-www END <<<\n'
-    } >> "$CWS/Caddyfile"
-    APPENDED=1
-  fi
-  if ! (cd "$CWS" && docker compose run --rm --no-deps -T --entrypoint caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile < /dev/null > /dev/null 2>&1); then
-    if [ "$APPENDED" = 1 ]; then
-      cat "$CWS/Caddyfile.vor-uniqsuite-www" > "$CWS/Caddyfile"
-      echo "::error::EDGE-BLOCK UNGUELTIG - Caddyfile von ClaudeCWS wiederhergestellt"
-    else
-      echo "::error::CADDYFILE VON CLAUDECWS UNGUELTIG - nichts geaendert"
-    fi
+# 5) Edge-Block bei der gemeinsamen Caddy-Tuer von ClaudeCWS eintragen.
+#    Seit 07.10.2026 (ClaudeCWS edge/README.md): als eigene Datei /root/edge-sites/uniqsuite-www.caddy,
+#    die kein ClaudeCWS-Deploy ueberschreibt. edge_site.sh prueft auf doppelte Adressen, sichert,
+#    validiert, laedt neu und nimmt bei Fehlern die alte Fassung zurueck.
+#    Rueckfall (nur falls ClaudeCWS noch keine Drop-in-Unterstuetzung hat): alter Weg ueber die Caddyfile.
+if [ -f "$CWS/edge/edge_site.sh" ]; then
+  if ! bash "$CWS/edge/edge_site.sh" apply uniqsuite-www "$PWD/edge-block.caddy"; then
+    echo "::error::EDGE-BLOCK NICHT EINGESPIELT - Ausgabe oben; die anderen Seiten laufen unveraendert"
     exit 1
   fi
-  if (cd "$CWS" && docker compose exec -T caddy cat /etc/caddy/Caddyfile) | cmp -s - "$CWS/Caddyfile"; then
-    (cd "$CWS" && docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile) \
-      || echo "::error::CADDY RELOAD FEHLGESCHLAGEN - bisherige Konfiguration bleibt aktiv"
-  else
-    echo "::notice::Caddy-Container von ClaudeCWS sieht eine veraltete Caddyfile - Container wird neu erstellt"
-    (cd "$CWS" && docker compose up -d --no-deps --force-recreate caddy)
+else
+  if [ -f "$CWS/Caddyfile" ]; then
+    APPENDED=0
+    if ! grep -q "^$HOST {" "$CWS/Caddyfile"; then
+      cp "$CWS/Caddyfile" "$CWS/Caddyfile.vor-uniqsuite-www"
+      {
+        printf '\n# >>> uniqsuite-www BEGIN (%s) >>>\n' "$HOST"
+        printf '# Quelle: Uniq-Repository website/deploy/edge-block.caddy - eingefügt von website/deploy/deploy_remote.sh\n'
+        cat edge-block.caddy
+        printf '# <<< uniqsuite-www END <<<\n'
+      } >> "$CWS/Caddyfile"
+      APPENDED=1
+    fi
+    if ! (cd "$CWS" && docker compose run --rm --no-deps -T --entrypoint caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile < /dev/null > /dev/null 2>&1); then
+      if [ "$APPENDED" = 1 ]; then
+        cat "$CWS/Caddyfile.vor-uniqsuite-www" > "$CWS/Caddyfile"
+        echo "::error::EDGE-BLOCK UNGUELTIG - Caddyfile von ClaudeCWS wiederhergestellt"
+      else
+        echo "::error::CADDYFILE VON CLAUDECWS UNGUELTIG - nichts geaendert"
+      fi
+      exit 1
+    fi
+    if (cd "$CWS" && docker compose exec -T caddy cat /etc/caddy/Caddyfile) | cmp -s - "$CWS/Caddyfile"; then
+      (cd "$CWS" && docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile) \
+        || echo "::error::CADDY RELOAD FEHLGESCHLAGEN - bisherige Konfiguration bleibt aktiv"
+    else
+      echo "::notice::Caddy-Container von ClaudeCWS sieht eine veraltete Caddyfile - Container wird neu erstellt"
+      (cd "$CWS" && docker compose up -d --no-deps --force-recreate caddy)
+    fi
   fi
 fi
 
@@ -94,7 +99,7 @@ if [ "$HEALTH" != ok ]; then
   # Diagnose: ohne sie bleibt unsichtbar, ob der Block geladen ist, der Container antwortet
   # oder die Zertifikatsausstellung (ACME) scheitert.
   echo "--- Diagnose: Edge-Block in der Datei ---"
-  grep -n "^$HOST {" "$CWS/Caddyfile" || echo "FEHLT in $CWS/Caddyfile"
+  grep -n "^$HOST {" "$CWS/Caddyfile" /root/edge-sites/*.caddy 2>/dev/null || echo "FEHLT (weder Caddyfile noch /root/edge-sites)"
   echo "--- Diagnose: laufende Caddy-Konfiguration kennt $HOST? ---"
   (cd "$CWS" && docker compose exec -T caddy wget -qO- http://127.0.0.1:2019/config/ 2>/dev/null | grep -o "$HOST" | head -1) || echo "nein (oder Admin-API nicht erreichbar)"
   echo "--- Diagnose: Website-Container aus Sicht von Caddy ---"
